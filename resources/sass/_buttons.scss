@@ -1,0 +1,129 @@
+@import 'variables.scss';
+
+//
+// Reset Bootstrap outline
+// --------------------------------------------------
+.btn:focus {
+  box-shadow: none;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-primary.dropdown-toggle:focus {
+  box-shadow: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #334E68;
+  border-color: #334E68;
+  color: $white;
+
+  .badge {
+    color: #BDDBFF;
+  }
+
+  &:hover {
+    background-color: lighten($dark-blue, 15%);
+    border-color: lighten($dark-blue, 15%);
+  }
+}
+
+.btn-secondary {
+  background-color: #D9E2EC;
+  border-color: darken(#EDF2F5, 0%);
+  color: $dark-blue;
+
+  &:hover {
+    background-color: darken(#D9E2EC, 3%);
+    border-color: darken(#EDF2F5, 3%);
+    color: $dark-blue;
+  }
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+  background-color: darken(#EDF2F5, 3%);
+  border-color: darken(#EDF2F5, 3%);
+  color: $dark-blue;
+}
+
+.btn-light {
+  color: #495057;
+  background-color: #f8f9fb;
+  border: 1px solid $gray-200;
+
+  &:hover {
+    color: darken(#495057, 4%);
+    background-color: darken(#f8f9fb, 3%);
+    border: 1px solid darken($gray-200, 3%);
+  }
+}
+
+.btn-filter {
+  padding: .26rem 1rem !important;
+}
+
+.btn-light:not(:disabled):not(.disabled).active, .btn-light:not(:disabled):not(.disabled):active, .show>.btn-light.dropdown-toggle {
+  color: darken(#495057, 1%);
+  background-color: darken(#F8F9FA, 1%);
+  border-color: #dae0e5;
+}
+
+.btn-outline-primary {
+  color: $dark-blue;
+  border-color: $dark-blue;
+}
+
+.btn-xs {
+  padding: .4rem .4rem;
+  font-size: .7rem;
+  line-height: .5;
+  border-radius: .2rem;
+}
+
+.btn-wide {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.btn-group-sm>.btn, .btn-sm {
+  padding: .4rem 1rem;
+  line-height: 1.5;
+}
+
+.btn-dark {
+  color: #fff;
+  background-color: $dark-blue;
+  border-color: $dark-blue;
+
+  &:hover {
+    background-color: lighten($dark-blue, 10%);
+  }
+}
+
+.btn .badge {
+    color: #969FA8;
+    top: auto;
+}
+
+.btn-group {
+    .btn {
+        border: 1px solid #E1E4E7;
+        color: #495057;
+    }
+
+    .btn-primary {
+        color: #ffffff;
+    }
+}
+
+.btn-group-sm > .btn, .btn-sm {
+    font-size: $font-size-sm;
+    padding: 0.2rem 0.5rem;
+}
+
+.btn-group-md > .btn, .btn-md {
+    font-size: $font-size-md;
+    padding: 0.35rem 0.75rem;
+}

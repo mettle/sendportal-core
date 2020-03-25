@@ -1,0 +1,15 @@
+.page-signin-alt .signin-password {
+  position: relative;
+
+  .forgot {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    color: #555;
+    background: $bg-body;
+    border-radius: 2px;
+    line-height: 25px;
+    padding: 0 7px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,48 @@
+@import "variables";
+
+.card-table {
+    .table {
+        margin-bottom: 0;
+        th {
+            border-top: none;
+        }
+    }
+}
+
+.table thead th {
+  border-bottom: 1px solid $gray-200;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* restore specificity of hover style */
+.table-hover tbody tr:hover {
+  background-color: rgba(0,0,0,.075);
+}
+
+table.table-hover-reset tr:hover {
+  background-color: inherit;
+  opacity: 1.0;
+}
+
+.table tr.bold td {
+  font-weight: bold;
+}
+
+.table {
+  th {
+    background-color: $bg-card-header;
+    font-weight: bold;
+    color: $dark-blue;
+  }
+
+  td, th {
+    padding: 0.8rem 0.8rem;
+    border-top: 1px solid #e9edf1;
+  }
+}
+.table-hover tbody tr:hover {
+  background-color: #f6fafc;
+}

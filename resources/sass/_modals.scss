@@ -1,0 +1,42 @@
+/*
+ * Sidebar
+ */
+
+.sidebar.modal .close {
+  position: absolute;
+  right: 5px;
+  top: 2px;
+  color: #ffffff;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .8;
+}
+
+.modal-left {
+  .modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 200px;
+    height: 100%;
+    -webkit-transform: translate3d(0%, 0, 0);
+    -ms-transform: translate3d(0%, 0, 0);
+    -o-transform: translate3d(0%, 0, 0);
+    transform: translate3d(0%, 0, 0);
+  }
+
+  .modal-content {
+    overflow-y: auto;
+  }
+
+  &.fade .modal-dialog {
+    left: -200px;
+    -webkit-transition: opacity 0.2s linear, left 0.2s ease-out;
+    -moz-transition: opacity 0.2s linear, left 0.2s ease-out;
+    -o-transition: opacity 0.2s linear, left 0.2s ease-out;
+    transition: opacity 0.2s linear, left 0.2s ease-out;
+  }
+
+  &.fade.show .modal-dialog{
+    left: 0;
+  }
+
+}

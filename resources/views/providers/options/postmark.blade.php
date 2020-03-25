@@ -1,0 +1,1 @@
+{!! Form::textField('settings[key]', __('API Key'), array_get($settings ?? [], 'key')) !!}

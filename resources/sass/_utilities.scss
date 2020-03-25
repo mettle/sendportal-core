@@ -1,0 +1,45 @@
+.hide {
+  display: none !important;
+}
+
+.no-underline,
+.no-underline:hover {
+  text-decoration: none;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.grow {
+  -webkit-transition: -webkit-transform 0.2s ease;
+  -moz-transition: -moz-transform 0.2s ease;
+  transition: transform 0.2s ease;
+}
+
+.grow:hover {
+  -webkit-transform: scale(1.15);
+  -moz-transform: scale(1.15);
+  -o-transform: scale(1.15);
+  transform: scale(1.15);
+}
+
+.p-4-half {
+  padding: 2.3rem!important;
+}
+
+.pl-4-half {
+  padding-left: 2.3rem!important;
+}
+
+.pr-4-half {
+  padding-right: 2.3rem!important;
+}
+
+.pb-4-half {
+  padding-right: 2.3rem!important;
+}
+
+.pt-4-half {
+  padding-top: 2.3rem!important;
+}

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Auth
-Auth::routes(['verify' => true, 'register' => true]); //config('auth.enable_register')]);
+//Auth::routes(['verify' => true, 'register' => true]); //config('auth.enable_register')]);
 
 // App
 Route::middleware(['auth', 'verified'])->group(static function (Router $router) {

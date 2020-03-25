@@ -8,6 +8,7 @@ use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
 use Sendportal\Base\Console\Commands\SetupProduction;
 use Sendportal\Base\Providers\EventServiceProvider;
+use Sendportal\Base\Providers\SendportalAppServiceProvider;
 
 class SendportalBaseServiceProvider extends ServiceProvider
 {
@@ -47,13 +48,6 @@ class SendportalBaseServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-
-        $this->registerEvents();
-    }
-
-    protected function registerEvents(): void
-    {
-        $this->register(EventServiceProvider::class);
     }
 
     /**
@@ -61,6 +55,9 @@ class SendportalBaseServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(EventServiceProvider::class);
+        $this->app->register(SendportalAppServiceProvider::class);
+
         //$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'automations');
     }
 }

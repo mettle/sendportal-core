@@ -1,5 +1,5 @@
 <div class="sidebar-inner">
-    <ul class="nav flex-column mt-4" id="metismenu">
+    <ul class="nav flex-column mt-4">
         <li class="nav-item {{ request()->is('campaigns*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('campaigns.index') }}">
                 <i class="fas fa-envelope mr-2"></i><span>{{ __('Campaigns') }}</span>

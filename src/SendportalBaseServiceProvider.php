@@ -7,6 +7,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
 use Sendportal\Base\Console\Commands\SetupProduction;
+use Sendportal\Base\Providers\EventServiceProvider;
 
 class SendportalBaseServiceProvider extends ServiceProvider
 {
@@ -46,10 +47,11 @@ class SendportalBaseServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+    }
 
-        // maybe do it through another service provider?
-        //$this->app['events']->listen(\Sendportal\Base\Events\SubscriberAddedEvent::class, SubscriberAddedHandler::class);
-        //$this->app['events']->listen(AutomationDispatchEvent::class, AutomationDispatchHandler::class);
+    protected function registerEvents(): void
+    {
+        $this->register(EventServiceProvider::class);
     }
 
     /**

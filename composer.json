@@ -19,12 +19,6 @@
             "Sendportal\\Base\\": "src"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/JonoB/Buzz"
-        }
-    ],
     "autoload-dev": {
         "psr-4": {
             "Sendportal\\Base\\Tests\\": "tests"

@@ -1,14 +1,14 @@
 {
     "name": "sendportal/base",
     "homepage": "https://github.com/sendportal/base",
+    "description": "Sendportal Base component",
     "license": "MIT",
     "type": "library",
     "authors": [],
     "require": {
-        "php": "^7.3",
+        "php": "^7.2.5",
         "illuminate/support": "^7.0",
-        "laravel/ui": "^2.0",
-        "jonob/buzz": "dev-master"
+        "laravel/ui": "^2.0"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",

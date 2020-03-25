@@ -36,7 +36,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
 
             $this->app->booted(function () {
                 $schedule = $this->app->make(Schedule::class);
-                //$schedule->command(AutomationDispatchCommand::class)->everyMinute()->withoutOverlapping();
+                $schedule->command(CampaignDispatchCommand::class)->everyMinute()->withoutOverlapping();
             });
         }
 

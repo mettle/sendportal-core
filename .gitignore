@@ -1,4 +1,6 @@
 .idea
 vendor
 composer.lock
+.phpunit.result.cache
+build/
 node_modules/

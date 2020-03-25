@@ -34,7 +34,7 @@ class CampaignTenantRepositoryTest extends TestCase
             'opened_at' => now()->addSeconds(60),
         ]);
 
-        $averageTimeToOpen = app()->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
+        $averageTimeToOpen = $this->app->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
 
         // 45 seconds
         static::assertEquals('00:00:45', $averageTimeToOpen);

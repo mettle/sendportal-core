@@ -10,7 +10,7 @@ use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 use Sendportal\Base\Traits\ResolvesDatabaseDriver;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class SendportalAppServiceProvider extends ServiceProvider
 {
     use ResolvesDatabaseDriver;
 

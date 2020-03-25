@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', __("Edit Subscriber") . " : {$subscriber->full_name}")
 

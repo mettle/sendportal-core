@@ -6,6 +6,7 @@ namespace Tests\Feature\API;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 class SegmentsControllerTest extends TestCase
@@ -31,7 +32,7 @@ class SegmentsControllerTest extends TestCase
 
         $expected = [
             'data' => [
-                array_only($segment->toArray(), ['name'])
+                Arr::only($segment->toArray(), ['name'])
             ],
         ];
 
@@ -56,7 +57,7 @@ class SegmentsControllerTest extends TestCase
         $response->assertStatus(200);
 
         $expected = [
-            'data' => array_only($segment->toArray(), ['name']),
+            'data' => Arr::only($segment->toArray(), ['name']),
         ];
 
         $response->assertJson($expected);

@@ -22,7 +22,7 @@ class VerifyUserOnTeam
             abort(403, 'Unauthorized');
         }
 
-        abort_unless(user()->onTeam($team), 403, 'Unauthorized');
+        abort_unless($request->user()->onTeam($team), 403, 'Unauthorized');
 
         config()->set('current_team_id', $team->id);
 

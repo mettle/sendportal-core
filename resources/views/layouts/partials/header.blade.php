@@ -63,7 +63,7 @@
                            title="{{{ user()->full_name }}}">
                             <img src="{{{ user()->avatar }}}" height="25" class="rounded-circle mr-2"
                                  alt="{{ user()->name }}">
-                            <span class="d-none d-sm-inline-block">{{{ str_limit(user()->name, 25) }}}</span> <i
+                            <span class="d-none d-sm-inline-block">{{{ \Illuminate\Support\Str::limit(user()->name, 25) }}}</span> <i
                                 class="ml-2 fas fa-caret-down fc-gray-500"></i>
                         </a>
 

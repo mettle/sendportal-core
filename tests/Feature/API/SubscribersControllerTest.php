@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API;
 
+use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Segment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -32,7 +33,7 @@ class SubscribersControllerTest extends TestCase
 
         $expected = [
             'data' => [
-                array_only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
+                Arr::only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
             ],
         ];
 
@@ -57,7 +58,7 @@ class SubscribersControllerTest extends TestCase
         $response->assertStatus(200);
 
         $expected = [
-            'data' => array_only($subscriber->toArray(), ['first_name', 'last_name', 'email']),
+            'data' => Arr::only($subscriber->toArray(), ['first_name', 'last_name', 'email']),
         ];
 
         $response->assertJson($expected);

@@ -17,7 +17,7 @@
                             </a>
                         </div>
 
-                        @include('layouts.partials.sidebar')
+                        @include('sendportal::layouts.partials.sidebar')
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
     @endauth
 
 
-    @include('layouts.partials.header')
+    @include('sendportal::layouts.partials.header')
 
     <div class="main-content pl-4-half pr-4-half pb-4-half">
 
@@ -34,11 +34,11 @@
             'register',
             'password.reset',
         ]))
-            @include('layouts.partials.errors')
+            @include('sendportal::layouts.partials.errors')
         @endif
 
-        @include('layouts.partials.success')
-        @include('layouts.partials.error')
+        @include('sendportal::layouts.partials.success')
+        @include('sendportal::layouts.partials.error')
 
         @yield('content')
     </div>

@@ -13,7 +13,7 @@
 
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/fa.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/app.css') . '?m=' . filemtime(public_path('css/app.css')) }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     @stack('css')
 
@@ -35,12 +35,12 @@
                 </div>
 
                 <div class="mt-5">
-                    @include('layouts.partials.sidebar')
+                    @include('sendportal::layouts.partials.sidebar')
                 </div>
             </div>
         @endauth()
 
-        @include('layouts.main')
+        @include('sendportal::layouts.main')
     </div>
 </div>
 

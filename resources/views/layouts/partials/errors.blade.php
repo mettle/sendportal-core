@@ -1,4 +1,4 @@
-@if ($errors->any())
+@if (isset($errors) and $errors->any())
     <div class="row">
         <div class="col-lg-6 offset-lg-3">
             <div class="alert alert-danger">

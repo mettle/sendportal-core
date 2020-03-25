@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', __('Edit Campaign'))
 
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     {!! Form::model($campaign, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['campaigns.update', $campaign->id]]) !!}
 
-                    @include('campaigns.partials.form')
+                    @include('sendportal::campaigns.partials.form')
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', __('Campaigns'))
 
@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @component('layouts.partials.actions')
+    @component('sendportal::layouts.partials.actions')
         @slot('right')
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('campaigns.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('New Campaign') }}
@@ -100,6 +100,6 @@
         </div>
     </div>
 
-    @include('layouts.partials.pagination', ['records' => $campaigns])
+    @include('sendportal::layouts.partials.pagination', ['records' => $campaigns])
 
 @endsection

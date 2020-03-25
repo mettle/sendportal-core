@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', __('Campaign Status'))
 
@@ -12,7 +12,7 @@
 
 <div class="row text-center">
     <div class="col-sm-6">
-        @include('svgs.undraw_in_progress')
+        @include('sendportal::svgs.undraw_in_progress')
     </div>
 </div>
 

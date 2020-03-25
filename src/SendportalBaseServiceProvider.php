@@ -47,6 +47,8 @@ class SendportalBaseServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+
+        $this->registerEvents();
     }
 
     protected function registerEvents(): void

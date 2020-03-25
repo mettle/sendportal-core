@@ -2,11 +2,11 @@
 
 namespace Sendportal\Base\Http\Controllers\Auth;
 
-use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\ProfileUpdateRequest;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
@@ -17,7 +17,7 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        return view('profile.edit');
+        return view('sendportal::profile.edit');
     }
 
     /**

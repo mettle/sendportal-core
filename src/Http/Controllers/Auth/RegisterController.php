@@ -4,13 +4,6 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Auth;
 
-use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Models\Team;
-use Sendportal\Base\Models\User;
-use Sendportal\Base\Rules\ValidInvitation;
-use Sendportal\Base\Services\Teams\AcceptInvitation;
-use Sendportal\Base\Services\Teams\CreateTeam;
-use Sendportal\Base\Traits\ChecksInvitations;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -18,6 +11,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Rules\ValidInvitation;
+use Sendportal\Base\Services\Teams\AcceptInvitation;
+use Sendportal\Base\Services\Teams\CreateTeam;
+use Sendportal\Base\Traits\ChecksInvitations;
 
 class RegisterController extends Controller
 {
@@ -70,7 +70,7 @@ class RegisterController extends Controller
                 ->with('error', __('The invitation is no longer valid.'));
         }
 
-        return view('auth.register');
+        return view('sendportal::auth.register');
     }
 
     /**

@@ -8,7 +8,7 @@
 
     @include('messages.partials.nav')
 
-    @component('layouts.partials.actions')
+    @component('sendportal::layouts.partials.actions')
         @slot('left')
             <form action="{{ route('messages.index') }}" method="GET" class="form-inline">
                 <div class="mr-2">

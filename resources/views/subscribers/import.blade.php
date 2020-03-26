@@ -11,7 +11,7 @@
 @section('content')
 
 
-    @component('layouts.partials.card')
+    @component('sendportal::layouts.partials.card')
         @slot('cardHeader', __('Import via CSV file'))
 
         @slot('cardBody')

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    @component('layouts.partials.actions')
+    @component('sendportal::layouts.partials.actions')
 
         @slot('right')
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('segments.create') }}">

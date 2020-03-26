@@ -2,15 +2,14 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Sendportal\Base\Http\Requests\ProviderStoreRequest;
-use Sendportal\Base\Http\Requests\ProviderUpdateRequest;
-use Sendportal\Base\Repositories\ProviderTenantRepository;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Http\Requests\ProviderStoreRequest;
+use Sendportal\Base\Http\Requests\ProviderUpdateRequest;
+use Sendportal\Base\Repositories\ProviderTenantRepository;
 
 class ProvidersController extends Controller
 {
@@ -67,7 +66,7 @@ class ProvidersController extends Controller
             'settings' => $settings,
         ]);
 
-        return redirect()->route('providers.index');
+        return redirect()->route('sendportal.providers.index');
     }
 
     /**
@@ -97,7 +96,7 @@ class ProvidersController extends Controller
         $provider->settings = $settings;
         $provider->save();
 
-        return redirect()->route('providers.index');
+        return redirect()->route('sendportal.providers.index');
     }
 
     /**
@@ -114,7 +113,7 @@ class ProvidersController extends Controller
 
         $this->providers->destroy(auth()->user()->currentWorkspace()->id, $providerId);
 
-        return redirect()->route('providers.index');
+        return redirect()->route('sendportal.providers.index');
     }
 
     public function providersTypeAjax($providerTypeId): JsonResponse

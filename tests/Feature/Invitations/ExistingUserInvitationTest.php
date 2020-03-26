@@ -33,7 +33,7 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->get(route('workspaces.index'));
+            ->get(route('sendportal.workspaces.index'));
 
         // then
         $response->assertSee($newWorkspace->name);
@@ -60,7 +60,7 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->get(route('workspaces.index'));
+            ->get(route('sendportal.workspaces.index'));
 
         // then
         $response->assertDontSee($newWorkspace->name);
@@ -84,10 +84,10 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('workspaces.invitations.accept', $invitation));
+            ->post(route('sendportal.workspaces.invitations.accept', $invitation));
 
         // then
-        $response->assertRedirect(route('workspaces.index'));
+        $response->assertRedirect(route('sendportal.workspaces.index'));
 
         $this->assertTrue($user->fresh()->onWorkspace($newWorkspace));
     }
@@ -110,10 +110,10 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('workspaces.invitations.reject', $invitation));
+            ->post(route('sendportal.workspaces.invitations.reject', $invitation));
 
         // then
-        $response->assertRedirect(route('workspaces.index'));
+        $response->assertRedirect(route('sendportal.workspaces.index'));
 
         $this->assertFalse($user->fresh()->onWorkspace($newWorkspace));
 
@@ -143,7 +143,7 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $this->actingAs($user)
-            ->post(route('workspaces.invitations.accept', $invitation));
+            ->post(route('sendportal.workspaces.invitations.accept', $invitation));
 
         // then
         $this->assertFalse($user->fresh()->onWorkspace($newWorkspace));

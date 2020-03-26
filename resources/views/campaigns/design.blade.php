@@ -14,7 +14,8 @@
 
     <br>
 
-    <a href="{{ route('campaigns.template', $campaign->id) }}" class="btn btn-link"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
+    <a href="{{ route('sendportal.campaigns.template', $campaign->id) }}" class="btn btn-link"><i
+            class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
 
     <button class="btn btn-primary" type="submit">{{ __('Save and continue') }}</button>
 

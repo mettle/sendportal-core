@@ -19,9 +19,10 @@
             <div class="card-header-inner">
                 <div class="float-right">
                     @if ($message->sent_at)
-                        {{ __('Sent') }} <span title="{{ $message->sent_at }}">{{ $message->sent_at->diffForHumans() }}</span>
+                        {{ __('Sent') }} <span
+                            title="{{ $message->sent_at }}">{{ $message->sent_at->diffForHumans() }}</span>
                     @else
-                        <form action="{{ route('messages.send') }}" method="post">
+                        <form action="{{ route('sendportal.messages.send') }}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{ $message->id }}">
                             <button type="submit" class="btn btn-sm btn-primary">{{ __('Send now') }}</button>

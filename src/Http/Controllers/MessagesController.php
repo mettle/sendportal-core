@@ -2,12 +2,14 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Sendportal\Base\Models\AutomationSchedule;
-use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\MessageTenantRepository;
 use Sendportal\Base\Services\Content\MergeContent;
 use Sendportal\Base\Services\Messages\DispatchMessage;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class MessagesController extends Controller
 {
@@ -46,8 +48,8 @@ class MessagesController extends Controller
     /**
      * Show all sent messages
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function index()
     {
@@ -62,8 +64,8 @@ class MessagesController extends Controller
     /**
      * Show draft messages
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function draft()
     {
@@ -76,8 +78,8 @@ class MessagesController extends Controller
      * Show a single message
      *
      * @param int $messageId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function show(int $messageId)
     {
@@ -91,8 +93,8 @@ class MessagesController extends Controller
     /**
      * Send a message
      *
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function send()
     {
@@ -106,6 +108,7 @@ class MessagesController extends Controller
 
         $this->dispatchMessage->handle($message);
 
-        return redirect()->route('messages.draft')->with('success', __('The message was sent successfully.'));
+        return redirect()->route('sendportal.messages.draft')->with('success',
+            __('The message was sent successfully.'));
     }
 }

@@ -22,7 +22,7 @@ class WorkspacesControllerTest extends TestCase
         [$workspace, $user] = $this->createUserAndWorkspace();
 
         // when
-        $response = $this->get(route('api.workspaces.index'), [
+        $response = $this->get(route('sendportal.api.workspaces.index'), [
             'Authorization' => 'Bearer ' . $user->api_token
         ]);
 
@@ -45,7 +45,7 @@ class WorkspacesControllerTest extends TestCase
         $secondWorkspace = factory(Workspace::class)->create();
 
         // when
-        $response = $this->get(route('api.workspaces.index'), [
+        $response = $this->get(route('sendportal.api.workspaces.index'), [
             'Authorization' => 'Bearer ' . $user->api_token
         ]);
 

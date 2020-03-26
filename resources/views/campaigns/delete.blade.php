@@ -10,7 +10,7 @@
 
     @component('sendportal::layouts.partials.actions')
         @slot('right')
-            <a class="btn btn-primary btn-md btn-flat" href="{{ route('campaigns.create') }}">
+            <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.campaigns.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('Create Campaign') }}
             </a>
         @endslot
@@ -26,11 +26,11 @@
             <p>
                 {{ __('Are you sure that you want to delete the <b>:name</b> campaign?', ['name' => $campaign->name]) }}
             </p>
-            <form action="{{ route('campaigns.destroy', $campaign->id) }}" method="post">
+            <form action="{{ route('sendportal.campaigns.destroy', $campaign->id) }}" method="post">
                 @csrf
                 @method('DELETE')
                 <input type="hidden" name="id" value="{{ $campaign->id }}">
-                <a href="{{ route('campaigns.index') }}" class="btn btn-md btn-light">{{ __('Cancel') }}</a>
+                <a href="{{ route('sendportal.campaigns.index') }}" class="btn btn-md btn-light">{{ __('Cancel') }}</a>
                 <button type="submit" class="btn btn-md btn-danger">{{ __('DELETE') }}</button>
             </form>
         </div>

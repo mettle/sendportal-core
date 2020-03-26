@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignTestRequest;
 use Sendportal\Base\Services\Messages\DispatchTestMessage;
-use Illuminate\Http\RedirectResponse;
-use Exception;
 
 class CampaignTestController extends Controller
 {
@@ -28,12 +28,12 @@ class CampaignTestController extends Controller
         $messageId = $this->dispatchTestMessage->handle(auth()->user()->currentWorkspace()->id, $campaignId, $request->get('recipient_email'));
 
         if (!$messageId) {
-            return redirect()->route('campaigns.preview', $campaignId)
+            return redirect()->route('sendportal.campaigns.preview', $campaignId)
                 ->withInput()
                 ->with(['error', __('Failed to dispatch test email.')]);
         }
 
-        return redirect()->route('campaigns.preview', $campaignId)
+        return redirect()->route('sendportal.campaigns.preview', $campaignId)
             ->withInput()
             ->with(['success' => __('The test email has been dispatched.')]);
     }

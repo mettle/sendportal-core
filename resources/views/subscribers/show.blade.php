@@ -79,12 +79,12 @@
                         <td>
                             @if($message->is_campaign)
                                 <i class="fas fa-envelope fc-gray-300"></i>
-                                <a href="{{ route('campaigns.reports.index', $message->source_id) }}">
+                                <a href="{{ route('sendportal.campaigns.reports.index', $message->source_id) }}">
                                     {{ $message->source->name }}
                                 </a>
                             @elseif(\Sendportal\Base\Facades\Helper::isPro() && $message->is_automation)
                                 <i class="fas fa-sync-alt fc-gray-300"></i>
-                                <a href="{{ route('automations.show', $message->source->automation_step->automation_id) }}">
+                                <a href="{{ route('sendportal.automations.show', $message->source->automation_step->automation_id) }}">
                                     {{ $message->source->automation_step->automation->name }}
                                 </a>
                             @endif

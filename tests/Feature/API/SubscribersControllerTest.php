@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API;
 
-use Illuminate\Support\Arr;
-use Sendportal\Base\Models\Segment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
+use Sendportal\Base\Models\Segment;
 use Tests\TestCase;
 
 class SubscribersControllerTest extends TestCase
@@ -22,7 +22,7 @@ class SubscribersControllerTest extends TestCase
 
         $subscriber = $this->createSubscriber($user);
 
-        $route = route('api.subscribers.index', [
+        $route = route('sendportal.api.subscribers.index', [
             'workspaceId' => $user->currentWorkspace()->id,
             'api_token' => $user->api_token,
         ]);
@@ -47,7 +47,7 @@ class SubscribersControllerTest extends TestCase
 
         $subscriber = $this->createSubscriber($user);
 
-        $route = route('api.subscribers.show', [
+        $route = route('sendportal.api.subscribers.show', [
             'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
@@ -69,7 +69,7 @@ class SubscribersControllerTest extends TestCase
     {
         $user = $this->createUserWithWorkspace();
 
-        $route = route('api.subscribers.store', $user->currentWorkspace()->id);
+        $route = route('sendportal.api.subscribers.store', $user->currentWorkspace()->id);
 
         $request = [
             'first_name' => $this->faker->firstName,
@@ -91,7 +91,7 @@ class SubscribersControllerTest extends TestCase
 
         $subscriber = $this->createSubscriber($user);
 
-        $route = route('api.subscribers.update', [
+        $route = route('sendportal.api.subscribers.update', [
             'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
@@ -118,7 +118,7 @@ class SubscribersControllerTest extends TestCase
 
         $subscriber = $this->createSubscriber($user);
 
-        $route = route('api.subscribers.destroy', [
+        $route = route('sendportal.api.subscribers.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
@@ -141,7 +141,7 @@ class SubscribersControllerTest extends TestCase
 
         // when
         $this->withoutExceptionHandling();
-        $response = $this->delete(route('api.subscribers.destroy', [
+        $response = $this->delete(route('sendportal.api.subscribers.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
@@ -154,6 +154,4 @@ class SubscribersControllerTest extends TestCase
             'subscriber_id' => $subscriber->id
         ]);
     }
-
-
 }

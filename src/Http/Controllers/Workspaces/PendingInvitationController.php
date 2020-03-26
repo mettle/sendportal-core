@@ -34,7 +34,7 @@ class PendingInvitationController extends Controller
 
         $this->acceptInvitation->handle($request->user(), $invitation);
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 
     /**
@@ -46,6 +46,6 @@ class PendingInvitationController extends Controller
 
         $invitation->delete();
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 }

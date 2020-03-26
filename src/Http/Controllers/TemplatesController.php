@@ -2,12 +2,12 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Sendportal\Base\Http\Requests\TemplateStoreRequest;
-use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
-use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Http\Requests\TemplateStoreRequest;
+use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
+use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Traits\NormalizeTags;
 
 class TemplatesController extends Controller
@@ -62,7 +62,7 @@ class TemplatesController extends Controller
         $this->templates->store(auth()->user()->currentWorkspace()->id, $data);
 
         return redirect()
-            ->route('templates.index');
+            ->route('sendportal.templates.index');
     }
 
     /**
@@ -98,7 +98,7 @@ class TemplatesController extends Controller
         $this->templates->update(auth()->user()->currentWorkspace()->id, $id, $data);
 
         return redirect()
-            ->route('templates.index');
+            ->route('sendportal.templates.index');
     }
 
     /**
@@ -123,7 +123,7 @@ class TemplatesController extends Controller
         $this->templates->destroy(auth()->user()->currentWorkspace()->id, $template->id);
 
         return redirect()
-            ->route('templates.index')
+            ->route('sendportal.templates.index')
             ->with('success', __('Template successfully deleted.'));
     }
 }

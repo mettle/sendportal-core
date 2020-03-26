@@ -12,16 +12,16 @@
         <div class="card-table table-responsive">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>{{ __('Subscriber') }}</th>
-                        <th>{{ __('Subject') }}</th>
-                        <th>{{ __('Unsubscribed') }}</th>
-                    </tr>
+                <tr>
+                    <th>{{ __('Subscriber') }}</th>
+                    <th>{{ __('Subject') }}</th>
+                    <th>{{ __('Unsubscribed') }}</th>
+                </tr>
                 </thead>
                 <tbody>
                     @forelse($messages as $message)
                         <tr>
-                            <td><a href="{{ route('subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
+                            <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
                             <td>{{ $message->subject }}</td>
                             <td>{{ \Sendportal\Base\Facades\Helper::displayDate($message->unsubscribed_at) }}</td>
                         </tr>

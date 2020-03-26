@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Content;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Services\Content\MergeContent;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class MergeContentTest extends TestCase
@@ -80,7 +80,7 @@ class MergeContentTest extends TestCase
         $mergedContent = $this->mergeContent($message);
 
         // then
-        $route = route('subscriptions.unsubscribe', $message->hash);
+        $route = route('sendportal.subscriptions.unsubscribe', $message->hash);
 
         // NOTE(david): the string has to be formatted like this to match!
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">

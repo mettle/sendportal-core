@@ -30,7 +30,7 @@ class WorkspacesControllerTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->get(route('workspaces.index'));
+        $response = $this->get(route('sendportal.workspaces.index'));
 
         // then
         $response->assertOk();
@@ -48,12 +48,12 @@ class WorkspacesControllerTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->post(route('workspaces.store'), [
+        $response = $this->post(route('sendportal.workspaces.store'), [
             'name' => $newWorkspaceName
         ]);
 
         // then
-        $response->assertRedirect(route('workspaces.index'));
+        $response->assertRedirect(route('sendportal.workspaces.index'));
 
         $this->assertDatabaseHas('workspaces', [
             'name' => $newWorkspaceName,

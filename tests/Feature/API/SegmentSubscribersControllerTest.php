@@ -24,7 +24,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $segment->subscribers()->save($subscriber);
 
-        $route = route('api.segments.subscribers.index', [
+        $route = route('sendportal.api.segments.subscribers.index', [
             'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
@@ -51,7 +51,7 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment = $this->createsegment($user);
         $subscriber = $this->createsubscriber($user);
 
-        $route = route('api.segments.subscribers.store', [
+        $route = route('sendportal.api.segments.subscribers.store', [
             'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
         ]);
@@ -90,7 +90,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $newSubscriber = $this->createSubscriber($user);
 
-        $route = route('api.segments.subscribers.store', [
+        $route = route('sendportal.api.segments.subscribers.store', [
             'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
         ]);
@@ -115,7 +115,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $segment->subscribers()->save($oldSubscriber);
 
-        $route = route('api.segments.subscribers.update', [
+        $route = route('sendportal.api.segments.subscribers.update', [
             'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
@@ -158,7 +158,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $segment->subscribers()->save($subscriber);
 
-        $route = route('api.segments.subscribers.destroy', [
+        $route = route('sendportal.api.segments.subscribers.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,

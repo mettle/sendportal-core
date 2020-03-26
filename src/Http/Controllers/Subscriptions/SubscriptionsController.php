@@ -2,15 +2,15 @@
 
 namespace Sendportal\Base\Http\Controllers\Subscriptions;
 
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriptionToggleRequest;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Repositories\MessageTenantRepository;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Carbon\Carbon;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Sendportal\Base\Repositories\MessageTenantRepository;
 
 class SubscriptionsController extends Controller
 {
@@ -33,8 +33,8 @@ class SubscriptionsController extends Controller
      * Unsubscribe a subscriber
      *
      * @param string $messageHash
-     * @return \Illuminate\Contracts\View\Factory|View
-     * @throws \Exception
+     * @return Factory|View
+     * @throws Exception
      */
     public function unsubscribe($messageHash)
     {
@@ -78,7 +78,7 @@ class SubscriptionsController extends Controller
             $subscriber->unsubscribe_event_id = UnsubscribeEventType::MANUAL_BY_SUBSCRIBER;
             $subscriber->save();
 
-            return redirect()->route('subscriptions.subscribe', $message->hash)
+            return redirect()->route('sendportal.subscriptions.subscribe', $message->hash)
                 ->with('success', __('You have been successfully removed from the mailing list.'));
         }
 
@@ -89,7 +89,7 @@ class SubscriptionsController extends Controller
         $subscriber->unsubscribe_event_id = null;
         $subscriber->save();
 
-        return redirect()->route('subscriptions.unsubscribe', $message->hash)
+        return redirect()->route('sendportal.subscriptions.unsubscribe', $message->hash)
             ->with('success', __('You have been added to the mailing list.'));
     }
 }

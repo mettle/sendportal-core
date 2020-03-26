@@ -48,7 +48,7 @@
 
                             <div class="dropdown-menu" aria-labelledby="bd-versions">
                                 @foreach($workspaces as $workspace)
-                                    <a class="dropdown-item px-3" href="{{ route('workspaces.switch', $workspace->id) }}">
+                                    <a class="dropdown-item px-3" href="{{ route('sendportal.workspaces.switch', $workspace->id) }}">
                                         <i class="fas fa-circle mr-2 {{ auth()->user()->currentWorkspace->id == $workspace->id ? 'fc-dark-blue' : 'fc-gray-300' }}"></i>{{ $workspace->name }}
                                     </a>
                                 @endforeach
@@ -68,9 +68,9 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                            <a class="dropdown-item px-3" href="{{ route('profile.edit') }}"><i
+                            <a class="dropdown-item px-3" href="{{ route('sendportal.profile.edit') }}"><i
                                     class="fas fa-user mr-2 fc-gray-300"></i>{{ __('My Profile') }}</a>
-                            <a class="dropdown-item px-3" href="{{ route('workspaces.index') }}"><i
+                            <a class="dropdown-item px-3" href="{{ route('sendportal.workspaces.index') }}"><i
                                     class="fas fa-layer-plus mr-2 fc-gray-300"></i>{{ __('Workspaces') }}</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item px-3" href="{{ route('logout') }}"

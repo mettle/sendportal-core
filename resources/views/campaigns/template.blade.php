@@ -42,7 +42,8 @@
 
     {{ $templates->links() }}
 
-    <a href="{{ route('campaigns.edit', $campaign->id) }}" class="btn btn-link"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
+    <a href="{{ route('sendportal.campaigns.edit', $campaign->id) }}" class="btn btn-link"><i
+            class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
 
     <button class="btn btn-primary" type="submit">{{ __('Save and continue') }}</button>
 
@@ -52,8 +53,8 @@
 
 @push('js')
     <script>
-        $(function() {
-            $('.js-select-template').click(function(e) {
+        $(function () {
+            $('.js-select-template').click(function (e) {
                 alert('what');
                 e.preventDefault();
                 $('#field-template_id').val($(this).data('template_id'));

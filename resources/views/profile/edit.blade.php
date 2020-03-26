@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form action="{{ route('profile.update') }}" method="post">
+                    <form action="{{ route('sendportal.profile.update') }}" method="post">
                         @csrf
                         @method('PUT')
 

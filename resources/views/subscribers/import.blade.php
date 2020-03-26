@@ -39,7 +39,7 @@
             </div>
 
 
-            {!! Form::open(['route' => ['subscribers.import.store'], 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['route' => ['sendportal.subscribers.import.store'], 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
 
             {!! Form::fileField('file', 'File', ['required' => 'required']) !!}
 

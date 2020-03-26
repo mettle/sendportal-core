@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @include('messages.partials.nav')
+    @include('sendportal::messages.partials.nav')
 
     @component('sendportal::layouts.partials.actions')
         @slot('left')

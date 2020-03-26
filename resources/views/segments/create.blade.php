@@ -12,9 +12,9 @@
         @slot('cardHeader', __('Create Segment'))
 
         @slot('cardBody')
-            {!! Form::open(['route' => ['segments.store'], 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['route' => ['sendportal.segments.store'], 'class' => 'form-horizontal']) !!}
 
-            @include('segments.partials.form')
+            @include('sendportal::segments.partials.form')
 
             {!! Form::submitButton(__('Save')) !!}
 

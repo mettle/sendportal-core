@@ -10,7 +10,7 @@
         @slot('cardHeader', __('Create Provider'))
 
         @slot('cardBody')
-            {!! Form::open(['method' => 'post', 'route' => 'providers.store', 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['method' => 'post', 'route' => 'sendportal.providers.store', 'class' => 'form-horizontal']) !!}
 
             {!! Form::textField('name', __('Name')) !!}
             {!! Form::selectField('type_id', __('Provider'), $providerTypes) !!}
@@ -28,7 +28,6 @@
     <script>
 
         let url = '{{ route('sendportal.providers.ajax', 1) }}';
-        let old = {!! json_encode(old()) !!};
 
         $(function () {
             let type_id = $('select[name="type_id"]').val();

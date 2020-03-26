@@ -63,6 +63,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         Route::get('messages/draft', ['as' => 'messages.draft', 'uses' => 'MessagesController@draft']);
         Route::get('messages/{id}/show', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
         Route::post('messages/send', ['as' => 'messages.send', 'uses' => 'MessagesController@send']);
+        Route::post('messages/send-selected', ['as' => 'messages.send-selected', 'uses' => 'MessagesController@sendSelected']);
 
         // Providers
         Route::get('providers', ['as' => 'providers.index', 'uses' => 'ProvidersController@index']);

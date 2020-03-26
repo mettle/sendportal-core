@@ -15,7 +15,7 @@ class OwnsCurrentTeam
      */
     public function handle($request, Closure $next)
     {
-        if (! user()->ownsCurrentTeam()) {
+        if (! $request->user()->ownsCurrentTeam()) {
             abort(404);
         }
 

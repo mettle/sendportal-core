@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Teams;
 
+use Illuminate\Http\Request;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Middleware\OwnsRequestedTeam;
 use Sendportal\Base\Http\Requests\Teams\TeamStoreRequest;
@@ -34,9 +35,9 @@ class WorkspacesController extends Controller
         ]);
     }
 
-    public function index(): ViewContract
+    public function index(Request $request): ViewContract
     {
-        $user = user()->load('teams', 'invitations.team');
+        $user = $request->user()->load('teams', 'invitations.team');
 
         return view('sendportal::teams.index', [
             'teams' => $user->teams,
@@ -49,7 +50,7 @@ class WorkspacesController extends Controller
      */
     public function store(TeamStoreRequest $request): RedirectResponse
     {
-        $this->createTeam->handle(user(), $request->get('name'), Team::ROLE_OWNER);
+        $this->createTeam->handle($request->user(), $request->get('name'), Team::ROLE_OWNER);
 
         return redirect()->route('workspaces.index');
     }

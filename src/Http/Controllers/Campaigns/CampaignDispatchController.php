@@ -37,7 +37,7 @@ class CampaignDispatchController extends Controller
      */
     public function send(CampaignDispatchRequest $request, $id)
     {
-        $campaign = $this->campaigns->find(currentTeamId(), $id);
+        $campaign = $this->campaigns->find(auth()->user()->currentTeam()->id, $id);
 
         if ($campaign->status_id > CampaignStatus::STATUS_DRAFT) {
             return redirect()->route('campaigns.status', $id);

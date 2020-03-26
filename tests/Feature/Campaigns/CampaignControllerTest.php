@@ -29,7 +29,7 @@ class CampaignControllerTest extends TestCase
         $response = $this->actingAs($user)->get(route('campaigns.index'));
 
         // then
-        $response->assertOk();
+        $response->dump()->assertOk();
     }
 
     /** @test */

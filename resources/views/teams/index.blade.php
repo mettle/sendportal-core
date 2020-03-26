@@ -36,14 +36,14 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if (user()->id === $team->owner_id)
+                                    @if (auth()->user()->id === $team->owner_id)
                                         You
                                     @else
                                         {{ $team->owner->name }}
                                     @endif
                                 </td>
                                 <td class="td-fit">
-                                    @if (user()->ownsTeam($team))
+                                    @if (auth()->user()->ownsTeam($team))
                                         <a href="{{route('workspaces.edit', $team->id)}}" class="btn btn-light btn-sm">{{ __('Edit') }}</a>
                                     @endif
                                 </td>

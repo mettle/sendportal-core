@@ -11,7 +11,7 @@ class OwnsRequestedTeam
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!$user = user()) {
+        if (!$user = $request->user()) {
             abort(404);
         }
 

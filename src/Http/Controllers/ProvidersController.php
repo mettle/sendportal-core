@@ -36,7 +36,7 @@ class ProvidersController extends Controller
      */
     public function index()
     {
-        $providers = $this->providers->all(currentTeamId());
+        $providers = $this->providers->all(auth()->user()->currentTeam()->id);
 
         return view('sendportal::providers.index', compact('providers'));
     }
@@ -61,7 +61,7 @@ class ProvidersController extends Controller
 
         $settings = $request->get('settings');
 
-        $this->providers->store(currentTeamId(), [
+        $this->providers->store(auth()->user()->currentTeam()->id, [
             'name' => $request->name,
             'type_id' => $providerType->id,
             'settings' => $settings,
@@ -77,7 +77,7 @@ class ProvidersController extends Controller
     public function edit(int $providerId)
     {
         $providerTypes = $this->providers->getProviderTypes()->pluck('name', 'id');
-        $provider = $this->providers->find(currentTeamId(), $providerId);
+        $provider = $this->providers->find(auth()->user()->currentTeam()->id, $providerId);
         $providerType = $this->providers->findType($provider->type_id);
 
         return view('sendportal::providers.edit', compact('providerTypes', 'provider', 'providerType'));
@@ -89,7 +89,7 @@ class ProvidersController extends Controller
      */
     public function update(ProviderUpdateRequest $request, int $providerId): RedirectResponse
     {
-        $provider = $this->providers->find(currentTeamId(), $providerId, ['type']);
+        $provider = $this->providers->find(auth()->user()->currentTeam()->id, $providerId, ['type']);
 
         $settings = $request->get('settings');
 
@@ -106,13 +106,13 @@ class ProvidersController extends Controller
      */
     public function delete(int $providerId): RedirectResponse
     {
-        $provider = $this->providers->find(currentTeamId(), $providerId, ['campaigns']);
+        $provider = $this->providers->find(auth()->user()->currentTeam()->id, $providerId, ['campaigns']);
 
         if ($provider->in_use) {
             return redirect()->back()->withErrors(__("You cannot delete a provider that is currently used by a campaign or automation."));
         }
 
-        $this->providers->destroy(currentTeamId(), $providerId);
+        $this->providers->destroy(auth()->user()->currentTeam()->id, $providerId);
 
         return redirect()->route('providers.index');
     }

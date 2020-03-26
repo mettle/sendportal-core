@@ -35,7 +35,7 @@ class SegmentsController extends Controller
      */
     public function index()
     {
-        $segments = $this->segmentRepository->paginate(currentTeamId(), 'name');
+        $segments = $this->segmentRepository->paginate(auth()->user()->currentTeam()->id, 'name');
 
         return view('segments.index', compact('segments'));
     }
@@ -59,7 +59,7 @@ class SegmentsController extends Controller
      */
     public function store(SegmentRequest $request)
     {
-        $this->segmentRepository->store(currentTeamId(), $request->all());
+        $this->segmentRepository->store(auth()->user()->currentTeam()->id, $request->all());
 
         return redirect()->route('segments.index');
     }
@@ -87,7 +87,7 @@ class SegmentsController extends Controller
      */
     public function edit($id, SubscriberTenantRepository $subscriberRepository)
     {
-        $segment = $this->segmentRepository->find(currentTeamId(), $id, ['subscribers']);
+        $segment = $this->segmentRepository->find(auth()->user()->currentTeam()->id, $id, ['subscribers']);
 
         return view('sendportal::segments.edit', compact('segment'));
     }
@@ -102,7 +102,7 @@ class SegmentsController extends Controller
      */
     public function update(SegmentRequest $request, $id)
     {
-        $this->segmentRepository->update(currentTeamId(), $id, $request->all());
+        $this->segmentRepository->update(auth()->user()->currentTeam()->id, $id, $request->all());
 
         return redirect()->route('segments.index');
     }

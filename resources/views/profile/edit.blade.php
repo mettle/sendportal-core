@@ -20,7 +20,7 @@
 
                             <div class="col-md-6">
                                 <input type="text" id="name" class="form-control" name="name"
-                                       value="{{ old('name') || $errors->has('name') ? old('name') : user()->name }}">
+                                       value="{{ old('name') || $errors->has('name') ? old('name') : auth()->user()->name }}">
                             </div>
                         </div>
 
@@ -29,7 +29,7 @@
 
                             <div class="col-md-6">
                                 <input type="email" id="email" class="form-control" name="email"
-                                       value="{{ old('email') || $errors->has('email') ? old('email') : user()->email }}">
+                                       value="{{ old('email') || $errors->has('email') ? old('email') : auth()->user()->email }}">
                             </div>
                         </div>
 
@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <select name="locale" id="locale" class="form-control">
                                     @foreach(config()->get('locale.supported') as $key => $locale)
-                                        <option value="{{ $key }}" {{ user()->locale === $key ? 'selected="selected"' : '' }}">
+                                        <option value="{{ $key }}" {{ auth()->user()->locale === $key ? 'selected="selected"' : '' }}">
                                             {{ $locale['name'] }}
                                         </option>
                                     @endforeach

@@ -42,9 +42,9 @@
                                 <a href="{{ route('campaigns.status', $campaign->id) }}">{{ $campaign->name }}</a>
                             @endif
                         </td>
-                        <td>{{ formatValue($campaign->sent_count) }}</td>
-                        <td>{{ formatRatio($campaign->open_ratio) }}</td>
-                        <td>{{ formatRatio($campaign->click_ratio) }}</td>
+                        <td>{{ $campaign->sent_count_formatted }}</td>
+                        <td>{{ number_format($campaign->open_ratio * 100, 1) . '%' }}</td>
+                        <td>{{ number_format($campaign->click_ratio * 100, 1) . '%' }}</td>
                         <td><span title="{{ $campaign->created_at }}">{{ $campaign->created_at->diffForHumans() }}</span></td>
                         <td>
                             @if($campaign->status_id === \Sendportal\Base\Models\CampaignStatus::STATUS_DRAFT)

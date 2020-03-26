@@ -43,7 +43,7 @@ class CampaignReportsController extends Controller
      */
     public function index($id)
     {
-        $campaign = $this->campaignRepo->find(currentTeamId(), $id);
+        $campaign = $this->campaignRepo->find(auth()->user()->currentTeam()->id, $id);
 
         if ($campaign->draft) {
             return redirect()->route('campaigns.edit', $id);
@@ -75,7 +75,7 @@ class CampaignReportsController extends Controller
      */
     public function recipients($id)
     {
-        $campaign = $this->campaignRepo->find(currentTeamId(), $id);
+        $campaign = $this->campaignRepo->find(auth()->user()->currentTeam()->id, $id);
 
         if ($campaign->draft) {
             return redirect()->route('campaigns.edit', $id);
@@ -85,7 +85,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->recipients(currentTeamId(), Campaign::class, $id);
+        $messages = $this->messageRepo->recipients(auth()->user()->currentTeam()->id, Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.recipients', compact('campaign', 'messages'));
     }
@@ -99,7 +99,7 @@ class CampaignReportsController extends Controller
      */
     public function opens($id)
     {
-        $campaign = $this->campaignRepo->find(currentTeamId(), $id);
+        $campaign = $this->campaignRepo->find(auth()->user()->currentTeam()->id, $id);
         $averageTimeToOpen = $this->campaignRepo->getAverageTimeToOpen($campaign);
 
         if ($campaign->draft) {
@@ -110,7 +110,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->opens(currentTeamId(), Campaign::class, $id);
+        $messages = $this->messageRepo->opens(auth()->user()->currentTeam()->id, Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.opens', compact('campaign', 'messages', 'averageTimeToOpen'));
     }
@@ -124,7 +124,7 @@ class CampaignReportsController extends Controller
      */
     public function clicks($id)
     {
-        $campaign = $this->campaignRepo->find(currentTeamId(), $id);
+        $campaign = $this->campaignRepo->find(auth()->user()->currentTeam()->id, $id);
         $averageTimeToClick = $this->campaignRepo->getAverageTimeToClick($campaign);
 
         if ($campaign->draft) {
@@ -135,7 +135,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->clicks(currentTeamId(), Campaign::class, $id);
+        $messages = $this->messageRepo->clicks(auth()->user()->currentTeam()->id, Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.clicks', compact('campaign', 'messages', 'averageTimeToClick'));
     }
@@ -149,7 +149,7 @@ class CampaignReportsController extends Controller
      */
     public function bounces($id)
     {
-        $campaign = $this->campaignRepo->find(currentTeamId(), $id);
+        $campaign = $this->campaignRepo->find(auth()->user()->currentTeam()->id, $id);
 
         if ($campaign->draft) {
             return redirect()->route('campaigns.edit', $id);
@@ -159,7 +159,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->bounces(currentTeamId(), Campaign::class, $id);
+        $messages = $this->messageRepo->bounces(auth()->user()->currentTeam()->id, Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.bounces', compact('campaign', 'messages'));
     }
@@ -173,7 +173,7 @@ class CampaignReportsController extends Controller
      */
     public function unsubscribes($id)
     {
-        $campaign = $this->campaignRepo->find(currentTeamId(), $id);
+        $campaign = $this->campaignRepo->find(auth()->user()->currentTeam()->id, $id);
 
         if ($campaign->draft) {
             return redirect()->route('campaigns.edit', $id);
@@ -183,7 +183,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->unsubscribes(currentTeamId(), Campaign::class, $id);
+        $messages = $this->messageRepo->unsubscribes(auth()->user()->currentTeam()->id, Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.unsubscribes', compact('campaign', 'messages'));
     }

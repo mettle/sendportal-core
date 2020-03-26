@@ -87,7 +87,7 @@ class CampaignReportsController extends Controller
 
         $messages = $this->messageRepo->recipients(currentTeamId(), Campaign::class, $id);
 
-        return view('campaigns.reports.recipients', compact('campaign', 'messages'));
+        return view('sendportal::campaigns.reports.recipients', compact('campaign', 'messages'));
     }
 
     /**

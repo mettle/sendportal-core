@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Auth;
 
-use Sendportal\Base\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Sendportal\Base\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller
 {
@@ -26,4 +28,11 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = '/dashboard';
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        return view('sendportal::auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+    }
 }

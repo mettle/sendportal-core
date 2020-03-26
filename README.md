@@ -22,4 +22,4 @@
 ## Release new version
 
 - If CSS or JS files have been changed we need to recompile them: `npm run prod`
-- In the main repository we have to publish the newly compiled files: `php artisan vendor:publish --provider=Sendportal\Base\SendportalBaseServiceProvider --tag=sendportal-assets`  
+- In the main repository we have to publish the newly compiled files: `php artisan vendor:publish --provider=Sendportal\\Base\\SendportalBaseServiceProvider --tag=sendportal-assets`  

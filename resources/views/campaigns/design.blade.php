@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', __('Campaign Design'))
 
@@ -10,7 +10,7 @@
 
     {!! Form::model($campaign, array('method' => 'put', 'route' => array('campaigns.content.update', $campaign->id))) !!}
 
-    @include('templates.partials.editor')
+    @include('sendportal::templates.partials.editor')
 
     <br>
 

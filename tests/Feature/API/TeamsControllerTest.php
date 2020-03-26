@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API;
 
+use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -30,7 +31,7 @@ class TeamsControllerTest extends TestCase
 
         $response->assertJson([
             'data' => [
-                array_only($team->toArray(), ['name'])
+                Arr::only($team->toArray(), ['name'])
             ]
         ]);
     }
@@ -53,13 +54,13 @@ class TeamsControllerTest extends TestCase
 
         $response->assertJson([
             'data' => [
-                array_only($team->toArray(), ['name'])
+                Arr::only($team->toArray(), ['name'])
             ]
         ]);
 
         $response->assertJsonMissing([
             'data' => [
-                array_only($secondTeam->toArray(), ['name'])
+                Arr::only($secondTeam->toArray(), ['name'])
             ]
         ]);
     }

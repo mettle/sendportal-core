@@ -2,6 +2,7 @@
 
 namespace Sendportal\Base\Repositories;
 
+use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Segment;
 
 class SegmentTenantRepository extends BaseTenantRepository
@@ -20,7 +21,7 @@ class SegmentTenantRepository extends BaseTenantRepository
 
         $this->executeSave($teamId, $instance, $data);
 
-        $this->syncSubscribers($instance, array_get($data, 'subscribers', []));
+        $this->syncSubscribers($instance, Arr::get($data, 'subscribers', []));
 
         return $instance;
     }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', $campaign->name)
 
@@ -86,6 +86,6 @@
     </div>
 
 
-    @include('layouts.partials.pagination', ['records' => $messages])
+    @include('sendportal::layouts.partials.pagination', ['records' => $messages])
 
 @endsection

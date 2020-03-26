@@ -6,6 +6,7 @@ namespace Tests\Feature\API;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 class SegmentSubscribersControllerTest extends TestCase
@@ -35,7 +36,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $expected = [
             'data' => [
-                array_only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
+                Arr::only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
             ],
         ];
 
@@ -70,7 +71,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $expected = [
             'data' => [
-                array_only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
+                Arr::only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
             ],
         ];
 
@@ -140,7 +141,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $expected = [
             'data' => [
-                array_only($newSubscriber->toArray(), ['first_name', 'last_name', 'email'])
+                Arr::only($newSubscriber->toArray(), ['first_name', 'last_name', 'email'])
             ],
         ];
 

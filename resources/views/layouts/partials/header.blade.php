@@ -71,7 +71,7 @@
                             <a class="dropdown-item px-3" href="{{ route('sendportal.profile.edit') }}"><i
                                     class="fas fa-user mr-2 fc-gray-300"></i>{{ __('My Profile') }}</a>
                             <a class="dropdown-item px-3" href="{{ route('sendportal.workspaces.index') }}"><i
-                                    class="fas fa-layer-plus mr-2 fc-gray-300"></i>{{ __('Workspaces') }}</a>
+                                    class="fas fa-layer-group mr-2 fc-gray-300"></i>{{ __('Workspaces') }}</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item px-3" href="{{ route('logout') }}"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i

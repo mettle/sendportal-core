@@ -54,7 +54,7 @@ class SendInvitation
     protected function getInvitationViewName(Invitation $invitation): string
     {
         return $invitation->user_id
-            ? 'workspaces.emails.invitation-to-existing-user'
-            : 'workspaces.emails.invitation-to-new-user';
+            ? 'sendportal::workspaces.emails.invitation-to-existing-user'
+            : 'sendportal::workspaces.emails.invitation-to-new-user';
     }
 }

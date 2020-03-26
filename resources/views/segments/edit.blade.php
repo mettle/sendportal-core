@@ -12,9 +12,9 @@
         @slot('cardHeader', __('Edit Segment'))
 
         @slot('cardBody')
-            {!! Form::model($segment, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['segments.update', $segment->id]]) !!}
+            {!! Form::model($segment, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['sendportal.segments.update', $segment->id]]) !!}
 
-            @include('segments.partials.form')
+            @include('sendportal::segments.partials.form')
 
             {!! Form::submitButton(__('Save')) !!}
 

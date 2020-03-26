@@ -56,7 +56,7 @@ class MessagesController extends Controller
 
         $messages = $this->messageRepo->paginateWithSource(currentTeamId(), 'sent_at', [], 50, $params);
 
-        return view('messages.index', compact('messages'));
+        return view('sendportal::messages.index', compact('messages'));
     }
 
     /**
@@ -69,7 +69,7 @@ class MessagesController extends Controller
     {
         $messages = $this->messageRepo->paginateWithSource(currentTeamId(), 'created_at', [], 50, ['draft' => true]);
 
-        return view('messages.index', compact('messages'));
+        return view('sendportal::messages.index', compact('messages'));
     }
 
     /**
@@ -85,7 +85,7 @@ class MessagesController extends Controller
 
         $content = $this->mergeContent->handle($message);
 
-        return view('messages.show', compact('content', 'message'));
+        return view('sendportal::messages.show', compact('content', 'message'));
     }
 
     /**

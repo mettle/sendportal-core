@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @include('templates.partials.griditem')
+                    @include('sendportal::templates.partials.griditem')
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ class SegmentSubscriberDestroyRequest extends FormRequest
     {
         return [
             'subscribers' => ['array', 'required'],
-            'subscribers.*' => ['integer', new CanAccessSubscriber(user())]
+            'subscribers.*' => ['integer', new CanAccessSubscriber($this->user())]
         ];
     }
 }

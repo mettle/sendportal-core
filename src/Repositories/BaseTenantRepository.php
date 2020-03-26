@@ -442,7 +442,7 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     protected function setBooleanFields($instance, array $data)
     {
         foreach ($this->getModelBooleanFields($instance) as $booleanField) {
-            $data[$booleanField] = array_get($data, $booleanField, 0);
+            $data[$booleanField] = \Arr::get($data, $booleanField, 0);
         }
 
         return $data;

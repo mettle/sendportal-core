@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @push('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.min.css">

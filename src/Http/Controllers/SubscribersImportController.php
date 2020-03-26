@@ -32,7 +32,7 @@ class SubscribersImportController extends Controller
     {
         $segments = $segmentRepo->pluck(currentTeamId(), 'name', 'id');
 
-        return view('subscribers.import', compact('segments'));
+        return view('sendportal::subscribers.import', compact('segments'));
     }
 
     /**

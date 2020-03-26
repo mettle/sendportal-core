@@ -105,10 +105,10 @@ class MessageTenantRepository extends BaseTenantRepository
      */
     protected function applySentFilter($instance, $filters = [])
     {
-        if ($sentAt = array_get($filters, 'draft')) {
+        if ($sentAt = \Arr::get($filters, 'draft')) {
             $instance->whereNotNull('queued_at')
                 ->whereNull('sent_at');
-        } elseif ($sentAt = array_get($filters, 'sent')) {
+        } elseif ($sentAt = \Arr::get($filters, 'sent')) {
             $instance->whereNotNull('sent_at');
         }
     }
@@ -119,7 +119,7 @@ class MessageTenantRepository extends BaseTenantRepository
      */
     protected function applySearchFilter($instance, $filters = [])
     {
-        if ($search = array_get($filters, 'search')) {
+        if ($search = \Arr::get($filters, 'search')) {
             $search = '%' . $search . '%';
 
             $instance->where(function ($instance) use ($search) {
@@ -141,7 +141,7 @@ class MessageTenantRepository extends BaseTenantRepository
      */
     protected function applyStatusFilter($instance, $filters = [])
     {
-        $status = array_get($filters, 'status', 'all');
+        $status = \Arr::get($filters, 'status', 'all');
 
         if ($status == 'bounced') {
             $instance->whereNotNull('bounced_at');

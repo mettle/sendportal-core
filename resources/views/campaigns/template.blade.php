@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('sendportal::layouts.app')
 
 @section('title', __('Campaign Template'))
 
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="card-body">
-                        @include('templates.partials.griditem')
+                        @include('sendportal::templates.partials.griditem')
                     </div>
                 </div>
             </div>

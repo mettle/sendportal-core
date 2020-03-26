@@ -29,7 +29,7 @@ class TemplatesController extends Controller
     {
         $templates = $this->templates->paginate(currentTeamId(), 'name');
 
-        return view('templates.index', compact('templates'));
+        return view('sendportal::templates.index', compact('templates'));
     }
 
     /**
@@ -39,7 +39,7 @@ class TemplatesController extends Controller
      */
     public function create(): View
     {
-        return view('templates.create');
+        return view('sendportal::templates.create');
     }
 
     /**
@@ -74,7 +74,7 @@ class TemplatesController extends Controller
     {
         $template = $this->templates->find(currentTeamId(), $id);
 
-        return view('templates.edit', compact('template'));
+        return view('sendportal::templates.edit', compact('template'));
     }
 
     /**

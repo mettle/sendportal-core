@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Resources\Team as TeamResource;
 use Sendportal\Base\Repositories\TeamsRepository;
@@ -23,9 +24,9 @@ class TeamsController extends Controller
     /**
      * @throws Exception
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $teams = $this->teams->teamsForUser(user());
+        $teams = $this->teams->teamsForUser($request->user());
 
         return TeamResource::collection($teams);
     }

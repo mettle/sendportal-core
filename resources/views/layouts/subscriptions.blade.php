@@ -10,7 +10,7 @@
 
 <div class="container">
     <div class="mt-5">
-        @include('layouts.partials.success')
+        @include('sendportal::layouts.partials.success')
 
         @yield('content')
     </div>

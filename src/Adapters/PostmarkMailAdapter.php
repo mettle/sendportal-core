@@ -40,7 +40,7 @@ class PostmarkMailAdapter extends BaseMailAdapter
             return $this->client;
         }
 
-        $this->client = new PostmarkClient(array_get($this->config, 'key'));
+        $this->client = new PostmarkClient(\Arr::get($this->config, 'key'));
 
         return $this->client;
     }

@@ -66,7 +66,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function handleOpened(string $messageId, array $content): void
     {
-        $ipAddress = array_get($content, 'event-data.ip');
+        $ipAddress = \Arr::get($content, 'event-data.ip');
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
@@ -77,7 +77,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function handleClicked(string $messageId, array $content): void
     {
-        $url = array_get($content, 'event-data.url');
+        $url = \Arr::get($content, 'event-data.url');
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleClick($messageId, $timestamp, $url);
@@ -98,7 +98,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function handleFailed(string $messageId, array $content): void
     {
-        $severity = array_get($content, 'event-data.severity');
+        $severity = \Arr::get($content, 'event-data.severity');
         $description = $this->extractFailureDescription($content);
         $timestamp = $this->extractTimestamp($content);
 
@@ -114,7 +114,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractEventName(array $payload): string
     {
-        return array_get($payload, 'event-data.event');
+        return \Arr::get($payload, 'event-data.event');
     }
 
     /**
@@ -122,7 +122,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractMessageId(array $payload): string
     {
-        return $this->formatMessageId(array_get($payload, 'event-data.message.headers.message-id'));
+        return $this->formatMessageId(\Arr::get($payload, 'event-data.message.headers.message-id'));
     }
 
     /**
@@ -145,7 +145,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractTimestamp($payload)
     {
-        return Carbon::createFromTimestamp(array_get($payload, 'event-data.timestamp'));
+        return Carbon::createFromTimestamp(\Arr::get($payload, 'event-data.timestamp'));
     }
 
     /**
@@ -153,11 +153,11 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractFailureDescription(array $payload): string
     {
-        if ($description = array_get($payload, 'event-data.delivery-status.description')) {
+        if ($description = \Arr::get($payload, 'event-data.delivery-status.description')) {
             return $description;
         }
 
-        if ($message = array_get($payload, 'event-data.delivery-status.message')) {
+        if ($message = \Arr::get($payload, 'event-data.delivery-status.message')) {
             return $message;
         }
 

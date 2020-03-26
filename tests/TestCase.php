@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Collective\Html\FormFacade;
+use Laravel\Ui\UiServiceProvider;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Team;
@@ -14,7 +16,10 @@ abstract class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app)
     {
-        return [SendportalBaseServiceProvider::class];
+        return [
+            UiServiceProvider::class,
+            SendportalBaseServiceProvider::class
+        ];
     }
 
     /**
@@ -63,6 +68,16 @@ abstract class TestCase extends BaseTestCase
             'schema' => 'public',
             'sslmode' => 'prefer',
         ]);
+
+        $app['config']->set('auth.providers.users.model', User::class);
+    }
+
+
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Form' => FormFacade::class
+        ];
     }
 
     /**

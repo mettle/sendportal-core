@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Sendportal\Base\Http\Middleware\VerifyUserOnTeam;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ Route::middleware(['auth:api'])->name('api.')->namespace('Api')->group(static fu
 
 Route::middleware([
     'auth:api',
-    'onTeam'
+    VerifyUserOnTeam::class
 ])->name('api.')->namespace('Api')->prefix('workspaces/{teamId}')->group(function () {
     Route::apiResource('subscribers', 'SubscribersController');
     Route::apiResource('segments', 'SegmentsController');

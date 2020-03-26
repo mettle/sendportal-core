@@ -54,7 +54,7 @@ class CampaignsController extends Controller
         $campaigns = $this->campaigns->paginate(currentTeamId(), 'created_atDesc', ['status']);
         $providerCount = $this->providers->count(currentTeamId());
 
-        return view('campaigns.index', compact('campaigns', 'providerCount'));
+        return view('sendportal::campaigns.index', compact('campaigns', 'providerCount'));
     }
 
     /**
@@ -65,7 +65,7 @@ class CampaignsController extends Controller
         $templates = [null => '- None -'] + $this->templates->pluck(currentTeamId());
         $providers = $this->providers->all(currentTeamId());
 
-        return view('campaigns.create', compact('templates', 'providers'));
+        return view('sendportal::campaigns.create', compact('templates', 'providers'));
     }
 
     /**
@@ -85,7 +85,7 @@ class CampaignsController extends Controller
     {
         $campaign = $this->campaigns->find(currentTeamId(), $id);
 
-        return view('campaigns.show', compact('campaign'));
+        return view('sendportal::campaigns.show', compact('campaign'));
     }
 
     /**
@@ -97,7 +97,7 @@ class CampaignsController extends Controller
         $providers = $this->providers->all(currentTeamId());
         $templates = [null => '- None -'] + $this->templates->pluck(currentTeamId());
 
-        return view('campaigns.edit', compact('campaign', 'providers', 'templates'));
+        return view('sendportal::campaigns.edit', compact('campaign', 'providers', 'templates'));
     }
 
     /**
@@ -126,7 +126,7 @@ class CampaignsController extends Controller
 
         $segments = $this->segments->all(currentTeamId(), 'name');
 
-        return view('campaigns.preview', compact('campaign', 'segments', 'subscriberCount'));
+        return view('sendportal::campaigns.preview', compact('campaign', 'segments', 'subscriberCount'));
     }
 
     /**
@@ -141,7 +141,7 @@ class CampaignsController extends Controller
             return redirect()->route('campaigns.reports.index', $id);
         }
 
-        return view('campaigns.status', compact('campaign'));
+        return view('sendportal::campaigns.status', compact('campaign'));
     }
 
     /**

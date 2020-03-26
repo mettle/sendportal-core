@@ -27,7 +27,7 @@ class TeamUsersController extends Controller
      */
     public function index(): ViewContract
     {
-        return view('settings.users.index', [
+        return view('sendportal::settings.users.index', [
             'users' => user()->currentTeam->users,
             'invitations' => user()->currentTeam->invitations,
         ]);

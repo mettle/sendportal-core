@@ -35,12 +35,12 @@
                 </div>
 
                 <div class="mt-5">
-                    @include('layouts.partials.sidebar')
+                    @include('sendportal::layouts.partials.sidebar')
                 </div>
             </div>
         @endauth()
 
-        @include('layouts.main')
+        @include('sendportal::layouts.main')
     </div>
 </div>
 

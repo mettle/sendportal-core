@@ -2,6 +2,7 @@
 
 namespace Sendportal\Base\Repositories;
 
+use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Subscriber;
 
 class SubscriberTenantRepository extends BaseTenantRepository
@@ -33,7 +34,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
      */
     protected function applyNameFilter(object $instance, array $filters)
     {
-        if ($name = array_get($filters, 'name')) {
+        if ($name = Arr::get($filters, 'name')) {
             $name = '%' . $name . '%';
 
             $instance->where(function ($instance) use ($name) {
@@ -52,7 +53,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
      */
     protected function applyStatusFilter(object $instance, array $filters)
     {
-        $status = array_get($filters, 'status');
+        $status = Arr::get($filters, 'status');
 
         if ($status == 'subscribed') {
             $instance->whereNull('unsubscribed_at');
@@ -69,7 +70,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
      */
     protected function applySegmentFilter($instance, $filters = [])
     {
-        if ($segmentId = array_get($filters, 'segment_id')) {
+        if ($segmentId = Arr::get($filters, 'segment_id')) {
             $instance->select('subscribers.*')
                 ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
                 ->whereIn('segment_subscriber.segment_id', $segmentId);
@@ -85,12 +86,12 @@ class SubscriberTenantRepository extends BaseTenantRepository
 
         $instance = $this->getNewInstance();
 
-        $subscriber = $this->executeSave($teamId, $instance, array_except($data, ['segments']));
+        $subscriber = $this->executeSave($teamId, $instance, Arr::except($data, ['segments']));
 
         // only sync segments if its actually present. This means that users's must
         // pass through an empty segments array if they want to delete all segments
         if (isset($data['segments'])) {
-            $this->syncSegments($instance, array_get($data, 'segments', []));
+            $this->syncSegments($instance, Arr::get($data, 'segments', []));
         }
 
         return $subscriber;
@@ -105,12 +106,12 @@ class SubscriberTenantRepository extends BaseTenantRepository
 
         $instance = $this->find($teamId, $id);
 
-        $subscriber = $this->executeSave($teamId, $instance, array_except($data, ['segments']));
+        $subscriber = $this->executeSave($teamId, $instance, Arr::except($data, ['segments']));
 
         // only sync segments if its actually present. This means that users's must
         // pass through an empty segments array if they want to delete all segments
         if (isset($data['segments'])) {
-            $this->syncSegments($instance, array_get($data, 'segments', []));
+            $this->syncSegments($instance, Arr::get($data, 'segments', []));
         }
 
         return $subscriber;

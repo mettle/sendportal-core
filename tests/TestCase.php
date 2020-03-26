@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutMix();
-        $this->withoutExceptionHandling();
+        $this->withExceptionHandling();
         $this->withFactories(__DIR__ . '/../database/factories');
 
         $this->artisan('migrate', ['--database' => 'mysql'])->run();

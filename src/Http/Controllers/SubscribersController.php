@@ -50,7 +50,7 @@ class SubscribersController extends Controller
     {
         $subscribers = $this->subscriberRepo->paginate(auth()->user()->currentWorkspace()->id, 'email', [], 50, request()->all());
 
-        return view('subscribers.index', compact('subscribers'));
+        return view('sendportal::subscribers.index', compact('subscribers'));
     }
 
     /**

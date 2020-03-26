@@ -12,9 +12,9 @@
         @slot('cardHeader', __('Create Subscriber'))
 
         @slot('cardBody')
-            {!! Form::open(['route' => ['subscribers.store'], 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['route' => ['sendportal.subscribers.store'], 'class' => 'form-horizontal']) !!}
 
-            @include('subscribers.partials.form')
+            @include('sendportal::subscribers.partials.form')
 
             {!! Form::submitButton(__('Save')) !!}
 

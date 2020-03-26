@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @include('messages.partials.nav')
+    @include('sendportal::messages.partials.nav')
 
     @component('sendportal::layouts.partials.actions')
         @slot('left')
@@ -81,14 +81,14 @@
                             </td>
                             <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
                             <td>
-                                @include('messages.partials.status-row')
+                                @include('sendportal::messages.partials.status-row')
                             </td>
                             <td>
                                 @if ( ! $message->sent_at)
                                     <form action="{{ route('sendportal.messages.send') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $message->id }}">
-                                        <a href="{{ route('messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
+                                        <a href="{{ route('sendportal.messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
                                         <button type="submit" class="btn btn-xs btn-light">{{ __('Send now') }}</button>
                                     </form>
                                 @endif

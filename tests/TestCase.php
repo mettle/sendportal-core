@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Collective\Html\FormFacade;
+use Illuminate\Foundation\Mix;
 use Laravel\Ui\UiServiceProvider;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
@@ -34,6 +35,10 @@ abstract class TestCase extends BaseTestCase
 
         $this->artisan('migrate', ['--database' => 'mysql'])->run();
         $this->artisan('migrate', ['--database' => 'pgsql_testing'])->run();
+
+        $this->app->singleton(Mix::class, function () {
+            return function () {};
+        });
     }
 
     /**

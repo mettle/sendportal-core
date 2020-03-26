@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Auth;
 
 use Exception;
@@ -15,7 +17,7 @@ class ProfileController extends Controller
      *
      * @return View
      */
-    public function edit()
+    public function edit(): View
     {
         return view('sendportal::profile.edit');
     }
@@ -28,7 +30,7 @@ class ProfileController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function update(ProfileUpdateRequest $request)
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         user()->update($request->validated());
 

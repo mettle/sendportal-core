@@ -20,10 +20,6 @@ class Helper
             return null;
         }
 
-        if (!$timezone) {
-            $timezone = auth()->user()->timezone;
-        }
-
         return Carbon::parse($date)->copy()->setTimezone($timezone);
     }
 

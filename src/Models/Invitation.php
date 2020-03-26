@@ -20,13 +20,13 @@ class Invitation extends Model
     }
 
     /**
-     * The team this invitation is for.
+     * The workspace this invitation is for.
      *
      * @return BelongsTo
      */
-    public function team(): BelongsTo
+    public function workspace(): BelongsTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Workspace::class);
     }
 
     public function isExpired(): bool

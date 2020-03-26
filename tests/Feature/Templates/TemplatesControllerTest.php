@@ -25,7 +25,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_logged_in_user_can_see_template_index()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $response = $this->get(route('templates.index'));
@@ -36,11 +36,11 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function the_index_lists_existing_templates()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $template = factory(Template::class)->create([
-            'team_id' => $user->currentTeam()->id
+            'workspace_id' => $user->currentWorkspace()->id
         ]);
 
         $response = $this->get(route('templates.index'));
@@ -62,7 +62,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_logged_in_user_can_see_the_create_form()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $response = $this->get(route('templates.create'));
@@ -96,7 +96,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_logged_in_user_can_store_a_new_template()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $data = [
@@ -111,14 +111,14 @@ class TemplatesControllerTest extends TestCase
         $this->assertDatabaseHas('templates', [
             'name' => $data['name'],
             'content' => $data['content'],
-            'team_id' => $user->currentTeam()->id
+            'workspace_id' => $user->currentWorkspace()->id
         ]);
     }
 
     /** @test */
     function storing_is_validated()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $data = [
@@ -153,11 +153,11 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_logged_in_user_can_see_the_edit_form()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $template = factory(Template::class)->create([
-            'team_id' => $user->currentTeam()->id
+            'workspace_id' => $user->currentWorkspace()->id
         ]);
 
         $response = $this->get(route('templates.edit', $template->id));
@@ -187,7 +187,7 @@ class TemplatesControllerTest extends TestCase
         $this->assertDatabaseMissing('templates', $data);
         $this->assertDatabaseHas('templates', [
             'id' => $template->id,
-            'team_id' => $template->team_id,
+            'workspace_id' => $template->workspace_id,
             'name' => $template->name,
             'content' => $template->content
         ]);
@@ -196,11 +196,11 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_logged_in_user_can_update_a_template()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $template = factory(Template::class)->create([
-            'team_id' => $user->currentTeam()->id
+            'workspace_id' => $user->currentWorkspace()->id
         ]);
 
         $data = [
@@ -217,17 +217,17 @@ class TemplatesControllerTest extends TestCase
             'name' => $template->name,
             'content' => $template->content
         ]);
-        $this->assertDatabaseHas('templates', $data + ['id' => $template->id, 'team_id' => $user->currentTeam()->id]);
+        $this->assertDatabaseHas('templates', $data + ['id' => $template->id, 'workspace_id' => $user->currentWorkspace()->id]);
     }
 
     /** @test */
     function updates_are_validated()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $template = factory(Template::class)->create([
-            'team_id' => $user->currentTeam()->id
+            'workspace_id' => $user->currentWorkspace()->id
         ]);
 
         $data = [
@@ -252,11 +252,11 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_logged_in_user_can_delete_a_template()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
         $template = factory(Template::class)->create([
-            'team_id' => $user->currentTeam()->id
+            'workspace_id' => $user->currentWorkspace()->id
         ]);
 
         $response = $this->delete(route('templates.destroy', $template->id));

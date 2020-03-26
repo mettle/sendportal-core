@@ -7,7 +7,7 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -36,17 +36,17 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
     {
-        [$team, $provider] = $this->createUserWithTeamAndProvider();
-        $campaign = $this->createCampaign($team, $provider);
+        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
+        $campaign = $this->createCampaign($workspace, $provider);
 
         // 30 seconds
-        $this->createOpenedMessage($team, $campaign, 1, [
+        $this->createOpenedMessage($workspace, $campaign, 1, [
             'delivered_at' => now(),
             'opened_at' => now()->addSeconds(30),
         ]);
 
         // 60 seconds
-        $this->createOpenedMessage($team, $campaign, 1, [
+        $this->createOpenedMessage($workspace, $campaign, 1, [
             'delivered_at' => now(),
             'opened_at' => now()->addSeconds(60),
         ]);
@@ -60,8 +60,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
     {
-        [$team, $provider] = $this->createUserWithTeamAndProvider();
-        $campaign = $this->createCampaign($team, $provider);
+        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
+        $campaign = $this->createCampaign($workspace, $provider);
 
         $averageTimeToOpen = app()->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
 
@@ -71,17 +71,17 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
-        [$team, $provider] = $this->createUserWithTeamAndProvider();
-        $campaign = $this->createCampaign($team, $provider);
+        [$workspace, $provider] = $this->createUserWithworkspaceAndProvider();
+        $campaign = $this->createCampaign($workspace, $provider);
 
         // 30 seconds
-        $this->createClickedMessage($team, $campaign, 1, [
+        $this->createClickedMessage($workspace, $campaign, 1, [
             'delivered_at' => now(),
             'clicked_at' => now()->addSeconds(30),
         ]);
 
         // 30 seconds
-        $this->createClickedMessage($team, $campaign, 1, [
+        $this->createClickedMessage($workspace, $campaign, 1, [
             'delivered_at' => now(),
             'clicked_at' => now()->addSeconds(60),
         ]);
@@ -94,8 +94,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
-        [$team, $provider] = $this->createUserWithTeamAndProvider();
-        $campaign = $this->createCampaign($team, $provider);
+        [$workspace, $provider] = $this->createUserWithworkspaceAndProvider();
+        $campaign = $this->createCampaign($workspace, $provider);
 
         $averageTimeToClick = app()->make(CampaignTenantInterface::class)->getAverageTimeToClick($campaign);
 
@@ -105,48 +105,48 @@ class CampaignTenantRepositoryTest extends TestCase
     /**
      * @return array
      */
-    protected function createUserWithTeamAndProvider(): array
+    protected function createUserWithworkspaceAndProvider(): array
     {
         $user = factory(User::class)->create();
 
-        $team = factory(Team::class)->create([
+        $workspace = factory(Workspace::class)->create([
             'owner_id' => $user->id,
         ]);
 
         $provider = factory(Provider::class)->create([
-            'team_id' => $team->id,
+            'workspace_id' => $workspace->id,
         ]);
 
-        return [$team, $provider];
+        return [$workspace, $provider];
     }
 
     /**
-     * @param Team $team
+     * @param Workspace $workspace
      * @param Provider $provider
      *
      * @return Campaign
      */
-    protected function createCampaign(Team $team, Provider $provider): Campaign
+    protected function createCampaign(Workspace $workspace, Provider $provider): Campaign
     {
         return factory(Campaign::class)->states(['withContent', 'sent'])->create([
-            'team_id' => $team->id,
+            'workspace_id' => $workspace->id,
             'provider_id' => $provider->id,
         ]);
     }
 
     /**
-     * @param Team $team
+     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $quantity
      * @param array $overrides
      * @return mixed
      */
-    protected function createOpenedMessage(Team $team, Campaign $campaign, int $quantity = 1, array $overrides = [])
+    protected function createOpenedMessage(Workspace $workspace, Campaign $campaign, int $quantity = 1, array $overrides = [])
     {
         $data = array_merge([
-            'team_id' => $team->id,
+            'workspace_id' => $workspace->id,
             'subscriber_id' => factory(Subscriber::class)->create([
-                'team_id' => $team->id,
+                'workspace_id' => $workspace->id,
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -160,18 +160,18 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @param Team $team
+     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $count
      *
      * @return mixed
      */
-    protected function createUnopenedMessage(Team $team, Campaign $campaign, int $count)
+    protected function createUnopenedMessage(Workspace $workspace, Campaign $campaign, int $count)
     {
         return factory(Message::class, $count)->create([
-            'team_id' => $team->id,
+            'workspace_id' => $workspace->id,
             'subscriber_id' => factory(Subscriber::class)->create([
-                'team_id' => $team->id,
+                'workspace_id' => $workspace->id,
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -182,18 +182,18 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @param Team $team
+     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $quantity
      * @param array $overrides
      * @return mixed
      */
-    protected function createClickedMessage(Team $team, Campaign $campaign, int $quantity = 1, array $overrides = [])
+    protected function createClickedMessage(Workspace $workspace, Campaign $campaign, int $quantity = 1, array $overrides = [])
     {
         $data = array_merge([
-            'team_id' => $team->id,
+            'workspace_id' => $workspace->id,
             'subscriber_id' => factory(Subscriber::class)->create([
-                'team_id' => $team->id,
+                'workspace_id' => $workspace->id,
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -207,18 +207,18 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @param Team $team
+     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $count
      *
      * @return mixed
      */
-    protected function createUnclickedMessage(Team $team, Campaign $campaign, int $count)
+    protected function createUnclickedMessage(Workspace $workspace, Campaign $campaign, int $count)
     {
         return factory(Message::class, $count)->create([
-            'team_id' => $team->id,
+            'workspace_id' => $workspace->id,
             'subscriber_id' => factory(Subscriber::class)->create([
-                'team_id' => $team->id,
+                'workspace_id' => $workspace->id,
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,

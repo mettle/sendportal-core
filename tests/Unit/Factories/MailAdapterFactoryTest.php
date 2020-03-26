@@ -20,7 +20,7 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_a_mailgun_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['team_id' => null, 'type_id' => ProviderType::MAILGUN]);
+        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::MAILGUN]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
@@ -34,7 +34,7 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_a_sendgrid_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['team_id' => null, 'type_id' => ProviderType::SENDGRID]);
+        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::SENDGRID]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
@@ -48,7 +48,7 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_a_postmark_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['team_id' => null, 'type_id' => ProviderType::POSTMARK]);
+        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::POSTMARK]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
@@ -62,7 +62,7 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_an_ses_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['team_id' => null, 'type_id' => ProviderType::SES]);
+        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::SES]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
@@ -76,7 +76,7 @@ class MailAdapterFactoryTest extends TestCase
     function an_exception_is_thrown_when_building_an_unknown_adapater()
     {
         // given
-        $provider = factory(Provider::class)->make(['team_id' => null, 'type_id' => 100]);
+        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => 100]);
         $adapterFactory = new MailAdapterFactory();
 
         // then

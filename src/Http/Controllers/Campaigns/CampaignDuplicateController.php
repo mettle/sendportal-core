@@ -33,7 +33,7 @@ class CampaignDuplicateController extends Controller
      */
     public function duplicate($campaignId)
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentTeam()->id, $campaignId);
+        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $campaignId);
 
         return redirect()->route('campaigns.create')->withInput([
                 'name' => $campaign->name . ' - Duplicate',

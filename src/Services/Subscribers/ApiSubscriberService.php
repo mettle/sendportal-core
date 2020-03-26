@@ -24,9 +24,9 @@ class ApiSubscriberService
     /**
      * @throws Exception
      */
-    public function store(int $teamId, Collection $data): Subscriber
+    public function store(int $workspaceId, Collection $data): Subscriber
     {
-        $subscriber = $this->subscribers->store($teamId, $data->except(['segments'])->toArray());
+        $subscriber = $this->subscribers->store($workspaceId, $data->except(['segments'])->toArray());
 
         event(new SubscriberAddedEvent($subscriber));
 
@@ -35,11 +35,11 @@ class ApiSubscriberService
         return $subscriber;
     }
 
-    public function delete(int $teamId, Subscriber $subscriber): bool
+    public function delete(int $workspaceId, Subscriber $subscriber): bool
     {
-        return DB::transaction(function () use ($teamId, $subscriber) {
+        return DB::transaction(function () use ($workspaceId, $subscriber) {
             $subscriber->segments()->detach();
-            return $this->subscribers->destroy($teamId, $subscriber->id);
+            return $this->subscribers->destroy($workspaceId, $subscriber->id);
         });
     }
 

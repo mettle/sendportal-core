@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Rules\ValidInvitation;
-use Sendportal\Base\Services\Teams\AcceptInvitation;
-use Sendportal\Base\Services\Teams\CreateTeam;
+use Sendportal\Base\Services\Workspaces\AcceptInvitation;
+use Sendportal\Base\Services\Workspaces\CreateWorkspace;
 use Sendportal\Base\Traits\ChecksInvitations;
 
 class RegisterController extends Controller
@@ -45,15 +45,15 @@ class RegisterController extends Controller
     /** @var AcceptInvitation */
     private $acceptInvitation;
 
-    /** @var CreateTeam */
-    private $createTeam;
+    /** @var CreateWorkspace */
+    private $createWorkspace;
 
-    public function __construct(AcceptInvitation $acceptInvitation, CreateTeam $createTeam)
+    public function __construct(AcceptInvitation $acceptInvitation, CreateWorkspace $createWorkspace)
     {
         $this->middleware('guest');
 
         $this->acceptInvitation = $acceptInvitation;
-        $this->createTeam = $createTeam;
+        $this->createWorkspace = $createWorkspace;
     }
 
     /**
@@ -110,11 +110,11 @@ class RegisterController extends Controller
             ]);
 
             if ($token = request('invitation')) {
-                // Attach user to invited team.
+                // Attach user to invited workspace.
                 $this->acceptInvitation->handle($user, $this->getInvitationFromToken($token));
             } else {
-                // Create a new team and attach as owner.
-                $this->createTeam->handle($user, $data['company_name'], Team::ROLE_OWNER);
+                // Create a new workspace and attach as owner.
+                $this->createWorkspace->handle($user, $data['company_name'], Workspace::ROLE_OWNER);
             }
 
             return $user;

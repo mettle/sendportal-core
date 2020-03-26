@@ -31,7 +31,7 @@ class SendgridWebhookHandler implements ShouldQueue
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
-        $method = 'handle' . studly_case(str_slug($eventName, ''));
+        $method = 'handle' . Str::studly(Str::slug($eventName, ''));
 
         if (method_exists($this, $method)) {
             Log::info('SendGrid webhook processing type=' . $eventName . ' message_id=' . $messageId);

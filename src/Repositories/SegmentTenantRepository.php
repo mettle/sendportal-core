@@ -15,11 +15,11 @@ class SegmentTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function update($teamId, $id, array $data)
+    public function update($workspaceId, $id, array $data)
     {
-        $instance = $this->find($teamId, $id);
+        $instance = $this->find($workspaceId, $id);
 
-        $this->executeSave($teamId, $instance, $data);
+        $this->executeSave($workspaceId, $instance, $data);
 
         $this->syncSubscribers($instance, Arr::get($data, 'subscribers', []));
 

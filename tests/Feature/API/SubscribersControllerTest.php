@@ -18,12 +18,12 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function the_subscribers_index_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $subscriber = $this->createSubscriber($user);
 
         $route = route('api.subscribers.index', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'api_token' => $user->api_token,
         ]);
 
@@ -43,12 +43,12 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_single_subscriber_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $subscriber = $this->createSubscriber($user);
 
         $route = route('api.subscribers.show', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]);
@@ -67,9 +67,9 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_created_by_authorised_users()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
-        $route = route('api.subscribers.store', $user->currentTeam()->id);
+        $route = route('api.subscribers.store', $user->currentWorkspace()->id);
 
         $request = [
             'first_name' => $this->faker->firstName,
@@ -87,12 +87,12 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_updated_by_authorised_users()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $subscriber = $this->createSubscriber($user);
 
         $route = route('api.subscribers.update', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]);
@@ -114,12 +114,12 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_deleted_by_authorised_users()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $subscriber = $this->createSubscriber($user);
 
         $route = route('api.subscribers.destroy', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]);
@@ -133,16 +133,16 @@ class SubscribersControllerTest extends TestCase
     function a_subscriber_in_a_segment_can_be_deleted()
     {
         // given
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $subscriber = $this->createSubscriber($user);
-        $segment = factory(Segment::class)->create(['team_id' => $user->currentTeam()->id]);
+        $segment = factory(Segment::class)->create(['workspace_id' => $user->currentWorkspace()->id]);
         $subscriber->segments()->attach($segment->id);
 
         // when
         $this->withoutExceptionHandling();
         $response = $this->delete(route('api.subscribers.destroy', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]));

@@ -24,25 +24,25 @@ class ImportSubscriberService
      * @return Subscriber
      * @throws Exception
      */
-    public function import(int $teamId, array $data): Subscriber
+    public function import(int $workspaceId, array $data): Subscriber
     {
         $subscriber = null;
 
         if (!empty(\Arr::get($data, 'id'))) {
-            $subscriber = $this->subscribers->findBy($teamId, 'id', $data['id'], ['segments']);
+            $subscriber = $this->subscribers->findBy($workspaceId, 'id', $data['id'], ['segments']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->findBy($teamId, 'email', \Arr::get($data, 'email'), ['segments']);
+            $subscriber = $this->subscribers->findBy($workspaceId, 'email', \Arr::get($data, 'email'), ['segments']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->store($teamId, array_except($data, ['id', 'segments']));
+            $subscriber = $this->subscribers->store($workspaceId, array_except($data, ['id', 'segments']));
         }
 
         $data['segments'] = array_merge($subscriber->segments->pluck('id')->toArray(), \Arr::get($data, 'segments'));
 
-        $this->subscribers->update($teamId, $subscriber->id, $data);
+        $this->subscribers->update($workspaceId, $subscriber->id, $data);
 
         return $subscriber;
     }

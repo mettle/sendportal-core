@@ -15,12 +15,12 @@ class CreateTemplatesTable extends Migration
     {
         Schema::create('templates', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('team_id');
+            $table->unsignedInteger('workspace_id');
             $table->string('name');
             $table->text('content')->nullable();
             $table->timestamps();
 
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->foreign('workspace_id')->references('id')->on('workspaces');
         });
     }
 }

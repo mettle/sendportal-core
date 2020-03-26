@@ -11,7 +11,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
 
     // TODO(david): we may want a way to disable the auth routes in sendportal, to allow for auth from other places?
     //  E.g. if the `sendportal/base` package is included in another project that already has its own auth setup.
-    //  Though, that in itself opens up issues around setting up teams, etc, that we currently rely on.
+    //  Though, that in itself opens up issues around setting up workspaces, etc, that we currently rely on.
 
     // Auth.
     Auth::routes(['verify' => true, 'register' => true]); // config('auth.enable_register')]);
@@ -82,20 +82,20 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
         $appRouter->prefix('settings')->group(static function (Router $settingsRouter) {
             $settingsRouter->get('', 'SettingsController@index')->name('settings.index');
 
-            // Team User Management.
-            $settingsRouter->namespace('Teams')
-                ->middleware(\Sendportal\Base\Http\Middleware\OwnsCurrentTeam::class)
+            // Workspace User Management.
+            $settingsRouter->namespace('Workspaces')
+                ->middleware(\Sendportal\Base\Http\Middleware\OwnsCurrentWorkspace::class)
                 ->name('settings.users.')
                 ->prefix('users')
-                ->group(static function (Router $teamsRouter) {
-                    $teamsRouter->get('/', 'TeamUsersController@index')->name('index');
-                    $teamsRouter->delete('{userId}', 'TeamUsersController@destroy')->name('destroy');
+                ->group(static function (Router $workspacesRouter) {
+                    $workspacesRouter->get('/', 'WorkspaceUsersController@index')->name('index');
+                    $workspacesRouter->delete('{userId}', 'WorkspaceUsersController@destroy')->name('destroy');
 
                     // Invitations.
-                    $teamsRouter->name('invitations.')->prefix('invitations')
+                    $workspacesRouter->name('invitations.')->prefix('invitations')
                         ->group(static function (Router $invitationsRouter) {
-                            $invitationsRouter->post('/', 'TeamInvitationsController@store')->name('store');
-                            $invitationsRouter->delete('{invitation}', 'TeamInvitationsController@destroy')
+                            $invitationsRouter->post('/', 'WorkspaceInvitationsController@store')->name('store');
+                            $invitationsRouter->delete('{invitation}', 'WorkspaceInvitationsController@destroy')
                                 ->name('destroy');
                         });
                 });
@@ -119,22 +119,22 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
         });
     });
 
-    // Team Management.
-    Route::namespace('Teams')->middleware(['auth', 'verified'])->group(static function (Router $teamRouter) {
-        $teamRouter->resource('workspaces', 'WorkspacesController')->except([
+    // Workspace Management.
+    Route::namespace('Workspaces')->middleware(['auth', 'verified'])->group(static function (Router $workspaceRouter) {
+        $workspaceRouter->resource('workspaces', 'WorkspacesController')->except([
             'create',
             'show',
             'destroy',
         ]);
 
-        // Team Switching.
-        $teamRouter->get('workspaces/{team}/switch', 'SwitchWorkspaceController@switch')->name('workspaces.switch');
+        // Workspace Switching.
+        $workspaceRouter->get('workspaces/{workspace}/switch', 'SwitchWorkspaceController@switch')->name('workspaces.switch');
 
         // Invitations.
-        $teamRouter->post('teams/invitations/{invitation}/accept', 'PendingInvitationController@accept')
-            ->name('teams.invitations.accept');
-        $teamRouter->post('teams/invitations/{invitation}/reject', 'PendingInvitationController@reject')
-            ->name('teams.invitations.reject');
+        $workspaceRouter->post('workspaces/invitations/{invitation}/accept', 'PendingInvitationController@accept')
+            ->name('workspaces.invitations.accept');
+        $workspaceRouter->post('workspaces/invitations/{invitation}/reject', 'PendingInvitationController@reject')
+            ->name('workspaces.invitations.reject');
     });
 
     // Subscriptions

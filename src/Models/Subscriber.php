@@ -26,9 +26,9 @@ class Subscriber extends BaseModel
         });
     }
 
-    public function team(): BelongsTo
+    public function workspace(): BelongsTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Workspace::class);
     }
 
     public function segments(): BelongsToMany

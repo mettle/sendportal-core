@@ -54,7 +54,7 @@ class MessagesController extends Controller
         $params = request()->only(['search', 'status']);
         $params['sent'] = true;
 
-        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentTeam()->id, 'sent_at', [], 50, $params);
+        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'sent_at', [], 50, $params);
 
         return view('sendportal::messages.index', compact('messages'));
     }
@@ -67,7 +67,7 @@ class MessagesController extends Controller
      */
     public function draft()
     {
-        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentTeam()->id, 'created_at', [], 50, ['draft' => true]);
+        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'created_at', [], 50, ['draft' => true]);
 
         return view('sendportal::messages.index', compact('messages'));
     }
@@ -81,7 +81,7 @@ class MessagesController extends Controller
      */
     public function show(int $messageId)
     {
-        $message = $this->messageRepo->find(auth()->user()->currentTeam()->id, $messageId);
+        $message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, $messageId);
 
         $content = $this->mergeContent->handle($message);
 
@@ -96,7 +96,7 @@ class MessagesController extends Controller
      */
     public function send()
     {
-        if (! $message = $this->messageRepo->find(auth()->user()->currentTeam()->id, request('id'), ['subscriber'])) {
+        if (! $message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, request('id'), ['subscriber'])) {
             return redirect()->back()->withErrors(__('Unable to locate that message'));
         }
 

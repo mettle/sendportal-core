@@ -51,7 +51,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sendportal');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        $this->app['router']->middleware('ownsCurrentTeam', OwnsCurrentTeam::class);
+
 
         Route::group([
             'namespace' => 'Sendportal\Base\Http\Controllers'

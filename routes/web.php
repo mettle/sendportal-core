@@ -84,7 +84,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
 
             // Team User Management.
             $settingsRouter->namespace('Teams')
-                ->middleware('ownsCurrentTeam')
+                ->middleware(\Sendportal\Base\Http\Middleware\OwnsCurrentTeam::class)
                 ->name('settings.users.')
                 ->prefix('users')
                 ->group(static function (Router $teamsRouter) {

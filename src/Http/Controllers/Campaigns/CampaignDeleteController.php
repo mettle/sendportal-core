@@ -37,7 +37,7 @@ class CampaignDeleteController extends Controller
      */
     public function confirm($id)
     {
-        $campaign = $this->campaigns->find(currentTeamId(), $id);
+        $campaign = $this->campaigns->find(auth()->user()->currentTeam()->id, $id);
 
         if (! $campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
@@ -56,14 +56,14 @@ class CampaignDeleteController extends Controller
      */
     public function destroy(Request $request)
     {
-        $campaign = $this->campaigns->find(currentTeamId(), $request->get('id'));
+        $campaign = $this->campaigns->find(auth()->user()->currentTeam()->id, $request->get('id'));
 
         if (! $campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
 
-        $this->campaigns->destroy(currentTeamId(), $request->get('id'));
+        $this->campaigns->destroy(auth()->user()->currentTeam()->id, $request->get('id'));
 
         return redirect()->route('sendportal.campaigns.index')
             ->with('success', __('The Campaign has been successfully deleted'));

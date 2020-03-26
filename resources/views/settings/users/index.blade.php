@@ -31,7 +31,7 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ ucwords($user->pivot->role) }}</td>
                                 <td>
-                                    @if ($user->id === user()->id)
+                                    @if ($user->id === auth()->user()->id)
                                         <button
                                             class="btn btn-sm btn-light"
                                             disabled
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            @if (user()->ownsCurrentTeam() && count($invitations) > 0)
+            @if ( auth()->user()->ownsCurrentTeam() && count($invitations) > 0)
                 <div class="card mt-3">
                     <div class="card-header">
                         {{ __('Invited Users') }}
@@ -95,7 +95,7 @@
                 </div>
             @endif
 
-            @if (user()->ownsCurrentTeam())
+            @if ( auth()->user()->ownsCurrentTeam())
                 <div class="card mt-3">
                     <div class="card-header">
                         {{ __('Invite User') }}

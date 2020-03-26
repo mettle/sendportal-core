@@ -8,9 +8,12 @@ use Illuminate\View\View;
 use Sendportal\Base\Http\Requests\TemplateStoreRequest;
 use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
+use Sendportal\Base\Traits\NormalizeTags;
 
 class TemplatesController extends Controller
 {
+    use NormalizeTags;
+
     /** @var TemplateTenantRepository */
     protected $templates;
 
@@ -27,7 +30,7 @@ class TemplatesController extends Controller
      */
     public function index(): View
     {
-        $templates = $this->templates->paginate(currentTeamId(), 'name');
+        $templates = $this->templates->paginate(auth()->user()->currentTeam()->id, 'name');
 
         return view('sendportal::templates.index', compact('templates'));
     }
@@ -54,9 +57,9 @@ class TemplatesController extends Controller
     {
         $data = $request->validated();
 
-        $data['content'] = normalize_tags($data['content'], 'content');
+        $data['content'] = $this->normalizeTags($data['content'], 'content');
 
-        $this->templates->store(currentTeamId(), $data);
+        $this->templates->store(auth()->user()->currentTeam()->id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
@@ -72,7 +75,7 @@ class TemplatesController extends Controller
      */
     public function edit(int $id): View
     {
-        $template = $this->templates->find(currentTeamId(), $id);
+        $template = $this->templates->find(auth()->user()->currentTeam()->id, $id);
 
         return view('sendportal::templates.edit', compact('template'));
     }
@@ -90,9 +93,9 @@ class TemplatesController extends Controller
     {
         $data = $request->validated();
 
-        $data['content'] = normalize_tags($data['content'], 'content');
+        $data['content'] = $this->normalizeTags($data['content'], 'content');
 
-        $this->templates->update(currentTeamId(), $id, $data);
+        $this->templates->update(auth()->user()->currentTeam()->id, $id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
@@ -108,7 +111,7 @@ class TemplatesController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $template = $this->templates->find(currentTeamId(), $id);
+        $template = $this->templates->find(auth()->user()->currentTeam()->id, $id);
 
         // TODO(david): I don't think `is_in_use` has been implemented.
         if ($template->is_in_use) {
@@ -117,7 +120,7 @@ class TemplatesController extends Controller
                 ->withErrors(['template' => __('Cannot delete a template that has been used.')]);
         }
 
-        $this->templates->destroy(currentTeamId(), $template->id);
+        $this->templates->destroy(auth()->user()->currentTeam()->id, $template->id);
 
         return redirect()
             ->route('sendportal.templates.index')

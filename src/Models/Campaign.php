@@ -84,6 +84,21 @@ class Campaign extends BaseModel
         return $this->messages()->whereNotNull('sent_at')->count();
     }
 
+    public function getSentCountFormattedAttribute(): string
+    {
+        $value = $this->sent_count;
+
+        if ($value > 9999 && $value <= 999999) {
+            return round($value / 1000) . 'k';
+        }
+
+        if ($value > 999999) {
+            return round($value / 1000000) . 'm';
+        }
+
+        return (string)$value;
+    }
+
     /**
      * Get the campaigns's open ratio as an attribute.
      *

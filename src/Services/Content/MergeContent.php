@@ -10,10 +10,14 @@ use Sendportal\Automations\Repositories\AutomationScheduleRepository;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Exception;
+use Sendportal\Base\Traits\NormalizeTags;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class MergeContent
 {
+    use NormalizeTags;
+
     /** @var CampaignTenantInterface */
     protected $campaignRepo;
 
@@ -96,7 +100,7 @@ class MergeContent
 
     protected function mergeTags(string $content, Message $message): string
     {
-        $content = $this->normaliseTags($content);
+        $content = $this->compileTags($content);
 
         $content = $this->mergeSubscriberTags($content, $message);
         $content = $this->mergeUnsubscribeLink($content, $message);
@@ -105,7 +109,7 @@ class MergeContent
         return $content;
     }
 
-    protected function normaliseTags(string $content): string
+    protected function compileTags(string $content): string
     {
         $tags = [
             'email',
@@ -117,7 +121,7 @@ class MergeContent
 
         // NOTE: regex doesn't seem to work here - I think it may be due to all the tags and inverted commas in html?
         foreach ($tags as $tag) {
-            $content = normalize_tags($content, $tag);
+            $content = $this->normalizeTags($content, $tag);
         }
 
         return $content;

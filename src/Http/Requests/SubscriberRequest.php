@@ -28,7 +28,7 @@ class SubscriberRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                'unique:subscribers,email,' . $this->subscriber . ',id,team_id, ' . currentTeamId()
+                'unique:subscribers,email,' . $this->subscriber . ',id,team_id, ' . auth()->user()->currentTeam()->id
             ],
                 'first_name' => [
                     'max:255',

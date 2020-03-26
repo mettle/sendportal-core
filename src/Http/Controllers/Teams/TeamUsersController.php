@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Teams;
 
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Services\Teams\RemoveUserFromTeam;
@@ -20,16 +21,11 @@ class TeamUsersController extends Controller
         $this->removeUserFromTeam = $removeUserFromTeam;
     }
 
-    /**
-     * List of users and invitations for the current team.
-     *
-     * @return ViewContract
-     */
-    public function index(): ViewContract
+    public function index(Request $request): ViewContract
     {
         return view('sendportal::settings.users.index', [
-            'users' => user()->currentTeam->users,
-            'invitations' => user()->currentTeam->invitations,
+            'users' => $request->user()->currentTeam->users,
+            'invitations' => $request->user()->currentTeam->invitations,
         ]);
     }
 
@@ -40,15 +36,18 @@ class TeamUsersController extends Controller
      *
      * @return RedirectResponse
      */
-    public function destroy(int $userId): RedirectResponse
+    public function destroy(Request $request, int $userId): RedirectResponse
     {
-        if ($userId === user()->id) {
+        /* @var $requestUser \Sendportal\Base\Models\User */
+        $requestUser = $request->user();
+
+        if ($userId === $requestUser->id) {
             return redirect()
                 ->back()
                 ->with('error', __('You cannot remove yourself from your own team.'));
         }
 
-        $team = currentTeam();
+        $team = $requestUser->currentTeam();
 
         $user = User::find($userId);
 

@@ -35,7 +35,7 @@ class CampaignDuplicateController extends Controller
      */
     public function duplicate($campaignId)
     {
-        $campaign = $this->campaigns->find(currentTeamId(), $campaignId);
+        $campaign = $this->campaigns->find(auth()->user()->currentTeam()->id, $campaignId);
 
         return redirect()->route('sendportal.campaigns.create')->withInput([
             'name' => $campaign->name . ' - Duplicate',

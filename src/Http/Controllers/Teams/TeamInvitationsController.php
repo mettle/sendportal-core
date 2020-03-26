@@ -29,7 +29,7 @@ class TeamInvitationsController extends Controller
      */
     public function store(TeamInvitationStoreRequest $request): RedirectResponse
     {
-        $team = user()->currentTeam();
+        $team = $request->user()->currentTeam();
 
         $this->sendInvitation->handle($team, $request->email);
 

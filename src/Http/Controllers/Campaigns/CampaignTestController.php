@@ -25,7 +25,7 @@ class CampaignTestController extends Controller
      */
     public function handle(CampaignTestRequest $request, int $campaignId): RedirectResponse
     {
-        $messageId = $this->dispatchTestMessage->handle(currentTeamId(), $campaignId, $request->get('recipient_email'));
+        $messageId = $this->dispatchTestMessage->handle(auth()->user()->currentTeam()->id, $campaignId, $request->get('recipient_email'));
 
         if (!$messageId) {
             return redirect()->route('sendportal.campaigns.preview', $campaignId)

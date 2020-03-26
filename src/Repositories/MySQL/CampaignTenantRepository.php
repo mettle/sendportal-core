@@ -5,9 +5,12 @@ namespace Sendportal\Base\Repositories\MySQL;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Repositories\BaseTenantRepository;
+use Sendportal\Base\Traits\SecondsToHms;
 
 class CampaignTenantRepository extends BaseTenantRepository implements CampaignTenantInterface
 {
+    use SecondsToHms;
+
     protected $modelName = Campaign::class;
 
     /**
@@ -23,7 +26,7 @@ class CampaignTenantRepository extends BaseTenantRepository implements CampaignT
             ->selectRaw('ROUND(AVG(TIMESTAMPDIFF(SECOND, delivered_at, opened_at))) as average_time_to_open')
             ->value('average_time_to_open');
 
-        return $average ? secondsToHms($average) : 'N/A';
+        return $average ? $this->secondsToHms($average) : 'N/A';
     }
 
     /**
@@ -38,6 +41,6 @@ class CampaignTenantRepository extends BaseTenantRepository implements CampaignT
             ->selectRaw('ROUND(AVG(TIMESTAMPDIFF(SECOND, delivered_at, clicked_at))) as average_time_to_click')
             ->value('average_time_to_click');
 
-        return $average ? secondsToHms($average) : 'N/A';
+        return $average ? $this->secondsToHms($average) : 'N/A';
     }
 }

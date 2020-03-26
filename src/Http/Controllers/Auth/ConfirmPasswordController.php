@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Auth;
 
-use Sendportal\Base\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
+use Sendportal\Base\Http\Controllers\Controller;
 
 class ConfirmPasswordController extends Controller
 {
@@ -35,5 +37,10 @@ class ConfirmPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function showConfirmForm()
+    {
+        return view('sendportal::auth.passwords.confirm');
     }
 }

@@ -31,8 +31,8 @@ class AwsWebhooksController extends Controller
     {
         $content = json_decode(request()->getContent(), true);
 
-        if (array_get($content, 'Type') == 'SubscriptionConfirmation') {
-            $subscribeUrl = array_get($content, 'SubscribeURL');
+        if (\Arr::get($content, 'Type') == 'SubscriptionConfirmation') {
+            $subscribeUrl = \Arr::get($content, 'SubscribeURL');
 
             $httpClient = new Client();
             $httpClient->get($subscribeUrl);
@@ -42,11 +42,11 @@ class AwsWebhooksController extends Controller
             return response('OK');
         }
 
-        if (! array_get($content, 'Type') == 'Notification') {
+        if (! \Arr::get($content, 'Type') == 'Notification') {
             return response('OK (not processed).');
         }
 
-        if ($event = json_decode(array_get($content, 'Message'), true)) {
+        if ($event = json_decode(\Arr::get($content, 'Message'), true)) {
             return $this->processEmailEvent($event);
         }
 
@@ -59,9 +59,9 @@ class AwsWebhooksController extends Controller
      */
     protected function processEmailEvent(array $event)
     {
-        $messageId = array_get($event, 'mail.messageId');
+        $messageId = \Arr::get($event, 'mail.messageId');
 
-        if (! $eventType = array_get($event, 'eventType')) {
+        if (! $eventType = \Arr::get($event, 'eventType')) {
             return response('OK (not processed).');
         }
 
@@ -86,8 +86,8 @@ class AwsWebhooksController extends Controller
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-click
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-contents.html#event-publishing-retrieving-sns-contents-click-object
-        $link = array_get($event, 'click.link');
-        $timestamp = Carbon::parse(array_get($event, 'click.timestamp'));
+        $link = \Arr::get($event, 'click.link');
+        $timestamp = Carbon::parse(\Arr::get($event, 'click.timestamp'));
 
         $this->emailWebhookService->handleClick($messageId, $timestamp, $link);
     }
@@ -100,8 +100,8 @@ class AwsWebhooksController extends Controller
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-contents.html#event-publishing-retrieving-sns-contents-open-object
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-open
-        $ipAddress = array_get($event, 'open.ipAddress');
-        $timestamp = Carbon::parse(array_get($event, 'open.timestamp'));
+        $ipAddress = \Arr::get($event, 'open.ipAddress');
+        $timestamp = Carbon::parse(\Arr::get($event, 'open.timestamp'));
 
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
     }
@@ -124,7 +124,7 @@ class AwsWebhooksController extends Controller
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/ses/latest/DeveloperGuide/ses/latest/DeveloperGuide/notification-contents.html.html#delivery-object
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-delivery
-        $timestamp = Carbon::parse(array_get($event, 'delivery.timestamp'));
+        $timestamp = Carbon::parse(\Arr::get($event, 'delivery.timestamp'));
 
         $this->emailWebhookService->handleDelivery($messageId, $timestamp);
     }
@@ -136,8 +136,8 @@ class AwsWebhooksController extends Controller
     protected function handleComplaint($messageId, array $event)
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html#complaint-object
-        // $complaint = array_get($event, 'complaint');
-        // $feedbackType = array_get($complaint, 'complaintFeedbackType');
+        // $complaint = \Arr::get($event, 'complaint');
+        // $feedbackType = \Arr::get($complaint, 'complaintFeedbackType');
 
         // abuse — Indicates unsolicited email or some other kind of email abuse.
         // auth-failure — Email authentication failure report.
@@ -148,7 +148,7 @@ class AwsWebhooksController extends Controller
         //
         // https://aws.amazon.com/blogs/messaging-and-targeting/handling-bounces-and-complaints/
 
-        $timestamp = Carbon::parse(array_get($event, 'complaint.timestamp'));
+        $timestamp = Carbon::parse(\Arr::get($event, 'complaint.timestamp'));
 
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
@@ -160,7 +160,7 @@ class AwsWebhooksController extends Controller
     protected function handleBounce($messageId, array $event)
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html#bounce-object
-        $bounceType = array_get($event, 'bounce.bounceType');
+        $bounceType = \Arr::get($event, 'bounce.bounceType');
 
         // https://aws.amazon.com/blogs/messaging-and-targeting/handling-bounces-and-complaints/
         if (strtolower($bounceType) == 'permanent') {

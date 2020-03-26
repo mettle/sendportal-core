@@ -24,4 +24,4 @@
 
 {!! Form::close() !!}
 
-@include('layouts.partials.summernote')
+@include('sendportal::layouts.partials.summernote')

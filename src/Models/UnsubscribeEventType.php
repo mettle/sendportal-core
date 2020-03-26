@@ -29,6 +29,6 @@ class UnsubscribeEventType extends BaseModel
      */
     public static function findById($id): string
     {
-        return array_get(static::$types, $id);
+        return \Arr::get(static::$types, $id);
     }
 }

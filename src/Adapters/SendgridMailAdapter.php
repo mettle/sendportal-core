@@ -47,7 +47,7 @@ class SendgridMailAdapter extends BaseMailAdapter
             return $this->client;
         }
 
-        $this->client = new SendGrid(array_get($this->config, 'key'));
+        $this->client = new SendGrid(\Arr::get($this->config, 'key'));
 
         return $this->client;
     }

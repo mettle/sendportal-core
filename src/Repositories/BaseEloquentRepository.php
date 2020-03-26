@@ -295,7 +295,7 @@ class BaseEloquentRepository implements BaseEloquentInterface
     protected function setBooleanFields(array $data)
     {
         foreach ($this->getModelBooleanFields() as $booleanField) {
-            $data[$booleanField] = array_get($data, $booleanField, 0);
+            $data[$booleanField] = \Arr::get($data, $booleanField, 0);
         }
 
         return $data;
@@ -390,7 +390,7 @@ class BaseEloquentRepository implements BaseEloquentInterface
     {
         $orderBy = \Input::get('sort_by');
 
-        $orderBy = array_get($this->orderOptions, $orderBy, $column);
+        $orderBy = \Arr::get($this->orderOptions, $orderBy, $column);
 
         $this->setOrderBy($orderBy);
     }

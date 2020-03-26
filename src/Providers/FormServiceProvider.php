@@ -157,8 +157,8 @@ class FormServiceProvider extends ServiceProvider
             $name = str_replace('[]', '', $name);
 
             $class = 'form-control';
-            if (array_get($attributes, 'class')) {
-                $class .= ' ' . array_get($attributes, 'class');
+            if (\Arr::get($attributes, 'class')) {
+                $class .= ' ' . \Arr::get($attributes, 'class');
             }
 
             $attributes['class'] = $class;

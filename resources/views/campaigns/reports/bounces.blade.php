@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @include('campaigns.reports.partials.nav')
+    @include('sendportal::campaigns.reports.partials.nav')
 
     <div class="card">
         <div class="card-table table-responsive">

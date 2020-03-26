@@ -28,19 +28,19 @@ class ImportSubscriberService
     {
         $subscriber = null;
 
-        if (!empty(array_get($data, 'id'))) {
+        if (!empty(\Arr::get($data, 'id'))) {
             $subscriber = $this->subscribers->findBy($teamId, 'id', $data['id'], ['segments']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->findBy($teamId, 'email', array_get($data, 'email'), ['segments']);
+            $subscriber = $this->subscribers->findBy($teamId, 'email', \Arr::get($data, 'email'), ['segments']);
         }
 
         if (!$subscriber) {
             $subscriber = $this->subscribers->store($teamId, array_except($data, ['id', 'segments']));
         }
 
-        $data['segments'] = array_merge($subscriber->segments->pluck('id')->toArray(), array_get($data, 'segments'));
+        $data['segments'] = array_merge($subscriber->segments->pluck('id')->toArray(), \Arr::get($data, 'segments'));
 
         $this->subscribers->update($teamId, $subscriber->id, $data);
 

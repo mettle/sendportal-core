@@ -38,7 +38,7 @@ class SesMailAdapter extends BaseMailAdapter
                     ],
                 ),
             ],
-            'ConfigurationSetName' => array_get($this->config, 'configuration_set_name'),
+            'ConfigurationSetName' => \Arr::get($this->config, 'configuration_set_name'),
         ]);
 
         return $this->resolveMessageId($result);
@@ -54,10 +54,10 @@ class SesMailAdapter extends BaseMailAdapter
         }
 
         $this->client = app()->make('aws')->createClient('ses', [
-            'region' => array_get($this->config, 'region'),
+            'region' => \Arr::get($this->config, 'region'),
             'credentials' => [
-                'key' => array_get($this->config, 'key'),
-                'secret' => array_get($this->config, 'secret'),
+                'key' => \Arr::get($this->config, 'key'),
+                'secret' => \Arr::get($this->config, 'secret'),
             ]
         ]);
 
@@ -66,6 +66,6 @@ class SesMailAdapter extends BaseMailAdapter
 
     protected function resolveMessageId(Result $result): string
     {
-        return array_get($result->toArray(), 'MessageId');
+        return \Arr::get($result->toArray(), 'MessageId');
     }
 }

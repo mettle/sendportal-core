@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @include('campaigns.reports.partials.nav')
+    @include('sendportal::campaigns.reports.partials.nav')
 
     <div class="row mb-4">
         <div class="col-md-3 col-sm-6 mb-md-0 mb-3">

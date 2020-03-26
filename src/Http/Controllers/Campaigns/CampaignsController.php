@@ -75,7 +75,7 @@ class CampaignsController extends Controller
     {
         $campaign = $this->campaigns->store(currentTeamId(), $this->handleCheckboxes($request->validated()));
 
-        return redirect()->route('sendportal::campaigns.preview', $campaign->id);
+        return redirect()->route('campaigns.preview', $campaign->id);
     }
 
     /**

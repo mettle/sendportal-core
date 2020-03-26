@@ -40,19 +40,19 @@ class MailgunMailAdapter extends BaseMailAdapter
             return $this->client;
         }
 
-        $this->client = Mailgun::create(array_get($this->config, 'key'), $this->resolveZone());
+        $this->client = Mailgun::create(\Arr::get($this->config, 'key'), $this->resolveZone());
 
         return $this->client;
     }
 
     protected function resolveDomain(): string
     {
-        return array_get($this->config, 'domain');
+        return \Arr::get($this->config, 'domain');
     }
 
     protected function resolveZone(): string
     {
-        return $this->urls[array_get($this->config, 'zone', 'US')];
+        return $this->urls[\Arr::get($this->config, 'zone', 'US')];
     }
 
     protected function resolveMessageId(SendResponse $result): string

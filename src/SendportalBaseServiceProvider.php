@@ -4,6 +4,7 @@ namespace Sendportal\Base;
 
 use Collective\Html\FormFacade;
 use Collective\Html\HtmlFacade;
+use Collective\Html\HtmlServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -13,6 +14,7 @@ use Sendportal\Base\Console\Commands\SetupProduction;
 use Sendportal\Base\Http\Middleware\OwnsCurrentTeam;
 use Sendportal\Base\Http\Middleware\VerifyUserOnTeam;
 use Sendportal\Base\Providers\EventServiceProvider;
+use Sendportal\Base\Providers\FormServiceProvider;
 use Sendportal\Base\Providers\SendportalAppServiceProvider;
 
 class SendportalBaseServiceProvider extends ServiceProvider
@@ -69,7 +71,8 @@ class SendportalBaseServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(SendportalAppServiceProvider::class);
-        $this->app->register( \Collective\Html\HtmlServiceProvider::class);
+        $this->app->register( HtmlServiceProvider::class);
+        $this->app->register(FormServiceProvider::class);
 
         //$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'automations');
     }

@@ -7,15 +7,15 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Presenters\CampaignReportPresenter;
+use Sendportal\Base\Repositories\CampaignTenantRepository;
 use Sendportal\Base\Repositories\MessageTenantRepository;
 
 class CampaignReportsController extends Controller
 {
     /**
-     * @var CampaignTenantInterface
+     * @var CampaignTenantRepository
      */
     protected $campaignRepo;
     /**
@@ -26,11 +26,11 @@ class CampaignReportsController extends Controller
     /**
      * CampaignsController constructor.
      *
-     * @param CampaignTenantInterface $campaignRepository
+     * @param CampaignTenantRepository $campaignRepository
      * @param MessageTenantRepository $messageRepo
      */
     public function __construct(
-        CampaignTenantInterface $campaignRepository,
+        CampaignTenantRepository $campaignRepository,
         MessageTenantRepository $messageRepo
     ) {
         $this->campaignRepo = $campaignRepository;

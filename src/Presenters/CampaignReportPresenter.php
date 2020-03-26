@@ -2,8 +2,8 @@
 
 namespace Sendportal\Base\Presenters;
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Repositories\CampaignTenantRepository;
 use Sendportal\Base\Repositories\MessageTenantRepository;
 use Sendportal\Base\Repositories\MessageUrlRepository;
 use Carbon\Carbon;
@@ -17,7 +17,7 @@ class CampaignReportPresenter
     protected $campaign;
 
     /**
-     * @var CampaignTenantInterface
+     * @var CampaignTenantRepository
      */
     protected $campaignRepo;
 
@@ -38,7 +38,7 @@ class CampaignReportPresenter
      */
     public function __construct(Campaign $campaign)
     {
-        $this->campaignRepo = app(CampaignTenantInterface::class);
+        $this->campaignRepo = app(CampaignTenantRepository::class);
         $this->messageRepo = app(MessageTenantRepository::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
 

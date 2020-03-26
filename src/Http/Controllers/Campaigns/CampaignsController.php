@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Sendportal\Base\Repositories\CampaignTenantRepository;
 use Sendportal\Base\Repositories\ProviderTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
@@ -17,7 +17,7 @@ use Sendportal\Base\Repositories\TemplateTenantRepository;
 
 class CampaignsController extends Controller
 {
-    /** @var CampaignTenantInterface */
+    /** @var CampaignTenantRepository */
     protected $campaigns;
 
     /** @var TemplateTenantRepository */
@@ -33,7 +33,7 @@ class CampaignsController extends Controller
     protected $subscribers;
 
     public function __construct(
-        CampaignTenantInterface $campaigns,
+        CampaignTenantRepository $campaigns,
         TemplateTenantRepository $templates,
         SegmentTenantRepository $segments,
         ProviderTenantRepository $providers,

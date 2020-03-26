@@ -33,8 +33,7 @@ abstract class TestCase extends BaseTestCase
         $this->withExceptionHandling();
         $this->withFactories(__DIR__ . '/../database/factories');
 
-        $this->artisan('migrate', ['--database' => 'mysql'])->run();
-        $this->artisan('migrate', ['--database' => 'pgsql'])->run();
+        $this->artisan('migrate')->run();
     }
 
     /**

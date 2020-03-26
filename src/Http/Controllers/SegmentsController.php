@@ -47,7 +47,7 @@ class SegmentsController extends Controller
      */
     public function create()
     {
-        return view('segments.create');
+        return view('sendportal::segments.create');
     }
 
     /**
@@ -74,7 +74,7 @@ class SegmentsController extends Controller
     {
         app()->abort(404, 'Not implemented');
 
-        return view('segments.show');
+        return view('sendportal::segments.show');
     }
 
     /**
@@ -89,7 +89,7 @@ class SegmentsController extends Controller
     {
         $segment = $this->segmentRepository->find(currentTeamId(), $id, ['subscribers']);
 
-        return view('segments.edit', compact('segment'));
+        return view('sendportal::segments.edit', compact('segment'));
     }
 
     /**

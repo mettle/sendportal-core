@@ -38,7 +38,7 @@ class WorkspacesController extends Controller
     {
         $user = user()->load('teams', 'invitations.team');
 
-        return view('teams.index', [
+        return view('sendportal::teams.index', [
             'teams' => $user->teams,
             'invitations' => $user->invitations,
         ]);
@@ -56,7 +56,7 @@ class WorkspacesController extends Controller
 
     public function edit(Team $workspace): ViewContract
     {
-        return view('teams.edit', [
+        return view('sendportal::teams.edit', [
             'team' => $workspace
         ]);
     }

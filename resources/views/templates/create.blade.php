@@ -15,7 +15,7 @@
         <div class="card-body">
             {!! Form::open(['route' => ['templates.store'], 'class' => 'form-horizontal']) !!}
 
-            @include('templates.partials.form')
+            @include('sendportal::templates.partials.form')
         </div>
     </div>
 

@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
 use Sendportal\Base\Console\Commands\SetupProduction;
+use Sendportal\Base\Http\Middleware\OwnsCurrentTeam;
 use Sendportal\Base\Http\Middleware\VerifyUserOnTeam;
 use Sendportal\Base\Providers\EventServiceProvider;
 use Sendportal\Base\Providers\SendportalAppServiceProvider;
@@ -49,6 +50,8 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sendportal');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sendportal');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        $this->app['router']->middleware('ownsCurrentTeam', OwnsCurrentTeam::class);
 
         Route::group([
             'namespace' => 'Sendportal\Base\Http\Controllers'

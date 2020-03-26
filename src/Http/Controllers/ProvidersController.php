@@ -38,7 +38,7 @@ class ProvidersController extends Controller
     {
         $providers = $this->providers->all(currentTeamId());
 
-        return view('providers.index', compact('providers'));
+        return view('sendportal::providers.index', compact('providers'));
     }
 
     /**
@@ -48,7 +48,7 @@ class ProvidersController extends Controller
     {
         $providerTypes = $this->providers->getProviderTypes()->pluck('name', 'id');
 
-        return view('providers.create', compact('providerTypes'));
+        return view('sendportal::providers.create', compact('providerTypes'));
     }
 
     /**
@@ -80,7 +80,7 @@ class ProvidersController extends Controller
         $provider = $this->providers->find(currentTeamId(), $providerId);
         $providerType = $this->providers->findType($provider->type_id);
 
-        return view('providers.edit', compact('providerTypes', 'provider', 'providerType'));
+        return view('sendportal::providers.edit', compact('providerTypes', 'provider', 'providerType'));
     }
 
     /**
@@ -122,7 +122,7 @@ class ProvidersController extends Controller
         $providerType = $this->providers->findType($providerTypeId);
 
         $view = view()
-            ->make('providers.options.' . strtolower($providerType->name))
+            ->make('sendportal::providers.options.' . strtolower($providerType->name))
             ->render();
 
         return response()->json([

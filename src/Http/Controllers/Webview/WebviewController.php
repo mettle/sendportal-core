@@ -30,6 +30,6 @@ class WebviewController extends Controller
 
         $content = $this->merger->handle($message);
 
-        return view('webview.show', compact('content'));
+        return view('sendportal::webview.show', compact('content'));
     }
 }

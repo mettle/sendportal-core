@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Collective\Html\FormFacade;
+use Laravel\Ui\UiServiceProvider;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Team;
@@ -15,7 +16,10 @@ abstract class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app)
     {
-        return [SendportalBaseServiceProvider::class];
+        return [
+            UiServiceProvider::class,
+            SendportalBaseServiceProvider::class
+        ];
     }
 
     /**

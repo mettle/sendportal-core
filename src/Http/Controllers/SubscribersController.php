@@ -62,7 +62,7 @@ class SubscribersController extends Controller
         $segments = $this->segmentRepo->pluck(currentTeamId());
         $selectedSegments = [];
 
-        return view('subscribers.create', compact('segments', 'selectedSegments'));
+        return view('sendportal::subscribers.create', compact('segments', 'selectedSegments'));
     }
 
     /**
@@ -91,7 +91,7 @@ class SubscribersController extends Controller
     {
         $subscriber = $this->subscriberRepo->find(currentTeamId(), $id, ['segments', 'messages.source']);
 
-        return view('subscribers.show', compact('subscriber'));
+        return view('sendportal::subscribers.show', compact('subscriber'));
     }
 
     /**
@@ -107,7 +107,7 @@ class SubscribersController extends Controller
         $segments = $this->segmentRepo->pluck(currentTeamId());
         $selectedSegments = $subscriber->segments->pluck('id', 'name');
 
-        return view('subscribers.edit', compact('subscriber', 'segments', 'selectedSegments'));
+        return view('sendportal::subscribers.edit', compact('subscriber', 'segments', 'selectedSegments'));
     }
 
     /**

@@ -63,7 +63,7 @@ class CampaignReportsController extends Controller
             'chartData' => json_encode($presenterData['chartData']['data']),
         ];
 
-        return view('campaigns.reports.index', $data);
+        return view('sendportal::campaigns.reports.index', $data);
     }
 
     /**
@@ -112,7 +112,7 @@ class CampaignReportsController extends Controller
 
         $messages = $this->messageRepo->opens(currentTeamId(), Campaign::class, $id);
 
-        return view('campaigns.reports.opens', compact('campaign', 'messages', 'averageTimeToOpen'));
+        return view('sendportal::campaigns.reports.opens', compact('campaign', 'messages', 'averageTimeToOpen'));
     }
 
     /**
@@ -137,7 +137,7 @@ class CampaignReportsController extends Controller
 
         $messages = $this->messageRepo->clicks(currentTeamId(), Campaign::class, $id);
 
-        return view('campaigns.reports.clicks', compact('campaign', 'messages', 'averageTimeToClick'));
+        return view('sendportal::campaigns.reports.clicks', compact('campaign', 'messages', 'averageTimeToClick'));
     }
 
     /**
@@ -161,7 +161,7 @@ class CampaignReportsController extends Controller
 
         $messages = $this->messageRepo->bounces(currentTeamId(), Campaign::class, $id);
 
-        return view('campaigns.reports.bounces', compact('campaign', 'messages'));
+        return view('sendportal::campaigns.reports.bounces', compact('campaign', 'messages'));
     }
 
     /**
@@ -185,6 +185,6 @@ class CampaignReportsController extends Controller
 
         $messages = $this->messageRepo->unsubscribes(currentTeamId(), Campaign::class, $id);
 
-        return view('campaigns.reports.unsubscribes', compact('campaign', 'messages'));
+        return view('sendportal::campaigns.reports.unsubscribes', compact('campaign', 'messages'));
     }
 }

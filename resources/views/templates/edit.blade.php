@@ -15,7 +15,7 @@
         <div class="card-body">
             {!! Form::model($template, ['method' => 'put', 'route' => ['templates.update', $template->id], 'class' => 'form-horizontal']) !!}
 
-            @include('templates.partials.form')
+            @include('sendportal::templates.partials.form')
         </div>
     </div>
 

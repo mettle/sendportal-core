@@ -41,7 +41,7 @@ class CampaignDeleteController extends Controller
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
 
-        return view('campaigns.delete', compact('campaign'));
+        return view('sendportal::campaigns.delete', compact('campaign'));
     }
 
     /**

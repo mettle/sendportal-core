@@ -7,7 +7,7 @@ namespace Tests\Feature\Content;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Services\Content\MergeContent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,26 +39,26 @@ class MergeContentTest extends TestCase
 
     private function generateCampaignMessage(string $campaignContent): Message
     {
-        /** @var Team $team */
-        $team = factory(Team::class)->create();
+        /** @var Workspace $workspace */
+        $workspace = factory(Workspace::class)->create();
 
         /** @var Template $template */
         $template = factory(Template::class)->create([
             'content' => '<p>{{content}}</p>',
-            'team_id' => $team->id
+            'workspace_id' => $workspace->id
         ]);
 
         /** @var Campaign $campaign */
         $campaign = factory(Campaign::class)->create([
             'template_id' => $template->id,
             'content' => $campaignContent,
-            'team_id' => $team->id
+            'workspace_id' => $workspace->id
         ]);
 
         return factory(Message::class)->create([
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
-            'team_id' => $team->id
+            'workspace_id' => $workspace->id
         ]);
     }
 
@@ -127,7 +127,7 @@ class MergeContentTest extends TestCase
     function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
     {
         // given
-        /** @var Team $team */
+        /** @var Workspace $workspace */
         $message = $this->generateCampaignMessage('Hi, {{ last_name }}');
 
         // when

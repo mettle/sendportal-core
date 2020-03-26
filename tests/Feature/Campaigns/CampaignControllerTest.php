@@ -6,7 +6,7 @@ namespace Tests\Feature\Campaigns;
 
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,9 +21,9 @@ class CampaignControllerTest extends TestCase
     function the_index_of_campaigns_is_accessible_to_authenticated_users()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
-        factory(Campaign::class, 3)->create(['team_id' => $team->id]);
+        factory(Campaign::class, 3)->create(['workspace_id' => $workspace->id]);
 
         // when
         $response = $this->actingAs($user)->get(route('campaigns.index'));
@@ -36,7 +36,7 @@ class CampaignControllerTest extends TestCase
     function the_campaign_creation_form_is_accessible_to_authenticated_users()
     {
         // given
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         // when
         $response = $this->actingAs($user)->get(route('campaigns.create'));
@@ -49,9 +49,9 @@ class CampaignControllerTest extends TestCase
     function new_campaigns_can_be_created_by_authenticated_users()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
-        $campaignStoreData = $this->generateCampaignStoreData($team);
+        $campaignStoreData = $this->generateCampaignStoreData($workspace);
 
         // when
         $response = $this->actingAs($user)
@@ -68,8 +68,8 @@ class CampaignControllerTest extends TestCase
     function the_preview_view_is_accessible_by_authenticated_users()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
-        $campaign = factory(Campaign::class)->create(['team_id' => $team->id]);
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $campaign = factory(Campaign::class)->create(['workspace_id' => $workspace->id]);
 
         // when
         $response = $this->actingAs($user)->get(route('campaigns.preview', $campaign->id));
@@ -82,8 +82,8 @@ class CampaignControllerTest extends TestCase
     function the_edit_view_is_accessible_by_authenticated_users()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
-        $campaign = factory(Campaign::class)->create(['team_id' => $team->id]);
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $campaign = factory(Campaign::class)->create(['workspace_id' => $workspace->id]);
 
         // when
         $response = $this->actingAs($user)->get(route('campaigns.edit', $campaign->id));
@@ -96,8 +96,8 @@ class CampaignControllerTest extends TestCase
     function a_campaign_is_updateable_by_authenticated_users()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
-        $campaign = factory(Campaign::class)->create(['team_id' => $team->id]);
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $campaign = factory(Campaign::class)->create(['workspace_id' => $workspace->id]);
 
         $campaignUpdateData = [
             'name' => $this->faker->word,
@@ -126,9 +126,9 @@ class CampaignControllerTest extends TestCase
     function campaigns_can_be_set_to_not_track_opens()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
-        $campaignStoreData = $this->generateCampaignStoreData($team);
+        $campaignStoreData = $this->generateCampaignStoreData($workspace);
 
         // when
         $response = $this->actingAs($user)
@@ -146,9 +146,9 @@ class CampaignControllerTest extends TestCase
     function campaigns_can_be_set_to_track_opens()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
-        $campaignStoreData = $this->generateCampaignStoreData($team) + ['is_open_tracking' => true];
+        $campaignStoreData = $this->generateCampaignStoreData($workspace) + ['is_open_tracking' => true];
 
         // when
         $response = $this->actingAs($user)
@@ -166,9 +166,9 @@ class CampaignControllerTest extends TestCase
     function campaigns_can_be_set_to_not_track_clicks()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
-        $campaignStoreData = $this->generateCampaignStoreData($team);
+        $campaignStoreData = $this->generateCampaignStoreData($workspace);
 
         // when
         $response = $this->actingAs($user)
@@ -186,9 +186,9 @@ class CampaignControllerTest extends TestCase
     function campaigns_can_be_set_to_track_clicks()
     {
         // given
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
-        $campaignStoreData = $this->generateCampaignStoreData($team) + ['is_click_tracking' => true];
+        $campaignStoreData = $this->generateCampaignStoreData($workspace) + ['is_click_tracking' => true];
 
         // when
         $response = $this->actingAs($user)
@@ -202,10 +202,10 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    private function generateCampaignStoreData(Team $team): array
+    private function generateCampaignStoreData(Workspace $workspace): array
     {
-        $provider = factory(Provider::class)->create(['team_id' => $team->id]);
-        $template = factory(Template::class)->create(['team_id' => $team->id]);
+        $provider = factory(Provider::class)->create(['workspace_id' => $workspace->id]);
+        $template = factory(Template::class)->create(['workspace_id' => $workspace->id]);
 
         return [
             'name' => $this->faker->word,

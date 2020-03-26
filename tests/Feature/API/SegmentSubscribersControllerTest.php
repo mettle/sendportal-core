@@ -17,7 +17,7 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_index_gets_segment_subscribers()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
         $subscriber = $this->createSubscriber($user);
@@ -25,7 +25,7 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment->subscribers()->save($subscriber);
 
         $route = route('api.segments.subscribers.index', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
         ]);
@@ -46,13 +46,13 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_added_to_a_segment()
     {
-        $user = $this->createuserwithteam();
+        $user = $this->createuserwithworkspace();
 
         $segment = $this->createsegment($user);
         $subscriber = $this->createsubscriber($user);
 
         $route = route('api.segments.subscribers.store', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
         ]);
 
@@ -81,7 +81,7 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_store_endpoint_is_idempotent()
     {
-        $user = $this->createuserwithteam();
+        $user = $this->createuserwithworkspace();
 
         $segment = $this->createsegment($user);
         $existingSubscriber = $this->createsubscriber($user);
@@ -91,7 +91,7 @@ class SegmentSubscribersControllerTest extends TestCase
         $newSubscriber = $this->createSubscriber($user);
 
         $route = route('api.segments.subscribers.store', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
         ]);
 
@@ -107,7 +107,7 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_segments_subscribers_can_be_synced()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
         $oldSubscriber = $this->createSubscriber($user);
@@ -116,7 +116,7 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment->subscribers()->save($oldSubscriber);
 
         $route = route('api.segments.subscribers.update', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
         ]);
@@ -151,7 +151,7 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_segment_can_be_deleted()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
         $subscriber = $this->createSubscriber($user);
@@ -159,7 +159,7 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment->subscribers()->save($subscriber);
 
         $route = route('api.segments.subscribers.destroy', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
         ]);

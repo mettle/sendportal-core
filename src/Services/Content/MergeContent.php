@@ -59,7 +59,7 @@ class MergeContent
     protected function mergeCampaignContent(Message $message): string
     {
         /** @var Campaign $campaign */
-        $campaign = $this->campaignRepo->find($message->team_id, $message->source_id, ['template']);
+        $campaign = $this->campaignRepo->find($message->workspace_id, $message->source_id, ['template']);
 
         if (!$campaign) {
             throw new Exception('Unable to resolve campaign step for message id= ' . $message->id);

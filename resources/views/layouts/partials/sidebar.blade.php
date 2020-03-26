@@ -32,7 +32,7 @@
                 <i class="fas fa-envelope mr-2"></i><span>{{ __('Providers') }}</span>
             </a>
         </li>
-        @if ( auth()->user()->ownsCurrentTeam())
+        @if ( auth()->user()->ownsCurrentWorkspace())
             <li class="nav-item {{ request()->is('settings*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settings.index') }}">
                     <i class="fas fa-cog mr-2"></i><span>{{ __('Settings') }}</span>

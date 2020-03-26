@@ -34,19 +34,19 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $teamId): AnonymousResourceCollection
+    public function index(int $workspaceId): AnonymousResourceCollection
     {
-        return SegmentResource::collection($this->segments->paginate($teamId, 'name'));
+        return SegmentResource::collection($this->segments->paginate($workspaceId, 'name'));
     }
 
     /**
      * @throws Exception
      */
-    public function store(SegmentStoreRequest $request, int $teamId): SegmentResource
+    public function store(SegmentStoreRequest $request, int $workspaceId): SegmentResource
     {
         $input = $request->validated();
 
-        $segment = $this->apiService->store($teamId, collect($input));
+        $segment = $this->apiService->store($workspaceId, collect($input));
 
         $segment->load('subscribers');
 
@@ -56,17 +56,17 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function show(int $teamId, int $id): SegmentResource
+    public function show(int $workspaceId, int $id): SegmentResource
     {
-        return new SegmentResource($this->segments->find($teamId, $id));
+        return new SegmentResource($this->segments->find($workspaceId, $id));
     }
 
     /**
      * @throws Exception
      */
-    public function update(SegmentUpdateRequest $request, int $teamId, int $id): SegmentResource
+    public function update(SegmentUpdateRequest $request, int $workspaceId, int $id): SegmentResource
     {
-        $segment = $this->segments->update($teamId, $id, $request->validated());
+        $segment = $this->segments->update($workspaceId, $id, $request->validated());
 
         return new SegmentResource($segment);
     }
@@ -74,9 +74,9 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(int $teamId, int $id): Response
+    public function destroy(int $workspaceId, int $id): Response
     {
-        $this->segments->destroy($teamId, $id);
+        $this->segments->destroy($workspaceId, $id);
 
         return response(null, 204);
     }

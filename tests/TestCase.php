@@ -6,7 +6,7 @@ use Collective\Html\FormFacade;
 use Laravel\Ui\UiServiceProvider;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Illuminate\Testing\TestResponse;
@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutMix();
-        $this->withExceptionHandling();
+        $this->withoutExceptionHandling();
         $this->withFactories(__DIR__ . '/../database/factories');
 
         $this->artisan('migrate', ['--database' => 'mysql'])->run();
@@ -82,21 +82,21 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Create a user with attached team.
+     * Create a user with attached workspace.
      */
-    protected function createUserWithTeam(): User
+    protected function createUserWithWorkspace(): User
     {
-        return factory(Team::class)->create()->owner;
+        return factory(Workspace::class)->create()->owner;
     }
 
     /**
-     * Create a user with attached team, returning both team and user.
+     * Create a user with attached workspace, returning both workspace and user.
      */
-    protected function createUserAndTeam(): array
+    protected function createUserAndWorkspace(): array
     {
-        $team = factory(Team::class)->create();
+        $workspace = factory(Workspace::class)->create();
 
-        return [$team, $team->owner];
+        return [$workspace, $workspace->owner];
     }
 
     /**
@@ -110,14 +110,14 @@ abstract class TestCase extends BaseTestCase
     protected function createSegment(User $user): Segment
     {
         return factory(Segment::class)->create([
-            'team_id' => $user->currentTeam()->id,
+            'workspace_id' => $user->currentWorkspace()->id,
         ]);
     }
 
     protected function createSubscriber(User $user): Subscriber
     {
         return factory(Subscriber::class)->create([
-            'team_id' => $user->currentTeam()->id,
+            'workspace_id' => $user->currentWorkspace()->id,
         ]);
     }
 
@@ -135,10 +135,10 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
-    public function createTeamUser(Team $team, array $overrides = []): User
+    public function createWorkspaceUser(Workspace $workspace, array $overrides = []): User
     {
         $user = factory(User::class)->create($overrides);
-        $team->users()->attach($user, ['role' => Team::ROLE_MEMBER]);
+        $workspace->users()->attach($user, ['role' => Workspace::ROLE_MEMBER]);
 
         return $user;
     }

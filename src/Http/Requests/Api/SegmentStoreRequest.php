@@ -12,7 +12,7 @@ class SegmentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', Rule::unique('segments', 'name')->where('team_id', $this->route('teamId'))],
+            'name' => ['required', Rule::unique('segments', 'name')->where('workspace_id', $this->route('workspaceId'))],
             'subscribers' => ['array', 'nullable']
         ];
     }

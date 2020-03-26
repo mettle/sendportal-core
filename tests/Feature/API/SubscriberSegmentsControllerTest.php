@@ -17,7 +17,7 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_retrieve_a_list_of_a_subscribers_segments()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
         $subscriber = $this->createSubscriber($user);
@@ -25,7 +25,7 @@ class SubscriberSegmentsControllerTest extends TestCase
         $subscriber->segments()->save($segment);
 
         $route = route('api.subscribers.segments.index', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]);
@@ -46,13 +46,13 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_add_new_segments_to_the_subscriber()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
         $subscriber = $this->createSubscriber($user);
 
         $route = route('api.subscribers.segments.store', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
         ]);
 
@@ -81,7 +81,7 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_update_the_segments_associated_with_the_subscriber()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $subscriber = $this->createSubscriber($user);
         $oldSegment = $this->createSegment($user);
@@ -90,7 +90,7 @@ class SubscriberSegmentsControllerTest extends TestCase
         $subscriber->segments()->save($oldSegment);
 
         $route = route('api.subscribers.segments.update', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]);
@@ -125,7 +125,7 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_remove_segments_from_the_subscriber()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
         $subscriber = $this->createSubscriber($user);
@@ -133,7 +133,7 @@ class SubscriberSegmentsControllerTest extends TestCase
         $subscriber->segments()->save($segment);
 
         $route = route('api.subscribers.segments.destroy', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,
             'api_token' => $user->api_token,
         ]);

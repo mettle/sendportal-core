@@ -2,7 +2,7 @@
 
 /** @var Factory $factory */
 
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
@@ -30,8 +30,8 @@ $factory->define(User::class, static function (Faker $faker) {
     ];
 });
 
-$factory->afterCreatingState(User::class, 'team-member', static function (User $user) {
-    /** @var Team $team */
-    $team = factory(Team::class)->create();
-    $team->users()->attach($user, ['role' => Team::ROLE_MEMBER]);
+$factory->afterCreatingState(User::class, 'workspace-member', static function (User $user) {
+    /** @var Workspace $workspace */
+    $workspace = factory(Workspace::class)->create();
+    $workspace->users()->attach($user, ['role' => Workspace::ROLE_MEMBER]);
 });

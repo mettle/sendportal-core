@@ -4,7 +4,7 @@ namespace Sendportal\Base\Http\Middleware;
 
 use Closure;
 
-class OwnsCurrentTeam
+class OwnsCurrentWorkspace
 {
     /**
      * Get the path the user should be redirected to when they are not authenticated.
@@ -15,7 +15,7 @@ class OwnsCurrentTeam
      */
     public function handle($request, Closure $next)
     {
-        if (! $request->user()->ownsCurrentTeam()) {
+        if (! $request->user()->ownsCurrentWorkspace()) {
             abort(404);
         }
 

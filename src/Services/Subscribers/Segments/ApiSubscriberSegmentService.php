@@ -21,16 +21,16 @@ class ApiSubscriberSegmentService
     /**
      * Add segments to a subscriber.
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $subscriberId
      * @param Collection $segmentIds
      *
      * @return Collection
      * @throws Exception
      */
-    public function store(int $teamId, int $subscriberId, Collection $segmentIds): Collection
+    public function store(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
     {
-        $subscriber = $this->subscribers->find($teamId, $subscriberId);
+        $subscriber = $this->subscribers->find($workspaceId, $subscriberId);
 
         /** @var Collection $existingSegments */
         $existingSegments = $subscriber->segments()->pluck('segment.id')->toBase();
@@ -45,16 +45,16 @@ class ApiSubscriberSegmentService
     /**
      * Sync the list of segments a subscriber is associated with.
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $subscriberId
      * @param Collection $segmentIds
      *
      * @return Collection
      * @throws Exception
      */
-    public function update(int $teamId, int $subscriberId, Collection $segmentIds): Collection
+    public function update(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
     {
-        $subscriber = $this->subscribers->find($teamId, $subscriberId, ['segments']);
+        $subscriber = $this->subscribers->find($workspaceId, $subscriberId, ['segments']);
 
         $subscriber->segments()->sync($segmentIds);
 
@@ -66,16 +66,16 @@ class ApiSubscriberSegmentService
     /**
      * Remove segments from a subscriber.
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $subscriberId
      * @param Collection $segmentIds
      *
      * @return Collection
      * @throws Exception
      */
-    public function destroy(int $teamId, int $subscriberId, Collection $segmentIds): Collection
+    public function destroy(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
     {
-        $subscriber = $this->subscribers->find($teamId, $subscriberId);
+        $subscriber = $this->subscribers->find($workspaceId, $subscriberId);
 
         $subscriber->segments()->detach($segmentIds);
 

@@ -24,9 +24,9 @@ class ApiSegmentSubscriberService
      *
      * @throws Exception
      */
-    public function store(int $teamId, int $segmentId, Collection $subscriberIds): Collection
+    public function store(int $workspaceId, int $segmentId, Collection $subscriberIds): Collection
     {
-        $segment = $this->segments->find($teamId, $segmentId);
+        $segment = $this->segments->find($workspaceId, $segmentId);
 
         /** @var Collection $existingSubscribers */
         $existingSubscribers = $segment->subscribers()->pluck('subscribers.id')->toBase();
@@ -43,9 +43,9 @@ class ApiSegmentSubscriberService
      *
      * @throws Exception
      */
-    public function update(int $teamId, int $segmentId, Collection $subscriberIds): EloquentCollection
+    public function update(int $workspaceId, int $segmentId, Collection $subscriberIds): EloquentCollection
     {
-        $segment = $this->segments->find($teamId, $segmentId);
+        $segment = $this->segments->find($workspaceId, $segmentId);
 
         $segment->subscribers()->sync($subscriberIds);
 
@@ -59,9 +59,9 @@ class ApiSegmentSubscriberService
      *
      * @throws Exception
      */
-    public function destroy(int $teamId, int $segmentId, Collection $subscriberIds): EloquentCollection
+    public function destroy(int $workspaceId, int $segmentId, Collection $subscriberIds): EloquentCollection
     {
-        $segment = $this->segments->find($teamId, $segmentId);
+        $segment = $this->segments->find($workspaceId, $segmentId);
 
         $segment->subscribers()->detach($subscriberIds);
 

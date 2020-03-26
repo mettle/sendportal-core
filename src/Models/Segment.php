@@ -20,11 +20,11 @@ class Segment extends BaseModel
     ];
 
     /**
-     * The team this segment belongs to.
+     * The workspace this segment belongs to.
      */
-    public function team(): BelongsTo
+    public function workspace(): BelongsTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Workspace::class);
     }
 
     /**

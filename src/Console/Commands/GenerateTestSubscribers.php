@@ -43,7 +43,7 @@ class GenerateTestSubscribers extends Command
         $times = 0;
         while ($times < 100) {
             $inserts[] = [
-                'team_id' => 1,
+                'workspace_id' => 1,
                 'hash' => Uuid::uuid4(),
                 'first_name' => 'Steve ' . $times,
                 'last_name' => 'Bar ' . $times,

@@ -2,7 +2,7 @@
 
 namespace Sendportal\Base\Console\Commands;
 
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\Hash;
@@ -167,13 +167,13 @@ class SetupProduction extends BaseCommand
     }
 
     /**
-     * Prompt the user for their company/team name
+     * Prompt the user for their company/workspace name
      */
     protected function getCompanyName(): string
     {
         $this->line('');
-        $this->info("Creating first admin user account and company/team");
-        $companyName = $this->ask("Company/Team name");
+        $this->info("Creating first admin user account and company/workspace");
+        $companyName = $this->ask("Company/Workspace name");
 
         if (! $companyName) {
             return $this->getCompanyName();
@@ -183,7 +183,7 @@ class SetupProduction extends BaseCommand
     }
 
     /**
-     * Create the first admin user account and associate it with the company/team
+     * Create the first admin user account and associate it with the company/workspace
      *
      * @param string $companyName
      * @return User
@@ -205,7 +205,7 @@ class SetupProduction extends BaseCommand
             'api_token' => Str::random(80),
         ]);
 
-        $this->storeTeam($user, $companyName);
+        $this->storeWorkspace($user, $companyName);
 
         return $user;
     }
@@ -242,24 +242,24 @@ class SetupProduction extends BaseCommand
     }
 
     /**
-     * Store the team
+     * Store the workspace
      *
      * @param User $user
      * @param string $companyName
-     * @return Team
+     * @return Workspace
      */
-    protected function storeTeam(User $user, string $companyName): Team
+    protected function storeWorkspace(User $user, string $companyName): Workspace
     {
-        $team = Team::create([
+        $workspace = Workspace::create([
             'name' => $companyName,
             'owner_id' => $user->id,
         ]);
 
-        $user->teams()->attach($team->id, [
-            'role' => Team::ROLE_OWNER,
+        $user->workspaces()->attach($workspace->id, [
+            'role' => Workspace::ROLE_OWNER,
         ]);
 
-        return $team;
+        return $workspace;
     }
 
     /**

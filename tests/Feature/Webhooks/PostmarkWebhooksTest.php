@@ -3,6 +3,7 @@
 namespace Tests\Feature\Webhooks;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Sendportal\Base\Models\Message;
 use Tests\TestCase;
@@ -10,6 +11,7 @@ use Tests\TestCase;
 class PostmarkWebhooksTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     /**
      * @var string
@@ -72,6 +74,7 @@ class PostmarkWebhooksTest extends TestCase
             'MessageID' => $message->message_id,
             'ReceivedAt' => now()->toIso8601String(),
             'RecordType' => 'Click',
+            'OriginalLink' => $this->faker->url,
         ];
 
         $this->json('POST', route($this->route), $webhook);

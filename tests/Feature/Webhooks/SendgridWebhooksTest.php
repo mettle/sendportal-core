@@ -3,6 +3,7 @@
 namespace Tests\Feature\Webhooks;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Sendportal\Base\Models\Message;
 use Tests\TestCase;
@@ -10,6 +11,7 @@ use Tests\TestCase;
 class SendgridWebhooksTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     /**
      * @var string
@@ -60,7 +62,8 @@ class SendgridWebhooksTest extends TestCase
         $this->assertEquals(0, $message->click_count);
         $this->assertNull($message->clicked_at);
 
-        $webhook = $this->resolveWebhook('click', $message->message_id);
+        $url = ['url' => $this->faker->url];
+        $webhook = $this->resolveWebhook('click', $message->message_id, $url);
 
         $this->json('POST', route($this->route), $webhook);
 
@@ -197,12 +200,12 @@ class SendgridWebhooksTest extends TestCase
         );
     }
 
-    protected function resolveWebhook(string $type, string $messageId): array
+    protected function resolveWebhook(string $type, string $messageId, array $properties = []): array
     {
         return [[
             'event' => $type,
             'sg_message_id' => $messageId,
             'timestamp' => now()->timestamp,
-        ]];
+        ] + $properties];
     }
 }

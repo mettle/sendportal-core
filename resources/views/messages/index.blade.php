@@ -58,8 +58,8 @@
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
                     <th>
-                        <button class="btn btn-xs btn-light inline-block" id="select-all">Select All</button>
-                        <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form">
+                        <button class="btn btn-xs btn-light" id="select-all" style="display: inline-block;">Select All</button>
+                        <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form" style="display: inline-block;">
                             @csrf
                             <button type="submit" class="btn btn-xs btn-light">{{ __('Send Selected') }}</button>
                         </form>

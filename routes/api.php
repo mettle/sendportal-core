@@ -16,14 +16,14 @@ use Sendportal\Base\Http\Middleware\VerifyUserOnWorkspace;
 |
 */
 
-Route::middleware(['auth:api'])->name('api.')->namespace('Api')->group(static function () {
+Route::middleware(['auth:api'])->name('sendportal.api.')->namespace('Api')->group(static function () {
     Route::apiResource('workspaces', 'WorkspacesController')->only('index');
 });
 
 Route::middleware([
     'auth:api',
     VerifyUserOnWorkspace::class
-])->name('api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(function () {
+])->name('sendportal.api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(function () {
     Route::apiResource('subscribers', 'SubscribersController');
     Route::apiResource('segments', 'SegmentsController');
 

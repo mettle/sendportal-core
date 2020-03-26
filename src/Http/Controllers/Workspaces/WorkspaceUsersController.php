@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Services\Workspaces\RemoveUserFromWorkspace;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Http\RedirectResponse;
 
 class WorkspaceUsersController extends Controller
 {
@@ -57,6 +55,7 @@ class WorkspaceUsersController extends Controller
 
         return redirect()
             ->route('sendportal.settings.users.index')
-            ->with('success', __(':user was removed from :workspace.', ['user' => $user->name, 'workspace' => $workspace->name]));
+            ->with('success',
+                __(':user was removed from :workspace.', ['user' => $user->name, 'workspace' => $workspace->name]));
     }
 }

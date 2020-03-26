@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Workspaces;
 
+use Exception;
+use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Middleware\OwnsRequestedWorkspace;
@@ -12,9 +15,6 @@ use Sendportal\Base\Http\Requests\Workspaces\WorkspaceUpdateRequest;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\WorkspacesRepository;
 use Sendportal\Base\Services\Workspaces\CreateWorkspace;
-use Exception;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Http\RedirectResponse;
 
 class WorkspacesController extends Controller
 {
@@ -52,7 +52,7 @@ class WorkspacesController extends Controller
     {
         $this->createWorkspace->handle($request->user(), $request->get('name'), Workspace::ROLE_OWNER);
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 
     public function edit(Workspace $workspace): ViewContract
@@ -69,6 +69,6 @@ class WorkspacesController extends Controller
     {
         $this->workspaces->update($workspace->id, ['name' => $request->get('workspace_name')]);
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 }

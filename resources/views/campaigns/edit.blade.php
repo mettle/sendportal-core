@@ -15,7 +15,7 @@
                     {{ __('Edit Campaign') }}
                 </div>
                 <div class="card-body">
-                    {!! Form::model($campaign, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['campaigns.update', $campaign->id]]) !!}
+                    {!! Form::model($campaign, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['sendportal.campaigns.update', $campaign->id]]) !!}
 
                     @include('sendportal::campaigns.partials.form')
                 </div>

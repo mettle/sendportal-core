@@ -48,7 +48,7 @@
 
                             <div class="dropdown-menu" aria-labelledby="bd-versions">
                                 @foreach($workspaces as $workspace)
-                                    <a class="dropdown-item px-3" href="{{ route('workspaces.switch', $workspace->id) }}">
+                                    <a class="dropdown-item px-3" href="{{ route('sendportal.workspaces.switch', $workspace->id) }}">
                                         <i class="fas fa-circle mr-2 {{ auth()->user()->currentWorkspace->id == $workspace->id ? 'fc-dark-blue' : 'fc-gray-300' }}"></i>{{ $workspace->name }}
                                     </a>
                                 @endforeach

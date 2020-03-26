@@ -47,7 +47,7 @@
 
     <div class="col-md-4">
 
-        {!! Form::model($campaign, array('method' => 'POST', 'route' => ['campaigns.test', $campaign->id])) !!}
+        {!! Form::model($campaign, array('method' => 'POST', 'route' => ['sendportal.campaigns.test', $campaign->id])) !!}
 
         <div class="card mb-4">
             <div class="card-header">
@@ -70,7 +70,7 @@
 
         {!! Form::close() !!}
 
-        {!! Form::model($campaign, array('method' => 'PUT', 'route' => ['campaigns.send', $campaign->id])) !!}
+        {!! Form::model($campaign, array('method' => 'PUT', 'route' => ['sendportal.campaigns.send', $campaign->id])) !!}
 
         <div class="card mb-4">
             <div class="card-header">

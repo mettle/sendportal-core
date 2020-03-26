@@ -125,6 +125,4 @@ class WorkspaceInvitationsControllerTest extends TestCase
         parent::setUp();
         Mail::fake();
     }
-
-
 }

@@ -21,7 +21,7 @@
                         {{ __('Create Campaign') }}
                     </div>
                     <div class="card-body">
-                        {!! Form::open(['route' => ['campaigns.store'], 'class' => 'form-horizontal']) !!}
+                        {!! Form::open(['route' => ['sendportal.campaigns.store'], 'class' => 'form-horizontal']) !!}
 
                         @include('sendportal::campaigns.partials.form')
                     </div>

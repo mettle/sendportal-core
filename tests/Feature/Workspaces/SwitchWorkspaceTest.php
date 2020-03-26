@@ -25,10 +25,10 @@ class SwitchWorkspaceTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->get(route('workspaces.switch', $secondWorkspace->id));
+        $response = $this->get(route('sendportal.workspaces.switch', $secondWorkspace->id));
 
         // then
-        $response->assertRedirect(route('campaigns.index'));
+        $response->assertRedirect(route('sendportal.campaigns.index'));
 
         $this->assertEquals($secondWorkspace->id, $user->currentWorkspace()->id);
     }
@@ -43,7 +43,7 @@ class SwitchWorkspaceTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->get(route('workspaces.switch', $secondWorkspace->id));
+        $response = $this->get(route('sendportal.workspaces.switch', $secondWorkspace->id));
 
         // then
         $response->assertStatus(404);
@@ -61,11 +61,9 @@ class SwitchWorkspaceTest extends TestCase
         (new AddWorkspaceMember())->handle($secondWorkspace, $user, Workspace::ROLE_OWNER);
 
         // when
-        $response = $this->get(route('workspaces.switch', $secondWorkspace->id));
+        $response = $this->get(route('sendportal.workspaces.switch', $secondWorkspace->id));
 
         // then
         $response->assertRedirect(route('login'));
     }
-
-
 }

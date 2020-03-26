@@ -23,3 +23,12 @@
 
 - If CSS or JS files have been changed we need to recompile them: `npm run prod`
 - In the main repository we have to publish the newly compiled files: `php artisan vendor:publish --provider=Sendportal\\Base\\SendportalBaseServiceProvider --tag=sendportal-assets`  
+
+## Tests
+Tests should run out of the box with a couple of things:
+
+- Run `composer install` in the `base` package, as well as in the host package (cannot run tests from the host package)
+- Create a MySQL database named `sendportal_dev`
+- Create a Postgres database named `sendportal_dev`
+
+After this, running `phpunit` on the commandline should produce passing tests, without errors. Unless you broke something. But that's on you.

@@ -27,19 +27,19 @@ class SendportalBaseServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('sendportal.php'),
-            ], 'config');
+            ], 'sendportal-config');
 
             $this->publishes([
                 __DIR__.'/../resources/views' => resource_path('views/vendor/sendportal'),
-            ], 'views');
+            ], 'sendportal-views');
 
             $this->publishes([
                 __DIR__.'/../resources/lang' => resource_path('lang/vendor/sendportal'),
-            ], 'lang');
+            ], 'sendportal-lang');
 
             $this->publishes([
                 __DIR__.'/../public' => public_path('vendor/sendportal'),
-            ], 'assets');
+            ], 'sendportal-assets');
 
             $this->commands([
                 CampaignDispatchCommand::class,

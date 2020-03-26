@@ -7,14 +7,20 @@
     "authors": [],
     "require": {
         "php": "^7.2.5",
+        "ext-json": "*",
         "illuminate/support": "^7.0",
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.0|^7.0",
-        "rap2hpoutre/fast-excel": "^1.7"
+        "rap2hpoutre/fast-excel": "^1.7",
+        "mailgun/mailgun-php": "^3.0",
+        "sendgrid/sendgrid": "^7.3",
+        "wildbit/postmark-php": "^2.8",
+        "aws/aws-sdk-php-laravel": "^3.4"
     },
     "require-dev": {
         "orchestra/testbench": "^5.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-4": {

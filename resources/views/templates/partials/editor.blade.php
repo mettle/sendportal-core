@@ -1,6 +1,6 @@
 @push('css')
-    <link rel="stylesheet" href="{{ asset('css/codemirror/codemirror.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/codemirror/themes/monokai.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
     <style>
         .CodeMirror {
             height: 600px;
@@ -30,8 +30,8 @@
 </div>
 
 @push('js')
-    <script src="{{ asset('js/codemirror/codemirror.js') }}"></script>
-    <script src="{{ asset('js/codemirror/modes/xml.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/xml/xml.min.js"></script>
 
     <script>
         $(document).ready(function () {

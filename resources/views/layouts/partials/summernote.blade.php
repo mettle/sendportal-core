@@ -1,9 +1,11 @@
 @push('css')
-    <link href="{{ asset('css/summernote/summernote-bs4.css') }}" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.css" rel="stylesheet">
 @endpush
 
 @push('js')
-    <script src="{{ asset('js/summernote-bs4.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.js"></script>
 
     <script>
         $(function () {

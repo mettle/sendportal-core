@@ -48,7 +48,10 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('auth.providers.users.model', User::class);
     }
 
-
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     * @return array
+     */
     protected function getPackageAliases($app)
     {
         return [

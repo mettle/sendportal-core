@@ -4,13 +4,13 @@ namespace Sendportal\Base;
 
 use Collective\Html\HtmlServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
 use Sendportal\Base\Console\Commands\SetupProduction;
 use Sendportal\Base\Providers\EventServiceProvider;
 use Sendportal\Base\Providers\FormServiceProvider;
+use Sendportal\Base\Providers\RouteServiceProvider;
 use Sendportal\Base\Providers\SendportalAppServiceProvider;
 
 class SendportalBaseServiceProvider extends ServiceProvider
@@ -53,18 +53,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sendportal');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        Route::group([
-            'namespace' => 'Sendportal\Base\Http\Controllers'
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        });
 
-        Route::group([
-            'namespace' => 'Sendportal\Base\Http\Controllers',
-            'prefix' => 'api'
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        });
     }
 
     /**
@@ -76,6 +65,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(HtmlServiceProvider::class);
         $this->app->register(FormServiceProvider::class);
+        $this->app->register(RouteServiceProvider::class);
 
         //$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'automations');
     }

@@ -30,7 +30,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request)
     {
-        user()->update($request->validated());
+        $request->user()->update($request->validated());
 
         return redirect()->back()->with('success', __('Your profile was updated successfully!'));
     }

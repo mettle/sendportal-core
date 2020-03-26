@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            @if ( auth()->user()->ownsCurrentTeam() && count($invitations) > 0)
+            @if ( auth()->user()->ownsCurrentWorkspace() && count($invitations) > 0)
                 <div class="card mt-3">
                     <div class="card-header">
                         {{ __('Invited Users') }}
@@ -95,7 +95,7 @@
                 </div>
             @endif
 
-            @if ( auth()->user()->ownsCurrentTeam())
+            @if ( auth()->user()->ownsCurrentWorkspace())
                 <div class="card mt-3">
                     <div class="card-header">
                         {{ __('Invite User') }}

@@ -8,7 +8,7 @@
 
     @include('messages.partials.nav')
 
-    @component('layouts.partials.actions')
+    @component('sendportal::layouts.partials.actions')
         @slot('left')
             <form action="{{ route('sendportal.messages.index') }}" method="GET" class="form-inline">
                 <div class="mr-2">
@@ -60,50 +60,47 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($messages as $message)
-                    <tr>
-                        <td>
-                            {{ $message->sent_at ?? $message->created_at }}
-                        </td>
-                        <td>{{ $message->subject }}</td>
-                        <td>
-                            @if($message->source_type == \Sendportal\Base\Models\Campaign::class)
-                                <i class="fas fa-envelope fc-gray-300"></i>
-                                <a href="{{ route('sendportal.campaigns.reports.index', $message->source_id) }}">
-                                    {{ $message->source->name }}
-                                </a>
-                            @elseif(automationsEnable() && $message->source_type == \Sendportal\Automations\Models\AutomationSchedule::class)
-                                <i class="fas fa-sync-alt fc-gray-300"></i>
-                                <a href="{{ route('sendportal.automations.show', $message->source->automation_step->automation_id) }}">
-                                    {{ $message->source->automation_step->automation->name }}
-                                </a>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a>
-                        </td>
-                        <td>
-                            @include('messages.partials.status-row')
-                        </td>
-                        <td>
-                            @if ( ! $message->sent_at)
-                                <form action="{{ route('sendportal.messages.send') }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{ $message->id }}">
-                                    <a href="{{ route('sendportal.messages.show', $message->id) }}"
-                                       class="btn btn-xs btn-light">{{ __('Preview') }}</a>
-                                    <button type="submit" class="btn btn-xs btn-light">{{ __('Send now') }}</button>
-                                </form>
-                            @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="100%">
-                            <p class="empty-table-text">{{ __('There are no messages') }}</p>
-                        </td>
-                    </tr>
-                @endforelse
+                    @forelse($messages as $message)
+                        <tr>
+                            <td>
+                                {{ $message->sent_at ?? $message->created_at }}
+                            </td>
+                            <td>{{ $message->subject }}</td>
+                            <td>
+                                @if($message->isCampaign())
+                                    <i class="fas fa-envelope fc-gray-300"></i>
+                                    <a href="{{ route('sendportal.campaigns.reports.index', $message->source_id) }}">
+                                        {{ $message->source->name }}
+                                    </a>
+                                @elseif($message->isAutomation())
+                                    <i class="fas fa-sync-alt fc-gray-300"></i>
+                                    <a href="{{ route('sendportal.automations.show', $message->source->automation_step->automation_id) }}">
+                                        {{ $message->source->automation_step->automation->name }}
+                                    </a>
+                                @endif
+                            </td>
+                            <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
+                            <td>
+                                @include('messages.partials.status-row')
+                            </td>
+                            <td>
+                                @if ( ! $message->sent_at)
+                                    <form action="{{ route('sendportal.messages.send') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $message->id }}">
+                                        <a href="{{ route('messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
+                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Send now') }}</button>
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="100%">
+                                <p class="empty-table-text">{{ __('There are no messages') }}</p>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

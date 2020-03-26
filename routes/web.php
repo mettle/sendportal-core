@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Sendportal\Base\Http\Middleware\OwnsCurrentTeam;
+use Sendportal\Base\Http\Middleware\OwnsCurrentWorkspace;
 
 // Auth.
 // TODO(david): we need a way to turn off auth for the situations where `sendportal/base` is getting included in other packages that already have auth.
@@ -81,20 +81,20 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         $appRouter->prefix('settings')->group(static function (Router $settingsRouter) {
             $settingsRouter->get('', 'SettingsController@index')->name('settings.index');
 
-            // Team User Management.
-            $settingsRouter->namespace('Teams')
-                ->middleware(OwnsCurrentTeam::class)
+            // Workspace User Management.
+            $settingsRouter->namespace('Workspaces')
+                ->middleware(OwnsCurrentWorkspace::class)
                 ->name('settings.users.')
                 ->prefix('users')
-                ->group(static function (Router $teamsRouter) {
-                    $teamsRouter->get('/', 'TeamUsersController@index')->name('index');
-                    $teamsRouter->delete('{userId}', 'TeamUsersController@destroy')->name('destroy');
+                ->group(static function (Router $workspacesRouter) {
+                    $workspacesRouter->get('/', 'WorkspaceUsersController@index')->name('index');
+                    $workspacesRouter->delete('{userId}', 'WorkspaceUsersController@destroy')->name('destroy');
 
                     // Invitations.
-                    $teamsRouter->name('invitations.')->prefix('invitations')
+                    $workspacesRouter->name('invitations.')->prefix('invitations')
                         ->group(static function (Router $invitationsRouter) {
-                            $invitationsRouter->post('/', 'TeamInvitationsController@store')->name('store');
-                            $invitationsRouter->delete('{invitation}', 'TeamInvitationsController@destroy')
+                            $invitationsRouter->post('/', 'WorkspaceInvitationsController@store')->name('store');
+                            $invitationsRouter->delete('{invitation}', 'WorkspaceInvitationsController@destroy')
                                 ->name('destroy');
                         });
                 });
@@ -118,22 +118,22 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         });
     });
 
-    // Team Management.
-    Route::namespace('Teams')->middleware(['auth', 'verified'])->group(static function (Router $teamRouter) {
-        $teamRouter->resource('workspaces', 'WorkspacesController')->except([
+    // Workspace Management.
+    Route::namespace('Workspaces')->middleware(['auth', 'verified'])->group(static function (Router $workspaceRouter) {
+        $workspaceRouter->resource('workspaces', 'WorkspacesController')->except([
             'create',
             'show',
             'destroy',
         ]);
 
-        // Team Switching.
-        $teamRouter->get('workspaces/{team}/switch', 'SwitchWorkspaceController@switch')->name('workspaces.switch');
+        // Workspace Switching.
+        $workspaceRouter->get('workspaces/{workspace}/switch', 'SwitchWorkspaceController@switch')->name('workspaces.switch');
 
         // Invitations.
-        $teamRouter->post('teams/invitations/{invitation}/accept', 'PendingInvitationController@accept')
-            ->name('teams.invitations.accept');
-        $teamRouter->post('teams/invitations/{invitation}/reject', 'PendingInvitationController@reject')
-            ->name('teams.invitations.reject');
+        $workspaceRouter->post('workspaces/invitations/{invitation}/accept', 'PendingInvitationController@accept')
+            ->name('workspaces.invitations.accept');
+        $workspaceRouter->post('workspaces/invitations/{invitation}/reject', 'PendingInvitationController@reject')
+            ->name('workspaces.invitations.reject');
     });
 
     // Subscriptions

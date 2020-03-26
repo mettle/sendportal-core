@@ -27,10 +27,10 @@ class CampaignReportsControllerTest extends TestCase
 
     private function getCampaignAndUser(): array
     {
-        [$team, $user] = $this->createUserAndTeam();
+        [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)
             ->state('sent')
-            ->create(['team_id' => $team->id]);
+            ->create(['workspace_id' => $workspace->id]);
 
         return [$campaign, $user];
     }

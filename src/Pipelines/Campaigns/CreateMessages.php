@@ -44,7 +44,7 @@ class CreateMessages
      */
     protected function handleAllSubscribers(Campaign $campaign)
     {
-        Subscriber::where('team_id', $campaign->team_id)
+        Subscriber::where('workspace_id', $campaign->workspace_id)
             ->whereNull('unsubscribed_at')
             ->chunkById(1000, function ($subscribers) use ($campaign) {
                 $this->dispatchToSubscriber($campaign, $subscribers);
@@ -171,7 +171,7 @@ class CreateMessages
         // the message doesn't exist, so we'll create and dispatch
         \Log::info('Saving empty email message campaign=' . $campaign->id . ' subscriber=' . $subscriber->id);
         $attributes = [
-            'team_id' => $campaign->team_id,
+            'workspace_id' => $campaign->workspace_id,
             'subscriber_id' => $subscriber->id,
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -201,7 +201,7 @@ class CreateMessages
 
         Message::firstOrCreate(
             [
-                'team_id' => $campaign->team_id,
+                'workspace_id' => $campaign->workspace_id,
                 'subscriber_id' => $subscriber->id,
                 'source_type' => Campaign::class,
                 'source_id' => $campaign->id,
@@ -219,7 +219,7 @@ class CreateMessages
 
     protected function findMessage(Campaign $campaign, Subscriber $subscriber): ?Message
     {
-        return Message::where('team_id', $campaign->team_id)
+        return Message::where('workspace_id', $campaign->workspace_id)
             ->where('subscriber_id', $subscriber->id)
             ->where('source_type', Campaign::class)
             ->where('source_id', $campaign->id)

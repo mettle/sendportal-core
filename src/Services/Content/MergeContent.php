@@ -10,7 +10,6 @@ use Sendportal\Automations\Repositories\AutomationScheduleRepository;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Exception;
 use Sendportal\Base\Traits\NormalizeTags;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
@@ -45,9 +44,9 @@ class MergeContent
      */
     protected function resolveContent(Message $message): string
     {
-        if ($message->source_type === Campaign::class) {
+        if ($message->isCampaign()) {
             $mergedContent = $this->mergeCampaignContent($message);
-        } elseif (automationsEnable() && $message->source_type === AutomationSchedule::class) {
+        } elseif ($message->isAutomation()) {
             $mergedContent = $this->mergeAutomationContent($message);
         } else {
             throw new Exception('Invalid message source type for message id=' . $message->id);
@@ -62,7 +61,7 @@ class MergeContent
     protected function mergeCampaignContent(Message $message): string
     {
         /** @var Campaign $campaign */
-        $campaign = $this->campaignRepo->find($message->team_id, $message->source_id, ['template']);
+        $campaign = $this->campaignRepo->find($message->workspace_id, $message->source_id, ['template']);
 
         if (!$campaign) {
             throw new Exception('Unable to resolve campaign step for message id= ' . $message->id);

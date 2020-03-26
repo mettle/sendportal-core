@@ -30,7 +30,7 @@ class TemplatesController extends Controller
      */
     public function index(): View
     {
-        $templates = $this->templates->paginate(auth()->user()->currentTeam()->id, 'name');
+        $templates = $this->templates->paginate(auth()->user()->currentWorkspace()->id, 'name');
 
         return view('sendportal::templates.index', compact('templates'));
     }
@@ -59,7 +59,7 @@ class TemplatesController extends Controller
 
         $data['content'] = $this->normalizeTags($data['content'], 'content');
 
-        $this->templates->store(auth()->user()->currentTeam()->id, $data);
+        $this->templates->store(auth()->user()->currentWorkspace()->id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
@@ -75,7 +75,7 @@ class TemplatesController extends Controller
      */
     public function edit(int $id): View
     {
-        $template = $this->templates->find(auth()->user()->currentTeam()->id, $id);
+        $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
 
         return view('sendportal::templates.edit', compact('template'));
     }
@@ -95,7 +95,7 @@ class TemplatesController extends Controller
 
         $data['content'] = $this->normalizeTags($data['content'], 'content');
 
-        $this->templates->update(auth()->user()->currentTeam()->id, $id, $data);
+        $this->templates->update(auth()->user()->currentWorkspace()->id, $id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
@@ -111,7 +111,7 @@ class TemplatesController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $template = $this->templates->find(auth()->user()->currentTeam()->id, $id);
+        $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
 
         // TODO(david): I don't think `is_in_use` has been implemented.
         if ($template->is_in_use) {
@@ -120,7 +120,7 @@ class TemplatesController extends Controller
                 ->withErrors(['template' => __('Cannot delete a template that has been used.')]);
         }
 
-        $this->templates->destroy(auth()->user()->currentTeam()->id, $template->id);
+        $this->templates->destroy(auth()->user()->currentWorkspace()->id, $template->id);
 
         return redirect()
             ->route('sendportal.templates.index')

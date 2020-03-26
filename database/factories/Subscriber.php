@@ -1,12 +1,12 @@
 <?php
 
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Faker\Generator as Faker;
 
 $factory->define(Subscriber::class, function (Faker $faker) {
     return [
-        'team_id' => factory(Team::class),
+        'workspace_id' => factory(Workspace::class),
         'hash' => $faker->uuid,
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,

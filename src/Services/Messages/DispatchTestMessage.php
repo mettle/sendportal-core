@@ -41,13 +41,13 @@ class DispatchTestMessage
     /**
      * @throws Exception
      */
-    public function handle(int $teamId, int $campaignId, string $recipientEmail): ?string
+    public function handle(int $workspaceId, int $campaignId, string $recipientEmail): ?string
     {
-        $campaign = $this->resolveCampaign($teamId, $campaignId);
+        $campaign = $this->resolveCampaign($workspaceId, $campaignId);
 
         if (!$campaign) {
             Log::error('Unable to get campaign to send test message.',
-                ['team_id' => $teamId, 'campaign_id' => $campaignId]);
+                ['workspace_id' => $workspaceId, 'campaign_id' => $campaignId]);
             return null;
         }
 
@@ -65,9 +65,9 @@ class DispatchTestMessage
     /**
      * @throws Exception
      */
-    protected function resolveCampaign(int $teamId, int $campaignId): ?Campaign
+    protected function resolveCampaign(int $workspaceId, int $campaignId): ?Campaign
     {
-        return $this->campaignTenant->find($teamId, $campaignId);
+        return $this->campaignTenant->find($workspaceId, $campaignId);
     }
 
     /**
@@ -107,7 +107,7 @@ class DispatchTestMessage
     protected function createTestMessage(Campaign $campaign, string $recipientEmail): Message
     {
         return new Message([
-            'team_id' => $campaign->team_id,
+            'workspace_id' => $campaign->workspace_id,
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
             'recipient_email' => $recipientEmail,

@@ -12,9 +12,9 @@ class Template extends BaseModel
     /** @var array */
     protected $guarded = [];
 
-    public function team(): BelongsTo
+    public function workspace(): BelongsTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Workspace::class);
     }
 
     /**

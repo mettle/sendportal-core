@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @component('layouts.partials.actions')
+    @component('sendportal::layouts.partials.actions')
         @slot('right')
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.providers.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('Add Provider') }}

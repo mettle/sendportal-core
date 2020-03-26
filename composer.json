@@ -9,7 +9,8 @@
         "php": "^7.2.5",
         "illuminate/support": "^7.0",
         "laravel/ui": "^2.0",
-        "laravelcollective/html": "^6.0|^7.0"
+        "laravelcollective/html": "^6.0|^7.0",
+        "rap2hpoutre/fast-excel": "^1.7"
     },
     "require-dev": {
         "orchestra/testbench": "^5.0",
@@ -18,10 +19,7 @@
     "autoload": {
         "psr-4": {
             "Sendportal\\Base\\": "src"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

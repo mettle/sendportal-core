@@ -21,13 +21,13 @@ class CreateProviderTables extends Migration
 
         \Schema::create('providers', function(Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('team_id');
+            $table->unsignedInteger('workspace_id');
             $table->string('name')->nullable();
             $table->unsignedInteger('type_id');
             $table->mediumText('settings');
             $table->timestamps();
 
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('type_id')->references('id')->on('provider_types');
         });
     }

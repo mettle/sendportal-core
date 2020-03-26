@@ -24,7 +24,7 @@ class ResolveProvider
      */
     public function handle(Message $message): Provider
     {
-        if (automationsEnable() && $message->isAutomation()) {
+        if (\Sendportal\Base\Facades\Helper::isPro() && $message->isAutomation()) {
             return $this->resolveAutomationProvider($message);
         }
 
@@ -64,7 +64,7 @@ class ResolveProvider
      */
     protected function resolveCampaignProvider(Message $message): Provider
     {
-        if (! $campaign = $this->campaignTenantRepository->find($message->team_id, $message->source_id, ['provider'])) {
+        if (! $campaign = $this->campaignTenantRepository->find($message->workspace_id, $message->source_id, ['provider'])) {
             throw new \Exception('Unable to resolve campaign for message id=' . $message->id);
         }
 

@@ -33,9 +33,9 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $teamId, int $segmentId): AnonymousResourceCollection
+    public function index(int $workspaceId, int $segmentId): AnonymousResourceCollection
     {
-        $segment = $this->segments->find($teamId, $segmentId, ['subscribers']);
+        $segment = $this->segments->find($workspaceId, $segmentId, ['subscribers']);
 
         return SubscriberResource::collection($segment->subscribers);
     }
@@ -43,11 +43,11 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SegmentSubscriberStoreRequest $request, int $teamId, int $segmentId): AnonymousResourceCollection
+    public function store(SegmentSubscriberStoreRequest $request, int $workspaceId, int $segmentId): AnonymousResourceCollection
     {
         $input = $request->validated();
 
-        $subscribers = $this->apiService->store($teamId, $segmentId, collect($input['subscribers']));
+        $subscribers = $this->apiService->store($workspaceId, $segmentId, collect($input['subscribers']));
 
         return SubscriberResource::collection($subscribers);
     }
@@ -55,11 +55,11 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function update(SegmentSubscriberUpdateRequest $request, int $teamId, int $segmentId): AnonymousResourceCollection
+    public function update(SegmentSubscriberUpdateRequest $request, int $workspaceId, int $segmentId): AnonymousResourceCollection
     {
         $input = $request->validated();
 
-        $subscribers = $this->apiService->update($teamId, $segmentId, collect($input['subscribers']));
+        $subscribers = $this->apiService->update($workspaceId, $segmentId, collect($input['subscribers']));
 
         return SubscriberResource::collection($subscribers);
     }
@@ -67,11 +67,11 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(SegmentSubscriberDestroyRequest $request, int $teamId, int $segmentId): AnonymousResourceCollection
+    public function destroy(SegmentSubscriberDestroyRequest $request, int $workspaceId, int $segmentId): AnonymousResourceCollection
     {
         $input = $request->validated();
 
-        $subscribers = $this->apiService->destroy($teamId, $segmentId, collect($input['subscribers']));
+        $subscribers = $this->apiService->destroy($workspaceId, $segmentId, collect($input['subscribers']));
 
         return SubscriberResource::collection($subscribers);
     }

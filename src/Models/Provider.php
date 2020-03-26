@@ -68,7 +68,7 @@ class Provider extends BaseModel
      */
     public function getInUseAttribute()
     {
-        if  (automationsEnable()) {
+        if  (\Sendportal\Base\Facades\Helper::isPro()) {
             return $this->campaigns()->count() + $this->automations()->count();
         }
 

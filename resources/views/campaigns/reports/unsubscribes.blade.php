@@ -19,21 +19,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($messages as $message)
-                    <tr>
-                        <td>
-                            <a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a>
-                        </td>
-                        <td>{{ $message->subject }}</td>
-                        <td>{{ displayDate($message->unsubscribed_at) }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="100%">
-                            <p class="empty-table-text">{{ __('There are no unsubscribes') }}</p>
-                        </td>
-                    </tr>
-                @endforelse
+                    @forelse($messages as $message)
+                        <tr>
+                            <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
+                            <td>{{ $message->subject }}</td>
+                            <td>{{ \Sendportal\Base\Facades\Helper::displayDate($message->unsubscribed_at) }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="100%">
+                                <p class="empty-table-text">{{ __('There are no unsubscribes') }}</p>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

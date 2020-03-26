@@ -42,7 +42,7 @@ class EmailWebhookService implements EmailWebhookServiceInterface
 
         // @todo not sure that this give much value? We can just derive the count
         // from the messages table
-        if (automationsEnable() && $message->isAutomation()) {
+        if (\Sendportal\Base\Facades\Helper::isPro() && $message->isAutomation()) {
             $automationStep = $this->resolveAutomationStepFromMessage($message);
 
             \DB::table('automation_steps')->where('id', $automationStep->id)->increment('open_count');
@@ -81,7 +81,7 @@ class EmailWebhookService implements EmailWebhookServiceInterface
 
         // @todo not sure that this give much value? We can just derive the count
         // from the messages table
-        if (automationsEnable() && $message->isAutomation()) {
+        if (\Sendportal\Base\Facades\Helper::isPro() && $message->isAutomation()) {
             $automationStep = $this->resolveAutomationStepFromMessage($message);
 
             \DB::table('automation_steps')->where('id', $automationStep->id)->increment('click_count');
@@ -182,7 +182,7 @@ class EmailWebhookService implements EmailWebhookServiceInterface
      */
     protected function resolveAutomationStepFromMessage(Message $message)
     {
-        if (automationsEnable() && $message->source_type != AutomationSchedule::class) {
+        if (\Sendportal\Base\Facades\Helper::isPro() && $message->source_type != AutomationSchedule::class) {
             throw new \Exception('Unable to resolve source for message id=' . $message->id);
         }
 

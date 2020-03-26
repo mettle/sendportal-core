@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @component('layouts.partials.card')
+    @component('sendportal::layouts.partials.card')
         @slot('cardHeader', __('Create Provider'))
 
         @slot('cardBody')

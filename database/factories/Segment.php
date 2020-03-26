@@ -1,7 +1,7 @@
 <?php
 
 use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Faker\Generator as Faker;
 
 $factory->define(Segment::class, function (Faker $faker) {

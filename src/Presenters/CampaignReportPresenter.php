@@ -71,7 +71,7 @@ class CampaignReportPresenter
     protected function getChartData()
     {
         // get the boundaries of the first and last event from the database
-        $boundaries = $this->messageRepo->getFirstLastOpenedAt(auth()->user()->currentTeam()->id, Campaign::class, $this->campaign->id);
+        $boundaries = $this->messageRepo->getFirstLastOpenedAt(auth()->user()->currentWorkspace()->id, Campaign::class, $this->campaign->id);
 
         // extract Carbon instances for $first and $last
         list($first, $last) = $this->calculateFirstLast($boundaries);
@@ -89,7 +89,7 @@ class CampaignReportPresenter
         $intervals = $this->createIntervals($first, $last, $timespan);
 
         // calculate the opens per period frm the database
-        $opensPerPeriod = $this->messageRepo->countUniqueOpensPerPeriod(auth()->user()->currentTeam()->id, Campaign::class, $this->campaign->id, $secondsPerInterval);
+        $opensPerPeriod = $this->messageRepo->countUniqueOpensPerPeriod(auth()->user()->currentWorkspace()->id, Campaign::class, $this->campaign->id, $secondsPerInterval);
 
         // merge in the actual opens to the intervals
         $periods = $this->populatePeriods($opensPerPeriod, $intervals);

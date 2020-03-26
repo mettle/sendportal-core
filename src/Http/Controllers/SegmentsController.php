@@ -36,7 +36,7 @@ class SegmentsController extends Controller
      */
     public function index()
     {
-        $segments = $this->segmentRepository->paginate(auth()->user()->currentTeam()->id, 'name');
+        $segments = $this->segmentRepository->paginate(auth()->user()->currentWorkspace()->id, 'name');
 
         return view('segments.index', compact('segments'));
     }
@@ -60,7 +60,7 @@ class SegmentsController extends Controller
      */
     public function store(SegmentRequest $request)
     {
-        $this->segmentRepository->store(auth()->user()->currentTeam()->id, $request->all());
+        $this->segmentRepository->store(auth()->user()->currentWorkspace()->id, $request->all());
 
         return redirect()->route('sendportal.segments.index');
     }
@@ -88,7 +88,7 @@ class SegmentsController extends Controller
      */
     public function edit($id, SubscriberTenantRepository $subscriberRepository)
     {
-        $segment = $this->segmentRepository->find(auth()->user()->currentTeam()->id, $id, ['subscribers']);
+        $segment = $this->segmentRepository->find(auth()->user()->currentWorkspace()->id, $id, ['subscribers']);
 
         return view('sendportal::segments.edit', compact('segment'));
     }
@@ -103,7 +103,7 @@ class SegmentsController extends Controller
      */
     public function update(SegmentRequest $request, $id)
     {
-        $this->segmentRepository->update(auth()->user()->currentTeam()->id, $id, $request->all());
+        $this->segmentRepository->update(auth()->user()->currentWorkspace()->id, $id, $request->all());
 
         return redirect()->route('sendportal.segments.index');
     }

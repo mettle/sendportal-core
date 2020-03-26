@@ -71,7 +71,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(SendportalAppServiceProvider::class);
-        $this->app->register( HtmlServiceProvider::class);
+        $this->app->register(HtmlServiceProvider::class);
         $this->app->register(FormServiceProvider::class);
 
         //$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'automations');

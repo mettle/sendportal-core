@@ -22,5 +22,13 @@
     <php>
         <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="APP_DEBUG" value="true"/>
+        <env name="APP_ENV" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+
+        <env name="DB_DATABASE" value="sendportal_dev"/>
+        <env name="DB_USERNAME" value="homestead"/>
+        <env name="DB_PASSWORD" value="secret"/>
     </php>
 </phpunit>

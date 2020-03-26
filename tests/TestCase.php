@@ -34,7 +34,7 @@ abstract class TestCase extends BaseTestCase
         $this->withFactories(__DIR__ . '/../database/factories');
 
         $this->artisan('migrate', ['--database' => 'mysql'])->run();
-        $this->artisan('migrate', ['--database' => 'pgsql_testing'])->run();
+        $this->artisan('migrate', ['--database' => 'pgsql'])->run();
     }
 
     /**
@@ -45,31 +45,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'mysql');
-        $app['config']->set('database.connections.mysql', [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'sendportal_dev'),
-            'username' => env('DB_USERNAME', 'homestead'),
-            'password' => env('DB_PASSWORD', 'secret'),
-        ]);
-
-        $app['config']->set('database.connections.pgsql_testing', [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => '5432',
-            'database' => env('DB_DATABASE', 'sendportal_dev'),
-            'username' => env('DB_USERNAME', 'homestead'),
-            'password' => env('DB_PASSWORD', 'secret'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ]);
-
         $app['config']->set('auth.providers.users.model', User::class);
     }
 

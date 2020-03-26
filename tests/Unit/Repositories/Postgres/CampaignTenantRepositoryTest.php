@@ -23,7 +23,7 @@ class CampaignTenantRepositoryTest extends TestCase
 
         // TODO(david): This fails if you haven't previously used PGSQL as your testing database, because
         //  it misses having the correct values seeded in the provider types table.
-        DB::setDefaultConnection('pgsql_testing');
+        DB::setDefaultConnection('pgsql');
     }
 
     protected function tearDown(): void

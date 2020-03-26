@@ -64,7 +64,7 @@
                                     <a href="{{ route('campaigns.reports.index', $message->source_id) }}">
                                         {{ $message->source->name }}
                                     </a>
-                                @elseif(automationsEnable() && $message->source_type == \Sendportal\Automations\Models\AutomationSchedule::class)
+                                @elseif(\Sendportal\Base\Facades\Helper::isPro() && $message->source_type == \Sendportal\Automations\Models\AutomationSchedule::class)
                                     <i class="fas fa-sync-alt fc-gray-300"></i>
                                     <a href="{{ route('automations.show', $message->source->automation_step->automation_id) }}">
                                         {{ $message->source->automation_step->automation->name }}

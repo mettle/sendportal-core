@@ -6,6 +6,7 @@ use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
 use Sendportal\Base\Repositories\MySQL\CampaignTenantRepository as MySQLCampaignTenantRepository;
 use Sendportal\Base\Repositories\Postgres\CampaignTenantRepository as PostgresCampaignTenantRepository;
+use Sendportal\Base\Services\Helper;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 use Sendportal\Base\Traits\ResolvesDatabaseDriver;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,10 @@ class SendportalAppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(EmailWebhookServiceInterface::class, EmailWebhookService::class);
+
+        $this->app->singleton('sendportal.helper', function() {
+            return new Helper();
+        });
     }
 
     /**

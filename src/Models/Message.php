@@ -69,7 +69,7 @@ class Message extends BaseModel
      */
     public function isAutomation(): bool
     {
-        return automationsEnable() && $this->source_type === AutomationSchedule::class;
+        return \Sendportal\Base\Facades\Helper::isPro() && $this->source_type === AutomationSchedule::class;
     }
 
     /**
@@ -93,7 +93,7 @@ class Message extends BaseModel
             return 'Campaign';
         }
 
-        if (automationsEnable() && $this->source_type === AutomationSchedule::class) {
+        if (\Sendportal\Base\Facades\Helper::isPro() && $this->source_type === AutomationSchedule::class) {
             return 'Automation';
         }
 

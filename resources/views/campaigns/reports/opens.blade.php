@@ -67,7 +67,7 @@
                                     <a href="{{ route('subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a>
                                 </td>
                                 <td>{{ $message->subject }}</td>
-                                <td>{{ displayDate($message->opened_at) }}</td>
+                                <td>{{ \Sendportal\Base\Facades\Helper::displayDate($message->opened_at) }}</td>
                                 <td>{{ $message->open_count }}</td>
                             </tr>
                         @empty

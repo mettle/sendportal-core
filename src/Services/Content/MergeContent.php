@@ -44,7 +44,7 @@ class MergeContent
     {
         if ($message->source_type === Campaign::class) {
             $mergedContent = $this->mergeCampaignContent($message);
-        } elseif (automationsEnable() && $message->source_type === \Sendportal\Automations\Models\AutomationSchedule::class) {
+        } elseif (\Sendportal\Base\Facades\Helper::isPro() && $message->source_type === \Sendportal\Automations\Models\AutomationSchedule::class) {
             $mergedContent = $this->mergeAutomationContent($message);
         } else {
             throw new Exception('Invalid message source type for message id=' . $message->id);

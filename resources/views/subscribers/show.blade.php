@@ -31,10 +31,10 @@
                                     @if($subscriber->unsubscribed_at)
                                         <span class="badge badge-danger">{{ __('Unsubscribed') }}</span>
                                         <span class="text-muted">{{ \Sendportal\Base\Models\UnsubscribeEventType::findById($subscriber->unsubscribe_event_id) }}
-                                            on {{ displayDate($subscriber->unsubscribed_at)->format('d M Y') }}
+                                            on {{ \Sendportal\Base\Facades\Helper::displayDate($subscriber->unsubscribed_at)->format('d M Y') }}
                                         </span>
                                     @else
-                                        <span class="badge badge-success">{{ __('Subscribed') }}</span> <span class="text-muted">{{ displayDate($subscriber->created_at) }}</span>
+                                        <span class="badge badge-success">{{ __('Subscribed') }}</span> <span class="text-muted">{{ \Sendportal\Base\Facades\Helper::displayDate($subscriber->created_at) }}</span>
                                     @endif
                                 </td>
                             </tr>
@@ -82,7 +82,7 @@
                                 <a href="{{ route('campaigns.reports.index', $message->source_id) }}">
                                     {{ $message->source->name }}
                                 </a>
-                            @elseif(automationsEnable() && $message->is_automation)
+                            @elseif(\Sendportal\Base\Facades\Helper::isPro() && $message->is_automation)
                                 <i class="fas fa-sync-alt fc-gray-300"></i>
                                 <a href="{{ route('automations.show', $message->source->automation_step->automation_id) }}">
                                     {{ $message->source->automation_step->automation->name }}

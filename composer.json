@@ -19,10 +19,7 @@
     "autoload": {
         "psr-4": {
             "Sendportal\\Base\\": "src"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

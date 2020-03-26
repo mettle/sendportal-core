@@ -13,11 +13,11 @@ class MessageTenantRepository extends BaseTenantRepository
 
     protected $modelName = Message::class;
 
-    public function paginateWithSource($teamId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = [])
+    public function paginateWithSource($workspaceId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = [])
     {
         $this->parseOrder($orderBy);
 
-        $instance = $this->getQueryBuilder($teamId)
+        $instance = $this->getQueryBuilder($workspaceId)
             ->with(['source' => function (MorphTo $morphTo) {
                 $morphTo->morphWith([
                     AutomationSchedule::class => ['automation_step.automation:id,name'],
@@ -31,10 +31,10 @@ class MessageTenantRepository extends BaseTenantRepository
             ->paginate($paginate);
     }
 
-    public function recipients($teamId, $sourceType, $sourceId)
+    public function recipients($workspaceId, $sourceType, $sourceId)
     {
-        return $this->getQueryBuilder($teamId)
-            ->where('team_id', $teamId)
+        return $this->getQueryBuilder($workspaceId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('sent_at')
@@ -42,10 +42,10 @@ class MessageTenantRepository extends BaseTenantRepository
             ->paginate(50);
     }
 
-    public function opens($teamId, $sourceType, $sourceId)
+    public function opens($workspaceId, $sourceType, $sourceId)
     {
-        return $this->getQueryBuilder($teamId)
-            ->where('team_id', $teamId)
+        return $this->getQueryBuilder($workspaceId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('opened_at')
@@ -53,10 +53,10 @@ class MessageTenantRepository extends BaseTenantRepository
             ->paginate(50);
     }
 
-    public function clicks($teamId, $sourceType, $sourceId)
+    public function clicks($workspaceId, $sourceType, $sourceId)
     {
-        return $this->getQueryBuilder($teamId)
-            ->where('team_id', $teamId)
+        return $this->getQueryBuilder($workspaceId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('clicked_at')
@@ -64,11 +64,11 @@ class MessageTenantRepository extends BaseTenantRepository
             ->paginate(50);
     }
 
-    public function bounces($teamId, $sourceType, $sourceId)
+    public function bounces($workspaceId, $sourceType, $sourceId)
     {
-        return $this->getQueryBuilder($teamId)
+        return $this->getQueryBuilder($workspaceId)
             ->with(['failures'])
-            ->where('team_id', $teamId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('bounced_at')
@@ -76,10 +76,10 @@ class MessageTenantRepository extends BaseTenantRepository
             ->paginate(50);
     }
 
-    public function unsubscribes($teamId, $sourceType, $sourceId)
+    public function unsubscribes($workspaceId, $sourceType, $sourceId)
     {
-        return $this->getQueryBuilder($teamId)
-            ->where('team_id', $teamId)
+        return $this->getQueryBuilder($workspaceId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('unsubscribed_at')
@@ -160,11 +160,11 @@ class MessageTenantRepository extends BaseTenantRepository
         }
     }
 
-    public function getFirstLastOpenedAt($teamId, $sourceType, $sourceId)
+    public function getFirstLastOpenedAt($workspaceId, $sourceType, $sourceId)
     {
         return \DB::table('messages')
             ->select(\DB::raw('MIN(opened_at) as first, MAX(opened_at) as last'))
-            ->where('team_id', $teamId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->first();
@@ -173,20 +173,20 @@ class MessageTenantRepository extends BaseTenantRepository
     /**
      * Count the number of unique open per period for a campaign or automation schedule
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $sourceType
      * @param int $sourceId
      * @param int $intervalInSeconds
      * @return mixed
      * @throws \Exception
      */
-    public function countUniqueOpensPerPeriod($teamId, $sourceType, $sourceId, $intervalInSeconds)
+    public function countUniqueOpensPerPeriod($workspaceId, $sourceType, $sourceId, $intervalInSeconds)
     {
         $intervalInSeconds = (int)$intervalInSeconds;
 
         $query = \DB::table('messages')
             ->select(\DB::raw('COUNT(*) as open_count, MIN(opened_at) as opened_at, FROM_UNIXTIME(MIN(UNIX_TIMESTAMP(opened_at) DIV '.$intervalInSeconds.') * '.$intervalInSeconds.') as period_start'))
-            ->where('team_id', $teamId)
+            ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('opened_at');

@@ -33,9 +33,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $teamId): AnonymousResourceCollection
+    public function index(int $workspaceId): AnonymousResourceCollection
     {
-        $subscribers = $this->subscribers->paginate($teamId, 'last_name');
+        $subscribers = $this->subscribers->paginate($workspaceId, 'last_name');
 
         return SubscriberResource::collection($subscribers);
     }
@@ -43,9 +43,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SubscriberStoreRequest $request, int $teamId): SubscriberResource
+    public function store(SubscriberStoreRequest $request, int $workspaceId): SubscriberResource
     {
-        $subscriber = $this->apiService->store($teamId, collect($request->validated()));
+        $subscriber = $this->apiService->store($workspaceId, collect($request->validated()));
 
         $subscriber->load('segments');
 
@@ -55,17 +55,17 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function show(int $teamId, int $id): SubscriberResource
+    public function show(int $workspaceId, int $id): SubscriberResource
     {
-        return new SubscriberResource($this->subscribers->find($teamId, $id, ['segments']));
+        return new SubscriberResource($this->subscribers->find($workspaceId, $id, ['segments']));
     }
 
     /**
      * @throws Exception
      */
-    public function update(SubscriberUpdateRequest $request, int $teamId, int $id): SubscriberResource
+    public function update(SubscriberUpdateRequest $request, int $workspaceId, int $id): SubscriberResource
     {
-        $subscriber = $this->subscribers->update($teamId, $id, $request->validated());
+        $subscriber = $this->subscribers->update($workspaceId, $id, $request->validated());
 
         return new SubscriberResource($subscriber);
     }
@@ -73,9 +73,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(int $teamId, int $id): Response
+    public function destroy(int $workspaceId, int $id): Response
     {
-        $this->apiService->delete($teamId, $this->subscribers->find($teamId, $id));
+        $this->apiService->delete($workspaceId, $this->subscribers->find($workspaceId, $id));
 
         return response(null, 204);
     }

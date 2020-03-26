@@ -15,7 +15,7 @@ class CreateCampaignsTable extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('team_id');
+            $table->unsignedInteger('workspace_id');
             $table->string('name');
             $table->unsignedInteger('status_id')->default(1);
             $table->unsignedInteger('template_id')->nullable();
@@ -32,7 +32,7 @@ class CreateCampaignsTable extends Migration
         });
 
         Schema::table('campaigns', function(Blueprint $table) {
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('status_id')->references('id')->on('campaign_statuses');
             $table->foreign('template_id')->references('id')->on('templates');
             $table->foreign('provider_id')->references('id')->on('providers');

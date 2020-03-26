@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Rules;
 
 use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Collection;
@@ -28,13 +28,13 @@ class CanAccessSegment implements Rule
             return false;
         }
 
-        /** @var Collection $userTeams */
-        $userTeams = $this->user->teams;
+        /** @var Collection $userWorkspaces */
+        $userWorkspaces = $this->user->workspaces;
 
-        /** @var Team $segmentTeam */
-        $segmentTeam = $segment->team;
+        /** @var Workspace $segmentWorkspace */
+        $segmentWorkspace = $segment->workspace;
 
-        return $userTeams->contains($segmentTeam);
+        return $userWorkspaces->contains($segmentWorkspace);
     }
 
     /**

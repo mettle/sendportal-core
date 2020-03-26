@@ -2,7 +2,7 @@
 
 namespace Sendportal\Base\Models;
 
-use Sendportal\Base\Traits\CanJoinTeams;
+use Sendportal\Base\Traits\CanJoinWorkspaces;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
-    use CanJoinTeams;
+    use CanJoinWorkspaces;
 
     /**
      * The attributes that are mass assignable.

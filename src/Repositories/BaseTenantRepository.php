@@ -12,7 +12,7 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * @var string
      */
-    protected $tenantKey = 'team_id';
+    protected $tenantKey = 'workspace_id';
 
     /**
      * Order Options
@@ -38,16 +38,16 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Return all records
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $orderBy
      * @param array $relations
      * @param array $parameters
      * @return mixed
      * @throws \Exception
      */
-    public function all($teamId, $orderBy = 'id', array $relations = [], array $parameters = [])
+    public function all($workspaceId, $orderBy = 'id', array $relations = [], array $parameters = [])
     {
-        $instance = $this->getQueryBuilder($teamId);
+        $instance = $this->getQueryBuilder($workspaceId);
 
         $this->parseOrder($orderBy);
 
@@ -61,7 +61,7 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Return paginated items
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $orderBy
      * @param array $relations
      * @param int $paginate
@@ -69,9 +69,9 @@ abstract class BaseTenantRepository implements BaseTenantInterface
      * @return mixed
      * @throws \Exception
      */
-    public function paginate($teamId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = [])
+    public function paginate($workspaceId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = [])
     {
-        $instance = $this->getQueryBuilder($teamId);
+        $instance = $this->getQueryBuilder($workspaceId);
 
         $this->parseOrder($orderBy);
 
@@ -97,15 +97,15 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Get many records by a field and value
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $parameters
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function getBy($teamId, $parameters, array $relations = [])
+    public function getBy($workspaceId, $parameters, array $relations = [])
     {
-        $instance = $this->getQueryBuilder($teamId)
+        $instance = $this->getQueryBuilder($workspaceId)
             ->with($relations);
 
         foreach ($parameters as $field => $value) {
@@ -118,15 +118,15 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * List all records
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $fieldName
      * @param string $fieldId
      * @return mixed
      * @throws \Exception
      */
-    public function pluck($teamId, $fieldName = 'name', $fieldId = 'id')
+    public function pluck($workspaceId, $fieldName = 'name', $fieldId = 'id')
     {
-        return $this->getQueryBuilder($teamId)
+        return $this->getQueryBuilder($workspaceId)
             ->orderBy($fieldName)
             ->pluck($fieldName, $fieldId)
             ->all();
@@ -135,7 +135,7 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * List all records matching a field's value
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $field
      * @param mixed $value
      * @param string $listFieldName
@@ -143,13 +143,13 @@ abstract class BaseTenantRepository implements BaseTenantInterface
      * @return mixed
      * @throws \Exception
      */
-    public function pluckBy($teamId, $field, $value, $listFieldName = 'name', $listFieldId = 'id')
+    public function pluckBy($workspaceId, $field, $value, $listFieldName = 'name', $listFieldId = 'id')
     {
         if (! is_array($value)) {
             $value = [$value];
         }
 
-        return $this->getQueryBuilder($teamId)
+        return $this->getQueryBuilder($workspaceId)
             ->whereIn($field, $value)
             ->orderBy($listFieldName)
             ->pluck($listFieldName, $listFieldId)
@@ -159,30 +159,30 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Find a single record
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $id
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function find($teamId, $id, array $relations = [])
+    public function find($workspaceId, $id, array $relations = [])
     {
-        return $this->getQueryBuilder($teamId)->with($relations)->findOrFail($id);
+        return $this->getQueryBuilder($workspaceId)->with($relations)->findOrFail($id);
     }
 
     /**
      * Find a single record by a field and value
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $field
      * @param mixed $value
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function findBy($teamId, $field, $value, array $relations = [])
+    public function findBy($workspaceId, $field, $value, array $relations = [])
     {
-        return $this->getQueryBuilder($teamId)
+        return $this->getQueryBuilder($workspaceId)
             ->with($relations)
             ->where($field, $value)
             ->first();
@@ -191,15 +191,15 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Find a single record by multiple fields
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $data
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function findByMany($teamId, array $data, array $relations = [])
+    public function findByMany($workspaceId, array $data, array $relations = [])
     {
-        $model = $this->getQueryBuilder($teamId)->with($relations);
+        $model = $this->getQueryBuilder($workspaceId)->with($relations);
 
         foreach ($data as $key => $value) {
             $model->where($key, $value);
@@ -211,15 +211,15 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Find multiple models
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $ids
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function getWhereIn($teamId, array $ids, array $relations = [])
+    public function getWhereIn($workspaceId, array $ids, array $relations = [])
     {
-        return $this->getQueryBuilder($teamId)
+        return $this->getQueryBuilder($workspaceId)
             ->with($relations)
             ->whereIn('id', $ids)->get();
     }
@@ -227,52 +227,52 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Create a new record
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $data
      * @return mixed
      * @throws \Exception
      */
-    public function store($teamId, array $data)
+    public function store($workspaceId, array $data)
     {
         $this->checkTenantData($data);
 
         $instance = $this->getNewInstance();
 
-        return $this->executeSave($teamId, $instance, $data);
+        return $this->executeSave($workspaceId, $instance, $data);
     }
 
     /**
      * Update the model instance
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $id
      * @param array $data
      * @return mixed
      * @throws \Exception
      */
-    public function update($teamId, $id, array $data)
+    public function update($workspaceId, $id, array $data)
     {
         $this->checkTenantData($data);
 
-        $instance = $this->find($teamId, $id);
+        $instance = $this->find($workspaceId, $id);
 
-        return $this->executeSave($teamId, $instance, $data);
+        return $this->executeSave($workspaceId, $instance, $data);
     }
 
     /**
      * Save the model
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param mixed $instance
      * @param array $data
      * @return mixed
      */
-    protected function executeSave($teamId, $instance, array $data)
+    protected function executeSave($workspaceId, $instance, array $data)
     {
         $data = $this->setBooleanFields($instance, $data);
 
         $instance->fill($data);
-        $instance->{$this->getTenantKey()} = $teamId;
+        $instance->{$this->getTenantKey()} = $workspaceId;
         $instance->save();
 
         return $instance;
@@ -281,14 +281,14 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Delete a record
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $id
      * @return mixed
      * @throws \Exception
      */
-    public function destroy($teamId, $id)
+    public function destroy($workspaceId, $id)
     {
-        $instance = $this->find($teamId, $id);
+        $instance = $this->find($workspaceId, $id);
 
         return $instance->delete();
     }
@@ -296,13 +296,13 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Count of all records
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @return mixed
      * @throws \Exception
      */
-    public function count($teamId)
+    public function count($workspaceId)
     {
-        return $this->getNewInstance($teamId)->count();
+        return $this->getNewInstance($workspaceId)->count();
     }
 
     /**
@@ -323,14 +323,14 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     /**
      * Return a new query builder instance
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @return mixed
      * @throws \Exception
      */
-    public function getQueryBuilder($teamId)
+    public function getQueryBuilder($workspaceId)
     {
         return $this->getNewInstance()->newQuery()
-            ->where('team_id', $teamId);
+            ->where('workspace_id', $workspaceId);
     }
 
     /**

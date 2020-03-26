@@ -24,9 +24,9 @@ class ApiSegmentService
      *
      * @throws Exception
      */
-    public function store(int $teamId, Collection $data): Segment
+    public function store(int $workspaceId, Collection $data): Segment
     {
-        $segment = $this->segments->store($teamId, $data->except('subscribers')->toArray());
+        $segment = $this->segments->store($workspaceId, $data->except('subscribers')->toArray());
 
         if (!empty($data['subscribers'])) {
             $segment->subscribers()->attach($data['subscribers']);

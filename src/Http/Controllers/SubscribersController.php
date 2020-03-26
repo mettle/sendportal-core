@@ -48,7 +48,7 @@ class SubscribersController extends Controller
      */
     public function index()
     {
-        $subscribers = $this->subscriberRepo->paginate(auth()->user()->currentTeam()->id, 'email', [], 50, request()->all());
+        $subscribers = $this->subscriberRepo->paginate(auth()->user()->currentWorkspace()->id, 'email', [], 50, request()->all());
 
         return view('subscribers.index', compact('subscribers'));
     }
@@ -59,7 +59,7 @@ class SubscribersController extends Controller
      */
     public function create()
     {
-        $segments = $this->segmentRepo->pluck(auth()->user()->currentTeam()->id);
+        $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
         $selectedSegments = [];
 
         return view('sendportal::subscribers.create', compact('segments', 'selectedSegments'));
@@ -76,7 +76,7 @@ class SubscribersController extends Controller
         $data['unsubscribed_at'] = $request->has('subscribed') ? null : now();
         $data['unsubscribe_event_id'] = $request->has('subscribed') ? null : UnsubscribeEventType::MANUAL_BY_ADMIN;
 
-        $subscriber = $this->subscriberRepo->store(auth()->user()->currentTeam()->id, $data);
+        $subscriber = $this->subscriberRepo->store(auth()->user()->currentWorkspace()->id, $data);
 
         event(new SubscriberAddedEvent($subscriber));
 
@@ -89,7 +89,7 @@ class SubscribersController extends Controller
      */
     public function show(int $id)
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentTeam()->id, $id, ['segments', 'messages.source']);
+        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id, ['segments', 'messages.source']);
 
         return view('sendportal::subscribers.show', compact('subscriber'));
     }
@@ -103,8 +103,8 @@ class SubscribersController extends Controller
      */
     public function edit(int $id)
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentTeam()->id, $id);
-        $segments = $this->segmentRepo->pluck(auth()->user()->currentTeam()->id);
+        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
         $selectedSegments = $subscriber->segments->pluck('id', 'name');
 
         return view('sendportal::subscribers.edit', compact('subscriber', 'segments', 'selectedSegments'));
@@ -120,7 +120,7 @@ class SubscribersController extends Controller
      */
     public function update(SubscriberRequest $request, int $id)
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentTeam()->id, $id);
+        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
         $data = $request->all();
 
         // updating subscriber from subscribed -> unsubscribed
@@ -133,7 +133,7 @@ class SubscribersController extends Controller
             $data['unsubscribe_event_id'] = null;
         }
 
-        $this->subscriberRepo->update(auth()->user()->currentTeam()->id, $id, $data);
+        $this->subscriberRepo->update(auth()->user()->currentWorkspace()->id, $id, $data);
 
         return redirect()->route('subscribers.index');
     }
@@ -148,7 +148,7 @@ class SubscribersController extends Controller
      */
     public function export()
     {
-        $subscribers = $this->subscriberRepo->all(auth()->user()->currentTeam()->id, 'id');
+        $subscribers = $this->subscriberRepo->all(auth()->user()->currentWorkspace()->id, 'id');
 
         if (!$subscribers->count()) {
             return redirect()->route('subscribers.index')->withErrors(__('There are no subscribers to export'));

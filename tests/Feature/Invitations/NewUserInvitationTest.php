@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Invitations;
 
 use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -22,9 +22,9 @@ class NewUserInvitationTest extends TestCase
         // NOTE(david): if this fails, you probably need to set ENABLE_REGISTER=true in the .env.testing file.
 
         // given
-        $team = factory(Team::class)->create();
+        $workspace = factory(Workspace::class)->create();
         $invitation = factory(Invitation::class)->create([
-            'team_id' => $team->id
+            'workspace_id' => $workspace->id
         ]);
 
         $postData = [
@@ -45,7 +45,7 @@ class NewUserInvitationTest extends TestCase
 
         $this->assertEquals($postData['name'], $user->name);
 
-        $this->assertTrue($user->onTeam($team));
+        $this->assertTrue($user->onWorkspace($workspace));
 
         $this->assertDatabaseMissing('invitations', [
             'token' => $invitation->token

@@ -80,13 +80,13 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function store($teamId, array $data)
+    public function store($workspaceId, array $data)
     {
         $this->checkTenantData($data);
 
         $instance = $this->getNewInstance();
 
-        $subscriber = $this->executeSave($teamId, $instance, Arr::except($data, ['segments']));
+        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments']));
 
         // only sync segments if its actually present. This means that users's must
         // pass through an empty segments array if they want to delete all segments
@@ -100,13 +100,13 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function update($teamId, $id, array $data)
+    public function update($workspaceId, $id, array $data)
     {
         $this->checkTenantData($data);
 
-        $instance = $this->find($teamId, $id);
+        $instance = $this->find($workspaceId, $id);
 
-        $subscriber = $this->executeSave($teamId, $instance, Arr::except($data, ['segments']));
+        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments']));
 
         // only sync segments if its actually present. This means that users's must
         // pass through an empty segments array if they want to delete all segments
@@ -132,13 +132,13 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Return the count of active subscribers
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @return mixed
      * @throws \Exception
      */
-    public function countActive($teamId): int
+    public function countActive($workspaceId): int
     {
-        return $this->getQueryBuilder($teamId)
+        return $this->getQueryBuilder($workspaceId)
             ->whereNull('unsubscribed_at')
             ->count();
     }

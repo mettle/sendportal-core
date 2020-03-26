@@ -7,19 +7,19 @@ interface BaseTenantInterface
     /**
      * Return all records
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $orderBy
      * @param array $relations
      * @param array $parameters
      * @return mixed
      * @throws \Exception
      */
-    public function all($teamId, $orderBy = 'id', array $relations = [], array $parameters = []);
+    public function all($workspaceId, $orderBy = 'id', array $relations = [], array $parameters = []);
 
     /**
      * Return paginated items
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $orderBy
      * @param array $relations
      * @param int $paginate
@@ -27,34 +27,34 @@ interface BaseTenantInterface
      * @return mixed
      * @throws \Exception
      */
-    public function paginate($teamId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = []);
+    public function paginate($workspaceId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = []);
 
     /**
      * Get many records by a field and value
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $parameters
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function getBy($teamId, array $parameters, array $relations = []);
+    public function getBy($workspaceId, array $parameters, array $relations = []);
 
     /**
      * List all records
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $fieldName
      * @param string $fieldId
      * @return mixed
      * @throws \Exception
      */
-    public function pluck($teamId, $fieldName = 'name', $fieldId = 'id');
+    public function pluck($workspaceId, $fieldName = 'name', $fieldId = 'id');
 
     /**
      * List all records matching a field's value
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $field
      * @param mixed $value
      * @param string $listFieldName
@@ -62,92 +62,92 @@ interface BaseTenantInterface
      * @return mixed
      * @throws \Exception
      */
-    public function pluckBy($teamId, $field, $value, $listFieldName = 'name', $listFieldId = 'id');
+    public function pluckBy($workspaceId, $field, $value, $listFieldName = 'name', $listFieldId = 'id');
 
     /**
      * Find a single record
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $id
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function find($teamId, $id, array $relations = []);
+    public function find($workspaceId, $id, array $relations = []);
 
     /**
      * Find a single record by a field and value
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param string $field
      * @param mixed $value
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function findBy($teamId, $field, $value, array $relations = []);
+    public function findBy($workspaceId, $field, $value, array $relations = []);
 
     /**
      * Find a single record by multiple fields
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $data
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function findByMany($teamId, array $data, array $relations = []);
+    public function findByMany($workspaceId, array $data, array $relations = []);
 
     /**
      * Find multiple models
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $ids
      * @param array $relations
      * @return mixed
      * @throws \Exception
      */
-    public function getWhereIn($teamId, array $ids, array $relations = []);
+    public function getWhereIn($workspaceId, array $ids, array $relations = []);
 
     /**
      * Create a new record
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param array $data
      * @return mixed
      * @throws \Exception
      */
-    public function store($teamId, array $data);
+    public function store($workspaceId, array $data);
 
     /**
      * Update the model instance
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $id
      * @param array $data
      * @return mixed
      * @throws \Exception
      */
-    public function update($teamId, $id, array $data);
+    public function update($workspaceId, $id, array $data);
 
     /**
      * Delete a record
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @param int $id
      * @return mixed
      * @throws \Exception
      */
-    public function destroy($teamId, $id);
+    public function destroy($workspaceId, $id);
 
     /**
      * Count of all records
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @return mixed
      * @throws \Exception
      */
-    public function count($teamId);
+    public function count($workspaceId);
 
     /**
      * Return model name
@@ -160,11 +160,11 @@ interface BaseTenantInterface
     /**
      * Return a new query builder instance
      *
-     * @param int $teamId
+     * @param int $workspaceId
      * @return mixed
      * @throws \Exception
      */
-    public function getQueryBuilder($teamId);
+    public function getQueryBuilder($workspaceId);
 
     /**
      * Returns new model instance

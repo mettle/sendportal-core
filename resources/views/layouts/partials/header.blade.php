@@ -30,26 +30,26 @@
                 <h1 class="h4 mb-0 fc-dark-blue">@yield('heading')</h1>
 
                 <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
-                    @php $teams = auth()->user()->teams @endphp
+                    @php $workspaces = auth()->user()->workspaces @endphp
 
-                    @if (count($teams) == 1)
+                    @if (count($workspaces) == 1)
                         <li class="nav-item mr-5 px-2">
                             <span class="nav-link" id="bd-versions" aria-haspopup="true" aria-expanded="false">
-                                {{-- auth()->user()->currentTeam->name --}}
+                                {{-- auth()->user()->currentWorkspace->name --}}
                             </span>
                         </li>
-                    @elseif (count($teams) > 1 && auth()->user()->currentTeam)
+                    @elseif (count($workspaces) > 1 && auth()->user()->currentWorkspace)
                         <li class="nav-item dropdown mr-4 px-2 channel-dropdown">
                             <a class="nav-link dropdown-toggle fc-dark-blue" href="#" id="bd-versions"
                                data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
-                                {{ auth()->user()->currentTeam->name }}<i class="ml-2 fas fa-caret-down fc-gray-500"></i>
+                                {{ auth()->user()->currentWorkspace->name }}<i class="ml-2 fas fa-caret-down fc-gray-500"></i>
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="bd-versions">
-                                @foreach($teams as $team)
-                                    <a class="dropdown-item px-3" href="{{ route('workspaces.switch', $team->id) }}">
-                                        <i class="fas fa-circle mr-2 {{ auth()->user()->currentTeam->id == $team->id ? 'fc-dark-blue' : 'fc-gray-300' }}"></i>{{ $team->name }}
+                                @foreach($workspaces as $workspace)
+                                    <a class="dropdown-item px-3" href="{{ route('workspaces.switch', $workspace->id) }}">
+                                        <i class="fas fa-circle mr-2 {{ auth()->user()->currentWorkspace->id == $workspace->id ? 'fc-dark-blue' : 'fc-gray-300' }}"></i>{{ $workspace->name }}
                                     </a>
                                 @endforeach
                             </div>

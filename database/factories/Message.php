@@ -5,14 +5,14 @@
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\Workspace;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Message::class, function (Faker $faker) {
     return [
         'hash' => $faker->uuid,
-        'team_id' => factory(Team::class),
+        'workspace_id' => factory(Workspace::class),
         'subscriber_id' => factory(Subscriber::class),
         'source_type' => Campaign::class,
         'source_id' => factory(Campaign::class),

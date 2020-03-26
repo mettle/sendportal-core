@@ -15,14 +15,14 @@ class SegmentsControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    public function a_list_of_a_teams_segments_can_be_retreived()
+    public function a_list_of_a_workspaces_segments_can_be_retreived()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
 
         $route = route('api.segments.index', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'api_token' => $user->api_token,
         ]);
 
@@ -42,12 +42,12 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_single_segment_can_be_retreived()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
 
         $route = route('api.segments.show', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
         ]);
@@ -66,9 +66,9 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_new_segment_can_be_added()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
-        $route = route('api.segments.store', $user->currentTeam()->id);
+        $route = route('api.segments.store', $user->currentWorkspace()->id);
 
         $request = [
             'name' => $this->faker->colorName,
@@ -84,12 +84,12 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_segment_can_be_created()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
 
         $route = route('api.segments.update', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
         ]);
@@ -109,12 +109,12 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_segment_can_be_deleted()
     {
-        $user = $this->createUserWithTeam();
+        $user = $this->createUserWithWorkspace();
 
         $segment = $this->createSegment($user);
 
         $route = route('api.segments.destroy', [
-            'teamId' => $user->currentTeam()->id,
+            'workspaceId' => $user->currentWorkspace()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
         ]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Listeners\Webhooks;
 
+use Illuminate\Support\Str;
 use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
 use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
 use Carbon\Carbon;
@@ -30,7 +31,7 @@ class PostmarkWebhookHandler implements ShouldQueue
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
-        $method = 'handle' . studly_case(str_slug($eventName, ''));
+        $method = 'handle' . Str::studly(Str::slug($eventName, ''));
 
         if (method_exists($this, $method)) {
             Log::info('postmark webhook processing type=' . $eventName . ' message_id=' . $messageId);

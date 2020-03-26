@@ -5,6 +5,8 @@ namespace Sendportal\Base\Providers;
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Events\SubscriberAddedEvent;
 use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
+use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
+use Sendportal\Base\Events\Webhooks\SendgridWebhookEvent;
 use Sendportal\Base\Listeners\MessageDispatchHandler;
 use Sendportal\Base\Listeners\Webhooks\MailgunWebhookHandler;
 use Sendportal\Base\Listeners\Webhooks\PostmarkWebhookHandler;

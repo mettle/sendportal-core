@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Listeners\Webhooks;
 
+use Illuminate\Support\Str;
 use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
 use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
 use Sendportal\Base\Models\Message;
@@ -42,7 +43,7 @@ class MailgunWebhookHandler implements ShouldQueue
             return;
         }
 
-        $method = 'handle' . studly_case(str_slug($eventName, ''));
+        $method = 'handle' . Str::studly(Str::slug($eventName, ''));
 
         if (method_exists($this, $method)) {
             Log::info('Mailgun webhook processing type=' . $eventName . ' message_id=' . $messageId);

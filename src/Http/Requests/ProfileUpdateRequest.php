@@ -31,7 +31,7 @@ class ProfileUpdateRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                'unique:users,email,' . user()->id,
+                'unique:users,email,' . $this->user()->id,
             ],
             'locale' => [
                 'required',

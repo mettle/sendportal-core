@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Teams;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Sendportal\Base\Models\Invitation;
 use Sendportal\Base\Models\Team;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Services\Teams\AddTeamMember;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class TeamInvitationsControllerTest extends TestCase
@@ -32,10 +32,10 @@ class TeamInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->post(route('settings.users.invitations.store', $postData));
+        $response = $this->post(route('sendportal.settings.users.invitations.store', $postData));
 
         // then
-        $response->assertRedirect(route('settings.users.index'));
+        $response->assertRedirect(route('sendportal.settings.users.index'));
 
         $this->assertDatabaseHas('invitations', [
             'team_id' => $team->id,
@@ -58,10 +58,10 @@ class TeamInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->post(route('settings.users.invitations.store', $postData));
+        $response = $this->post(route('sendportal.settings.users.invitations.store', $postData));
 
         // then
-        $response->assertRedirect(route('settings.users.index'));
+        $response->assertRedirect(route('sendportal.settings.users.index'));
 
         $this->assertDatabaseHas('invitations', [
             'team_id' => $team->id,
@@ -87,7 +87,7 @@ class TeamInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->post(route('settings.users.invitations.store', $postData));
+        $response = $this->post(route('sendportal.settings.users.invitations.store', $postData));
 
         // then
         $response->assertStatus(404);
@@ -110,10 +110,10 @@ class TeamInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->delete(route('settings.users.invitations.destroy', $invitation));
+        $response = $this->delete(route('sendportal.settings.users.invitations.destroy', $invitation));
 
         // then
-        $response->assertRedirect(route('settings.users.index'));
+        $response->assertRedirect(route('sendportal.settings.users.index'));
 
         $this->assertDatabaseMissing('invitations', [
             'id' => $invitation->id

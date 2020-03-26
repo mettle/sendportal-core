@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Teams;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Team;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Services\Teams\AddTeamMember;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class WorkspacesControllerTest extends TestCase
@@ -30,7 +30,7 @@ class WorkspacesControllerTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->get(route('workspaces.index'));
+        $response = $this->get(route('sendportal.workspaces.index'));
 
         // then
         $response->assertOk();
@@ -48,12 +48,12 @@ class WorkspacesControllerTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->post(route('workspaces.store'), [
+        $response = $this->post(route('sendportal.workspaces.store'), [
             'name' => $newWorkspaceName
         ]);
 
         // then
-        $response->assertRedirect(route('workspaces.index'));
+        $response->assertRedirect(route('sendportal.workspaces.index'));
 
         $this->assertDatabaseHas('teams', [
             'name' => $newWorkspaceName,

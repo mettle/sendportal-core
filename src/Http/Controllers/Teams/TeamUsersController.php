@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Teams;
 
+use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Services\Teams\RemoveUserFromTeam;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Http\RedirectResponse;
 
 class TeamUsersController extends Controller
 {
@@ -55,7 +55,7 @@ class TeamUsersController extends Controller
         $this->removeUserFromTeam->handle($user, $team);
 
         return redirect()
-            ->route('settings.users.index')
+            ->route('sendportal.settings.users.index')
             ->with('success', __(':user was removed from :team.', ['user' => $user->name, 'team' => $team->name]));
     }
 }

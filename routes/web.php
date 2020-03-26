@@ -5,23 +5,22 @@ declare(strict_types=1);
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Sendportal\Base\Http\Middleware\OwnsCurrentTeam;
 
-// TODO(david): look into whether we have a cleaner way of setting up the namespaces and middlewares for the routes.
-Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(static function (Router $router) {
-
-    // TODO(david): we may want a way to disable the auth routes in sendportal, to allow for auth from other places?
-    //  E.g. if the `sendportal/base` package is included in another project that already has its own auth setup.
-    //  Though, that in itself opens up issues around setting up teams, etc, that we currently rely on.
-
-    // Auth.
+// Auth.
+// TODO(david): we need a way to turn off auth for the situations where `sendportal/base` is getting included in other packages that already have auth.
+Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(static function () {
     Auth::routes(['verify' => true, 'register' => true]); // config('auth.enable_register')]);
+});
+
+Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('sendportal.')->group(static function (Router $router) {
 
     // App.
     $router->middleware(['auth', 'verified'])->group(static function (Router $appRouter) {
         // Auth.
         $appRouter->namespace('Auth')->group(static function (Router $authRouter) {
             // Logout.
-            $authRouter->get('logout', ['LoginController@logout'])->name('logout');
+            $authRouter->get('logout', ['LoginController@logout'])->name('sendportal.logout');
 
             // Profile.
             $authRouter->name('profile.')->prefix('profile')->group(static function (Router $profileRouter) {
@@ -33,7 +32,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
         // Dashboard
         $appRouter->get('dashboard', 'DashboardController@index')->name('dashboard');
         $appRouter->get('/', static function () {
-            return redirect()->route('campaigns.index');
+            return redirect()->route('sendportal.campaigns.index');
         });
 
         // Campaigns
@@ -84,7 +83,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
 
             // Team User Management.
             $settingsRouter->namespace('Teams')
-                ->middleware(\Sendportal\Base\Http\Middleware\OwnsCurrentTeam::class)
+                ->middleware(OwnsCurrentTeam::class)
                 ->name('settings.users.')
                 ->prefix('users')
                 ->group(static function (Router $teamsRouter) {

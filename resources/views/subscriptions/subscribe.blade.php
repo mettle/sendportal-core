@@ -5,7 +5,7 @@
         <h1>{{ __('Resubscribe') }}</h1>
         <p>{{ __('Add <b>:email</b> to this email list?', ['email' => $message->subscriber->email]) }}</p>
 
-        <form action="{{ route('subscriptions.update', $message->hash) }}" method="post">
+        <form action="{{ route('sendportal.subscriptions.update', $message->hash) }}" method="post">
             @csrf
             <input type="hidden" name="_method" value="put">
             <input type="hidden" name="unsubscribed" value="0">

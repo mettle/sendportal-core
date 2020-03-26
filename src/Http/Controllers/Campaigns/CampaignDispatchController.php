@@ -2,12 +2,13 @@
 
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\CampaignStatus;
-use Carbon\Carbon;
-use Illuminate\Http\RedirectResponse;
 
 class CampaignDispatchController extends Controller
 {
@@ -33,18 +34,18 @@ class CampaignDispatchController extends Controller
      * @param CampaignDispatchRequest $request
      * @param $id
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function send(CampaignDispatchRequest $request, $id)
     {
         $campaign = $this->campaigns->find(currentTeamId(), $id);
 
         if ($campaign->status_id > CampaignStatus::STATUS_DRAFT) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         if (! $campaign->provider_id) {
-            return redirect()->route('campaigns.edit', $id)
+            return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('Please select a Provider'));
         }
 
@@ -59,6 +60,6 @@ class CampaignDispatchController extends Controller
 
         $campaign->segments()->sync($request->get('segments'));
 
-        return redirect()->route('campaigns.status', $id);
+        return redirect()->route('sendportal.campaigns.status', $id);
     }
 }

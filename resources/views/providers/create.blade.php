@@ -27,24 +27,23 @@
 @push('js')
     <script>
 
-        let url = '{{ route('providers.ajax', 1) }}';
+        let url = '{{ route('sendportal.providers.ajax', 1) }}';
         let old = {!! json_encode(old()) !!};
 
-        $(function() {
+        $(function () {
             let type_id = $('select[name="type_id"]').val();
 
             createFields(type_id);
 
-            $('#id-field-type_id').on('change', function() {
+            $('#id-field-type_id').on('change', function () {
                 createFields(this.value);
             });
         });
 
-        function createFields(providerTypeId)
-        {
+        function createFields(providerTypeId) {
             url = url.substring(0, url.length - 1) + providerTypeId;
 
-            $.get(url, function(result) {
+            $.get(url, function (result) {
                 $('#provider-fields')
                   .html('')
                   .append(result.view);

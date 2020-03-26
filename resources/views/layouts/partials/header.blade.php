@@ -48,7 +48,8 @@
 
                             <div class="dropdown-menu" aria-labelledby="bd-versions">
                                 @foreach($teams as $team)
-                                    <a class="dropdown-item px-3" href="{{ route('workspaces.switch', $team->id) }}">
+                                    <a class="dropdown-item px-3"
+                                       href="{{ route('sendportal.workspaces.switch', $team->id) }}">
                                         <i class="fas fa-circle mr-2 {{ user()->currentTeam->id == $team->id ? 'fc-dark-blue' : 'fc-gray-300' }}"></i>{{ $team->name }}
                                     </a>
                                 @endforeach
@@ -63,14 +64,16 @@
                            title="{{{ user()->full_name }}}">
                             <img src="{{{ user()->avatar }}}" height="25" class="rounded-circle mr-2"
                                  alt="{{ user()->name }}">
-                            <span class="d-none d-sm-inline-block">{{{ \Illuminate\Support\Str::limit(user()->name, 25) }}}</span> <i
+                            <span
+                                class="d-none d-sm-inline-block">{{{ \Illuminate\Support\Str::limit(user()->name, 25) }}}</span>
+                            <i
                                 class="ml-2 fas fa-caret-down fc-gray-500"></i>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                            <a class="dropdown-item px-3" href="{{ route('profile.edit') }}"><i
+                            <a class="dropdown-item px-3" href="{{ route('sendportal.profile.edit') }}"><i
                                     class="fas fa-user mr-2 fc-gray-300"></i>{{ __('My Profile') }}</a>
-                            <a class="dropdown-item px-3" href="{{ route('workspaces.index') }}"><i
+                            <a class="dropdown-item px-3" href="{{ route('sendportal.workspaces.index') }}"><i
                                     class="fas fa-layer-plus mr-2 fc-gray-300"></i>{{ __('Workspaces') }}</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item px-3" href="{{ route('logout') }}"

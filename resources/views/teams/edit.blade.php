@@ -12,11 +12,12 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('workspaces.update', $team) }}" method="post">
+                    <form action="{{ route('sendportal.workspaces.update', $team) }}" method="post">
                         @csrf
                         @method('PUT')
                         <div class="form-group row">
-                            <label for="workspace_name" class="col-md-2 col-form-label">{{ __('Workspace Name') }}</label>
+                            <label for="workspace_name"
+                                   class="col-md-2 col-form-label">{{ __('Workspace Name') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" id="edit-team-name" class="form-control" name="workspace_name"

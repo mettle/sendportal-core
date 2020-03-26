@@ -17,7 +17,7 @@
 
 <div class="form-group row">
     <div class="offset-sm-3 col-sm-9">
-        <a href="{{ route('campaigns.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
+        <a href="{{ route('sendportal.campaigns.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
         <button type="submit" class="btn btn-primary">{{ __('Save and continue') }}</button>
     </div>
 </div>

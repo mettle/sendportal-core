@@ -40,10 +40,12 @@
                                             Remove
                                         </button>
                                     @else
-                                        <form action="{{ route('settings.users.destroy', $user->id) }}" method="post">
+                                        <form action="{{ route('sendportal.settings.users.destroy', $user->id) }}"
+                                              method="post">
                                             @csrf
                                             @method('delete')
-                                            <input type="submit" class="btn btn-sm btn-light" value="{{ __('Remove') }}">
+                                            <input type="submit" class="btn btn-sm btn-light"
+                                                   value="{{ __('Remove') }}">
                                         </form>
                                     @endif
                                 </td>
@@ -76,11 +78,13 @@
                                     <td>{{ $invitation->email }}</td>
                                     <td>{{ $invitation->expires_at->format('Y-m-d') }}</td>
                                     <td class="td-fit">
-                                        <form action="{{ route('settings.users.invitations.destroy', $invitation) }}"
-                                              method="post">
+                                        <form
+                                            action="{{ route('sendportal.settings.users.invitations.destroy', $invitation) }}"
+                                            method="post">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-sm btn-light">{{ __('Retract') }}</button>
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-light">{{ __('Retract') }}</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -98,7 +102,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="{{ route('settings.users.invitations.store') }}" method="post">
+                        <form action="{{ route('sendportal.settings.users.invitations.store') }}" method="post">
                             @csrf
                             <div class="form-group row">
                                 <label for="create-invitation-email" class="col-sm-2">{{ __('Email Address') }}</label>

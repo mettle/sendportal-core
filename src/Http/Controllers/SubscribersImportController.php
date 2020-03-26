@@ -2,9 +2,6 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Sendportal\Base\Http\Requests\SubscribersImportRequest;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Services\Subscribers\ImportSubscriberService;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
 use Box\Spout\Reader\Exception\ReaderNotOpenedException;
@@ -14,6 +11,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Sendportal\Base\Http\Requests\SubscribersImportRequest;
+use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Services\Subscribers\ImportSubscriberService;
 
 class SubscribersImportController extends Controller
 {
@@ -64,11 +64,11 @@ class SubscribersImportController extends Controller
 
             Storage::disk('local')->delete('imports/' . $filename);
 
-            return redirect()->route('subscribers.index')
+            return redirect()->route('sendportal.subscribers.index')
                 ->with('success', __('Imported :count subscriber(s)', ['count' => $subscribers->count()]));
         }
 
-        return redirect()->route('subscribers.index')
+        return redirect()->route('sendportal.subscribers.index')
             ->with('errors', __('The uploaded file is not valid'));
     }
 }

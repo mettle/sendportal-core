@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Campaigns;
 
-use Sendportal\Base\Models\Campaign;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sendportal\Base\Models\Campaign;
 use Tests\TestCase;
 
 class CampaignReportsControllerTest extends TestCase
@@ -19,7 +19,7 @@ class CampaignReportsControllerTest extends TestCase
         [$campaign, $user] = $this->getCampaignAndUser();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.reports.index', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.index', $campaign->id));
 
         // then
         $response->assertOk();
@@ -42,7 +42,7 @@ class CampaignReportsControllerTest extends TestCase
         [$campaign, $user] = $this->getCampaignAndUser();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.reports.recipients', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.recipients', $campaign->id));
 
         // then
         $response->assertOk();
@@ -55,7 +55,7 @@ class CampaignReportsControllerTest extends TestCase
         [$campaign, $user] = $this->getCampaignAndUser();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.reports.opens', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.opens', $campaign->id));
 
         // then
         $response->assertOk();
@@ -68,7 +68,7 @@ class CampaignReportsControllerTest extends TestCase
         [$campaign, $user] = $this->getCampaignAndUser();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.reports.clicks', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.clicks', $campaign->id));
 
         // then
         $response->assertOk();
@@ -81,7 +81,7 @@ class CampaignReportsControllerTest extends TestCase
         [$campaign, $user] = $this->getCampaignAndUser();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.reports.bounces', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.bounces', $campaign->id));
 
         // then
         $response->assertOk();
@@ -94,7 +94,7 @@ class CampaignReportsControllerTest extends TestCase
         [$campaign, $user] = $this->getCampaignAndUser();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.reports.unsubscribes', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.unsubscribes', $campaign->id));
 
         // then
         $response->assertOk();

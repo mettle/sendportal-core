@@ -2,12 +2,12 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Sendportal\Base\Http\Requests\TemplateStoreRequest;
-use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
-use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Http\Requests\TemplateStoreRequest;
+use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
+use Sendportal\Base\Repositories\TemplateTenantRepository;
 
 class TemplatesController extends Controller
 {
@@ -59,7 +59,7 @@ class TemplatesController extends Controller
         $this->templates->store(currentTeamId(), $data);
 
         return redirect()
-            ->route('templates.index');
+            ->route('sendportal.templates.index');
     }
 
     /**
@@ -95,7 +95,7 @@ class TemplatesController extends Controller
         $this->templates->update(currentTeamId(), $id, $data);
 
         return redirect()
-            ->route('templates.index');
+            ->route('sendportal.templates.index');
     }
 
     /**
@@ -120,7 +120,7 @@ class TemplatesController extends Controller
         $this->templates->destroy(currentTeamId(), $template->id);
 
         return redirect()
-            ->route('templates.index')
+            ->route('sendportal.templates.index')
             ->with('success', __('Template successfully deleted.'));
     }
 }

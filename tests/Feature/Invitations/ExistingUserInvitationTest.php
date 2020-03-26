@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Invitations;
 
-use Sendportal\Base\Models\Team;
-use Sendportal\Base\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Sendportal\Base\Models\Team;
+use Sendportal\Base\Models\User;
 use Tests\TestCase;
 
 class ExistingUserInvitationTest extends TestCase
@@ -33,7 +33,7 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->get(route('workspaces.index'));
+            ->get(route('sendportal.workspaces.index'));
 
         // then
         $response->assertSee($newTeam->name);
@@ -60,7 +60,7 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->get(route('workspaces.index'));
+            ->get(route('sendportal.workspaces.index'));
 
         // then
         $response->assertDontSee($newTeam->name);
@@ -84,10 +84,10 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('teams.invitations.accept', $invitation));
+            ->post(route('sendportal.teams.invitations.accept', $invitation));
 
         // then
-        $response->assertRedirect(route('workspaces.index'));
+        $response->assertRedirect(route('sendportal.workspaces.index'));
 
         $this->assertTrue($user->fresh()->onTeam($newTeam));
     }
@@ -110,10 +110,10 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('teams.invitations.reject', $invitation));
+            ->post(route('sendportal.teams.invitations.reject', $invitation));
 
         // then
-        $response->assertRedirect(route('workspaces.index'));
+        $response->assertRedirect(route('sendportal.workspaces.index'));
 
         $this->assertFalse($user->fresh()->onTeam($newTeam));
 
@@ -143,7 +143,7 @@ class ExistingUserInvitationTest extends TestCase
 
         // when
         $this->actingAs($user)
-            ->post(route('teams.invitations.accept', $invitation));
+            ->post(route('sendportal.teams.invitations.accept', $invitation));
 
         // then
         $this->assertFalse($user->fresh()->onTeam($newTeam));

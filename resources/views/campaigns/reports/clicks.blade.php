@@ -61,7 +61,7 @@
                 @forelse($messages as $message)
                     <tr>
                         <td>
-                            <a href="{{ route('subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a>
+                            <a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a>
                         </td>
                         <td>{{ $message->subject }}</td>
                         <td>{{ displayDate($message->clicked_at) }}</td>

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Templates;
 
-use Sendportal\Base\Models\Template;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Models\Template;
 use Tests\TestCase;
 
 class TemplatesControllerTest extends TestCase
@@ -17,7 +17,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_guest_cannot_see_the_index()
     {
-        $response = $this->get(route('templates.index'));
+        $response = $this->get(route('sendportal.templates.index'));
 
         $response->assertRedirect(route('login'));
     }
@@ -28,7 +28,7 @@ class TemplatesControllerTest extends TestCase
         $user = $this->createUserWithTeam();
         $this->loginUser($user);
 
-        $response = $this->get(route('templates.index'));
+        $response = $this->get(route('sendportal.templates.index'));
 
         $response->assertOk();
     }
@@ -43,7 +43,7 @@ class TemplatesControllerTest extends TestCase
             'team_id' => $user->currentTeam()->id
         ]);
 
-        $response = $this->get(route('templates.index'));
+        $response = $this->get(route('sendportal.templates.index'));
 
         $response->assertOk();
         $response->assertSee($template->name);
@@ -54,7 +54,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_guest_cannot_see_the_create_form()
     {
-        $response = $this->get(route('templates.create'));
+        $response = $this->get(route('sendportal.templates.create'));
 
         $response->assertRedirect(route('login'));
     }
@@ -65,7 +65,7 @@ class TemplatesControllerTest extends TestCase
         $user = $this->createUserWithTeam();
         $this->loginUser($user);
 
-        $response = $this->get(route('templates.create'));
+        $response = $this->get(route('sendportal.templates.create'));
 
         $response->assertOk();
         $response->assertSee('New Template');
@@ -83,7 +83,7 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->faker->sentence
         ];
 
-        $response = $this->post(route('templates.store'), $data);
+        $response = $this->post(route('sendportal.templates.store'), $data);
 
         $response->assertRedirect(route('login'));
 
@@ -104,9 +104,9 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->faker->sentence
         ];
 
-        $response = $this->post(route('templates.store'), $data);
+        $response = $this->post(route('sendportal.templates.store'), $data);
 
-        $response->assertRedirect(route('templates.index'));
+        $response->assertRedirect(route('sendportal.templates.index'));
 
         $this->assertDatabaseHas('templates', [
             'name' => $data['name'],
@@ -125,7 +125,7 @@ class TemplatesControllerTest extends TestCase
             'name' => $this->faker->name,
         ];
 
-        $response = $this->post(route('templates.store'), $data);
+        $response = $this->post(route('sendportal.templates.store'), $data);
 
         $response->assertSessionHasErrors('content');
 
@@ -133,7 +133,7 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->faker->sentence
         ];
 
-        $response = $this->post(route('templates.store'), $data);
+        $response = $this->post(route('sendportal.templates.store'), $data);
 
         $response->assertSessionHasErrors('name');
     }
@@ -145,7 +145,7 @@ class TemplatesControllerTest extends TestCase
     {
         $template = factory(Template::class)->create();
 
-        $response = $this->get(route('templates.edit', $template->id));
+        $response = $this->get(route('sendportal.templates.edit', $template->id));
 
         $response->assertRedirect(route('login'));
     }
@@ -160,7 +160,7 @@ class TemplatesControllerTest extends TestCase
             'team_id' => $user->currentTeam()->id
         ]);
 
-        $response = $this->get(route('templates.edit', $template->id));
+        $response = $this->get(route('sendportal.templates.edit', $template->id));
 
         $response->assertOk();
 
@@ -180,7 +180,7 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->faker->sentence
         ];
 
-        $response = $this->put(route('templates.update', $template->id), $data);
+        $response = $this->put(route('sendportal.templates.update', $template->id), $data);
 
         $response->assertRedirect(route('login'));
 
@@ -208,9 +208,9 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->faker->sentence
         ];
 
-        $response = $this->put(route('templates.update', $template->id), $data);
+        $response = $this->put(route('sendportal.templates.update', $template->id), $data);
 
-        $response->assertRedirect(route('templates.index'));
+        $response->assertRedirect(route('sendportal.templates.index'));
 
         $this->assertDatabaseMissing('templates', [
             'id' => $template->id,
@@ -234,7 +234,7 @@ class TemplatesControllerTest extends TestCase
             'name' => $this->faker->name,
         ];
 
-        $response = $this->put(route('templates.update', $template->id), $data);
+        $response = $this->put(route('sendportal.templates.update', $template->id), $data);
 
         $response->assertSessionHasErrors('content');
 
@@ -242,7 +242,7 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->faker->sentence
         ];
 
-        $response = $this->put(route('templates.update', $template->id), $data);
+        $response = $this->put(route('sendportal.templates.update', $template->id), $data);
 
         $response->assertSessionHasErrors('name');
     }
@@ -259,9 +259,9 @@ class TemplatesControllerTest extends TestCase
             'team_id' => $user->currentTeam()->id
         ]);
 
-        $response = $this->delete(route('templates.destroy', $template->id));
+        $response = $this->delete(route('sendportal.templates.destroy', $template->id));
 
-        $response->assertRedirect(route('templates.index'));
+        $response->assertRedirect(route('sendportal.templates.index'));
 
         $this->assertDatabaseMissing('templates', [
             'id' => $template->id,

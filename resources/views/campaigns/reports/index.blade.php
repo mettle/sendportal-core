@@ -12,7 +12,8 @@
 
     <div class="row mb-4">
         <div class="col-md-3 col-sm-6 mb-md-0 mb-3">
-            <a href="{{ route('campaigns.reports.recipients', $campaign->id) }}" class="text-decoration-none text-reset">
+            <a href="{{ route('sendportal.campaigns.reports.recipients', $campaign->id) }}"
+               class="text-decoration-none text-reset">
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
                         <div class="h2 m-0">{{ $campaign->sent_count }}</div>
@@ -26,7 +27,8 @@
         </div>
 
         <div class="col-md-3 col-sm-6 mb-md-0 mb-3">
-            <a href="{{ route('campaigns.reports.opens', $campaign->id) }}" class="text-decoration-none text-reset">
+            <a href="{{ route('sendportal.campaigns.reports.opens', $campaign->id) }}"
+               class="text-decoration-none text-reset">
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
                         <div class="h2 m-0">{{ round($campaign->open_ratio * 100, 1) }}%</div>
@@ -40,7 +42,8 @@
         </div>
 
         <div class="col-md-3 col-sm-6 mb-md-0 mb-3">
-            <a href="{{ route('campaigns.reports.clicks', $campaign->id) }}" class="text-decoration-none text-reset">
+            <a href="{{ route('sendportal.campaigns.reports.clicks', $campaign->id) }}"
+               class="text-decoration-none text-reset">
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
                         <div class="h2 m-0">{{ round($campaign->click_ratio * 100, 1) }}%</div>
@@ -54,7 +57,8 @@
         </div>
 
         <div class="col-md-3 col-sm-6 mb-md-0 mb-3">
-            <a href="{{ route('campaigns.reports.bounces', $campaign->id) }}" class="text-decoration-none text-reset">
+            <a href="{{ route('sendportal.campaigns.reports.bounces', $campaign->id) }}"
+               class="text-decoration-none text-reset">
 
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Content;
 
+use Exception;
+use Sendportal\Automations\Models\AutomationSchedule;
+use Sendportal\Automations\Repositories\AutomationScheduleRepository;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Exception;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class MergeContent
@@ -41,7 +43,7 @@ class MergeContent
     {
         if ($message->source_type === Campaign::class) {
             $mergedContent = $this->mergeCampaignContent($message);
-        } elseif (automationsEnable() && $message->source_type === \Sendportal\Automations\Models\AutomationSchedule::class) {
+        } elseif (automationsEnable() && $message->source_type === AutomationSchedule::class) {
             $mergedContent = $this->mergeAutomationContent($message);
         } else {
             throw new Exception('Invalid message source type for message id=' . $message->id);
@@ -72,7 +74,7 @@ class MergeContent
      */
     protected function mergeAutomationContent(Message $message): string
     {
-        if (!$schedule = app(\Sendportal\Automations\Repositories\AutomationScheduleRepository::class)->find($message->source_id, ['automation_step'])) {
+        if (!$schedule = app(AutomationScheduleRepository::class)->find($message->source_id, ['automation_step'])) {
             throw new Exception('Unable to resolve automation step for message id=' . $message->id);
         }
 
@@ -145,7 +147,7 @@ class MergeContent
 
     protected function generateUnsubscribeLink(Message $message): string
     {
-        return route('subscriptions.unsubscribe', $message->hash);
+        return route('sendportal.subscriptions.unsubscribe', $message->hash);
     }
 
     protected function mergeWebviewLink(string $content, Message $message): string
@@ -157,7 +159,7 @@ class MergeContent
 
     protected function generateWebviewLink(Message $message): string
     {
-        return route('webview.show', $message->hash);
+        return route('sendportal.webview.show', $message->hash);
     }
 
     protected function inlineStyles(string $content): string

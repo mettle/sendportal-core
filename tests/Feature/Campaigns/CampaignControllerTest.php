@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Campaigns;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Provider;
 use Sendportal\Base\Models\Team;
 use Sendportal\Base\Models\Template;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CampaignControllerTest extends TestCase
@@ -26,7 +26,7 @@ class CampaignControllerTest extends TestCase
         factory(Campaign::class, 3)->create(['team_id' => $team->id]);
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.index'));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.index'));
 
         // then
         $response->assertOk();
@@ -39,7 +39,7 @@ class CampaignControllerTest extends TestCase
         $user = $this->createUserWithTeam();
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.create'));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.create'));
 
         // then
         $response->assertOk();
@@ -55,7 +55,7 @@ class CampaignControllerTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('campaigns.store'), $campaignStoreData);
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
 
         // then
         $response->assertRedirect();
@@ -72,7 +72,7 @@ class CampaignControllerTest extends TestCase
         $campaign = factory(Campaign::class)->create(['team_id' => $team->id]);
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.preview', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.preview', $campaign->id));
 
         // then
         $response->assertOk();
@@ -86,7 +86,7 @@ class CampaignControllerTest extends TestCase
         $campaign = factory(Campaign::class)->create(['team_id' => $team->id]);
 
         // when
-        $response = $this->actingAs($user)->get(route('campaigns.edit', $campaign->id));
+        $response = $this->actingAs($user)->get(route('sendportal.campaigns.edit', $campaign->id));
 
         // then
         $response->assertOk();
@@ -111,7 +111,7 @@ class CampaignControllerTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->put(route('campaigns.update', $campaign->id), $campaignUpdateData);
+            ->put(route('sendportal.campaigns.update', $campaign->id), $campaignUpdateData);
 
         // then
         $response->assertRedirect();
@@ -132,7 +132,7 @@ class CampaignControllerTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('campaigns.store'), $campaignStoreData);
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
 
         // then
         $response->assertRedirect();
@@ -152,7 +152,7 @@ class CampaignControllerTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('campaigns.store'), $campaignStoreData);
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
 
         // then
         $response->assertRedirect();
@@ -172,7 +172,7 @@ class CampaignControllerTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('campaigns.store'), $campaignStoreData);
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
 
         // then
         $response->assertRedirect();
@@ -192,7 +192,7 @@ class CampaignControllerTest extends TestCase
 
         // when
         $response = $this->actingAs($user)
-            ->post(route('campaigns.store'), $campaignStoreData);
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
 
         // then
         $response->assertRedirect();

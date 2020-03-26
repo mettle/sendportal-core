@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API;
 
-use Illuminate\Support\Arr;
-use Sendportal\Base\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
+use Sendportal\Base\Models\Team;
 use Tests\TestCase;
 
 class TeamsControllerTest extends TestCase
@@ -22,7 +22,7 @@ class TeamsControllerTest extends TestCase
         [$team, $user] = $this->createUserAndTeam();
 
         // when
-        $response = $this->get(route('api.teams.index'), [
+        $response = $this->get(route('sendportal.api.teams.index'), [
             'Authorization' => 'Bearer ' . $user->api_token
         ]);
 
@@ -45,7 +45,7 @@ class TeamsControllerTest extends TestCase
         $secondTeam = factory(Team::class)->create();
 
         // when
-        $response = $this->get(route('api.teams.index'), [
+        $response = $this->get(route('sendportal.api.teams.index'), [
             'Authorization' => 'Bearer ' . $user->api_token
         ]);
 

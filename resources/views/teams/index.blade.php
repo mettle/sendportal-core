@@ -44,7 +44,8 @@
                                 </td>
                                 <td class="td-fit">
                                     @if (user()->ownsTeam($team))
-                                        <a href="{{route('workspaces.edit', $team->id)}}" class="btn btn-light btn-sm">{{ __('Edit') }}</a>
+                                        <a href="{{route('sendportal.workspaces.edit', $team->id)}}"
+                                           class="btn btn-light btn-sm">{{ __('Edit') }}</a>
                                     @endif
                                 </td>
                             </tr>
@@ -85,7 +86,7 @@
                                     </td>
                                     <td class="td-fit">
                                         {{-- Accept --}}
-                                        <form action="{{ route('teams.invitations.accept', $invitation) }}"
+                                        <form action="{{ route('sendportal.teams.invitations.accept', $invitation) }}"
                                               method="post" style="display:inline-block;">
                                             @csrf
                                             <input
@@ -99,10 +100,11 @@
                                             >
                                         </form>
                                         {{-- Reject --}}
-                                        <form action="{{ route('teams.invitations.reject', $invitation) }}"
+                                        <form action="{{ route('sendportal.teams.invitations.reject', $invitation) }}"
                                               method="post" style="display:inline-block;">
                                             @csrf
-                                            <input type="submit" value="{{ __('Reject') }}" class="btn btn-sm btn-light">
+                                            <input type="submit" value="{{ __('Reject') }}"
+                                                   class="btn btn-sm btn-light">
                                         </form>
                                     </td>
                                 </tr>
@@ -121,10 +123,11 @@
                 </div>
                 <div class="card-body">
 
-                    <form action="{{ route('workspaces.store') }}" method="post">
+                    <form action="{{ route('sendportal.workspaces.store') }}" method="post">
                         @csrf
                         <div class="form-group row">
-                            <label for="create-workspace-name" class="col-md-2 col-form-label">{{ __('Workspace Name') }}</label>
+                            <label for="create-workspace-name"
+                                   class="col-md-2 col-form-label">{{ __('Workspace Name') }}</label>
 
                             <div class="col-md-6">
                                 <input type="text" id="create-workspace-name" class="form-control" name="name">

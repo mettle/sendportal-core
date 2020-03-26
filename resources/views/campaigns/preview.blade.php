@@ -127,7 +127,7 @@
         </div>
 
         <div>
-            <a href="{{ route('campaigns.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
+            <a href="{{ route('sendportal.campaigns.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
             <button type="submit" class="btn btn-primary">{{ __('Send campaign') }}</button>
         </div>
 

@@ -21,7 +21,7 @@ class SegmentsControllerTest extends TestCase
 
         $segment = $this->createSegment($user);
 
-        $route = route('api.segments.index', [
+        $route = route('sendportal.api.segments.index', [
             'teamId' => $user->currentTeam()->id,
             'api_token' => $user->api_token,
         ]);
@@ -46,7 +46,7 @@ class SegmentsControllerTest extends TestCase
 
         $segment = $this->createSegment($user);
 
-        $route = route('api.segments.show', [
+        $route = route('sendportal.api.segments.show', [
             'teamId' => $user->currentTeam()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
@@ -68,7 +68,7 @@ class SegmentsControllerTest extends TestCase
     {
         $user = $this->createUserWithTeam();
 
-        $route = route('api.segments.store', $user->currentTeam()->id);
+        $route = route('sendportal.api.segments.store', $user->currentTeam()->id);
 
         $request = [
             'name' => $this->faker->colorName,
@@ -88,7 +88,7 @@ class SegmentsControllerTest extends TestCase
 
         $segment = $this->createSegment($user);
 
-        $route = route('api.segments.update', [
+        $route = route('sendportal.api.segments.update', [
             'teamId' => $user->currentTeam()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,
@@ -113,7 +113,7 @@ class SegmentsControllerTest extends TestCase
 
         $segment = $this->createSegment($user);
 
-        $route = route('api.segments.destroy', [
+        $route = route('sendportal.api.segments.destroy', [
             'teamId' => $user->currentTeam()->id,
             'segment' => $segment->id,
             'api_token' => $user->api_token,

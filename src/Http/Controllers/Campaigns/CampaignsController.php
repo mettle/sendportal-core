@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
+use Exception;
+use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
@@ -11,9 +14,6 @@ use Sendportal\Base\Repositories\ProviderTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
-use Exception;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Http\RedirectResponse;
 
 class CampaignsController extends Controller
 {
@@ -75,7 +75,7 @@ class CampaignsController extends Controller
     {
         $campaign = $this->campaigns->store(currentTeamId(), $this->handleCheckboxes($request->validated()));
 
-        return redirect()->route('campaigns.preview', $campaign->id);
+        return redirect()->route('sendportal.campaigns.preview', $campaign->id);
     }
 
     /**
@@ -108,7 +108,7 @@ class CampaignsController extends Controller
         $campaign = $this->campaigns->update(currentTeamId(), $campaignId,
             $this->handleCheckboxes($request->validated()));
 
-        return redirect()->route('campaigns.preview', $campaign->id);
+        return redirect()->route('sendportal.campaigns.preview', $campaign->id);
     }
 
     /**
@@ -121,7 +121,7 @@ class CampaignsController extends Controller
         $subscriberCount = $this->subscribers->countActive(currentTeamId());
 
         if (!$campaign->draft) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $segments = $this->segments->all(currentTeamId(), 'name');
@@ -138,7 +138,7 @@ class CampaignsController extends Controller
         $campaign = $this->campaigns->find(currentTeamId(), $id, ['status']);
 
         if ($campaign->sent) {
-            return redirect()->route('campaigns.reports.index', $id);
+            return redirect()->route('sendportal.campaigns.reports.index', $id);
         }
 
         return view('sendportal::campaigns.status', compact('campaign'));

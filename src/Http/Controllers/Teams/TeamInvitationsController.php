@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Teams;
 
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Middleware\OwnsCurrentTeam;
 use Sendportal\Base\Http\Requests\Teams\TeamInvitationStoreRequest;
 use Sendportal\Base\Models\Invitation;
 use Sendportal\Base\Services\Teams\SendInvitation;
-use Exception;
-use Illuminate\Http\RedirectResponse;
 
 class TeamInvitationsController extends Controller
 {
@@ -33,7 +33,7 @@ class TeamInvitationsController extends Controller
 
         $this->sendInvitation->handle($team, $request->email);
 
-        return redirect()->route('settings.users.index');
+        return redirect()->route('sendportal.settings.users.index');
     }
 
     /**
@@ -43,6 +43,6 @@ class TeamInvitationsController extends Controller
     {
         $invitation->delete();
 
-        return redirect()->route('settings.users.index');
+        return redirect()->route('sendportal.settings.users.index');
     }
 }

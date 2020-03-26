@@ -2,11 +2,6 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Sendportal\Base\Events\SubscriberAddedEvent;
-use Sendportal\Base\Http\Requests\SubscriberRequest;
-use Sendportal\Base\Models\UnsubscribeEventType;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
@@ -16,6 +11,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Sendportal\Base\Events\SubscriberAddedEvent;
+use Sendportal\Base\Http\Requests\SubscriberRequest;
+use Sendportal\Base\Models\UnsubscribeEventType;
+use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubscribersController extends Controller
@@ -80,7 +80,7 @@ class SubscribersController extends Controller
 
         event(new SubscriberAddedEvent($subscriber));
 
-        return redirect()->route('subscribers.index');
+        return redirect()->route('sendportal.subscribers.index');
     }
 
     /**
@@ -135,7 +135,7 @@ class SubscribersController extends Controller
 
         $this->subscriberRepo->update(currentTeamId(), $id, $data);
 
-        return redirect()->route('subscribers.index');
+        return redirect()->route('sendportal.subscribers.index');
     }
 
     /**
@@ -151,7 +151,7 @@ class SubscribersController extends Controller
         $subscribers = $this->subscriberRepo->all(currentTeamId(), 'id');
 
         if (!$subscribers->count()) {
-            return redirect()->route('subscribers.index')->withErrors(__('There are no subscribers to export'));
+            return redirect()->route('sendportal.subscribers.index')->withErrors(__('There are no subscribers to export'));
         }
 
         return (new FastExcel($subscribers))

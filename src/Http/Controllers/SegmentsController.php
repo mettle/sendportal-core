@@ -2,12 +2,13 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Sendportal\Base\Http\Requests\SegmentRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 
 class SegmentsController extends Controller
 {
@@ -30,7 +31,7 @@ class SegmentsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      * @throws Exception
      */
     public function index()
@@ -43,7 +44,7 @@ class SegmentsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function create()
     {
@@ -61,14 +62,14 @@ class SegmentsController extends Controller
     {
         $this->segmentRepository->store(currentTeamId(), $request->all());
 
-        return redirect()->route('segments.index');
+        return redirect()->route('sendportal.segments.index');
     }
 
     /**
      * Display the specified resource.
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function show($id)
     {
@@ -82,7 +83,7 @@ class SegmentsController extends Controller
      *
      * @param int $id
      * @param SubscriberTenantRepository $subscriberRepository
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      * @throws Exception
      */
     public function edit($id, SubscriberTenantRepository $subscriberRepository)
@@ -104,7 +105,7 @@ class SegmentsController extends Controller
     {
         $this->segmentRepository->update(currentTeamId(), $id, $request->all());
 
-        return redirect()->route('segments.index');
+        return redirect()->route('sendportal.segments.index');
     }
 
     /**

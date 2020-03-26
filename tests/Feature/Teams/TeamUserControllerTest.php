@@ -17,7 +17,7 @@ class TeamUserControllerTest extends TestCase
      */
     function an_unauthenticated_user_cannot_view_the_team_user_index()
     {
-        $response = $this->get(route('settings.users.index'));
+        $response = $this->get(route('sendportal.settings.users.index'));
 
         $this->assertLoginRedirect($response);
     }
@@ -31,7 +31,7 @@ class TeamUserControllerTest extends TestCase
     {
         $this->createUserAndLogin(['team-member']);
 
-        $response = $this->get(route('settings.users.index'));
+        $response = $this->get(route('sendportal.settings.users.index'));
 
         $response->assertStatus(404);
     }
@@ -45,7 +45,7 @@ class TeamUserControllerTest extends TestCase
         $user = $this->createUserWithTeam();
 
         $this->actingAs($user);
-        $response = $this->get(route('settings.users.index'));
+        $response = $this->get(route('sendportal.settings.users.index'));
 
         $response->assertOk();
         $response->assertSee($user->name);
@@ -65,7 +65,7 @@ class TeamUserControllerTest extends TestCase
         $this->assertTrue($otherUser->onTeam($team));
 
         $this->actingAs($user);
-        $this->delete(route('settings.users.destroy', $otherUser->id));
+        $this->delete(route('sendportal.settings.users.destroy', $otherUser->id));
 
         $this->assertFalse($otherUser->fresh()->onTeam($team));
     }
@@ -79,7 +79,7 @@ class TeamUserControllerTest extends TestCase
         [$team, $user] = $this->createUserAndTeam();
 
         $this->actingAs($user);
-        $response = $this->delete(route('settings.users.destroy', $user->id));
+        $response = $this->delete(route('sendportal.settings.users.destroy', $user->id));
 
         $response->assertRedirect();
 
@@ -98,7 +98,7 @@ class TeamUserControllerTest extends TestCase
 
         $otherUser = $this->createTeamUser($team);
 
-        $response = $this->delete(route('settings.users.destroy', $otherUser->id));
+        $response = $this->delete(route('sendportal.settings.users.destroy', $otherUser->id));
 
         $response->assertStatus(404);
     }

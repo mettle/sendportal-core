@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Teams;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Team;
 use Sendportal\Base\Services\Teams\AddTeamMember;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SwitchWorkspaceTest extends TestCase
@@ -25,10 +25,10 @@ class SwitchWorkspaceTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->get(route('workspaces.switch', $secondTeam->id));
+        $response = $this->get(route('sendportal.workspaces.switch', $secondTeam->id));
 
         // then
-        $response->assertRedirect(route('campaigns.index'));
+        $response->assertRedirect(route('sendportal.campaigns.index'));
 
         $this->assertEquals($secondTeam->id, $user->currentTeam()->id);
     }
@@ -43,7 +43,7 @@ class SwitchWorkspaceTest extends TestCase
 
         // when
         $this->loginUser($user);
-        $response = $this->get(route('workspaces.switch', $secondTeam->id));
+        $response = $this->get(route('sendportal.workspaces.switch', $secondTeam->id));
 
         // then
         $response->assertStatus(404);
@@ -61,7 +61,7 @@ class SwitchWorkspaceTest extends TestCase
         (new AddTeamMember())->handle($secondTeam, $user, Team::ROLE_OWNER);
 
         // when
-        $response = $this->get(route('workspaces.switch', $secondTeam->id));
+        $response = $this->get(route('sendportal.workspaces.switch', $secondTeam->id));
 
         // then
         $response->assertRedirect(route('login'));

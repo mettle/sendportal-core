@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Teams;
 
+use Exception;
+use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Middleware\OwnsRequestedTeam;
 use Sendportal\Base\Http\Requests\Teams\TeamStoreRequest;
@@ -11,9 +14,6 @@ use Sendportal\Base\Http\Requests\Teams\TeamUpdateRequest;
 use Sendportal\Base\Models\Team;
 use Sendportal\Base\Repositories\TeamsRepository;
 use Sendportal\Base\Services\Teams\CreateTeam;
-use Exception;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Http\RedirectResponse;
 
 class WorkspacesController extends Controller
 {
@@ -51,7 +51,7 @@ class WorkspacesController extends Controller
     {
         $this->createTeam->handle(user(), $request->get('name'), Team::ROLE_OWNER);
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 
     public function edit(Team $workspace): ViewContract
@@ -68,6 +68,6 @@ class WorkspacesController extends Controller
     {
         $this->teams->update($workspace->id, ['name' => $request->get('workspace_name')]);
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 }

@@ -2,10 +2,13 @@
 
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
-use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Interfaces\CampaignTenantInterface;
 
 class CampaignDeleteController extends Controller
 {
@@ -29,15 +32,15 @@ class CampaignDeleteController extends Controller
      * Show a confirmation view prior to deletion
      *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function confirm($id)
     {
         $campaign = $this->campaigns->find(currentTeamId(), $id);
 
         if (! $campaign->draft) {
-            return redirect()->route('campaigns.index')
+            return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
 
@@ -49,20 +52,20 @@ class CampaignDeleteController extends Controller
      *
      * @param Request $request
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Request $request)
     {
         $campaign = $this->campaigns->find(currentTeamId(), $request->get('id'));
 
         if (! $campaign->draft) {
-            return redirect()->route('campaigns.index')
+            return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
 
         $this->campaigns->destroy(currentTeamId(), $request->get('id'));
 
-        return redirect()->route('campaigns.index')
+        return redirect()->route('sendportal.campaigns.index')
             ->with('success', __('The Campaign has been successfully deleted'));
     }
 }

@@ -2,12 +2,15 @@
 
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Presenters\CampaignReportPresenter;
 use Sendportal\Base\Repositories\MessageTenantRepository;
-use Illuminate\Http\RedirectResponse;
 
 class CampaignReportsController extends Controller
 {
@@ -38,19 +41,19 @@ class CampaignReportsController extends Controller
      * Show campaign report view
      *
      * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function index($id)
     {
         $campaign = $this->campaignRepo->find(currentTeamId(), $id);
 
         if ($campaign->draft) {
-            return redirect()->route('campaigns.edit', $id);
+            return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
         if ($campaign->queued or $campaign->sending) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $presenter = new CampaignReportPresenter($campaign);
@@ -70,19 +73,19 @@ class CampaignReportsController extends Controller
      * Show campaign recipients
      *
      * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function recipients($id)
     {
         $campaign = $this->campaignRepo->find(currentTeamId(), $id);
 
         if ($campaign->draft) {
-            return redirect()->route('campaigns.edit', $id);
+            return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
         if ($campaign->queued or $campaign->sending) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $messages = $this->messageRepo->recipients(currentTeamId(), Campaign::class, $id);
@@ -94,8 +97,8 @@ class CampaignReportsController extends Controller
      * Show campaign opens
      *
      * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function opens($id)
     {
@@ -103,11 +106,11 @@ class CampaignReportsController extends Controller
         $averageTimeToOpen = $this->campaignRepo->getAverageTimeToOpen($campaign);
 
         if ($campaign->draft) {
-            return redirect()->route('campaigns.edit', $id);
+            return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
         if ($campaign->queued or $campaign->sending) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $messages = $this->messageRepo->opens(currentTeamId(), Campaign::class, $id);
@@ -119,8 +122,8 @@ class CampaignReportsController extends Controller
      * Show campaign clicks
      *
      * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function clicks($id)
     {
@@ -128,11 +131,11 @@ class CampaignReportsController extends Controller
         $averageTimeToClick = $this->campaignRepo->getAverageTimeToClick($campaign);
 
         if ($campaign->draft) {
-            return redirect()->route('campaigns.edit', $id);
+            return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
         if ($campaign->queued or $campaign->sending) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $messages = $this->messageRepo->clicks(currentTeamId(), Campaign::class, $id);
@@ -144,19 +147,19 @@ class CampaignReportsController extends Controller
      * Show campaign bounces
      *
      * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function bounces($id)
     {
         $campaign = $this->campaignRepo->find(currentTeamId(), $id);
 
         if ($campaign->draft) {
-            return redirect()->route('campaigns.edit', $id);
+            return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
         if ($campaign->queued or $campaign->sending) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $messages = $this->messageRepo->bounces(currentTeamId(), Campaign::class, $id);
@@ -168,19 +171,19 @@ class CampaignReportsController extends Controller
      * Show campaign unsubscribes
      *
      * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\View\View
-     * @throws \Exception
+     * @return Factory|RedirectResponse|View
+     * @throws Exception
      */
     public function unsubscribes($id)
     {
         $campaign = $this->campaignRepo->find(currentTeamId(), $id);
 
         if ($campaign->draft) {
-            return redirect()->route('campaigns.edit', $id);
+            return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
         if ($campaign->queued or $campaign->sending) {
-            return redirect()->route('campaigns.status', $id);
+            return redirect()->route('sendportal.campaigns.status', $id);
         }
 
         $messages = $this->messageRepo->unsubscribes(currentTeamId(), Campaign::class, $id);

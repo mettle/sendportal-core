@@ -6,10 +6,11 @@
 
 @section('content')
 
-	@if( ! $providers)
+    @if( ! $providers)
         <div class="callout callout-danger">
             <h4>{{ __('You haven\'t added any providers!') }}</h4>
-            <p>{{ __('Before you can create a campaign, you must first') }} <a href="{{ route('providers.create') }}">{{ __('add a provider') }}</a>.
+            <p>{{ __('Before you can create a campaign, you must first') }} <a
+                    href="{{ route('sendportal.providers.create') }}">{{ __('add a provider') }}</a>.
             </p>
         </div>
     @else

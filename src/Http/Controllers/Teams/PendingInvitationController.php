@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Teams;
 
-use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Services\Teams\AcceptInvitation;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Models\Invitation;
+use Sendportal\Base\Services\Teams\AcceptInvitation;
 
 class PendingInvitationController extends Controller
 {
@@ -34,7 +34,7 @@ class PendingInvitationController extends Controller
 
         $this->acceptInvitation->handle($request->user(), $invitation);
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 
     /**
@@ -46,6 +46,6 @@ class PendingInvitationController extends Controller
 
         $invitation->delete();
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('sendportal.workspaces.index');
     }
 }

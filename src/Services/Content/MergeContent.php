@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Content;
 
 use Exception;
-use Sendportal\Automations\Models\AutomationSchedule;
-use Sendportal\Automations\Repositories\AutomationScheduleRepository;
+use Sendportal\Pro\Repositories\AutomationScheduleRepository;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;

@@ -8,9 +8,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Sendportal\Base\Interfaces\MessageTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Presenters\CampaignReportPresenter;
-use Sendportal\Base\Repositories\MessageTenantRepository;
 
 class CampaignReportsController extends Controller
 {
@@ -19,7 +19,7 @@ class CampaignReportsController extends Controller
      */
     protected $campaignRepo;
     /**
-     * @var MessageTenantRepository
+     * @var MessageTenantInterface
      */
     protected $messageRepo;
 
@@ -27,11 +27,11 @@ class CampaignReportsController extends Controller
      * CampaignsController constructor.
      *
      * @param CampaignTenantInterface $campaignRepository
-     * @param MessageTenantRepository $messageRepo
+     * @param MessageTenantInterface $messageRepo
      */
     public function __construct(
         CampaignTenantInterface $campaignRepository,
-        MessageTenantRepository $messageRepo
+        MessageTenantInterface $messageRepo
     ) {
         $this->campaignRepo = $campaignRepository;
         $this->messageRepo = $messageRepo;

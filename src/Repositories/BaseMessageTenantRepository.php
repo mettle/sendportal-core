@@ -2,15 +2,12 @@
 
 namespace Sendportal\Base\Repositories;
 
-use Sendportal\Base\Models\AutomationSchedule;
-use Sendportal\Base\Models\Message;
-use Sendportal\Base\Traits\ResolvesDatabaseDriver;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Sendportal\Base\Interfaces\MessageTenantInterface;
+use Sendportal\Base\Models\Message;
 
-class MessageTenantRepository extends BaseTenantRepository
+abstract class BaseMessageTenantRepository extends BaseTenantRepository implements MessageTenantInterface
 {
-    use ResolvesDatabaseDriver;
-
     protected $modelName = Message::class;
 
     public function paginateWithSource($workspaceId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = [])
@@ -168,47 +165,5 @@ class MessageTenantRepository extends BaseTenantRepository
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->first();
-    }
-
-    /**
-     * Count the number of unique open per period for a campaign or automation schedule
-     *
-     * @param int $workspaceId
-     * @param string $sourceType
-     * @param int $sourceId
-     * @param int $intervalInSeconds
-     * @return mixed
-     * @throws \Exception
-     */
-    public function countUniqueOpensPerPeriod($workspaceId, $sourceType, $sourceId, $intervalInSeconds)
-    {
-        $intervalInSeconds = (int)$intervalInSeconds;
-
-        $query = \DB::table('messages');
-
-        if ($this->usingMySQL()) {
-            $query->select(\DB::raw('COUNT(*) as open_count, MIN(opened_at) as opened_at, FROM_UNIXTIME(MIN(UNIX_TIMESTAMP(opened_at) DIV '.$intervalInSeconds.') * '.$intervalInSeconds.') as period_start'));
-        } elseif ($this->usingPostgres()) {
-            $query->select(\DB::raw("COUNT(*) as open_count, MIN(opened_at) as opened_at, round(extract('epoch' from opened_at) / $intervalInSeconds) * $intervalInSeconds as period_start"));
-        } else {
-            throw new \Exception('Invalid database driver');
-        }
-
-        $query
-            ->where('workspace_id', $workspaceId)
-            ->where('source_type', $sourceType)
-            ->where('source_id', $sourceId)
-            ->whereNotNull('opened_at');
-
-        if ($this->usingMySQL()) {
-            $query->groupBy(\DB::raw("UNIX_TIMESTAMP(opened_at) DIV " . $intervalInSeconds));
-        } elseif ($this->usingPostgres()) {
-            $query->groupBy(\DB::raw("round(extract('epoch' from opened_at) / ".$intervalInSeconds.")"));
-        } else {
-            throw new \Exception('Invalid database driver');
-        }
-
-        return $query->orderBy('opened_at')
-            ->get();
     }
 }

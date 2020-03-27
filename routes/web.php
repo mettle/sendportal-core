@@ -20,7 +20,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         // Auth.
         $appRouter->namespace('Auth')->group(static function (Router $authRouter) {
             // Logout.
-            $authRouter->get('logout', ['LoginController@logout'])->name('sendportal.logout');
+            $authRouter->get('logout', 'LoginController@logout')->name('sendportal.logout');
 
             // Profile.
             $authRouter->name('profile.')->prefix('profile')->group(static function (Router $profileRouter) {

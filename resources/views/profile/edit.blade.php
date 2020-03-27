@@ -49,7 +49,7 @@
 
                         <div class="form-group row mb-4">
                             <div class="col-md-6 offset-md-2">
-                                <input type="submit" class="btn btn-sm btn-primary" value="{{ __('Save') }}">
+                                <input type="submit" class="btn btn-md btn-primary" value="{{ __('Save') }}">
                             </div>
                         </div>
 

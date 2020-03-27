@@ -68,7 +68,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                            <a class="dropdown-item px-3" href="{{ route('sendportal.profile.edit') }}"><i
+                            <a class="dropdown-item px-3" href="{{ route('sendportal.profile.show') }}"><i
                                     class="fas fa-user mr-2 fc-gray-300"></i>{{ __('My Profile') }}</a>
                             <a class="dropdown-item px-3" href="{{ route('sendportal.workspaces.index') }}"><i
                                     class="fas fa-layer-group mr-2 fc-gray-300"></i>{{ __('Workspaces') }}</a>

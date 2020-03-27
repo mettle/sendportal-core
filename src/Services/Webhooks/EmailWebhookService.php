@@ -87,14 +87,17 @@ class EmailWebhookService implements EmailWebhookServiceInterface
             \DB::table('automation_steps')->where('id', $automationStep->id)->increment('click_count');
         }
 
-        MessageUrl::updateOrCreate([
+        $messageUrl = MessageUrl::updateOrCreate([
             'hash' => md5($message->source_type . '_' . $message->source_id . '_' . $url),
         ], [
             'source_type' => $message->source_type,
             'source_id' => $message->source_id,
-            'url' => $url,
-            'click_count' => \DB::raw('click_count+1')
+            'url' => $url
         ]);
+
+        if (!$messageUrl->wasRecentlyCreated) {
+            \DB::table('message_urls')->where('id', $messageUrl->id)->increment('click_count');
+        }
     }
 
     /**

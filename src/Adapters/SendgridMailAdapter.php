@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
-use Sendportal\Base\Services\Messages\MessageTrackingOptions;
+use DomainException;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use SendGrid;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\TypeException;
 use SendGrid\Response as SendgridResponse;
+use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 
 class SendgridMailAdapter extends BaseMailAdapter
 {
@@ -47,7 +49,7 @@ class SendgridMailAdapter extends BaseMailAdapter
             return $this->client;
         }
 
-        $this->client = new SendGrid(\Arr::get($this->config, 'key'));
+        $this->client = new SendGrid(Arr::get($this->config, 'key'));
 
         return $this->client;
     }
@@ -60,6 +62,6 @@ class SendgridMailAdapter extends BaseMailAdapter
             }
         }
 
-        throw new \DomainException('Unable to resolve message ID');
+        throw new DomainException('Unable to resolve message ID');
     }
 }

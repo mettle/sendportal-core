@@ -18,6 +18,8 @@ class CampaignReportsControllerTest extends TestCase
         // given
         [$campaign, $user] = $this->getCampaignAndUser();
 
+        $this->withoutExceptionHandling();
+
         // when
         $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.index', $campaign->id));
 

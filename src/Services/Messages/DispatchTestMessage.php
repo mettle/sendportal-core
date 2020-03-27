@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Interfaces\CampaignTenantRepository;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
 use Sendportal\Base\Services\Content\MergeContent;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class DispatchTestMessage
 {
@@ -23,11 +23,11 @@ class DispatchTestMessage
     /** @var MergeContent */
     protected $mergeContent;
 
-    /** @var CampaignTenantInterface */
+    /** @var CampaignTenantRepository */
     protected $campaignTenant;
 
     public function __construct(
-        CampaignTenantInterface $campaignTenant,
+        CampaignTenantRepository $campaignTenant,
         MergeContent $mergeContent,
         ResolveProvider $resolveProvider,
         RelayMessage $relayMessage

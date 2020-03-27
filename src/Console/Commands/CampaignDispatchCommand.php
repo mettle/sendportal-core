@@ -1,41 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Console\Commands;
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
-use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\CampaignStatus;
-use Sendportal\Base\Services\Campaigns\CampaignDispatchService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\CampaignStatus;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Services\Campaigns\CampaignDispatchService;
 
 class CampaignDispatchCommand extends Command
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $signature = 'sp:campaigns:dispatch';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Dispatch all campaigns waiting in the queue';
 
-    /**
-     * @var CampaignTenantInterface
-     */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
 
-    /**
-     * @var CampaignDispatchService
-     */
+    /** @var CampaignDispatchService */
     protected $campaignService;
 
-    /**
-     * Execute the console command.
-     */
     public function handle(
-        CampaignTenantInterface $campaignRepo,
+        CampaignTenantRepositoryInterface $campaignRepo,
         CampaignDispatchService $campaignService
     ): void
     {
@@ -55,7 +47,7 @@ class CampaignDispatchCommand extends Command
             $message = 'Dispatching campaign id=' . $campaign->id;
 
             $this->info($message);
-            \Log::info($message);
+            Log::info($message);
             $count++;
 
             $this->campaignService->handle($campaign);
@@ -63,17 +55,14 @@ class CampaignDispatchCommand extends Command
 
         $message = 'Finished dispatching campaigns';
         $this->info($message);
-        \Log::info($message);
+        Log::info($message);
     }
 
     /**
-     * Get all queued campaigns
-     *
-     * @return EloquentCollection
+     * Get all queued campaigns.
      */
     protected function getQueuedCampaigns(): EloquentCollection
     {
-        return Campaign::where('status_id', CampaignStatus::STATUS_QUEUED)
-            ->get();
+        return Campaign::where('status_id', CampaignStatus::STATUS_QUEUED)->get();
     }
 }

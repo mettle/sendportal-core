@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Repositories;
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sendportal\Base\Models\Workspace;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Tests\TestCase;
 
 class CampaignTenantRepositoryTest extends TestCase
@@ -34,7 +34,7 @@ class CampaignTenantRepositoryTest extends TestCase
             'opened_at' => now()->addSeconds(60),
         ]);
 
-        $averageTimeToOpen = $this->app->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
+        $averageTimeToOpen = $this->app->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToOpen($campaign);
 
         // 45 seconds
         static::assertEquals('00:00:45', $averageTimeToOpen);
@@ -46,7 +46,7 @@ class CampaignTenantRepositoryTest extends TestCase
         [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
         $campaign = $this->createCampaign($workspace, $provider);
 
-        $averageTimeToOpen = app()->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
+        $averageTimeToOpen = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToOpen($campaign);
 
         static::assertEquals('N/A', $averageTimeToOpen);
     }
@@ -69,7 +69,7 @@ class CampaignTenantRepositoryTest extends TestCase
             'clicked_at' => now()->addSeconds(60),
         ]);
 
-        $averageTimeToClick = app()->make(CampaignTenantInterface::class)->getAverageTimeToClick($campaign);
+        $averageTimeToClick = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToClick($campaign);
 
         static::assertEquals('00:00:45', $averageTimeToClick);
     }
@@ -80,7 +80,7 @@ class CampaignTenantRepositoryTest extends TestCase
         [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
         $campaign = $this->createCampaign($workspace, $provider);
 
-        $averageTimeToClick = app()->make(CampaignTenantInterface::class)->getAverageTimeToClick($campaign);
+        $averageTimeToClick = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToClick($campaign);
 
         static::assertEquals('N/A', $averageTimeToClick);
     }

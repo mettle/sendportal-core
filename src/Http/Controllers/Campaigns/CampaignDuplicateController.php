@@ -8,14 +8,14 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\CampaignStatus;
-use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 
 class CampaignDuplicateController extends Controller
 {
-    /** @var CampaignTenantRepository */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaigns;
 
-    public function __construct(CampaignTenantRepository $campaigns)
+    public function __construct(CampaignTenantRepositoryInterface $campaigns)
     {
         $this->campaigns = $campaigns;
     }

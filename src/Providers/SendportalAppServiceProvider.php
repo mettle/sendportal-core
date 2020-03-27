@@ -7,10 +7,10 @@ namespace Sendportal\Base\Providers;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
-use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
 use Sendportal\Base\Repositories\Campaigns\PostgresCampaignTenantRepository;
-use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MySqlMessageTenantRepository;
 use Sendportal\Base\Repositories\Messages\PostgresMessageTenantRepository;
 use Sendportal\Base\Services\Helper;
@@ -29,7 +29,7 @@ class SendportalAppServiceProvider extends ServiceProvider
     public function register()
     {
         // Campaign repository.
-        $this->app->bind(CampaignTenantRepository::class, function (Application $app) {
+        $this->app->bind(CampaignTenantRepositoryInterface::class, function (Application $app) {
             if ($this->usingPostgres()) {
                 return $app->make(PostgresCampaignTenantRepository::class);
             }
@@ -38,7 +38,7 @@ class SendportalAppServiceProvider extends ServiceProvider
         });
 
         // Message repository.
-        $this->app->bind(MessageTenantRepository::class, function (Application $app) {
+        $this->app->bind(MessageTenantRepositoryInterface::class, function (Application $app) {
             if ($this->usingPostgres()) {
                 return $app->make(PostgresMessageTenantRepository::class);
             }

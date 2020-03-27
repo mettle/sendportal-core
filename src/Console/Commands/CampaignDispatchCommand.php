@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
-use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Services\Campaigns\CampaignDispatchService;
 
 class CampaignDispatchCommand extends Command
@@ -20,14 +20,14 @@ class CampaignDispatchCommand extends Command
     /** @var string */
     protected $description = 'Dispatch all campaigns waiting in the queue';
 
-    /** @var CampaignTenantRepository */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
 
     /** @var CampaignDispatchService */
     protected $campaignService;
 
     public function handle(
-        CampaignTenantRepository $campaignRepo,
+        CampaignTenantRepositoryInterface $campaignRepo,
         CampaignDispatchService $campaignService
     ): void
     {

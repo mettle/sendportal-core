@@ -10,14 +10,14 @@ use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriptionToggleRequest;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 
 class SubscriptionsController extends Controller
 {
-    /** @var MessageTenantRepository */
+    /** @var MessageTenantRepositoryInterface */
     protected $messages;
 
-    public function __construct(MessageTenantRepository $messages)
+    public function __construct(MessageTenantRepositoryInterface $messages)
     {
         $this->messages = $messages;
     }

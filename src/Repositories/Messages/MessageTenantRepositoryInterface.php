@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Sendportal\Base\Interfaces\BaseTenantInterface;
 
-interface MessageTenantRepository extends BaseTenantInterface
+interface MessageTenantRepositoryInterface extends BaseTenantInterface
 {
     public function paginateWithSource(int $workspaceId, string $orderBy = 'name', array $relations = [], int $paginate = 25, array $parameters = []): LengthAwarePaginator;
 

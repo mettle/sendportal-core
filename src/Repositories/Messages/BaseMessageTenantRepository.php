@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\BaseTenantRepository;
 
-abstract class BaseMessageTenantRepository extends BaseTenantRepository implements MessageTenantRepository
+abstract class BaseMessageTenantRepository extends BaseTenantRepository implements MessageTenantRepositoryInterface
 {
     /** @var string */
     protected $modelName = Message::class;

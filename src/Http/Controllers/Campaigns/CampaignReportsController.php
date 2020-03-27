@@ -10,20 +10,20 @@ use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Presenters\CampaignReportPresenter;
-use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
-use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 
 class CampaignReportsController extends Controller
 {
-    /** @var CampaignTenantRepository */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
 
-    /** @var MessageTenantRepository */
+    /** @var MessageTenantRepositoryInterface */
     protected $messageRepo;
 
     public function __construct(
-        CampaignTenantRepository $campaignRepository,
-        MessageTenantRepository $messageRepo
+        CampaignTenantRepositoryInterface $campaignRepository,
+        MessageTenantRepositoryInterface $messageRepo
     ) {
         $this->campaignRepo = $campaignRepository;
         $this->messageRepo = $messageRepo;

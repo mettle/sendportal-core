@@ -9,8 +9,8 @@ use DateTime;
 use Exception;
 use Illuminate\Support\Collection;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
-use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\MessageUrlRepository;
 
 class CampaignReportPresenter
@@ -18,10 +18,10 @@ class CampaignReportPresenter
     /** @var Campaign */
     protected $campaign;
 
-    /** @var CampaignTenantRepository */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
 
-    /** @var MessageTenantRepository */
+    /** @var MessageTenantRepositoryInterface */
     protected $messageRepo;
 
     /** @var MessageUrlRepository */
@@ -29,8 +29,8 @@ class CampaignReportPresenter
 
     public function __construct(Campaign $campaign)
     {
-        $this->campaignRepo = app(CampaignTenantRepository::class);
-        $this->messageRepo = app(MessageTenantRepository::class);
+        $this->campaignRepo = app(CampaignTenantRepositoryInterface::class);
+        $this->messageRepo = app(MessageTenantRepositoryInterface::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
 
         $this->campaign = $campaign;

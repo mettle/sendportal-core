@@ -8,13 +8,13 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Services\Content\MergeContent;
 use Sendportal\Base\Services\Messages\DispatchMessage;
 
 class MessagesController extends Controller
 {
-    /** @var MessageTenantRepository */
+    /** @var MessageTenantRepositoryInterface */
     protected $messageRepo;
 
     /** @var DispatchMessage */
@@ -24,7 +24,7 @@ class MessagesController extends Controller
     protected $mergeContent;
 
     public function __construct(
-        MessageTenantRepository $messageRepo,
+        MessageTenantRepositoryInterface $messageRepo,
         DispatchMessage $dispatchMessage,
         MergeContent $mergeContent
     ) {

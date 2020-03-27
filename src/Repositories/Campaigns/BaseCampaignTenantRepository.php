@@ -8,7 +8,7 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Repositories\BaseTenantRepository;
 use Sendportal\Base\Traits\SecondsToHms;
 
-abstract class BaseCampaignTenantRepository extends BaseTenantRepository implements CampaignTenantRepository
+abstract class BaseCampaignTenantRepository extends BaseTenantRepository implements CampaignTenantRepositoryInterface
 {
     use SecondsToHms;
 

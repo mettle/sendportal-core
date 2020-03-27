@@ -7,7 +7,7 @@ namespace Sendportal\Base\Repositories\Campaigns;
 use Sendportal\Base\Interfaces\BaseTenantInterface;
 use Sendportal\Base\Models\Campaign;
 
-interface CampaignTenantRepository extends BaseTenantInterface
+interface CampaignTenantRepositoryInterface extends BaseTenantInterface
 {
     /**
      * Get the average time it takes for a message to be opened once it has been delivered for the campaign.

@@ -5,15 +5,15 @@ namespace Sendportal\Base\Services\Messages;
 use Exception;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Pro\Repositories\AutomationScheduleRepository;
 
 class ResolveProvider
 {
-    /** @var CampaignTenantRepository */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignTenantRepository;
 
-    public function __construct(CampaignTenantRepository $campaignTenantRepository)
+    public function __construct(CampaignTenantRepositoryInterface $campaignTenantRepository)
     {
         $this->campaignTenantRepository = $campaignTenantRepository;
     }

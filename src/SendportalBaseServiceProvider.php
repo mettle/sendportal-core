@@ -50,10 +50,9 @@ class SendportalBaseServiceProvider extends ServiceProvider
         }
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sendportal');
+        $this->loadJsonTranslationsFrom(resource_path('lang/vendor/sendportal'));
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sendportal');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
-
     }
 
     /**

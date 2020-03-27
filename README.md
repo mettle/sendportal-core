@@ -5,7 +5,7 @@
 
 1) `laravel new sendportal_host`.
 
-2) `git clone[git@github.com](mailto:git@github.com):JonoB/base.git sendportal_base`.
+2) `git clone git@github.com:JonoB/base.git sendportal_base`.
 
 3) Edit the `sendportal_host` composer.json file and add the following lines:
 ```json
@@ -35,7 +35,7 @@ to `\Sendportal\Base\Models\User::class,`.
 
 1) Install the Base package first.
 
-2) `git clone[git@github.com](mailto:git@github.com):JonoB/sendportal-pro.git`.
+2) `git clone git@github.com:JonoB/sendportal-pro.git`.
 
 3) Edit the `sendportal_host` composer.json file and add the following lines:
 ```json

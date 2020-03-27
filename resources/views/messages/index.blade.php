@@ -56,14 +56,16 @@
                     <th>{{ __('Source') }}</th>
                     <th>{{ __('Recipient') }}</th>
                     <th>{{ __('Status') }}</th>
-                    <th>{{ __('Actions') }}</th>
-                    <th>
-                        <button class="btn btn-xs btn-light" id="select-all">Select All</button>
-                        <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form" style="display: inline-block;">
-                            @csrf
-                            <button type="submit" class="btn btn-xs btn-light">{{ __('Send Selected') }}</button>
-                        </form>
-                    </th>
+                    @if(request()->route()->named('sendportal.messages.draft'))
+                        <th>{{ __('Actions') }}</th>
+                        <th>
+                            <button class="btn btn-xs btn-light" id="select-all">Select All</button>
+                            <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form" style="display: inline-block;">
+                                @csrf
+                                <button type="submit" class="btn btn-xs btn-light">{{ __('Send Selected') }}</button>
+                            </form>
+                        </th>
+                    @endif
                 </tr>
                 </thead>
                 <tbody>
@@ -90,19 +92,19 @@
                             <td>
                                 @include('sendportal::messages.partials.status-row')
                             </td>
-                            <td>
-                                @if ( ! $message->sent_at)
+                            @if(request()->route()->named('sendportal.messages.draft') &&  ! $message->sent_at)
+                                <td>
                                     <form action="{{ route('sendportal.messages.send') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $message->id }}">
                                         <a href="{{ route('sendportal.messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
                                         <button type="submit" class="btn btn-xs btn-light">{{ __('Send Now') }}</button>
                                     </form>
-                                @endif
-                            </td>
-                            <td>
-                                <input type="checkbox" name="messages[]" value="{{ $message->id }}" class="message-select" form="send-selected-form">
-                            </td>
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="messages[]" value="{{ $message->id }}" class="message-select" form="send-selected-form">
+                                </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>

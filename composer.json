@@ -8,14 +8,16 @@
     "require": {
         "php": "^7.2.5",
         "ext-json": "*",
+        "aws/aws-sdk-php-laravel": "^3.4",
         "illuminate/support": "^7.0",
+        "kriswallsmith/buzz": "^1.1",
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.0|^7.0",
-        "rap2hpoutre/fast-excel": "^1.7",
         "mailgun/mailgun-php": "^3.0",
+        "nyholm/psr7": "^1.2",
+        "rap2hpoutre/fast-excel": "^1.7",
         "sendgrid/sendgrid": "^7.3",
-        "wildbit/postmark-php": "^2.8",
-        "aws/aws-sdk-php-laravel": "^3.4"
+        "wildbit/postmark-php": "^2.8"
     },
     "require-dev": {
         "orchestra/testbench": "^5.0",

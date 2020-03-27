@@ -24,7 +24,7 @@ class ResolveProvider
      */
     public function handle(Message $message): Provider
     {
-        if (\Sendportal\Base\Facades\Helper::isPro() && $message->isAutomation()) {
+        if ($message->isAutomation()) {
             return $this->resolveAutomationProvider($message);
         }
 

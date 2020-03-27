@@ -60,7 +60,7 @@
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-light btn-sm btn-wide" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

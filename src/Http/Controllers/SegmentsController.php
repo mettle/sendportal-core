@@ -38,7 +38,7 @@ class SegmentsController extends Controller
     {
         $segments = $this->segmentRepository->paginate(auth()->user()->currentWorkspace()->id, 'name');
 
-        return view('segments.index', compact('segments'));
+        return view('sendportal::segments.index', compact('segments'));
     }
 
     /**

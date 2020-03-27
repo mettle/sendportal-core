@@ -12,9 +12,9 @@
         @slot('cardHeader', __('Edit Subscriber'))
 
         @slot('cardBody')
-            {!! Form::model($subscriber, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['subscribers.update', $subscriber->id]]) !!}
+            {!! Form::model($subscriber, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['sendportal.subscribers.update', $subscriber->id]]) !!}
 
-            @include('subscribers.partials.form')
+            @include('sendportal::subscribers.partials.form')
 
             {!! Form::submitButton(__('Save')) !!}
 

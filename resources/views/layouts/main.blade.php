@@ -13,7 +13,7 @@
 
                         <div class="logo text-center mt-4">
                             <a href="/">
-                                <img src="{{ asset('/vendor/sendportal/img/logo-blue.png') }}" alt="Sendportal" width="130">
+                                <img src="{{ asset('/vendor/sendportal/img/logo-blue.png') }}" alt="SendPortal" width="130">
                             </a>
                         </div>
 

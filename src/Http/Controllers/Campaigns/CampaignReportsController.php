@@ -1,50 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
-use Sendportal\Base\Interfaces\MessageTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Presenters\CampaignReportPresenter;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 
 class CampaignReportsController extends Controller
 {
-    /**
-     * @var CampaignTenantInterface
-     */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
-    /**
-     * @var MessageTenantInterface
-     */
+
+    /** @var MessageTenantRepositoryInterface */
     protected $messageRepo;
 
-    /**
-     * CampaignsController constructor.
-     *
-     * @param CampaignTenantInterface $campaignRepository
-     * @param MessageTenantInterface $messageRepo
-     */
     public function __construct(
-        CampaignTenantInterface $campaignRepository,
-        MessageTenantInterface $messageRepo
+        CampaignTenantRepositoryInterface $campaignRepository,
+        MessageTenantRepositoryInterface $messageRepo
     ) {
         $this->campaignRepo = $campaignRepository;
         $this->messageRepo = $messageRepo;
     }
 
     /**
-     * Show campaign report view
+     * Show campaign report view.
      *
-     * @param int $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function index($id)
+    public function index(int $id)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
 
@@ -70,13 +61,12 @@ class CampaignReportsController extends Controller
     }
 
     /**
-     * Show campaign recipients
+     * Show campaign recipients.
      *
-     * @param int $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function recipients($id)
+    public function recipients(int $id)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
 
@@ -84,7 +74,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued or $campaign->sending) {
+        if ($campaign->queued || $campaign->sending) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -94,13 +84,12 @@ class CampaignReportsController extends Controller
     }
 
     /**
-     * Show campaign opens
+     * Show campaign opens.
      *
-     * @param int $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function opens($id)
+    public function opens(int $id)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
         $averageTimeToOpen = $this->campaignRepo->getAverageTimeToOpen($campaign);
@@ -109,7 +98,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued or $campaign->sending) {
+        if ($campaign->queued || $campaign->sending) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -119,13 +108,12 @@ class CampaignReportsController extends Controller
     }
 
     /**
-     * Show campaign clicks
+     * Show campaign clicks.
      *
-     * @param int $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function clicks($id)
+    public function clicks(int $id)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
         $averageTimeToClick = $this->campaignRepo->getAverageTimeToClick($campaign);
@@ -134,7 +122,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued or $campaign->sending) {
+        if ($campaign->queued || $campaign->sending) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -144,13 +132,12 @@ class CampaignReportsController extends Controller
     }
 
     /**
-     * Show campaign bounces
+     * Show campaign bounces.
      *
-     * @param int $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function bounces($id)
+    public function bounces(int $id)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
 
@@ -158,7 +145,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued or $campaign->sending) {
+        if ($campaign->queued || $campaign->sending) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -168,13 +155,12 @@ class CampaignReportsController extends Controller
     }
 
     /**
-     * Show campaign unsubscribes
+     * Show campaign unsubscribes.
      *
-     * @param int $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function unsubscribes($id)
+    public function unsubscribes(int $id)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
 
@@ -182,7 +168,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued or $campaign->sending) {
+        if ($campaign->queued || $campaign->sending) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 

@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Console\Commands;
 
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
+use Exception;
+use Illuminate\Database\Console\Migrations\BaseCommand;
 use Illuminate\Database\Migrations\Migrator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Console\Migrations\BaseCommand;
 use Illuminate\Support\Str;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 
 class SetupProduction extends BaseCommand
 {
@@ -26,23 +30,13 @@ class SetupProduction extends BaseCommand
      */
     protected $description = 'Set up the application for a production environment.';
 
-    /**
-     * @var Migrator
-     */
+    /** @var Migrator */
     protected $migrator;
-
-    /**
-     * SetupProduction constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->migrator = app('migrator');
-    }
 
     public function handle(): void
     {
+        $this->migrator = app('migrator');
+
         $this->intro();
         $this->line('');
         $this->checkEnvironment();
@@ -103,8 +97,8 @@ class SetupProduction extends BaseCommand
     protected function checkDatabaseConnection(): void
     {
         try {
-            \DB::connection()->getPdo();
-        } catch (\Exception $e) {
+            DB::connection()->getPdo();
+        } catch (Exception $e) {
             $this->error('A database connection could not be established. Please update your configuration and try again.');
             $this->printDatabaseConfig();
             exit();

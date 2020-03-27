@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class GenerateTestSubscribers extends Command
@@ -21,21 +24,6 @@ class GenerateTestSubscribers extends Command
      */
     protected $description = 'Create test subscribers';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $inserts = [];
@@ -55,6 +43,6 @@ class GenerateTestSubscribers extends Command
             $times++;
         }
 
-        \DB::table('subscribers')->insert($inserts);
+        DB::table('subscribers')->insert($inserts);
     }
 }

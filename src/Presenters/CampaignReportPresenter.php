@@ -3,43 +3,34 @@
 namespace Sendportal\Base\Presenters;
 
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
+use DateTime;
+use Exception;
 use Illuminate\Support\Collection;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
-use Sendportal\Base\Interfaces\MessageTenantInterface;
 use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\MessageUrlRepository;
 
 class CampaignReportPresenter
 {
-    /**
-     * @var Campaign
-     */
+    /** @var Campaign */
     protected $campaign;
 
-    /**
-     * @var CampaignTenantInterface
-     */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
 
-    /**
-     * @var MessageTenantInterface
-     */
+    /** @var MessageTenantRepositoryInterface */
     protected $messageRepo;
 
-    /**
-     * @var MessageUrlRepository
-     */
+    /** @var MessageUrlRepository */
     protected $messageUrlRepo;
 
-    /**
-     * CampaignReportPresenter constructor
-     *
-     * @param Campaign $campaign
-     */
     public function __construct(Campaign $campaign)
     {
-        $this->campaignRepo = app(CampaignTenantInterface::class);
-        $this->messageRepo = app(MessageTenantInterface::class);
+        $this->campaignRepo = app(CampaignTenantRepositoryInterface::class);
+        $this->messageRepo = app(MessageTenantRepositoryInterface::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
 
         $this->campaign = $campaign;
@@ -49,12 +40,12 @@ class CampaignReportPresenter
      * Generate the data for the view
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function generate()
     {
         if (! $this->campaign) {
-            throw new \Exception('Campaign must be initialised');
+            throw new Exception('Campaign must be initialised');
         }
 
         return [
@@ -66,7 +57,7 @@ class CampaignReportPresenter
     /**
      * Generate the chart data
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getChartData()
     {
@@ -111,17 +102,17 @@ class CampaignReportPresenter
      * @param Carbon $first
      * @param Carbon $last
      * @param int $timespan
-     * @return \DatePeriod
-     * @throws \Exception
+     * @return DatePeriod
+     * @throws Exception
      */
-    protected function createIntervals(Carbon $first, Carbon $last, $timespan): \DatePeriod
+    protected function createIntervals(Carbon $first, Carbon $last, $timespan): DatePeriod
     {
         $interval = $this->calculateDateTimeInterval($timespan);
 
-        return new \DatePeriod(
-            new \DateTime($first),
-            new \DateInterval('PT'.$interval),
-            new \DateTime($last)
+        return new DatePeriod(
+            new DateTime($first),
+            new DateInterval('PT' . $interval),
+            new DateTime($last)
         );
     }
 
@@ -262,10 +253,10 @@ class CampaignReportPresenter
      * Populate the periods into the intervals
      *
      * @param Collection $opensPerPeriod
-     * @param \DatePeriod $intervals
+     * @param DatePeriod $intervals
      * @return array
      */
-    protected function populatePeriods(Collection $opensPerPeriod, \DatePeriod $intervals): array
+    protected function populatePeriods(Collection $opensPerPeriod, DatePeriod $intervals): array
     {
         $periods = [];
 
@@ -291,7 +282,7 @@ class CampaignReportPresenter
      * Get all clicked links for a campaign
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getCampaignUrls()
     {

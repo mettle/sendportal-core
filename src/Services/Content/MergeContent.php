@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Content;
 
 use Exception;
-use Sendportal\Pro\Repositories\AutomationScheduleRepository;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Traits\NormalizeTags;
+use Sendportal\Pro\Repositories\AutomationScheduleRepository;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class MergeContent
 {
     use NormalizeTags;
 
-    /** @var CampaignTenantInterface */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignRepo;
 
     /** @var CssToInlineStyles */
     protected $cssProcessor;
 
     public function __construct(
-        CampaignTenantInterface $campaignRepo,
+        CampaignTenantRepositoryInterface $campaignRepo,
         CssToInlineStyles $cssProcessor
     ) {
         $this->campaignRepo = $campaignRepo;

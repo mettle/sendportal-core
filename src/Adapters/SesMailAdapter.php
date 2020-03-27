@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
-use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 use Aws\Result;
 use Aws\Ses\SesClient;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Arr;
+use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 
 class SesMailAdapter extends BaseMailAdapter
 {
@@ -38,7 +39,7 @@ class SesMailAdapter extends BaseMailAdapter
                     ],
                 ),
             ],
-            'ConfigurationSetName' => \Arr::get($this->config, 'configuration_set_name'),
+            'ConfigurationSetName' => Arr::get($this->config, 'configuration_set_name'),
         ]);
 
         return $this->resolveMessageId($result);
@@ -54,10 +55,10 @@ class SesMailAdapter extends BaseMailAdapter
         }
 
         $this->client = app()->make('aws')->createClient('ses', [
-            'region' => \Arr::get($this->config, 'region'),
+            'region' => Arr::get($this->config, 'region'),
             'credentials' => [
-                'key' => \Arr::get($this->config, 'key'),
-                'secret' => \Arr::get($this->config, 'secret'),
+                'key' => Arr::get($this->config, 'key'),
+                'secret' => Arr::get($this->config, 'secret'),
             ]
         ]);
 
@@ -66,6 +67,6 @@ class SesMailAdapter extends BaseMailAdapter
 
     protected function resolveMessageId(Result $result): string
     {
-        return \Arr::get($result->toArray(), 'MessageId');
+        return Arr::get($result->toArray(), 'MessageId');
     }
 }

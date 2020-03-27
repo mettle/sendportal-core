@@ -1,24 +1,15 @@
 <?php
 
-namespace Sendportal\Base\Repositories\MySQL;
+declare(strict_types=1);
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+namespace Sendportal\Base\Repositories\Campaigns;
+
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Repositories\BaseTenantRepository;
-use Sendportal\Base\Traits\SecondsToHms;
 
-class CampaignTenantRepository extends BaseTenantRepository implements CampaignTenantInterface
+class MySqlCampaignTenantRepository extends BaseCampaignTenantRepository
 {
-    use SecondsToHms;
-
-    protected $modelName = Campaign::class;
-
     /**
-     * Get the average time it takes for a message to be opened once it has been delivered for the campaign.
-     *
-     * @param Campaign $campaign
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getAverageTimeToOpen(Campaign $campaign): string
     {
@@ -30,10 +21,7 @@ class CampaignTenantRepository extends BaseTenantRepository implements CampaignT
     }
 
     /**
-     * Get the average time it takes for a link to be clicked for the campaign.
-     *
-     * @param Campaign $campaign
-     * @return string
+     * @inheritDoc
      */
     public function getAverageTimeToClick(Campaign $campaign): string
     {

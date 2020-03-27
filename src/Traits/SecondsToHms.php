@@ -6,7 +6,11 @@ namespace Sendportal\Base\Traits;
 
 trait SecondsToHms
 {
-    protected function secondsToHms(int $seconds): string
+    /**
+     * @param int|string $seconds
+     * @return string
+     */
+    protected function secondsToHms($seconds): string
     {
         $hours = floor($seconds / 3600);
         $minutes = floor($seconds / 60) % 60;

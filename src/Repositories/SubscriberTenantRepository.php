@@ -1,25 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Repositories;
 
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Subscriber;
 
 class SubscriberTenantRepository extends BaseTenantRepository
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $modelName = Subscriber::class;
 
     /**
-     * Apply parameters, which can be extended in child classes for filtering
-     *
-     * @param object $instance
-     * @param array $filters
-     * @return mixed
+     * @inheritDoc
      */
-    protected function applyFilters($instance, array $filters = [])
+    protected function applyFilters(Builder $instance, array $filters = []): void
     {
         $this->applyNameFilter($instance, $filters);
         $this->applyStatusFilter($instance, $filters);
@@ -27,48 +25,39 @@ class SubscriberTenantRepository extends BaseTenantRepository
     }
 
     /**
-     * Filter by name or email
-     *
-     * @param object $instance
-     * @param array $filters
+     * Filter by name or email.
      */
-    protected function applyNameFilter(object $instance, array $filters)
+    protected function applyNameFilter(Builder $instance, array $filters): void
     {
         if ($name = Arr::get($filters, 'name')) {
-            $name = '%' . $name . '%';
+            $filterString = '%' . $name . '%';
 
-            $instance->where(function ($instance) use ($name) {
-                $instance->where('subscribers.first_name', 'like', $name)
-                    ->orWhere('subscribers.last_name', 'like', $name)
-                    ->orWhere('subscribers.email', 'like', $name);
+            $instance->where(static function (Builder $instance) use ($filterString) {
+                $instance->where('subscribers.first_name', 'like', $filterString)
+                    ->orWhere('subscribers.last_name', 'like', $filterString)
+                    ->orWhere('subscribers.email', 'like', $filterString);
             });
         }
     }
 
     /**
-     * Filter by subscription status
-     *
-     * @param object $instance
-     * @param array $filters
+     * Filter by subscription status.
      */
-    protected function applyStatusFilter(object $instance, array $filters)
+    protected function applyStatusFilter(Builder $instance, array $filters): void
     {
         $status = Arr::get($filters, 'status');
 
-        if ($status == 'subscribed') {
+        if ($status === 'subscribed') {
             $instance->whereNull('unsubscribed_at');
-        } elseif ($status == 'unsubscribed') {
+        } elseif ($status === 'unsubscribed') {
             $instance->whereNotNull('unsubscribed_at');
         }
     }
 
     /**
-     * Filter by segment
-     *
-     * @param $instance
-     * @param array $filters
+     * Filter by segment.
      */
-    protected function applySegmentFilter($instance, $filters = [])
+    protected function applySegmentFilter(Builder $instance, array $filters = []): void
     {
         if ($segmentId = Arr::get($filters, 'segment_id')) {
             $instance->select('subscribers.*')
@@ -84,6 +73,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
     {
         $this->checkTenantData($data);
 
+        /** @var Subscriber $instance */
         $instance = $this->getNewInstance();
 
         $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments']));
@@ -134,7 +124,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
      *
      * @param int $workspaceId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function countActive($workspaceId): int
     {

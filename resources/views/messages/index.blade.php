@@ -57,6 +57,13 @@
                     <th>{{ __('Recipient') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
+                    <th>
+                        <button class="btn btn-xs btn-light" id="select-all">Select All</button>
+                        <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form" style="display: inline-block;">
+                            @csrf
+                            <button type="submit" class="btn btn-xs btn-light">{{ __('Send Selected') }}</button>
+                        </form>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -89,9 +96,12 @@
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $message->id }}">
                                         <a href="{{ route('sendportal.messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
-                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Send now') }}</button>
+                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Send Now') }}</button>
                                     </form>
                                 @endif
+                            </td>
+                            <td>
+                                <input type="checkbox" name="messages[]" value="{{ $message->id }}" class="message-select" form="send-selected-form">
                             </td>
                         </tr>
                     @empty
@@ -107,5 +117,15 @@
     </div>
 
     @include('sendportal::layouts.partials.pagination', ['records' => $messages])
+
+    @push('js')
+        <script>
+            $(function () {
+                $('#select-all').click(function () {
+                    $('.message-select').prop('checked', true);
+                });
+            })
+        </script>
+    @endpush
 
 @endsection

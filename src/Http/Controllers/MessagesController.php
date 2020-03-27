@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\MessageTenantRepository;
 use Sendportal\Base\Services\Content\MergeContent;
 use Sendportal\Base\Services\Messages\DispatchMessage;
@@ -109,5 +110,30 @@ class MessagesController extends Controller
 
         return redirect()->route('sendportal.messages.draft')->with('success',
             __('The message was sent successfully.'));
+    }
+
+    /**
+     * Send multiple messages
+     *
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function sendSelected()
+    {
+        if (! $messages = $this->messageRepo->getWhereIn(auth()->user()->currentWorkspace()->id, request('messages'), ['subscriber'])) {
+            return redirect()->back()->withErrors(__('Unable to locate messages'));
+        }
+
+        $messages->each(function (Message $message)
+        {
+            if ($message->sent_at) {
+                return;
+            }
+
+            $this->dispatchMessage->handle($message);
+        });
+
+        return redirect()->route('sendportal.messages.draft')->with('success',
+            __('The messages were sent successfully.'));
     }
 }

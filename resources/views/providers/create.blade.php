@@ -28,7 +28,6 @@
     <script>
 
         let url = '{{ route('sendportal.providers.ajax', 1) }}';
-        let old = {!! json_encode(old()) !!};
 
         $(function () {
             let type_id = $('select[name="type_id"]').val();

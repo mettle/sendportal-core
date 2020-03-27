@@ -68,4 +68,12 @@ class SesMailAdapter extends BaseMailAdapter
     {
         return \Arr::get($result->toArray(), 'MessageId');
     }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getSendQuota(): array
+    {
+        return $this->resolveClient()->getSendQuota()->toArray();
+    }
 }

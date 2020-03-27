@@ -204,6 +204,7 @@
     "The Mailgun provider requires you to enter a domain": "The Mailgun provider requires you to enter a domain",
     "The invitation is no longer valid.": "The invitation is no longer valid.",
     "The message was sent successfully.": "The message was sent successfully.",
+    "The number of subscribers for this campaign exceeds your SES quota.": "The number of subscribers for this campaign exceeds your SES quota",
     "The selected message has already been sent": "The selected message has already been sent",
     "The test email has been dispatched.": "The test email has been dispatched.",
     "The uploaded file is not valid": "The uploaded file is not valid",

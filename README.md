@@ -1,23 +1,62 @@
-# base
+# The Base Package
 
-- `laravel new sendportal_testing`
-- `git clone git@github.com:JonoB/base.git sendportal_base`
-- Edit the `sendportal_testing/composer.json` file and add the following JSON:
-```
+
+### The Base package installation
+
+1) `laravel new sendportal_host`.
+
+2) `git clone[git@github.com](mailto:git@github.com):JonoB/base.git sendportal_base`.
+
+3) Edit the `sendportal_host` composer.json file and add the following lines:
+```json
 "sendportal/base": "dev-master"
-...
-    "repositories": [
-        {
-            "type": "path",
-            "symlink": true,
-            "url": "../sendportal_base"
-        }
-    ],
+// ...
+"repositories": [
+    {
+        "type": "path",
+        "symlink": true,
+        "url": "../sendportal_base"
+    }
+],
 ```
-- `composer update` in the sendportal_testing folder
-- Now you should be able to edit code in the `sendportal_base` project and it's changes should be automatically picked up by the `sendportal_testing` project.
+4) `cd sendportal_host && composer update`.
 
-* Please adjust this readme if you experienced any issues or things which I didn't list here. Thanks!
+5) Edit the `sendportal_host` `.env` file and adjust it accordingly (DB connection, default mail driver).
+
+6) Edit the `sendportal_host` `config/auth.php` file and change the `providers.users.model`
+
+to `\Sendportal\Base\Models\User::class,`.
+
+7) `php artisan migrate`.
+
+8) `php artisan vendor:publish --provider=Sendportal\\Base\\SendportalBaseServiceProvider --tag=sendportal-assets`.
+
+### The Pro package installation
+
+1) Install the Base package first.
+
+2) `git clone[git@github.com](mailto:git@github.com):JonoB/sendportal-pro.git`.
+
+3) Edit the `sendportal_host` composer.json file and add the following lines:
+```json
+"sendportal/pro": "dev-master"
+// ...
+"repositories": [
+    {
+        "type": "path",
+        "symlink": true,
+        "url": "../sendportal_pro"
+    }
+],
+```
+4) Run `composer update` for the host app.
+
+5) `php artisan migrate`.
+
+6) Refresh the page in your browser.
+
+
+---
 
 ## Release new version
 

@@ -4,29 +4,30 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Listeners\Webhooks;
 
-use Illuminate\Support\Str;
-use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
-use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
-use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
+use Arr;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
+use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Services\Webhooks\EmailWebhookService;
+use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
 
 class MailgunWebhookHandler implements ShouldQueue
 {
     /** @var string */
     public $queue = 'webhook-process';
 
-    /** @var EmailWebhookServiceInterface */
+    /** @var EmailWebhookService */
     private $emailWebhookService;
 
     /** @var WebhookVerifier */
     private $verifier;
 
     public function __construct(
-        EmailWebhookServiceInterface $emailWebhookService,
+        EmailWebhookService $emailWebhookService,
         WebhookVerifier $verifier
     ) {
         $this->emailWebhookService = $emailWebhookService;
@@ -67,7 +68,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function handleOpened(string $messageId, array $content): void
     {
-        $ipAddress = \Arr::get($content, 'event-data.ip');
+        $ipAddress = Arr::get($content, 'event-data.ip');
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
@@ -78,7 +79,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function handleClicked(string $messageId, array $content): void
     {
-        $url = \Arr::get($content, 'event-data.url');
+        $url = Arr::get($content, 'event-data.url');
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleClick($messageId, $timestamp, $url);
@@ -99,7 +100,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function handleFailed(string $messageId, array $content): void
     {
-        $severity = \Arr::get($content, 'event-data.severity');
+        $severity = Arr::get($content, 'event-data.severity');
         $description = $this->extractFailureDescription($content);
         $timestamp = $this->extractTimestamp($content);
 
@@ -115,7 +116,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractEventName(array $payload): string
     {
-        return \Arr::get($payload, 'event-data.event');
+        return Arr::get($payload, 'event-data.event');
     }
 
     /**
@@ -123,7 +124,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractMessageId(array $payload): string
     {
-        return $this->formatMessageId(\Arr::get($payload, 'event-data.message.headers.message-id'));
+        return $this->formatMessageId(Arr::get($payload, 'event-data.message.headers.message-id'));
     }
 
     /**
@@ -146,7 +147,7 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractTimestamp($payload)
     {
-        return Carbon::createFromTimestamp(\Arr::get($payload, 'event-data.timestamp'));
+        return Carbon::createFromTimestamp(Arr::get($payload, 'event-data.timestamp'));
     }
 
     /**
@@ -154,11 +155,11 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     protected function extractFailureDescription(array $payload): string
     {
-        if ($description = \Arr::get($payload, 'event-data.delivery-status.description')) {
+        if ($description = Arr::get($payload, 'event-data.delivery-status.description')) {
             return $description;
         }
 
-        if ($message = \Arr::get($payload, 'event-data.delivery-status.message')) {
+        if ($message = Arr::get($payload, 'event-data.delivery-status.message')) {
             return $message;
         }
 

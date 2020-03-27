@@ -1,50 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Api;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Sendportal\Base\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client;
-use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
+use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
 class AwsWebhooksController extends Controller
 {
+    /** @var EmailWebhookService */
+    private $emailWebhookService;
 
-    /**
-     * @var EmailWebhookServiceInterface
-     */
-    protected $emailWebhookService;
-
-    /**
-     * @param EmailWebhookServiceInterface $emailWebhookService
-     */
-    public function __construct(
-        EmailWebhookServiceInterface $emailWebhookService
-    ) {
+    public function __construct(EmailWebhookService $emailWebhookService)
+    {
         $this->emailWebhookService = $emailWebhookService;
     }
 
     /**
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws Exception
      */
-    public function handle()
+    public function handle(): Response
     {
         $content = json_decode(request()->getContent(), true);
 
-        if (Arr::get($content, 'Type') == 'SubscriptionConfirmation') {
+        if (Arr::get($content, 'Type') === 'SubscriptionConfirmation') {
             $subscribeUrl = Arr::get($content, 'SubscribeURL');
 
             $httpClient = new Client();
             $httpClient->get($subscribeUrl);
 
-            \Log::info('subscribing', ['url' => $subscribeUrl]);
+            Log::info('subscribing', ['url' => $subscribeUrl]);
 
             return response('OK');
         }
 
-        if (! Arr::get($content, 'Type') == 'Notification') {
+        if (!Arr::get($content, 'Type') === 'Notification') {
             return response('OK (not processed).');
         }
 
@@ -56,35 +53,57 @@ class AwsWebhooksController extends Controller
     }
 
     /**
-     * @param array $event
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|void
+     * @throws Exception
      */
-    protected function processEmailEvent(array $event)
+    private function processEmailEvent(array $event): Response
     {
-        $messageId = Arr::get($event, 'mail.messageId');
+        /** @var string|null $messageId */
+        $messageId = $event['mail']['messageId'] ?? null;
+        /** @var string|null $eventType */
+        $eventType = $event['eventType'] ?? null;
 
-        if (! $eventType = Arr::get($event, 'eventType')) {
+        if (!$eventType || !$messageId) {
             return response('OK (not processed).');
         }
 
-        $method = 'handle' . Str::studly(Str::slug($eventType, ''));
-
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-open
         // Bounce, Complaint, Message, Send Email, Reject Event, Open Event, Click Event
-        if (method_exists($this, $method)) {
-            $this->{$method}($messageId, $event);
+        switch ($eventType) {
+            case 'click':
+                $this->handleClick($messageId, $event);
+                break;
 
-            return response('OK');
+            case 'open':
+                $this->handleOpen($messageId, $event);
+                break;
+
+            case 'reject':
+                $this->handleReject($messageId, $event);
+                break;
+
+            case 'delivery':
+                $this->handleDelivery($messageId, $event);
+                break;
+
+            case 'complaint':
+                $this->handleComplaint($messageId, $event);
+                break;
+
+            case 'bounce':
+                $this->handleBounce($messageId, $event);
+                break;
+
+            default:
+                abort(404);
         }
 
-        abort(404);
+        return response('OK');
     }
 
     /**
-     * @param $messageId
-     * @param array $event
+     * @throws Exception
      */
-    public function handleClick($messageId, array $event)
+    private function handleClick(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-click
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-contents.html#event-publishing-retrieving-sns-contents-click-object
@@ -95,10 +114,9 @@ class AwsWebhooksController extends Controller
     }
 
     /**
-     * @param $messageId
-     * @param array $event
+     * @throws Exception
      */
-    public function handleOpen($messageId, array $event)
+    private function handleOpen(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-contents.html#event-publishing-retrieving-sns-contents-open-object
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-open
@@ -108,21 +126,13 @@ class AwsWebhooksController extends Controller
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
     }
 
-    /**
-     * @param $messageId
-     * @param array $event
-     */
-    public function handleReject($messageId, array $event)
+    private function handleReject(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-contents.html#event-publishing-retrieving-sns-contents-reject-object
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-reject
     }
 
-    /**
-     * @param $messageId
-     * @param array $event
-     */
-    protected function handleDelivery($messageId, array $event)
+    private function handleDelivery(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/ses/latest/DeveloperGuide/ses/latest/DeveloperGuide/notification-contents.html.html#delivery-object
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-delivery
@@ -131,11 +141,7 @@ class AwsWebhooksController extends Controller
         $this->emailWebhookService->handleDelivery($messageId, $timestamp);
     }
 
-    /**
-     * @param $messageId
-     * @param array $event
-     */
-    protected function handleComplaint($messageId, array $event)
+    protected function handleComplaint(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html#complaint-object
         // $complaint = \Arr::get($event, 'complaint');
@@ -155,18 +161,14 @@ class AwsWebhooksController extends Controller
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
 
-    /**
-     * @param $messageId
-     * @param array $event
-     */
-    protected function handleBounce($messageId, array $event)
+    protected function handleBounce(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html#bounce-object
         $bounceType = Arr::get($event, 'bounce.bounceType');
         $timestamp = Carbon::parse(Arr::get($event, 'bounce.timestamp'));
 
         // https://aws.amazon.com/blogs/messaging-and-targeting/handling-bounces-and-complaints/
-        if (strtolower($bounceType) == 'permanent') {
+        if (strtolower($bounceType) === 'permanent') {
             $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
         }
     }

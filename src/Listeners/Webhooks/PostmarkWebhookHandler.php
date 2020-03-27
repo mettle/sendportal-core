@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Listeners\Webhooks;
 
-use Illuminate\Support\Str;
-use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
-use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
+use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
 class PostmarkWebhookHandler implements ShouldQueue
 {
     /** @var string */
     public $queue = 'webhook-process';
 
-    /** @var EmailWebhookServiceInterface */
+    /** @var EmailWebhookService */
     private $emailWebhookService;
 
-    public function __construct(EmailWebhookServiceInterface $emailWebhookService)
+    public function __construct(EmailWebhookService $emailWebhookService)
     {
         $this->emailWebhookService = $emailWebhookService;
     }

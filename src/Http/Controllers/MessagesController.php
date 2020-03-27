@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Sendportal\Base\Models\AutomationSchedule;
 use Sendportal\Base\Repositories\MessageTenantRepository;
 use Sendportal\Base\Services\Content\MergeContent;
 use Sendportal\Base\Services\Messages\DispatchMessage;

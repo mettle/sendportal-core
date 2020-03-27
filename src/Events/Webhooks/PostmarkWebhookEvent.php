@@ -10,8 +10,6 @@ class PostmarkWebhookEvent
     public $payload;
 
     /**
-     * AutomationDispatchEvent constructor
-     *
      * @param array $payload
      */
     public function __construct(array $payload)

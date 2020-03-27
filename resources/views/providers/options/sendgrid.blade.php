@@ -1,1 +1,1 @@
-{!! Form::textField('settings[key]', __('API Key'), \Arr::get($settings ?? [], 'key')) !!}
+{!! Form::textField('settings[key]', __('API Key'), \Arr::get($settings ?? [], 'key'), ['autocomplete' => 'off']) !!}

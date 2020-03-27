@@ -20,7 +20,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         // Auth.
         $appRouter->namespace('Auth')->group(static function (Router $authRouter) {
             // Logout.
-            $authRouter->get('logout', ['LoginController@logout'])->name('sendportal.logout');
+            $authRouter->get('logout', 'LoginController@logout')->name('sendportal.logout');
 
             // Profile.
             $authRouter->name('profile.')->prefix('profile')->group(static function (Router $profileRouter) {
@@ -30,54 +30,57 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
             });
         });
 
-        // Dashboard
+        // Dashboard.
         $appRouter->get('dashboard', 'DashboardController@index')->name('dashboard');
         $appRouter->get('/', static function () {
             return redirect()->route('sendportal.campaigns.index');
         });
 
-        // Campaigns
-        Route::resource('campaigns', 'Campaigns\CampaignsController')->except(['destroy']);
-        Route::prefix('campaigns')->namespace('Campaigns')->group(function () {
-            Route::get('{id}/preview', 'CampaignsController@preview')->name('campaigns.preview');
-            Route::put('{id}/send', 'CampaignDispatchController@send')->name('campaigns.send');
-            Route::get('{id}/status', 'CampaignsController@status')->name('campaigns.status');
-            Route::post('{id}/test', 'CampaignTestController@handle')->name('campaigns.test');
+        // Campaigns.
+        $appRouter->resource('campaigns', 'Campaigns\CampaignsController')->except(['destroy']);
+        $appRouter->name('campaigns.')->prefix('campaigns')->namespace('Campaigns')->group(static function (Router $campaignRouter) {
+            $campaignRouter->get('{id}/preview', 'CampaignsController@preview')->name('preview');
+            $campaignRouter->put('{id}/send', 'CampaignDispatchController@send')->name('send');
+            $campaignRouter->get('{id}/status', 'CampaignsController@status')->name('status');
+            $campaignRouter->post('{id}/test', 'CampaignTestController@handle')->name('test');
 
-            Route::get('{id}/confirm-delete', 'CampaignDeleteController@confirm')->name('campaigns.destroy.confirm');
-            Route::delete('', 'CampaignDeleteController@destroy')->name('campaigns.destroy');
+            $campaignRouter->get('{id}/confirm-delete', 'CampaignDeleteController@confirm')->name('destroy.confirm');
+            $campaignRouter->delete('', 'CampaignDeleteController@destroy')->name('destroy');
 
-            Route::get('{id}/duplicate', 'CampaignDuplicateController@duplicate')->name('campaigns.duplicate');
+            $campaignRouter->get('{id}/duplicate', 'CampaignDuplicateController@duplicate')->name('duplicate');
 
-            Route::get('{id}/report', 'CampaignReportsController@index')->name('campaigns.reports.index');
-            Route::get('{id}/report/recipients', 'CampaignReportsController@recipients')
-                ->name('campaigns.reports.recipients');
-            Route::get('{id}/report/opens', 'CampaignReportsController@opens')->name('campaigns.reports.opens');
-            Route::get('{id}/report/clicks', 'CampaignReportsController@clicks')->name('campaigns.reports.clicks');
-            Route::get('{id}/report/unsubscribes', 'CampaignReportsController@unsubscribes')
-                ->name('campaigns.reports.unsubscribes');
-            Route::get('{id}/report/bounces', 'CampaignReportsController@bounces')->name('campaigns.reports.bounces');
+            $campaignRouter->get('{id}/report', 'CampaignReportsController@index')->name('reports.index');
+            $campaignRouter->get('{id}/report/recipients', 'CampaignReportsController@recipients')
+                ->name('reports.recipients');
+            $campaignRouter->get('{id}/report/opens', 'CampaignReportsController@opens')->name('reports.opens');
+            $campaignRouter->get('{id}/report/clicks', 'CampaignReportsController@clicks')->name('reports.clicks');
+            $campaignRouter->get('{id}/report/unsubscribes', 'CampaignReportsController@unsubscribes')
+                ->name('reports.unsubscribes');
+            $campaignRouter->get('{id}/report/bounces', 'CampaignReportsController@bounces')->name('reports.bounces');
         });
 
-        // Messages
-        Route::get('messages', ['as' => 'messages.index', 'uses' => 'MessagesController@index']);
-        Route::get('messages/draft', ['as' => 'messages.draft', 'uses' => 'MessagesController@draft']);
-        Route::get('messages/{id}/show', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
-        Route::post('messages/send', ['as' => 'messages.send', 'uses' => 'MessagesController@send']);
-        Route::post('messages/send-selected', ['as' => 'messages.send-selected', 'uses' => 'MessagesController@sendSelected']);
+        // Messages.
+        $appRouter->name('messages.')->prefix('messages')->group(static function (Router $messageRouter) {
+            $messageRouter->get('/', 'MessagesController@index')->name('index');
+            $messageRouter->get('draft', 'MessagesController@draft')->name('draft');
+            $messageRouter->get('{id}/show', 'MessagesController@show')->name('show');
+            $messageRouter->post('send', 'MessagesController@send')->name('send');
+            $messageRouter->post('send-selected', 'MessagesController@sendSelected')->name('send-selected');
+        });
 
-        // Providers
-        Route::get('providers', ['as' => 'providers.index', 'uses' => 'ProvidersController@index']);
-        Route::get('providers/create', ['as' => 'providers.create', 'uses' => 'ProvidersController@create']);
-        Route::get('providers/type/{id}',
-            ['as' => 'providers.ajax', 'uses' => 'ProvidersController@providersTypeAjax']);
-        Route::post('providers', ['as' => 'providers.store', 'uses' => 'ProvidersController@store']);
-        Route::get('providers/{id}/edit', ['as' => 'providers.edit', 'uses' => 'ProvidersController@edit']);
-        Route::post('providers/{id}', ['as' => 'providers.update', 'uses' => 'ProvidersController@update']);
-        Route::delete('providers/{id}', ['as' => 'providers.delete', 'uses' => 'ProvidersController@delete']);
+        // Providers.
+        $appRouter->name('providers.')->prefix('providers')->group(static function (Router $providerRouter) {
+            $providerRouter->get('/', 'ProvidersController@index')->name('index');
+            $providerRouter->get('create', 'ProvidersController@create')->name('create');
+            $providerRouter->get('type/{id}', 'ProvidersController@providersTypeAjax')->name('ajax');
+            $providerRouter->post('/', 'ProvidersController@store')->name('store');
+            $providerRouter->get('{id}/edit', 'ProvidersController@edit')->name('edit');
+            $providerRouter->post('{id}', 'ProvidersController@update')->name('update');
+            $providerRouter->delete('{id}', 'ProvidersController@delete')->name('delete');
+        });
 
-        // Segments
-        Route::resource('segments', 'SegmentsController');
+        // Segments.
+        $appRouter->resource('segments', 'SegmentsController');
 
         // Settings.
         $appRouter->prefix('settings')->group(static function (Router $settingsRouter) {
@@ -104,50 +107,55 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
             $settingsRouter->resource('templates', 'TemplatesController');
         });
 
-        // Subscribers
-        Route::get('subscribers/export', ['as' => 'subscribers.export', 'uses' => 'SubscribersController@export']);
-        Route::get('subscribers/import', ['as' => 'subscribers.import', 'uses' => 'SubscribersImportController@show']);
-        Route::post('subscribers/import',
-            ['as' => 'subscribers.import.store', 'uses' => 'SubscribersImportController@store']);
-        Route::resource('subscribers', 'SubscribersController');
+        // Subscribers.
+        $appRouter->name('subscribers.')->prefix('subscribers')->group(static function (Router $subscriberRouter) {
+            $subscriberRouter->get('export', 'SubscribersController@export')->name('export');
+            $subscriberRouter->get('import', 'SubscribersImportController@show')->name('import');
+            $subscriberRouter->post('import', 'SubscribersImportController@store')->name('import.store');
+        });
+        $appRouter->resource('subscribers', 'SubscribersController');
 
-        // Templates
-        Route::resource('templates', 'TemplatesController')->except(['show']);
+        // Templates.
+        $appRouter->resource('templates', 'TemplatesController')->except(['show']);
 
-        // Ajax
-        Route::namespace('Ajax')->prefix('ajax')->group(function () {
-            Route::post('segments/store', 'SegmentsController@store')->name('ajax.segments.store');
+        // Ajax.
+        $appRouter->name('ajax.')->prefix('ajax')->namespace('Ajax')->group(static function (Router $ajaxRouter) {
+            $ajaxRouter->post('segments/store', 'SegmentsController@store')->name('segments.store');
+        });
+
+        // Workspace Management.
+        $appRouter->namespace('Workspaces')->middleware([
+            'auth',
+            'verified'
+        ])->group(static function (Router $workspaceRouter) {
+            $workspaceRouter->resource('workspaces', 'WorkspacesController')->except([
+                'create',
+                'show',
+                'destroy',
+            ]);
+
+            // Workspace Switching.
+            $workspaceRouter->get('workspaces/{workspace}/switch', 'SwitchWorkspaceController@switch')
+                ->name('workspaces.switch');
+
+            // Invitations.
+            $workspaceRouter->post('workspaces/invitations/{invitation}/accept', 'PendingInvitationController@accept')
+                ->name('workspaces.invitations.accept');
+            $workspaceRouter->post('workspaces/invitations/{invitation}/reject', 'PendingInvitationController@reject')
+                ->name('workspaces.invitations.reject');
         });
     });
 
-    // Workspace Management.
-    Route::namespace('Workspaces')->middleware(['auth', 'verified'])->group(static function (Router $workspaceRouter) {
-        $workspaceRouter->resource('workspaces', 'WorkspacesController')->except([
-            'create',
-            'show',
-            'destroy',
-        ]);
-
-        // Workspace Switching.
-        $workspaceRouter->get('workspaces/{workspace}/switch', 'SwitchWorkspaceController@switch')->name('workspaces.switch');
-
-        // Invitations.
-        $workspaceRouter->post('workspaces/invitations/{invitation}/accept', 'PendingInvitationController@accept')
-            ->name('workspaces.invitations.accept');
-        $workspaceRouter->post('workspaces/invitations/{invitation}/reject', 'PendingInvitationController@reject')
-            ->name('workspaces.invitations.reject');
-    });
-
     // Subscriptions
-    Route::name('subscriptions.')->namespace('Subscriptions')->prefix('subscriptions')->group(function () {
-        Route::get('unsubscribe/{messageHash}', 'SubscriptionsController@unsubscribe')->name('unsubscribe');
-        Route::get('subscribe/{messageHash}', 'SubscriptionsController@subscribe')->name('subscribe');
-        Route::put('subscriptions/{messageHash}', 'SubscriptionsController@update')->name('update');
+    $router->name('subscriptions.')->namespace('Subscriptions')->prefix('subscriptions')->group(static function (Router $subscriptionController) {
+        $subscriptionController->get('unsubscribe/{messageHash}', 'SubscriptionsController@unsubscribe')
+            ->name('unsubscribe');
+        $subscriptionController->get('subscribe/{messageHash}', 'SubscriptionsController@subscribe')->name('subscribe');
+        $subscriptionController->put('subscriptions/{messageHash}', 'SubscriptionsController@update')->name('update');
     });
 
     // Webview.
-    Route::prefix('webview')->name('webview.')->namespace('Webview')->group(static function (Router $webviewRouter) {
+    $router->name('webview.')->prefix('webview')->namespace('Webview')->group(static function (Router $webviewRouter) {
         $webviewRouter->get('{messageHash}', 'WebviewController@show')->name('show');
     });
-
 });

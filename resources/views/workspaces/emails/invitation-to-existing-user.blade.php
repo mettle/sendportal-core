@@ -2,7 +2,7 @@
 
 <br><br>
 
-{{__(':userName has invited you to join their workspace on Sendportal!', ['userName' => $invitation->workspace->owner->name])}}
+{{__(':userName has invited you to join their workspace on SendPortal!', ['userName' => $invitation->workspace->owner->name])}}
 
 <br><br>
 

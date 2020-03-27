@@ -29,7 +29,8 @@ class AwsWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('delivery', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertNotNull($message->refresh()->delivered_at);
     }
@@ -47,7 +48,8 @@ class AwsWebhooksTest extends TestCase
         $link = ['link' => $this->faker->url];
         $webhook = $this->resolveWebhook('click', $message->message_id, $link);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertEquals(1, $message->refresh()->click_count);
         $this->assertNotNull($message->clicked_at);
@@ -65,7 +67,8 @@ class AwsWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('open', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertEquals(1, $message->refresh()->open_count);
         $this->assertNotNull($message->opened_at);
@@ -82,7 +85,8 @@ class AwsWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('complaint', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertNotNull($message->refresh()->unsubscribed_at);
     }
@@ -99,7 +103,8 @@ class AwsWebhooksTest extends TestCase
         $bounceType = ['bounceType' => 'permanent'];
         $webhook = $this->resolveWebhook('bounce', $message->message_id, $bounceType);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertNotNull($message->refresh()->bounced_at);
     }

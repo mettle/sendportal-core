@@ -184,8 +184,17 @@ class MessageTenantRepository extends BaseTenantRepository
     {
         $intervalInSeconds = (int)$intervalInSeconds;
 
-        $query = \DB::table('messages')
-            ->select(\DB::raw('COUNT(*) as open_count, MIN(opened_at) as opened_at, FROM_UNIXTIME(MIN(UNIX_TIMESTAMP(opened_at) DIV '.$intervalInSeconds.') * '.$intervalInSeconds.') as period_start'))
+        $query = \DB::table('messages');
+
+        if ($this->usingMySQL()) {
+            $query->select(\DB::raw('COUNT(*) as open_count, MIN(opened_at) as opened_at, FROM_UNIXTIME(MIN(UNIX_TIMESTAMP(opened_at) DIV '.$intervalInSeconds.') * '.$intervalInSeconds.') as period_start'));
+        } elseif ($this->usingPostgres()) {
+            $query->select(\DB::raw("COUNT(*) as open_count, MIN(opened_at) as opened_at, round(extract('epoch' from opened_at) / $intervalInSeconds) * $intervalInSeconds as period_start"));
+        } else {
+            throw new \Exception('Invalid database driver');
+        }
+
+        $query
             ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
@@ -194,7 +203,7 @@ class MessageTenantRepository extends BaseTenantRepository
         if ($this->usingMySQL()) {
             $query->groupBy(\DB::raw("UNIX_TIMESTAMP(opened_at) DIV " . $intervalInSeconds));
         } elseif ($this->usingPostgres()) {
-            $query->groupBy(\DB::raw("round(extract('epoch' from timestamp) / ".$intervalInSeconds.")"));
+            $query->groupBy(\DB::raw("round(extract('epoch' from opened_at) / ".$intervalInSeconds.")"));
         } else {
             throw new \Exception('Invalid database driver');
         }

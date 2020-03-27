@@ -2,6 +2,10 @@
 
 namespace Sendportal\Base\Traits;
 
+use Illuminate\Database\MySqlConnection;
+use Illuminate\Database\PostgresConnection;
+use Illuminate\Support\Facades\DB;
+
 trait ResolvesDatabaseDriver
 {
     /**
@@ -11,7 +15,7 @@ trait ResolvesDatabaseDriver
      */
     public function usingMySQL(): bool
     {
-        return $this->getDatabaseDriver() === 'mysql';
+        return DB::connection() instanceof MySqlConnection;
     }
 
     /**
@@ -21,18 +25,6 @@ trait ResolvesDatabaseDriver
      */
     public function usingPostgres(): bool
     {
-        return $this->getDatabaseDriver() === 'pgsql';
-    }
-
-    /**
-     * Get the database driver.
-     *
-     * @return string
-     */
-    protected function getDatabaseDriver(): string
-    {
-        $connection = config('database.default');
-
-        return config('database.connections.'.$connection.'.driver');
+        return DB::connection() instanceof PostgresConnection;
     }
 }

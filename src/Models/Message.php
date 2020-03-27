@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Ramsey\Uuid\Uuid;
-use Sendportal\Automations\Models\AutomationSchedule;
+use Sendportal\Pro\Models\AutomationSchedule;
 
 class Message extends BaseModel
 {

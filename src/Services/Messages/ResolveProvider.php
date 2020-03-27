@@ -44,7 +44,7 @@ class ResolveProvider
      */
     protected function resolveAutomationProvider(Message $message): Provider
     {
-        if (! $automationSchedule = app(\Sendportal\Automations\Repositories\AutomationScheduleRepository::class)->find($message->source_id, ['automation_step.automation.provider.type'])) {
+        if (! $automationSchedule = app(\Sendportal\Pro\Repositories\AutomationScheduleRepository::class)->find($message->source_id, ['automation_step.automation.provider.type'])) {
             throw new \Exception('Unable to resolve automation schedule for message id=' . $message->id);
         }
 

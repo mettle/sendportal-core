@@ -57,6 +57,13 @@
                     <th>{{ __('Recipient') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
+                    <th>
+                        <button class="btn btn-xs btn-light" id="select-all">Select All</button>
+                        <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form" style="display: inline-block;">
+                            @csrf
+                            <button type="submit" class="btn btn-xs btn-light">{{ __('Send Selected') }}</button>
+                        </form>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -81,17 +88,20 @@
                             </td>
                             <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
                             <td>
-                                @include('messages.partials.status-row')
+                                @include('sendportal::messages.partials.status-row')
                             </td>
                             <td>
                                 @if ( ! $message->sent_at)
                                     <form action="{{ route('sendportal.messages.send') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $message->id }}">
-                                        <a href="{{ route('messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
-                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Send now') }}</button>
+                                        <a href="{{ route('sendportal.messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
+                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Send Now') }}</button>
                                     </form>
                                 @endif
+                            </td>
+                            <td>
+                                <input type="checkbox" name="messages[]" value="{{ $message->id }}" class="message-select" form="send-selected-form">
                             </td>
                         </tr>
                     @empty
@@ -107,5 +117,15 @@
     </div>
 
     @include('sendportal::layouts.partials.pagination', ['records' => $messages])
+
+    @push('js')
+        <script>
+            $(function () {
+                $('#select-all').click(function () {
+                    $('.message-select').prop('checked', true);
+                });
+            })
+        </script>
+    @endpush
 
 @endsection

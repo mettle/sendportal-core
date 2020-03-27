@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Carbon\Carbon;
@@ -7,36 +9,25 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\CampaignStatus;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
 
 class CampaignDispatchController extends Controller
 {
-    /**
-     * @var CampaignTenantInterface
-     */
+    /** @var CampaignTenantRepository */
     protected $campaigns;
 
-    /**
-     * CampaignsController constructor
-     *
-     * @param CampaignTenantInterface $campaigns
-     */
-    public function __construct(
-        CampaignTenantInterface $campaigns
-    ) {
+    public function __construct(CampaignTenantRepository $campaigns)
+    {
         $this->campaigns = $campaigns;
     }
 
     /**
-     * Dispatch the campaign
+     * Dispatch the campaign.
      *
-     * @param CampaignDispatchRequest $request
-     * @param $id
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function send(CampaignDispatchRequest $request, $id)
+    public function send(CampaignDispatchRequest $request, int $id): RedirectResponse
     {
         $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
 
@@ -44,18 +35,18 @@ class CampaignDispatchController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        if (! $campaign->provider_id) {
+        if (!$campaign->provider_id) {
             return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('Please select a Provider'));
         }
 
-        $scheduledAt = $request->get('schedule') == 'scheduled' ? Carbon::parse($request->get('scheduled_at')) : now();
+        $scheduledAt = $request->get('schedule') === 'scheduled' ? Carbon::parse($request->get('scheduled_at')) : now();
 
         $campaign->update([
-            'send_to_all' => $request->get('recipients') == 'send_to_all',
+            'send_to_all' => $request->get('recipients') === 'send_to_all',
             'scheduled_at' => $scheduledAt,
             'status_id' => CampaignStatus::STATUS_QUEUED,
-            'save_as_draft' => $request->get('behaviour') == 'draft',
+            'save_as_draft' => $request->get('behaviour') === 'draft',
         ]);
 
         $campaign->segments()->sync($request->get('segments'));

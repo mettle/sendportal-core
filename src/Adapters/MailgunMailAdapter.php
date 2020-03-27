@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
-use Sendportal\Base\Services\Messages\MessageTrackingOptions;
+use Illuminate\Support\Arr;
 use Mailgun\Mailgun;
 use Mailgun\Model\Message\SendResponse;
+use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 
 class MailgunMailAdapter extends BaseMailAdapter
 {
@@ -40,19 +41,19 @@ class MailgunMailAdapter extends BaseMailAdapter
             return $this->client;
         }
 
-        $this->client = Mailgun::create(\Arr::get($this->config, 'key'), $this->resolveZone());
+        $this->client = Mailgun::create(Arr::get($this->config, 'key'), $this->resolveZone());
 
         return $this->client;
     }
 
     protected function resolveDomain(): string
     {
-        return \Arr::get($this->config, 'domain');
+        return Arr::get($this->config, 'domain');
     }
 
     protected function resolveZone(): string
     {
-        return $this->urls[\Arr::get($this->config, 'zone', 'US')];
+        return $this->urls[Arr::get($this->config, 'zone', 'US')];
     }
 
     protected function resolveMessageId(SendResponse $result): string

@@ -1,45 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
 
 class CampaignDeleteController extends Controller
 {
-    /**
-     * @var CampaignTenantInterface
-     */
+    /** @var CampaignTenantRepository */
     protected $campaigns;
 
-    /**
-     * CampaignsController constructor
-     *
-     * @param CampaignTenantInterface $campaigns
-     */
-    public function __construct(
-        CampaignTenantInterface $campaigns
-    ) {
+    public function __construct(CampaignTenantRepository $campaigns)
+    {
         $this->campaigns = $campaigns;
     }
 
     /**
-     * Show a confirmation view prior to deletion
+     * Show a confirmation view prior to deletion.
      *
-     * @param $id
-     * @return Factory|RedirectResponse|View
+     * @return RedirectResponse|View
      * @throws Exception
      */
-    public function confirm($id)
+    public function confirm(int $id)
     {
         $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
 
-        if (! $campaign->draft) {
+        if (!$campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
@@ -48,17 +40,15 @@ class CampaignDeleteController extends Controller
     }
 
     /**
-     * Delete a campaign from the database
+     * Delete a campaign from the database.
      *
-     * @param Request $request
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $request->get('id'));
 
-        if (! $campaign->draft) {
+        if (!$campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }

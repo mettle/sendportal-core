@@ -1,24 +1,21 @@
 <?php
 
-namespace Sendportal\Base\Interfaces;
+declare(strict_types=1);
 
+namespace Sendportal\Base\Repositories\Campaigns;
+
+use Sendportal\Base\Interfaces\BaseTenantInterface;
 use Sendportal\Base\Models\Campaign;
 
-interface CampaignTenantInterface extends BaseTenantInterface
+interface CampaignTenantRepository extends BaseTenantInterface
 {
     /**
      * Get the average time it takes for a message to be opened once it has been delivered for the campaign.
-     *
-     * @param Campaign $campaign
-     * @return string
      */
     public function getAverageTimeToOpen(Campaign $campaign): string;
 
     /**
      * Get the average time it takes for a link to be clicked for the campaign.
-     *
-     * @param Campaign $campaign
-     * @return string
      */
     public function getAverageTimeToClick(Campaign $campaign): string;
 }

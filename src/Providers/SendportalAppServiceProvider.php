@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Providers;
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
-use Sendportal\Base\Interfaces\MessageTenantInterface;
-use Sendportal\Base\Repositories\MySQL\CampaignTenantRepository as MySQLCampaignTenantRepository;
-use Sendportal\Base\Repositories\Postgres\CampaignTenantRepository as PostgresCampaignTenantRepository;
-use Sendportal\Base\Repositories\MySQL\MessageTenantRepository as MySQLMessageTenantRepository;
-use Sendportal\Base\Repositories\Postgres\MessageTenantRepository as PostgresMessageTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\PostgresCampaignTenantRepository;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\MySqlMessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\PostgresMessageTenantRepository;
 use Sendportal\Base\Services\Helper;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 use Sendportal\Base\Traits\ResolvesDatabaseDriver;
-use Illuminate\Support\ServiceProvider;
 
 class SendportalAppServiceProvider extends ServiceProvider
 {
@@ -25,25 +28,27 @@ class SendportalAppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(CampaignTenantInterface::class, function ($app) {
+        // Campaign repository.
+        $this->app->bind(CampaignTenantRepository::class, function (Application $app) {
             if ($this->usingPostgres()) {
                 return $app->make(PostgresCampaignTenantRepository::class);
             }
 
-            return $app->make(MySQLCampaignTenantRepository::class);
+            return $app->make(MySqlCampaignTenantRepository::class);
         });
 
-        $this->app->bind(MessageTenantInterface::class, function ($app) {
+        // Message repository.
+        $this->app->bind(MessageTenantRepository::class, function (Application $app) {
             if ($this->usingPostgres()) {
                 return $app->make(PostgresMessageTenantRepository::class);
             }
 
-            return $app->make(MySQLMessageTenantRepository::class);
+            return $app->make(MySqlMessageTenantRepository::class);
         });
 
         $this->app->bind(EmailWebhookServiceInterface::class, EmailWebhookService::class);
 
-        $this->app->singleton('sendportal.helper', function() {
+        $this->app->singleton('sendportal.helper', function () {
             return new Helper();
         });
     }

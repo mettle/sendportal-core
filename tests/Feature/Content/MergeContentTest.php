@@ -8,9 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Services\Content\MergeContent;
 use Tests\TestCase;
 
@@ -25,6 +24,8 @@ class MergeContentTest extends TestCase
         // given
         $content = $this->faker->sentence;
         $message = $this->generateCampaignMessage($content);
+
+        $this->withoutExceptionHandling();
 
         // when
         $mergedContent = $this->mergeContent($message);

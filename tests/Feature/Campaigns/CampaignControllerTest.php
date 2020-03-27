@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
+use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
 
 class CampaignControllerTest extends TestCase
@@ -24,6 +24,8 @@ class CampaignControllerTest extends TestCase
         [$workspace, $user] = $this->createUserAndWorkspace();
 
         factory(Campaign::class, 3)->create(['workspace_id' => $workspace->id]);
+
+        $this->withoutExceptionHandling();
 
         // when
         $response = $this->actingAs($user)->get(route('sendportal.campaigns.index'));

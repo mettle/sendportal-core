@@ -1,42 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Subscriptions;
 
-use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriptionToggleRequest;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Sendportal\Base\Repositories\MessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepository;
 
 class SubscriptionsController extends Controller
 {
-    /**
-     * @var MessageTenantRepository
-     */
+    /** @var MessageTenantRepository */
     protected $messages;
 
-    /**
-     * SubscriptionsController constructor
-     *
-     * @param MessageTenantRepository $messages
-     */
     public function __construct(MessageTenantRepository $messages)
     {
         $this->messages = $messages;
     }
 
     /**
-     * Unsubscribe a subscriber
-     *
-     * @param string $messageHash
-     * @return Factory|View
-     * @throws Exception
+     * Unsubscribe a subscriber.
      */
-    public function unsubscribe($messageHash)
+    public function unsubscribe(string $messageHash): View
     {
         $message = Message::with('subscriber')->where('hash', $messageHash)->first();
 
@@ -44,12 +33,9 @@ class SubscriptionsController extends Controller
     }
 
     /**
-     * Subscribe a subscriber
-     *
-     * @param string $messageHash
-     * @return View
+     * Subscribe a subscriber.
      */
-    public function subscribe($messageHash)
+    public function subscribe(string $messageHash): View
     {
         $message = Message::with('subscriber')->where('hash', $messageHash)->first();
 
@@ -57,13 +43,9 @@ class SubscriptionsController extends Controller
     }
 
     /**
-     * Toggle subscriber subscription state
-     *
-     * @param SubscriptionToggleRequest $request
-     * @param string $messageHash
-     * @return RedirectResponse
+     * Toggle subscriber subscription state.
      */
-    public function update(SubscriptionToggleRequest $request, $messageHash)
+    public function update(SubscriptionToggleRequest $request, string $messageHash): RedirectResponse
     {
         $message = Message::where('hash', $messageHash)->first();
         $subscriber = $message->subscriber;

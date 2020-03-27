@@ -1,13 +1,13 @@
 <?php
 
-namespace Sendportal\Base\Repositories;
+namespace Sendportal\Base\Repositories\MySQL;
 
+use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Repositories\Queries\AverageTimeToClick;
-use Sendportal\Base\Repositories\Queries\AverageTimeToOpen;
+use Sendportal\Base\Repositories\BaseTenantRepository;
 use Sendportal\Base\Traits\SecondsToHms;
 
-class CampaignTenantRepository extends BaseTenantRepository
+class CampaignTenantRepository extends BaseTenantRepository implements CampaignTenantInterface
 {
     use SecondsToHms;
 
@@ -23,7 +23,7 @@ class CampaignTenantRepository extends BaseTenantRepository
     public function getAverageTimeToOpen(Campaign $campaign): string
     {
         $average = $campaign->opens()
-            ->selectRaw(AverageTimeToOpen::compile('average_time_to_open'))
+            ->selectRaw('ROUND(AVG(TIMESTAMPDIFF(SECOND, delivered_at, opened_at))) as average_time_to_open')
             ->value('average_time_to_open');
 
         return $average ? $this->secondsToHms($average) : 'N/A';
@@ -38,7 +38,7 @@ class CampaignTenantRepository extends BaseTenantRepository
     public function getAverageTimeToClick(Campaign $campaign): string
     {
         $average = $campaign->clicks()
-            ->selectRaw(AverageTimeToClick::compile('average_time_to_click'))
+            ->selectRaw('ROUND(AVG(TIMESTAMPDIFF(SECOND, delivered_at, clicked_at))) as average_time_to_click')
             ->value('average_time_to_click');
 
         return $average ? $this->secondsToHms($average) : 'N/A';

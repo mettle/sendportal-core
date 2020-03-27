@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repositories;
+namespace Tests\Unit\Repositories\Postgres;
 
 use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\Campaign;
@@ -10,11 +10,28 @@ use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class CampaignTenantRepositoryTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // TODO(david): This fails if you haven't previously used PGSQL as your testing database, because
+        //  it misses having the correct values seeded in the provider types table.
+        DB::setDefaultConnection('pgsql');
+    }
+
+    protected function tearDown(): void
+    {
+        DB::setDefaultConnection('mysql');
+
+        parent::tearDown();
+    }
 
     /** @test */
     function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
@@ -34,7 +51,7 @@ class CampaignTenantRepositoryTest extends TestCase
             'opened_at' => now()->addSeconds(60),
         ]);
 
-        $averageTimeToOpen = $this->app->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
+        $averageTimeToOpen = app()->make(CampaignTenantInterface::class)->getAverageTimeToOpen($campaign);
 
         // 45 seconds
         static::assertEquals('00:00:45', $averageTimeToOpen);
@@ -54,7 +71,7 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
-        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
+        [$workspace, $provider] = $this->createUserWithworkspaceAndProvider();
         $campaign = $this->createCampaign($workspace, $provider);
 
         // 30 seconds
@@ -77,7 +94,7 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
-        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
+        [$workspace, $provider] = $this->createUserWithworkspaceAndProvider();
         $campaign = $this->createCampaign($workspace, $provider);
 
         $averageTimeToClick = app()->make(CampaignTenantInterface::class)->getAverageTimeToClick($campaign);
@@ -88,12 +105,14 @@ class CampaignTenantRepositoryTest extends TestCase
     /**
      * @return array
      */
-    protected function createUserWithWorkspaceAndProvider(): array
+    protected function createUserWithworkspaceAndProvider(): array
     {
         $user = factory(User::class)->create();
+
         $workspace = factory(Workspace::class)->create([
             'owner_id' => $user->id,
         ]);
+
         $provider = factory(Provider::class)->create([
             'workspace_id' => $workspace->id,
         ]);

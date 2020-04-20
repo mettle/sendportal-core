@@ -2,14 +2,15 @@
 
 namespace Sendportal\Base\Services\Webhooks;
 
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
-use Sendportal\Automations\Models\AutomationSchedule;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\MessageFailure;
 use Sendportal\Base\Models\MessageUrl;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
+use Sendportal\Pro\Models\AutomationSchedule;
 
 class EmailWebhookService implements EmailWebhookServiceInterface
 {
@@ -185,7 +186,7 @@ class EmailWebhookService implements EmailWebhookServiceInterface
      */
     protected function resolveAutomationStepFromMessage(Message $message)
     {
-        if (\Sendportal\Base\Facades\Helper::isPro() && $message->source_type != AutomationSchedule::class) {
+        if (Helper::isPro() && $message->source_type != AutomationSchedule::class) {
             throw new \Exception('Unable to resolve source for message id=' . $message->id);
         }
 

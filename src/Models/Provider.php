@@ -4,7 +4,8 @@ namespace Sendportal\Base\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Sendportal\Automations\Models\Automation;
+use Sendportal\Base\Facades\Helper;
+use Sendportal\Pro\Models\Automation;
 
 class Provider extends BaseModel
 {
@@ -68,7 +69,7 @@ class Provider extends BaseModel
      */
     public function getInUseAttribute()
     {
-        if  (\Sendportal\Base\Facades\Helper::isPro()) {
+        if  (Helper::isPro()) {
             return $this->campaigns()->count() + $this->automations()->count();
         }
 

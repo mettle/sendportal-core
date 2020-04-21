@@ -141,7 +141,7 @@ class AwsWebhooksController extends Controller
         $this->emailWebhookService->handleDelivery($messageId, $timestamp);
     }
 
-    protected function handleComplaint(string $messageId, array $event): void
+    private function handleComplaint(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html#complaint-object
         // $complaint = \Arr::get($event, 'complaint');
@@ -161,7 +161,7 @@ class AwsWebhooksController extends Controller
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
 
-    protected function handleBounce(string $messageId, array $event): void
+    private function handleBounce(string $messageId, array $event): void
     {
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html#bounce-object
         $bounceType = Arr::get($event, 'bounce.bounceType');

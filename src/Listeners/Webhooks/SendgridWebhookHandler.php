@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Sendportal\Base\Events\Webhooks\SendgridWebhookEvent;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
@@ -31,29 +32,58 @@ class SendgridWebhookHandler implements ShouldQueue
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
-        $method = 'handle' . Str::studly(Str::slug($eventName, ''));
+        Log::info('Processing SendGrid webhook.', ['type' => $eventName, 'message_id' => $messageId]);
 
-        if (method_exists($this, $method)) {
-            Log::info('SendGrid webhook processing type=' . $eventName . ' message_id=' . $messageId);
+        switch ($eventName) {
+            case 'delivered':
+                $this->handleDelivered($messageId, $event->payload);
+                break;
 
-            $this->{$method}($messageId, $event->payload);
+            case 'open':
+                $this->handleOpen($messageId, $event->payload);
+                break;
+
+            case 'click':
+                $this->handleClick($messageId, $event->payload);
+                break;
+
+            case 'spamreport':
+                $this->handleSpamreport($messageId, $event->payload);
+                break;
+
+            case 'dropped':
+                $this->handleDropped($messageId, $event->payload);
+                break;
+
+            case 'deferred':
+                $this->handleDeferred($messageId, $event->payload);
+                break;
+
+            case 'bounce':
+                $this->handleBounce($messageId, $event->payload);
+                break;
+
+            case 'blocked':
+                $this->handleBlocked($messageId, $event->payload);
+                break;
+
+            case 'unsubscribe':
+                $this->handleUnsubscribe($messageId, $event->payload);
+                break;
+
+            default:
+                throw new RuntimeException("Unknown Sendgrid webhook event type '{$eventName}'.");
         }
     }
 
-    /**
-     * Handle an email delivery event.
-     */
-    protected function handleDelivered(string $messageId, array $content): void
+    private function handleDelivered(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleDelivery($messageId, $timestamp);
     }
 
-    /**
-     * Handle an email open event.
-     */
-    protected function handleOpen(string $messageId, array $content): void
+    private function handleOpen(string $messageId, array $content): void
     {
         $ipAddress = Arr::get($content, 'ip');
         $timestamp = $this->extractTimestamp($content);
@@ -61,10 +91,7 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
     }
 
-    /**
-     * Handle an email click event.
-     */
-    protected function handleClick(string $messageId, array $content): void
+    private function handleClick(string $messageId, array $content): void
     {
         $url = Arr::get($content, 'url');
         $timestamp = $this->extractTimestamp($content);
@@ -72,20 +99,14 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handleClick($messageId, $timestamp, $url);
     }
 
-    /**
-     * Handle an email complained event.
-     */
-    protected function handleSpamreport(string $messageId, array $content): void
+    private function handleSpamreport(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
 
-    /*
-     * Handle dropped event
-     */
-    protected function handleDropped(string $messageId, array $content): void
+    private function handleDropped(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
         $description = Arr::get($content, 'reason');
@@ -95,10 +116,7 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
     }
 
-    /*
-     * Handle deferred event
-     */
-    protected function handleDeferred(string $messageId, array $content): void
+    private function handleDeferred(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
         $description = Arr::get($content, 'response');
@@ -106,10 +124,7 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handleFailure($messageId, 'Temporary', $description, $timestamp);
     }
 
-    /*
-     * Handle bounce event
-     */
-    protected function handleBounce(string $messageId, array $content): void
+    private function handleBounce(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
         $description = Arr::get($content, 'reason');
@@ -119,10 +134,7 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
     }
 
-    /*
-     * Handle blocked event
-     */
-    protected function handleBlocked(string $messageId, array $content): void
+    private function handleBlocked(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
         $description = Arr::get($content, 'response');
@@ -130,41 +142,26 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handleFailure($messageId, 'Temporary', $description, $timestamp);
     }
 
-    /*
-     * Handle unsubscribe event
-     */
-    protected function handleUnsubscribe(string $messageId, array $content): void
+    private function handleUnsubscribe(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
 
-    /**
-     * Extract the event name from the payload.
-     */
-    protected function extractEventName(array $payload): string
+    private function extractEventName(array $payload): string
     {
         return Arr::get($payload, 'event');
     }
 
-    /**
-     * Extract the message ID from the payload.
-     */
-    protected function extractMessageId(array $payload): string
+    private function extractMessageId(array $payload): string
     {
         $messageId = Arr::get($payload, 'sg_message_id');
 
         return trim(Str::before($messageId, '.'));
     }
 
-    /**
-     * Resolve the timestamp
-     *
-     * @param array $payload
-     * @return Carbon
-     */
-    protected function extractTimestamp($payload)
+    private function extractTimestamp($payload): Carbon
     {
         return Carbon::createFromTimestamp(Arr::get($payload, 'timestamp'));
     }

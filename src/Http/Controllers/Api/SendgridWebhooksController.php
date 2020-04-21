@@ -13,18 +13,17 @@ class SendgridWebhooksController extends Controller
 {
     public function handle(): Response
     {
-        /** @var array $payload */
-        $payload = json_decode(request()->getContent(), true);
+        $payload = collect(json_decode(request()->getContent(), true));
 
         Log::info('SendGrid webhook received');
 
-        $event = collect($payload)->first();
-
-        if (!$event) {
+        if ($payload->isEmpty()) {
             return response('OK (not processed');
         }
 
-        event(new SendgridWebhookEvent($event));
+        foreach ($payload as $event) {
+            event(new SendgridWebhookEvent($event));
+        }
 
         return response('OK');
     }

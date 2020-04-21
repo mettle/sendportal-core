@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use RuntimeException;
 use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
@@ -27,33 +27,46 @@ class PostmarkWebhookHandler implements ShouldQueue
 
     public function handle(PostmarkWebhookEvent $event): void
     {
-        // https://sendgrid.com/docs/for-developers/tracking-events/event/#events
+        // https://postmarkapp.com/developer/webhooks/webhooks-overview
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
-        $method = 'handle' . Str::studly(Str::slug($eventName, ''));
+        Log::info('Processing Postmark webhook.', ['type' => $eventName, 'message_id' => $messageId]);
 
-        if (method_exists($this, $method)) {
-            Log::info('postmark webhook processing type=' . $eventName . ' message_id=' . $messageId);
+        switch ($eventName) {
+            case 'Delivery':
+                $this->handleDelivery($messageId, $event->payload);
+                break;
 
-            $this->{$method}($messageId, $event->payload);
+            case 'Open':
+                $this->handleOpen($messageId, $event->payload);
+                break;
+
+            case 'Click':
+                $this->handleClick($messageId, $event->payload);
+                break;
+
+            case 'SpamComplaint':
+                $this->handleSpamComplaint($messageId, $event->payload);
+                break;
+
+            case 'Bounce':
+                $this->handleBounce($messageId, $event->payload);
+                break;
+
+            default:
+                throw new RuntimeException("Unknown Postmark webhook event type '{$eventName}'.");
         }
     }
 
-    /**
-     * Handle an email delivery event.
-     */
-    protected function handleDelivery(string $messageId, array $content): void
+    private function handleDelivery(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content, 'DeliveredAt');
 
         $this->emailWebhookService->handleDelivery($messageId, $timestamp);
     }
 
-    /**
-     * Handle an email open event.
-     */
-    protected function handleOpen(string $messageId, array $content): void
+    private function handleOpen(string $messageId, array $content): void
     {
         $ipAddress = Arr::get($content, 'Geo.IP');
         $timestamp = $this->extractTimestamp($content);
@@ -61,10 +74,7 @@ class PostmarkWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
     }
 
-    /**
-     * Handle an email click event.
-     */
-    protected function handleClick(string $messageId, array $content): void
+    private function handleClick(string $messageId, array $content): void
     {
         $url = Arr::get($content, 'OriginalLink');
         $timestamp = $this->extractTimestamp($content);
@@ -72,20 +82,14 @@ class PostmarkWebhookHandler implements ShouldQueue
         $this->emailWebhookService->handleClick($messageId, $timestamp, $url);
     }
 
-    /**
-     * Handle an email complained event.
-     */
-    protected function handleSpamComplaint(string $messageId, array $content): void
+    private function handleSpamComplaint(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content, 'BouncedAt');
 
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
 
-    /*
-     * Handle bounce event
-     */
-    protected function handleBounce(string $messageId, array $content): void
+    private function handleBounce(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content, 'BouncedAt');
         $description = Arr::get($content, 'Description');
@@ -105,7 +109,7 @@ class PostmarkWebhookHandler implements ShouldQueue
      * Determine if the bounce is permanent
      * https://postmarkapp.com/developer/api/bounce-api#bounce-types
      */
-    protected function resolveBounceTypePermanent(string $bounceType): bool
+    private function resolveBounceTypePermanent(string $bounceType): bool
     {
         return in_array(
             $bounceType,
@@ -123,26 +127,17 @@ class PostmarkWebhookHandler implements ShouldQueue
         );
     }
 
-    /**
-     * Extract the event name from the payload.
-     */
-    protected function extractEventName(array $payload): string
+    private function extractEventName(array $payload): string
     {
         return Arr::get($payload, 'RecordType');
     }
 
-    /**
-     * Extract the message ID from the payload.
-     */
-    protected function extractMessageId(array $payload): string
+    private function extractMessageId(array $payload): string
     {
         return trim(Arr::get($payload, 'MessageID'));
     }
 
-    /**
-     * Resolve the timestamp
-     */
-    protected function extractTimestamp(array $payload, string $field = 'ReceivedAt'): Carbon
+    private function extractTimestamp(array $payload, string $field = 'ReceivedAt'): Carbon
     {
         return Carbon::parse(Arr::get($payload, $field));
     }

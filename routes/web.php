@@ -24,7 +24,8 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
 
             // Profile.
             $authRouter->name('profile.')->prefix('profile')->group(static function (Router $profileRouter) {
-                $profileRouter->get('/', 'ProfileController@edit')->name('edit');
+                $profileRouter->get('/', 'ProfileController@show')->name('show');
+                $profileRouter->get('/edit', 'ProfileController@edit')->name('edit');
                 $profileRouter->put('/', 'ProfileController@update')->name('update');
             });
         });

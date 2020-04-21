@@ -19,6 +19,7 @@ class NewUserInvitationTest extends TestCase
     /** @test */
     function a_new_user_can_register_with_an_invitation_to_an_existing_workspace()
     {
+        $this->withoutEvents();
         // NOTE(david): if this fails, you probably need to set ENABLE_REGISTER=true in the .env.testing file.
 
         // given

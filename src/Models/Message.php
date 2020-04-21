@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Ramsey\Uuid\Uuid;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Pro\Models\AutomationSchedule;
 
 class Message extends BaseModel
@@ -69,7 +70,7 @@ class Message extends BaseModel
      */
     public function isAutomation(): bool
     {
-        return \Sendportal\Base\Facades\Helper::isPro() && $this->source_type === AutomationSchedule::class;
+        return Helper::isPro() && $this->source_type === AutomationSchedule::class;
     }
 
     /**
@@ -93,7 +94,7 @@ class Message extends BaseModel
             return 'Campaign';
         }
 
-        if (\Sendportal\Base\Facades\Helper::isPro() && $this->source_type === AutomationSchedule::class) {
+        if (Helper::isPro() && $this->source_type === AutomationSchedule::class) {
             return 'Automation';
         }
 

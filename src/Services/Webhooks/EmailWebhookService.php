@@ -9,12 +9,12 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
-use Sendportal\Automations\Models\AutomationSchedule;
 use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\MessageFailure;
 use Sendportal\Base\Models\MessageUrl;
 use Sendportal\Base\Models\UnsubscribeEventType;
+use Sendportal\Pro\Models\AutomationSchedule;
 
 class EmailWebhookService
 {

@@ -4,37 +4,43 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Listeners\Webhooks;
 
-use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use RuntimeException;
 use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
-use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
-use Carbon\Carbon;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
 
 class MailgunWebhookHandler implements ShouldQueue
 {
     /** @var string */
     public $queue = 'webhook-process';
 
-    /** @var EmailWebhookServiceInterface */
+    /** @var EmailWebhookService */
     private $emailWebhookService;
 
     /** @var WebhookVerifier */
     private $verifier;
 
     public function __construct(
-        EmailWebhookServiceInterface $emailWebhookService,
+        EmailWebhookService $emailWebhookService,
         WebhookVerifier $verifier
     ) {
         $this->emailWebhookService = $emailWebhookService;
         $this->verifier = $verifier;
     }
 
+    /**
+     * @throws Exception
+     */
     public function handle(MailgunWebhookEvent $event): void
     {
+        // https://documentation.mailgun.com/en/latest/user_manual.html#events
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
@@ -43,19 +49,35 @@ class MailgunWebhookHandler implements ShouldQueue
             return;
         }
 
-        $method = 'handle' . Str::studly(Str::slug($eventName, ''));
+        Log::info('Processing Mailgun webhook.', ['type' => $eventName, 'message_id' => $messageId]);
 
-        if (method_exists($this, $method)) {
-            Log::info('Mailgun webhook processing type=' . $eventName . ' message_id=' . $messageId);
+        switch ($eventName) {
+            case 'delivered':
+                $this->handleDelivered($messageId, $event->payload);
+                break;
 
-            $this->{$method}($messageId, $event->payload);
+            case 'opened':
+                $this->handleOpened($messageId, $event->payload);
+                break;
+
+            case 'clicked':
+                $this->handleClicked($messageId, $event->payload);
+                break;
+
+            case 'complained':
+                $this->handleComplained($messageId, $event->payload);
+                break;
+
+            case 'failed':
+                $this->handleFailed($messageId, $event->payload);
+                break;
+
+            default:
+                throw new RuntimeException("Unknown Mailgun webhook event type '{$eventName}'.");
         }
     }
 
-    /**
-     * Handle an email delivery event.
-     */
-    protected function handleDelivered(string $messageId, array $content): void
+    private function handleDelivered(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
 
@@ -63,43 +85,37 @@ class MailgunWebhookHandler implements ShouldQueue
     }
 
     /**
-     * Handle an email open event.
+     * @throws Exception
      */
-    protected function handleOpened(string $messageId, array $content): void
+    private function handleOpened(string $messageId, array $content): void
     {
-        $ipAddress = \Arr::get($content, 'event-data.ip');
+        $ipAddress = Arr::get($content, 'event-data.ip');
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleOpen($messageId, $timestamp, $ipAddress);
     }
 
     /**
-     * Handle an email click event.
+     * @throws Exception
      */
-    protected function handleClicked(string $messageId, array $content): void
+    private function handleClicked(string $messageId, array $content): void
     {
-        $url = \Arr::get($content, 'event-data.url');
+        $url = Arr::get($content, 'event-data.url');
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleClick($messageId, $timestamp, $url);
     }
 
-    /**
-     * Handle an email complained event.
-     */
-    protected function handleComplained(string $messageId, array $content): void
+    private function handleComplained(string $messageId, array $content): void
     {
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
     }
 
-    /**
-     * Handle an email failed event.
-     */
-    protected function handleFailed(string $messageId, array $content): void
+    private function handleFailed(string $messageId, array $content): void
     {
-        $severity = \Arr::get($content, 'event-data.severity');
+        $severity = Arr::get($content, 'event-data.severity');
         $description = $this->extractFailureDescription($content);
         $timestamp = $this->extractTimestamp($content);
 
@@ -110,26 +126,20 @@ class MailgunWebhookHandler implements ShouldQueue
         }
     }
 
-    /**
-     * Extract the event name from the payload.
-     */
-    protected function extractEventName(array $payload): string
+    private function extractEventName(array $payload): string
     {
-        return \Arr::get($payload, 'event-data.event');
+        return Arr::get($payload, 'event-data.event');
     }
 
-    /**
-     * Extract the message ID from the payload.
-     */
-    protected function extractMessageId(array $payload): string
+    private function extractMessageId(array $payload): string
     {
-        return $this->formatMessageId(\Arr::get($payload, 'event-data.message.headers.message-id'));
+        return $this->formatMessageId(Arr::get($payload, 'event-data.message.headers.message-id'));
     }
 
     /**
      * Prepend/append crocodiles to message ID.
      */
-    protected function formatMessageId(string $messageId): string
+    private function formatMessageId(string $messageId): string
     {
         $messageId = strpos($messageId, '<') === 0
             ? $messageId
@@ -138,27 +148,18 @@ class MailgunWebhookHandler implements ShouldQueue
         return trim($messageId);
     }
 
-    /**
-     * Resolve the timestamp
-     *
-     * @param array $payload
-     * @return Carbon
-     */
-    protected function extractTimestamp($payload)
+    private function extractTimestamp($payload): Carbon
     {
-        return Carbon::createFromTimestamp(\Arr::get($payload, 'event-data.timestamp'));
+        return Carbon::createFromTimestamp(Arr::get($payload, 'event-data.timestamp'));
     }
 
-    /**
-     * Resolve the failure description/message.
-     */
-    protected function extractFailureDescription(array $payload): string
+    private function extractFailureDescription(array $payload): string
     {
-        if ($description = \Arr::get($payload, 'event-data.delivery-status.description')) {
+        if ($description = Arr::get($payload, 'event-data.delivery-status.description')) {
             return $description;
         }
 
-        if ($message = \Arr::get($payload, 'event-data.delivery-status.message')) {
+        if ($message = Arr::get($payload, 'event-data.delivery-status.message')) {
             return $message;
         }
 
@@ -166,7 +167,7 @@ class MailgunWebhookHandler implements ShouldQueue
     }
 
     /**
-     * Check that the webhook is valid and that we should process it.
+     * Validate that the webhook came from Mailgun.
      */
     private function checkWebhookValidity(string $messageId, array $payload): bool
     {

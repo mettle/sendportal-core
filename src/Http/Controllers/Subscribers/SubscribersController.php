@@ -1,17 +1,19 @@
 <?php
 
-namespace Sendportal\Base\Http\Controllers;
+declare(strict_types=1);
+
+namespace Sendportal\Base\Http\Controllers\Subscribers;
 
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
 use Box\Spout\Writer\Exception\WriterNotOpenedException;
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Sendportal\Base\Events\SubscriberAddedEvent;
+use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriberRequest;
 use Sendportal\Base\Models\UnsubscribeEventType;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
@@ -20,22 +22,12 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubscribersController extends Controller
 {
-    /**
-     * @var SubscriberTenantRepository
-     */
-    protected $subscriberRepo;
+    /** @var SubscriberTenantRepository */
+    private $subscriberRepo;
 
-    /**
-     * @var SegmentTenantRepository
-     */
-    protected $segmentRepo;
+    /** @var SegmentTenantRepository */
+    private $segmentRepo;
 
-    /**
-     * SubscribersController constructor.
-     *
-     * SubscribersController constructor.
-     * @param SubscriberTenantRepository $subscriberRepo
-     */
     public function __construct(SubscriberTenantRepository $subscriberRepo, SegmentTenantRepository $segmentRepo)
     {
         $this->subscriberRepo = $subscriberRepo;
@@ -43,21 +35,20 @@ class SubscribersController extends Controller
     }
 
     /**
-     * @return Factory|View
      * @throws Exception
      */
-    public function index()
+    public function index(): View
     {
-        $subscribers = $this->subscriberRepo->paginate(auth()->user()->currentWorkspace()->id, 'email', [], 50, request()->all());
+        $subscribers = $this->subscriberRepo->paginate(auth()->user()->currentWorkspace()->id, 'email', [], 50,
+            request()->all());
 
         return view('sendportal::subscribers.index', compact('subscribers'));
     }
 
     /**
-     * @return Factory|View
      * @throws Exception
      */
-    public function create()
+    public function create(): View
     {
         $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
         $selectedSegments = [];
@@ -66,11 +57,9 @@ class SubscribersController extends Controller
     }
 
     /**
-     * @param SubscriberRequest $request
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function store(SubscriberRequest $request)
+    public function store(SubscriberRequest $request): RedirectResponse
     {
         $data = $request->all();
         $data['unsubscribed_at'] = $request->has('subscribed') ? null : now();
@@ -84,24 +73,20 @@ class SubscribersController extends Controller
     }
 
     /**
-     * @return Factory|View
      * @throws Exception
      */
-    public function show(int $id)
+    public function show(int $id): View
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id, ['segments', 'messages.source']);
+        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id,
+            ['segments', 'messages.source']);
 
         return view('sendportal::subscribers.show', compact('subscriber'));
     }
 
     /**
-     * Edit a single subscriber
-     *
-     * @param int $id
-     * @return Factory|View
      * @throws Exception
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
         $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
@@ -111,14 +96,9 @@ class SubscribersController extends Controller
     }
 
     /**
-     * Update a single subscriber
-     *
-     * @param SubscriberRequest $request
-     * @param int $id
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function update(SubscriberRequest $request, int $id)
+    public function update(SubscriberRequest $request, int $id): RedirectResponse
     {
         $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
         $data = $request->all();

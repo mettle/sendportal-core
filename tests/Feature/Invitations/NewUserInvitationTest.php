@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Invitations;
 
-use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Models\Invitation;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
 
 class NewUserInvitationTest extends TestCase
@@ -31,14 +31,16 @@ class NewUserInvitationTest extends TestCase
         $postData = [
             'name' => $this->faker->name,
             'email' => $invitation->email,
-            'password' => $this->faker->password,
+            'password' => $this->faker->password(8),
             'invitation' => $invitation->token
         ];
 
         // when
-        $this->post(route('register'), $postData);
+        $response = $this->post(route('register'), $postData);
 
         // then
+        $response->assertSessionHasNoErrors();
+
         /** @var User $user */
         $user = User::where('email', $postData['email'])->first();
 

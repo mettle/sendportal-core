@@ -90,7 +90,7 @@
                             @endif
                         </td>
                         <td>
-                            @include('messages.partials.status-row')
+                            @include('sendportal::messages.partials.status-row')
                         </td>
                     </tr>
                 @empty

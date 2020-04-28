@@ -30,20 +30,16 @@ class SubscriberRequest extends FormRequest
                 'max:255',
                 'unique:subscribers,email,' . $this->subscriber . ',id,workspace_id, ' . auth()->user()->currentWorkspace()->id
             ],
-                'first_name' => [
-                    'max:255',
+            'first_name' => [
+                'max:255',
             ],
-            [
-                'last_name' => [
-                    'max:255',
-                ],
+            'last_name' => [
+                'max:255',
             ],
-            [
-                'segments' => [
-                    'nullable',
-                    'array',
-                ],
-            ]
+            'segments' => [
+                'nullable',
+                'array',
+            ],
         ];
     }
 }

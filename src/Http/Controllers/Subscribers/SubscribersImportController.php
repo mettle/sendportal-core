@@ -1,6 +1,6 @@
 <?php
 
-namespace Sendportal\Base\Http\Controllers;
+namespace Sendportal\Base\Http\Controllers\Subscribers;
 
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscribersImportRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Services\Subscribers\ImportSubscriberService;

@@ -27,16 +27,6 @@ class CampaignReportsControllerTest extends TestCase
         $response->assertOk();
     }
 
-    private function getCampaignAndUser(): array
-    {
-        [$workspace, $user] = $this->createUserAndWorkspace();
-        $campaign = factory(Campaign::class)
-            ->state('sent')
-            ->create(['workspace_id' => $workspace->id]);
-
-        return [$campaign, $user];
-    }
-
     /** @test */
     function sent_campaign_recipients_are_accessible_by_authenticated_users()
     {
@@ -100,5 +90,15 @@ class CampaignReportsControllerTest extends TestCase
 
         // then
         $response->assertOk();
+    }
+
+    private function getCampaignAndUser(): array
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $campaign = factory(Campaign::class)
+            ->state('sent')
+            ->create(['workspace_id' => $workspace->id]);
+
+        return [$campaign, $user];
     }
 }

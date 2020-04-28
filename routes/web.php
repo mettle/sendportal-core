@@ -15,20 +15,23 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
 
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('sendportal.')->group(static function (Router $router) {
 
+    // Auth.
+    $router->middleware('auth')->namespace('Auth')->group(static function (Router $authRouter) {
+        // Logout.
+        $authRouter->get('logout', 'LoginController@logout')->name('sendportal.logout');
+
+        // Profile.
+        $authRouter->middleware('verified')->name('profile.')->prefix('profile')->group(static function (
+            Router $profileRouter
+        ) {
+            $profileRouter->get('/', 'ProfileController@show')->name('show');
+            $profileRouter->get('/edit', 'ProfileController@edit')->name('edit');
+            $profileRouter->put('/', 'ProfileController@update')->name('update');
+        });
+    });
+
     // App.
     $router->middleware(['auth', 'verified'])->group(static function (Router $appRouter) {
-        // Auth.
-        $appRouter->namespace('Auth')->group(static function (Router $authRouter) {
-            // Logout.
-            $authRouter->get('logout', 'LoginController@logout')->name('sendportal.logout');
-
-            // Profile.
-            $authRouter->name('profile.')->prefix('profile')->group(static function (Router $profileRouter) {
-                $profileRouter->get('/', 'ProfileController@show')->name('show');
-                $profileRouter->get('/edit', 'ProfileController@edit')->name('edit');
-                $profileRouter->put('/', 'ProfileController@update')->name('update');
-            });
-        });
 
         // Dashboard.
         $appRouter->get('dashboard', 'DashboardController@index')->name('dashboard');
@@ -108,12 +111,14 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         });
 
         // Subscribers.
-        $appRouter->name('subscribers.')->prefix('subscribers')->group(static function (Router $subscriberRouter) {
+        $appRouter->name('subscribers.')->prefix('subscribers')->namespace('Subscribers')->group(static function (
+            Router $subscriberRouter
+        ) {
             $subscriberRouter->get('export', 'SubscribersController@export')->name('export');
             $subscriberRouter->get('import', 'SubscribersImportController@show')->name('import');
             $subscriberRouter->post('import', 'SubscribersImportController@store')->name('import.store');
         });
-        $appRouter->resource('subscribers', 'SubscribersController');
+        $appRouter->resource('subscribers', 'Subscribers\SubscribersController');
 
         // Templates.
         $appRouter->resource('templates', 'TemplatesController')->except(['show']);

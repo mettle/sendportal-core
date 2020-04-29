@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/** @var Factory $factory */
+
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
+use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Workspace;
-use Faker\Generator as Faker;
 
-$factory->define(Subscriber::class, function (Faker $faker) {
+$factory->define(Subscriber::class, static function (Faker $faker) {
     return [
         'workspace_id' => factory(Workspace::class),
         'hash' => $faker->uuid,
@@ -14,10 +20,7 @@ $factory->define(Subscriber::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Subscriber::class, 'segmented', function (Faker $faker) {
-    return [];
-});
 
-$factory->afterCreatingState(Subscriber::class, 'segmented', function ($subscriber, $faker) {
-    $subscriber->segments()->saveMany(factory(\Sendportal\Base\Models\Segment::class, 2)->make());
+$factory->afterCreatingState(Subscriber::class, 'segmented', static function (Subscriber $subscriber) {
+    $subscriber->segments()->saveMany(factory(Segment::class, 2)->make());
 });

@@ -83,7 +83,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         });
 
         // Segments.
-        $appRouter->resource('segments', 'SegmentsController');
+        $appRouter->resource('segments', 'Segments\SegmentsController')->except(['show', 'destroy']);
 
         // Settings.
         $appRouter->prefix('settings')->group(static function (Router $settingsRouter) {

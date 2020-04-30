@@ -1,49 +1,39 @@
 <?php
 
-namespace Sendportal\Base\Http\Controllers;
+declare(strict_types=1);
+
+namespace Sendportal\Base\Http\Controllers\Providers;
 
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\ProviderStoreRequest;
 use Sendportal\Base\Http\Requests\ProviderUpdateRequest;
 use Sendportal\Base\Repositories\ProviderTenantRepository;
 
 class ProvidersController extends Controller
 {
-    /**
-     * @var ProviderTenantRepository
-     */
-    protected $providers;
+    /** @var ProviderTenantRepository */
+    private $providers;
 
-    /**
-     * ProviderController constructor.
-     *
-     * @param ProviderTenantRepository $providers
-     */
-    public function __construct(
-        ProviderTenantRepository $providers
-    ) {
+    public function __construct(ProviderTenantRepository $providers)
+    {
         $this->providers = $providers;
     }
 
     /**
-     * @return Factory|View
      * @throws Exception
      */
-    public function index()
+    public function index(): View
     {
         $providers = $this->providers->all(auth()->user()->currentWorkspace()->id);
 
         return view('sendportal::providers.index', compact('providers'));
     }
 
-    /**
-     * @return Factory|View
-     */
-    public function create()
+    public function create(): View
     {
         $providerTypes = $this->providers->getProviderTypes()->pluck('name', 'id');
 
@@ -51,7 +41,6 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      * @throws Exception
      */
     public function store(ProviderStoreRequest $request): RedirectResponse
@@ -70,10 +59,9 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @return Factory|View
      * @throws Exception
      */
-    public function edit(int $providerId)
+    public function edit(int $providerId): View
     {
         $providerTypes = $this->providers->getProviderTypes()->pluck('name', 'id');
         $provider = $this->providers->find(auth()->user()->currentWorkspace()->id, $providerId);
@@ -83,7 +71,6 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      * @throws Exception
      */
     public function update(ProviderUpdateRequest $request, int $providerId): RedirectResponse
@@ -93,6 +80,7 @@ class ProvidersController extends Controller
         $settings = $request->get('settings');
 
         $provider->name = $request->name;
+        $provider->type_id = $request->type_id;
         $provider->settings = $settings;
         $provider->save();
 
@@ -100,7 +88,6 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      * @throws Exception
      */
     public function delete(int $providerId): RedirectResponse

@@ -10,7 +10,7 @@
         @slot('cardHeader', __('Edit Provider'))
 
         @slot('cardBody')
-            {!! Form::open(['method' => 'post', 'class' => 'form-horizontal', 'route' => ['sendportal.providers.update', $provider->id]]) !!}
+            {!! Form::open(['method' => 'PUT', 'class' => 'form-horizontal', 'route' => ['sendportal.providers.update', $provider->id]]) !!}
 
             {!! Form::textField('name', __('Name'), $provider->name) !!}
 

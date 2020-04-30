@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,9 +11,7 @@ use Sendportal\Pro\Models\Automation;
 
 class Provider extends BaseModel
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $fillable = [
         'name',
         'type_id',
@@ -19,60 +19,45 @@ class Provider extends BaseModel
     ];
 
     /**
-     * ProviderType relationship
-     *
-     * @param null
-     * @return BelongsTo
+     * The type of this provider.
      */
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(ProviderType::class, 'type_id');
     }
 
     /**
-     * Campaigns relationship
-     *
-     * @return HasMany
+     * Campaigns using this provider.
      */
-    public function campaigns()
+    public function campaigns(): HasMany
     {
         return $this->hasMany(Campaign::class, 'provider_id');
     }
 
     /**
-     * @return HasMany
+     * Automations using this provider.
      */
-    public function automations()
+    public function automations(): HasMany
     {
         return $this->hasMany(Automation::class, 'provider_id');
     }
 
-    /**
-     * @param array $data
-     */
-    public function setSettingsAttribute(array $data)
+    public function setSettingsAttribute(array $data): void
     {
         $this->attributes['settings'] = encrypt(json_encode($data));
     }
 
-    /**
-     * @param $value
-     * @return string
-     */
-    public function getSettingsAttribute($value)
+    public function getSettingsAttribute(string $value): array
     {
         return json_decode(decrypt($value), true);
     }
 
-    /**
-     * Determine whether or not the provider is currently used by an automation or campaign.
-     */
-    public function getInUseAttribute()
+    public function getInUseAttribute(): bool
     {
         if  (Helper::isPro()) {
-            return $this->campaigns()->count() + $this->automations()->count();
+            return (bool)$this->campaigns()->count() + $this->automations()->count();
         }
 
-        return $this->campaigns()->count();
+        return (bool)$this->campaigns()->count();
     }
 }

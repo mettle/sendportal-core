@@ -72,13 +72,13 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         });
 
         // Providers.
-        $appRouter->name('providers.')->prefix('providers')->group(static function (Router $providerRouter) {
+        $appRouter->name('providers.')->prefix('providers')->namespace('Providers')->group(static function (Router $providerRouter) {
             $providerRouter->get('/', 'ProvidersController@index')->name('index');
             $providerRouter->get('create', 'ProvidersController@create')->name('create');
             $providerRouter->get('type/{id}', 'ProvidersController@providersTypeAjax')->name('ajax');
             $providerRouter->post('/', 'ProvidersController@store')->name('store');
             $providerRouter->get('{id}/edit', 'ProvidersController@edit')->name('edit');
-            $providerRouter->post('{id}', 'ProvidersController@update')->name('update');
+            $providerRouter->put('{id}', 'ProvidersController@update')->name('update');
             $providerRouter->delete('{id}', 'ProvidersController@delete')->name('delete');
         });
 

@@ -43,11 +43,11 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued or $campaign->sending) {
+        if ($campaign->queued || $campaign->sending) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $presenter = new CampaignReportPresenter($campaign);
+        $presenter = new CampaignReportPresenter($campaign, auth()->user()->currentWorkspace());
         $presenterData = $presenter->generate();
 
         $data = [

@@ -61,8 +61,6 @@ class MessagesControllerTest extends TestCase
     /** @test */
     function a_draft_message_can_be_viewed_by_an_authenticated_user()
     {
-        $this->withoutExceptionHandling();
-
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
 

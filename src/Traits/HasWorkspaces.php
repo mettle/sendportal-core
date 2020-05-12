@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
 
-trait CanJoinWorkspaces
+trait HasWorkspaces
 {
     /** @var Workspace */
     protected $activeWorkspace;

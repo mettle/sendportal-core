@@ -9,6 +9,7 @@
 @import 'tables.scss';
 
 @import url('https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,600,600i,700,700i&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Product+Sans:300,400,700&display=swap');
 
 @supports (font-variation-settings: normal) {
     html {
@@ -55,8 +56,8 @@ h1 {
     background-color: $dark-blue !important;
 }
 
-.bg-bright-blue {
-    background-color: $bright-blue !important;
+.bg-primary-blue {
+    background-color: $primary-blue !important;
 }
 
 .bg-blue-800 {
@@ -199,12 +200,12 @@ a.fc-dark-blue {
 
         &.active {
             background-color: transparent;
-            border-bottom: 5px solid $bright-blue;
+            border-bottom: 5px solid $primary-blue;
             color: $dark-blue;
         }
 
         &:hover {
-            border-bottom: 5px solid $bright-blue;
+            border-bottom: 5px solid $primary-blue;
         }
     }
 }
@@ -254,7 +255,7 @@ a.fc-dark-blue {
             }
 
             &.active {
-                border-left-color: $bright-blue;
+                border-left-color: $primary-blue;
                 background: lighten($dark-blue, 5%);
 
                 a.nav-link {
@@ -333,7 +334,7 @@ a.fc-dark-blue {
     background-color: #fff;
     background-clip: border-box;
     border-radius: .25rem;
-    border-bottom: 3px solid $bright-blue;
+    border-bottom: 3px solid $primary-blue;
 
     .h2 {
         font-weight: 400;

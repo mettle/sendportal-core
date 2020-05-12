@@ -16,8 +16,8 @@ button:disabled {
 }
 
 .btn-primary {
-  background-color: #334E68;
-  border-color: #334E68;
+  background-color: $primary-blue;
+  border-color: $primary-blue;
   color: $white;
 
   .badge {
@@ -25,27 +25,27 @@ button:disabled {
   }
 
   &:hover {
-    background-color: lighten($dark-blue, 15%);
-    border-color: lighten($dark-blue, 15%);
+    background-color: lighten($primary-blue, 5%);
+    border-color: lighten($primary-blue, 5%);
   }
 }
 
 .btn-secondary {
   background-color: #D9E2EC;
   border-color: darken(#EDF2F5, 0%);
-  color: $dark-blue;
+  color: $primary-blue;
 
   &:hover {
     background-color: darken(#D9E2EC, 3%);
     border-color: darken(#EDF2F5, 3%);
-    color: $dark-blue;
+    color: $primary-blue;
   }
 }
 
 .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
   background-color: darken(#EDF2F5, 3%);
   border-color: darken(#EDF2F5, 3%);
-  color: $dark-blue;
+  color: $primary-blue;
 }
 
 .btn-light {
@@ -71,8 +71,8 @@ button:disabled {
 }
 
 .btn-outline-primary {
-  color: $dark-blue;
-  border-color: $dark-blue;
+  color: $primary-blue;
+  border-color: $primary-blue;
 }
 
 .btn-xs {
@@ -90,16 +90,6 @@ button:disabled {
 .btn-group-sm>.btn, .btn-sm {
   padding: .4rem 1rem;
   line-height: 1.5;
-}
-
-.btn-dark {
-  color: #fff;
-  background-color: $dark-blue;
-  border-color: $dark-blue;
-
-  &:hover {
-    background-color: lighten($dark-blue, 10%);
-  }
 }
 
 .btn .badge {

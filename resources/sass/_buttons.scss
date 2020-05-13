@@ -16,8 +16,8 @@ button:disabled {
 }
 
 .btn-primary {
-  background-color: $primary-blue;
-  border-color: $primary-blue;
+  background-color: $purple-500;
+  border-color: $purple-500;
   color: $white;
 
   .badge {
@@ -25,27 +25,27 @@ button:disabled {
   }
 
   &:hover {
-    background-color: lighten($primary-blue, 5%);
-    border-color: lighten($primary-blue, 5%);
+    background-color: lighten($purple-500, 5%);
+    border-color: lighten($purple-500, 5%);
   }
 }
 
 .btn-secondary {
   background-color: #D9E2EC;
   border-color: darken(#EDF2F5, 0%);
-  color: $primary-blue;
+  color: $purple-500;
 
   &:hover {
     background-color: darken(#D9E2EC, 3%);
     border-color: darken(#EDF2F5, 3%);
-    color: $primary-blue;
+    color: $purple-500;
   }
 }
 
 .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
   background-color: darken(#EDF2F5, 3%);
   border-color: darken(#EDF2F5, 3%);
-  color: $primary-blue;
+  color: $purple-500;
 }
 
 .btn-light {
@@ -71,8 +71,8 @@ button:disabled {
 }
 
 .btn-outline-primary {
-  color: $primary-blue;
-  border-color: $primary-blue;
+  color: $purple-500;
+  border-color: $purple-500;
 }
 
 .btn-xs {

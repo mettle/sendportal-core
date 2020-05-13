@@ -1,4 +1,4 @@
-<div class="sidebar-inner">
+<div class="sidebar-inner mx-3">
     <ul class="nav flex-column mt-4">
         <li class="nav-item {{ request()->is('campaigns*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.campaigns.index') }}">

@@ -429,7 +429,7 @@ label .form-check-input.is-invalid .abc-radio:before {
 }
 
 .form-control:focus {
-  border-color: #102A43;
+  border-color: #1E2442;
   box-shadow: none;
 }
 
@@ -739,7 +739,7 @@ table.table-hover-reset tr:hover {
 .table th {
   background-color: #fdfdfd;
   font-weight: bold;
-  color: #102A43;
+  color: #1E2442;
 }
 
 .table td,
@@ -794,71 +794,55 @@ h1 {
 }
 
 .bg-dark-blue {
-  background-color: #102A43 !important;
+  background-color: #1E2442 !important;
 }
 
 .bg-primary-blue {
   background-color: #5D63FF !important;
 }
 
-.bg-blue-800 {
-  background-color: #84C5F4 !important;
+a.color-purple-500 {
+  color: #1E2442;
 }
 
-.bg-blue-900 {
-  background-color: #B6E0FE !important;
+a.color-purple-500:hover,
+a.color-purple-500:active {
+  color: #1E2442;
 }
 
-.bg-blue-950 {
-  background-color: #DCEEFB !important;
+.color-purple-500 {
+  color: #1E2442;
 }
 
-a.fc-dark-blue {
-  color: #102A43;
-}
-
-a.fc-dark-blue:hover,
-a.fc-dark-blue:active {
-  color: #102A43;
-}
-
-.fc-dark-blue {
-  color: #102A43;
-}
-
-.fc-primary {
-  color: #009ad9;
-}
-
-.fc-gray-100 {
+.color-gray-100 {
   color: #eceff2 !important;
 }
 
-.fc-gray-200 {
+.color-gray-200 {
   color: #dee2e6 !important;
 }
 
-.fc-gray-300 {
+.color-gray-300 {
   color: #ced4da !important;
 }
 
-.fc-gray-400 {
+.color-gray-400 {
   color: #adb5bd !important;
 }
 
-.fc-gray-500 {
+.color-gray-500 {
   color: #8B97A3 !important;
 }
 
-.fc-gray-600 {
+.color-gray-600 {
   color: #6c757d !important;
 }
 
-.fc-gray-700 {
+.color-gray-700 {
   color: #495057 !important;
 }
 
-.fc-gray-800 {
+.color-gray-800 {
   color: #343a40 !important;
 }
 
@@ -893,7 +877,7 @@ a.fc-dark-blue:active {
 }
 
 .main-header .dropdown-item:hover .fas {
-  color: #102A43;
+  color: #1E2442;
 }
 
 .main-header .dropdown-toggle::after {
@@ -933,7 +917,7 @@ a.fc-dark-blue:active {
 
 .nav-pills a.nav-link {
   border-radius: 0;
-  color: #102A43;
+  color: #1E2442;
   padding: 0.4rem 0.8rem 0.3rem;
   margin-right: 0.5rem;
 }
@@ -941,7 +925,7 @@ a.fc-dark-blue:active {
 .nav-pills a.nav-link.active {
   background-color: transparent;
   border-bottom: 5px solid #5D63FF;
-  color: #102A43;
+  color: #1E2442;
 }
 
 .nav-pills a.nav-link:hover {
@@ -958,6 +942,10 @@ a.fc-dark-blue:active {
   transition: transform 0.1s ease-in-out, width 0.1s ease-in-out, margin 0.1s ease-in-out, -webkit-transform 0.1s ease-in-out;
 }
 
+.sidebar .sidebar-inner {
+  margin: 0 1rem;
+}
+
 .sidebar ul {
   margin: 0;
   padding: 0;
@@ -968,41 +956,35 @@ a.fc-dark-blue:active {
   overflow: hidden;
 }
 
-.sidebar li .nav-heading {
-  color: #b3b3b3;
-  padding: 0.5rem 1rem;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
 .sidebar li.nav-item {
   color: #ffffff;
-  border-radius: 0;
-  border-left: 5px solid transparent;
+  margin-bottom: 0.2rem;
+  padding: 0;
 }
 
 .sidebar li.nav-item a.nav-link {
-  color: #b8c7ce;
+  color: #ffffff;
   font-weight: normal;
   font-size: 0.9rem;
-  padding: 1rem 0 1rem 2.5rem;
+  padding: 0.7rem 0 0.7em 1.2rem;
+  border-left: 8px solid;
+  border-left-color: #1E2442;
+  border-radius: 8px;
 }
 
 .sidebar li.nav-item a.nav-link .fas {
   color: #7c97a4;
 }
 
-.sidebar li.nav-item:hover {
-  background: #183f64;
-}
-
-.sidebar li.nav-item.active {
-  border-left-color: #5D63FF;
-  background: #153758;
+.sidebar li.nav-item a.nav-link:hover {
+  background: #364177;
+  border-left-color: #364177;
 }
 
 .sidebar li.nav-item.active a.nav-link {
   color: #ffffff;
+  background: #364177;
+  border-left-color: #5D63FF;
 }
 
 .sidebar li.nav-item.active a.nav-link .fas {
@@ -1124,12 +1106,12 @@ ul.pagination {
 }
 
 ul.pagination .page-item.active .page-link {
-  background-color: #102A43;
-  border-color: #102A43;
+  background-color: #1E2442;
+  border-color: #1E2442;
 }
 
 ul.pagination .page-link {
-  color: #102A43;
+  color: #1E2442;
 }
 
 /*
@@ -1163,7 +1145,7 @@ ul.pagination .page-link {
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-  border: 1px solid #102A43;
+  border: 1px solid #1E2442;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
@@ -1172,7 +1154,7 @@ ul.pagination .page-link {
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-  border-color: #102A43;
+  border-color: #1E2442;
   box-shadow: none;
 }
 

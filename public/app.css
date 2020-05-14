@@ -772,6 +772,10 @@ body {
   color: #555;
 }
 
+a {
+  color: #0056b3;
+}
+
 h1 {
   font-weight: 300;
   font-size: 2.2rem;
@@ -793,11 +797,11 @@ h1 {
   }
 }
 
-.bg-dark-blue {
+.bg-purple-100 {
   background-color: #1E2442 !important;
 }
 
-.bg-primary-blue {
+.bg-purple-500 {
   background-color: #5D63FF !important;
 }
 
@@ -867,7 +871,7 @@ a.color-purple-500:active {
   background-color: #ffe4af;
 }
 
-.main-header .channel-dropdown {
+.main-header .workspace-select {
   line-height: 24px;
 }
 
@@ -885,7 +889,7 @@ a.color-purple-500:active {
 }
 
 @media (min-width: 576px) {
-  .main-header .channel-dropdown {
+  .main-header .workspace-select {
     border: 1px solid rgba(107, 120, 133, 0.1);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
     border-radius: 4px;

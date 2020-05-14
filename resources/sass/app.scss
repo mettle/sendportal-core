@@ -9,7 +9,6 @@
 @import 'tables.scss';
 
 @import url('https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,600,600i,700,700i&display=swap');
-// @import url('https://fonts.googleapis.com/css?family=Product+Sans:300,400,700&display=swap');
 
 @supports (font-variation-settings: normal) {
     html {
@@ -29,6 +28,10 @@ body {
     overflow-y: auto;
     background-color: $bg-body;
     color: #555;
+}
+
+a {
+    color: #0056b3;
 }
 
 h1 {
@@ -52,11 +55,11 @@ h1 {
     }
 }
 
-.bg-dark-blue {
+.bg-purple-100 {
     background-color: $purple-100 !important;
 }
 
-.bg-primary-blue {
+.bg-purple-500 {
     background-color: $purple-500 !important;
 }
 
@@ -123,7 +126,7 @@ a.color-purple-500 {
 }
 
 .main-header {
-    .channel-dropdown {
+    .workspace-select {
         line-height: 24px;
     }
 
@@ -143,7 +146,7 @@ a.color-purple-500 {
 
 @media (min-width: 576px) {
     .main-header {
-        .channel-dropdown {
+        .workspace-select {
             border: 1px solid rgba(107, 120, 133, 0.1);
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
             border-radius: $radius;

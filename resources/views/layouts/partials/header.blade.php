@@ -39,7 +39,7 @@
                             </span>
                         </li>
                     @elseif (count($workspaces) > 1 && auth()->user()->currentWorkspace)
-                        <li class="nav-item dropdown mr-4 px-2 channel-dropdown">
+                        <li class="nav-item dropdown mr-4 px-2 workspace-select">
                             <a class="nav-link dropdown-toggle color-purple-500" href="#" id="bd-versions"
                                data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">

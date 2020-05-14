@@ -33,7 +33,7 @@ class CampaignDuplicateController extends Controller
             'name' => $campaign->name . ' - Duplicate',
             'status_id' => CampaignStatus::STATUS_DRAFT,
             'template_id' => $campaign->template_id,
-            'provider_id' => $campaign->provider_id,
+            'email_service_id' => $campaign->email_service_id,
             'subject' => $campaign->subject,
             'content' => $campaign->content,
             'from_name' => $campaign->from_name,

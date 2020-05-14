@@ -5,7 +5,7 @@ namespace Tests\Unit\Repositories;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
@@ -19,8 +19,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
     {
-        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
-        $campaign = $this->createCampaign($workspace, $provider);
+        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $campaign = $this->createCampaign($workspace, $emailService);
 
         // 30 seconds
         $this->createOpenedMessage($workspace, $campaign, 1, [
@@ -43,8 +43,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
     {
-        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
-        $campaign = $this->createCampaign($workspace, $provider);
+        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $campaign = $this->createCampaign($workspace, $emailService);
 
         $averageTimeToOpen = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToOpen($campaign);
 
@@ -54,8 +54,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
-        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
-        $campaign = $this->createCampaign($workspace, $provider);
+        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $campaign = $this->createCampaign($workspace, $emailService);
 
         // 30 seconds
         $this->createClickedMessage($workspace, $campaign, 1, [
@@ -77,8 +77,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
-        [$workspace, $provider] = $this->createUserWithWorkspaceAndProvider();
-        $campaign = $this->createCampaign($workspace, $provider);
+        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $campaign = $this->createCampaign($workspace, $emailService);
 
         $averageTimeToClick = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToClick($campaign);
 
@@ -88,30 +88,30 @@ class CampaignTenantRepositoryTest extends TestCase
     /**
      * @return array
      */
-    protected function createUserWithWorkspaceAndProvider(): array
+    protected function createUserWithWorkspaceAndEmailService(): array
     {
         $user = factory(User::class)->create();
         $workspace = factory(Workspace::class)->create([
             'owner_id' => $user->id,
         ]);
-        $provider = factory(Provider::class)->create([
+        $emailService = factory(EmailService::class)->create([
             'workspace_id' => $workspace->id,
         ]);
 
-        return [$workspace, $provider];
+        return [$workspace, $emailService];
     }
 
     /**
      * @param Workspace $workspace
-     * @param Provider $provider
+     * @param EmailService $emailService
      *
      * @return Campaign
      */
-    protected function createCampaign(Workspace $workspace, Provider $provider): Campaign
+    protected function createCampaign(Workspace $workspace, EmailService $emailService): Campaign
     {
         return factory(Campaign::class)->states(['withContent', 'sent'])->create([
             'workspace_id' => $workspace->id,
-            'provider_id' => $provider->id,
+            'email_service_id' => $emailService->id,
         ]);
     }
 

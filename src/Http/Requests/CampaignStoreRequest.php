@@ -28,10 +28,10 @@ class CampaignStoreRequest extends FormRequest
                 'max:255',
                 'email',
             ],
-            'provider_id' => [
+            'email_service_id' => [
                 'required',
                 'integer',
-                'exists:providers,id',
+                'exists:email_services,id',
             ],
             'template_id' => [
                 'nullable',
@@ -56,7 +56,7 @@ class CampaignStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'provider_id.required' => __('Please select a provider.'),
+            'email_service_id.required' => __('Please select an email service.'),
         ];
     }
 }

@@ -35,9 +35,9 @@ class CampaignDispatchController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        if (!$campaign->provider_id) {
+        if (!$campaign->email_service_id) {
             return redirect()->route('sendportal.campaigns.edit', $id)
-                ->withErrors(__('Please select a Provider'));
+                ->withErrors(__('Please select an Email Service'));
         }
 
         $scheduledAt = $request->get('schedule') === 'scheduled' ? Carbon::parse($request->get('scheduled_at')) : now();

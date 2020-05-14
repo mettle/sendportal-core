@@ -7,8 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\ProviderType;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\EmailServiceType;
 use Tests\TestCase;
 
 class MailgunWebhooksTest extends TestCase
@@ -162,15 +162,15 @@ class MailgunWebhooksTest extends TestCase
 
     protected function createMessage(): Message
     {
-        $provider = factory(Provider::class)->create([
-            'type_id' => ProviderType::MAILGUN,
+        $emailService = factory(EmailService::class)->create([
+            'type_id' => EmailServiceType::MAILGUN,
             'settings' => [
                 'key' => $this->apiKey,
             ],
         ]);
 
         $campaign = factory(Campaign::class)->create([
-            'provider_id' => $provider,
+            'email_service_id' => $emailService->id,
         ]);
 
         return factory(Message::class)->create([

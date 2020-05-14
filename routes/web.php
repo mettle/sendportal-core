@@ -71,15 +71,15 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
             $messageRouter->post('send-selected', 'MessagesController@sendSelected')->name('send-selected');
         });
 
-        // Providers.
-        $appRouter->name('providers.')->prefix('providers')->namespace('Providers')->group(static function (Router $providerRouter) {
-            $providerRouter->get('/', 'ProvidersController@index')->name('index');
-            $providerRouter->get('create', 'ProvidersController@create')->name('create');
-            $providerRouter->get('type/{id}', 'ProvidersController@providersTypeAjax')->name('ajax');
-            $providerRouter->post('/', 'ProvidersController@store')->name('store');
-            $providerRouter->get('{id}/edit', 'ProvidersController@edit')->name('edit');
-            $providerRouter->put('{id}', 'ProvidersController@update')->name('update');
-            $providerRouter->delete('{id}', 'ProvidersController@delete')->name('delete');
+        // Email Services.
+        $appRouter->name('email_services.')->prefix('email-services')->namespace('EmailServices')->group(static function (Router $servicesRouter) {
+            $servicesRouter->get('/', 'EmailServicesController@index')->name('index');
+            $servicesRouter->get('create', 'EmailServicesController@create')->name('create');
+            $servicesRouter->get('type/{id}', 'EmailServicesController@emailServicesTypeAjax')->name('ajax');
+            $servicesRouter->post('/', 'EmailServicesController@store')->name('store');
+            $servicesRouter->get('{id}/edit', 'EmailServicesController@edit')->name('edit');
+            $servicesRouter->put('{id}', 'EmailServicesController@update')->name('update');
+            $servicesRouter->delete('{id}', 'EmailServicesController@delete')->name('delete');
         });
 
         // Segments.

@@ -26,7 +26,7 @@
                                 {{ $message->subject }}
 
                                 @foreach($message->failures as $failure)
-                                    <div class="mt-2 fc-gray-500">
+                                    <div class="mt-2 color-gray-500">
                                         {{ $failure->failed_at }}&nbsp;:&nbsp;{{ $failure->severity }}&nbsp;-&nbsp;{{ $failure->description }}
                                     </div>
                                 @endforeach

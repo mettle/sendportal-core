@@ -158,6 +158,9 @@ class CampaignReportPresenter
             $last = $first->copy()->addHours(12);
         }
 
+        // by default we only show the first 24 hours of the campaign
+        $last = min($last->copy(), $first->copy()->addHours(24));
+
         return [$first->copy()->startOfHour(), $last->copy()->endOfHour()];
     }
 

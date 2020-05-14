@@ -30,6 +30,10 @@ body {
     color: #555;
 }
 
+a {
+    color: #0056b3;
+}
+
 h1 {
     font-weight: 300;
     font-size: 2.2rem;
@@ -51,71 +55,55 @@ h1 {
     }
 }
 
-.bg-dark-blue {
-    background-color: $dark-blue !important;
+.bg-purple-100 {
+    background-color: $purple-100 !important;
 }
 
-.bg-bright-blue {
-    background-color: $bright-blue !important;
+.bg-purple-500 {
+    background-color: $purple-500 !important;
 }
 
-.bg-blue-800 {
-    background-color: $blue-800 !important;
-}
-
-.bg-blue-900 {
-    background-color: $blue-900 !important;
-}
-
-.bg-blue-950 {
-    background-color: $blue-950 !important;
-}
-
-a.fc-dark-blue {
-    color: $dark-blue;
+a.color-purple-500 {
+    color: $purple-100;
 
     &:hover, &:active {
-        color: $dark-blue;
+        color: $purple-100;
     }
 }
 
-.fc-dark-blue {
-    color: $dark-blue;
+.color-purple-500 {
+    color: $purple-100;
 }
 
-.fc-primary {
-    color: $primary;
-}
-
-.fc-gray-100 {
+.color-gray-100 {
     color: $gray-100 !important;
 }
 
-.fc-gray-200 {
+.color-gray-200 {
     color: $gray-200 !important;
 }
 
-.fc-gray-300 {
+.color-gray-300 {
     color: $gray-300 !important;
 }
 
-.fc-gray-400 {
+.color-gray-400 {
     color: $gray-400 !important;
 }
 
-.fc-gray-500 {
+.color-gray-500 {
     color: $gray-500 !important;
 }
 
-.fc-gray-600 {
+.color-gray-600 {
     color: $gray-600 !important;
 }
 
-.fc-gray-700 {
+.color-gray-700 {
     color: $gray-700 !important;
 }
 
-.fc-gray-800 {
+.color-gray-800 {
     color: $gray-800 !important;
 }
 
@@ -131,7 +119,6 @@ a.fc-dark-blue {
     flex: 0 0 160px;
 }
 
-
 /* Header */
 
 .bg-trial-header {
@@ -139,7 +126,7 @@ a.fc-dark-blue {
 }
 
 .main-header {
-    .channel-dropdown {
+    .workspace-select {
         line-height: 24px;
     }
 
@@ -149,7 +136,7 @@ a.fc-dark-blue {
     }
 
     .dropdown-item:hover .fas {
-        color: $dark-blue;
+        color: $purple-100;
     }
 
     .dropdown-toggle::after {
@@ -159,7 +146,7 @@ a.fc-dark-blue {
 
 @media (min-width: 576px) {
     .main-header {
-        .channel-dropdown {
+        .workspace-select {
             border: 1px solid rgba(107, 120, 133, 0.1);
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
             border-radius: $radius;
@@ -193,18 +180,18 @@ a.fc-dark-blue {
 .nav-pills {
     a.nav-link {
         border-radius: 0;
-        color: $dark-blue;
+        color: $purple-100;
         padding: .4rem .8rem .3rem;
         margin-right: 0.5rem;
 
         &.active {
             background-color: transparent;
-            border-bottom: 5px solid $bright-blue;
-            color: $dark-blue;
+            border-bottom: 5px solid $purple-500;
+            color: $purple-100;
         }
 
         &:hover {
-            border-bottom: 5px solid $bright-blue;
+            border-bottom: 5px solid $purple-500;
         }
     }
 }
@@ -217,6 +204,10 @@ a.fc-dark-blue {
     flex: 0 0 $sidebar-width;
     transition: transform 0.1s ease-in-out, width 0.1s ease-in-out, margin 0.1s ease-in-out, -webkit-transform 0.1s ease-in-out;
 
+    .sidebar-inner {
+        margin: 0 1.5rem;
+    }
+
     ul {
         margin: 0;
         padding: 0;
@@ -226,39 +217,36 @@ a.fc-dark-blue {
         white-space: nowrap;
         overflow: hidden;
 
-        .nav-heading {
-            color: darken($white, 30%);
-            padding: .5rem 1rem;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
         &.nav-item {
             color: $white;
-            border-radius: 0;
-            border-left: 5px solid transparent;
+            margin-bottom: 0.2rem;
+            padding: 0;
 
             a.nav-link {
-                color: $light-blue;
+                color: $white;
                 font-weight: normal;
                 font-size: 0.9rem;
-                padding: 1rem 0 1rem 2.5rem;
+                padding: 0.7rem 0 0.7em 1.2rem;
+                border-left: 6px solid;
+                border-left-color: $purple-100;
+                border-radius: 6px;
 
                 .fas {
                     color: darken($light-blue, 20%);
                 }
-            }
 
-            &:hover {
-                background: lighten($dark-blue, 8%);
+                &:hover {
+                    background: lighten($purple-100, 10%);
+                    border-left-color: lighten($purple-100, 10%);
+                }
             }
 
             &.active {
-                border-left-color: $bright-blue;
-                background: lighten($dark-blue, 5%);
 
                 a.nav-link {
                     color: $white;
+                    background: lighten($purple-100, 10%);
+                    border-left-color: $purple-500;
 
                     .fas {
                         color: $white;
@@ -333,7 +321,7 @@ a.fc-dark-blue {
     background-color: #fff;
     background-clip: border-box;
     border-radius: .25rem;
-    border-bottom: 3px solid $bright-blue;
+    border-bottom: 3px solid $purple-500;
 
     .h2 {
         font-weight: 400;
@@ -383,12 +371,12 @@ ul.pagination {
     margin-bottom: 0;
 
     .page-item.active .page-link {
-        background-color: $dark-blue;
-        border-color: $dark-blue;
+        background-color: $purple-100;
+        border-color: $purple-100;
     }
 
     .page-link {
-        color: $dark-blue;
+        color: $purple-100;
     }
 }
 
@@ -426,7 +414,7 @@ ul.pagination {
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-    border: 1px solid $dark-blue;
+    border: 1px solid $purple-100;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }
 
@@ -435,7 +423,7 @@ ul.pagination {
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-    border-color: $dark-blue;
+    border-color: $purple-100;
     box-shadow: none;
 }
 

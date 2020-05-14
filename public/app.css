@@ -556,8 +556,8 @@ button:disabled {
 }
 
 .btn-primary:hover {
-  background-color: #777cff;
-  border-color: #777cff;
+  background-color: #6c72ff;
+  border-color: #6c72ff;
 }
 
 .btn-secondary {
@@ -943,7 +943,7 @@ a.color-purple-500:active {
 }
 
 .sidebar .sidebar-inner {
-  margin: 0 1rem;
+  margin: 0 1.5rem;
 }
 
 .sidebar ul {
@@ -967,9 +967,9 @@ a.color-purple-500:active {
   font-weight: normal;
   font-size: 0.9rem;
   padding: 0.7rem 0 0.7em 1.2rem;
-  border-left: 8px solid;
+  border-left: 6px solid;
   border-left-color: #1E2442;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .sidebar li.nav-item a.nav-link .fas {
@@ -977,13 +977,13 @@ a.color-purple-500:active {
 }
 
 .sidebar li.nav-item a.nav-link:hover {
-  background: #364177;
-  border-left-color: #364177;
+  background: #2e3765;
+  border-left-color: #2e3765;
 }
 
 .sidebar li.nav-item.active a.nav-link {
   color: #ffffff;
-  background: #364177;
+  background: #2e3765;
   border-left-color: #5D63FF;
 }
 

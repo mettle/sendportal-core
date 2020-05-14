@@ -25,8 +25,8 @@ button:disabled {
   }
 
   &:hover {
-    background-color: lighten($purple-500, 5%);
-    border-color: lighten($purple-500, 5%);
+    background-color: lighten($purple-500, 3%);
+    border-color: lighten($purple-500, 3%);
   }
 }
 

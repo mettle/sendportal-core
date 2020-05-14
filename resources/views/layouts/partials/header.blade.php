@@ -24,7 +24,7 @@
             @if ( auth()->user()->hasVerifiedEmail())
 
                 <button type="button" class="btn btn-light mr-3 btn-sm d-xl-none" data-toggle="modal" data-target="#sidebar-modal">
-                    <i class="fal fa-bars"></i>
+                    <i class="fa fa-bars"></i>
                 </button>
 
                 <h1 class="h4 mb-0 color-purple-500">@yield('heading')</h1>

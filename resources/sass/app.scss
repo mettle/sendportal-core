@@ -202,7 +202,7 @@ a.color-purple-500 {
     transition: transform 0.1s ease-in-out, width 0.1s ease-in-out, margin 0.1s ease-in-out, -webkit-transform 0.1s ease-in-out;
 
     .sidebar-inner {
-        margin: 0 1rem;
+        margin: 0 1.5rem;
     }
 
     ul {
@@ -224,17 +224,17 @@ a.color-purple-500 {
                 font-weight: normal;
                 font-size: 0.9rem;
                 padding: 0.7rem 0 0.7em 1.2rem;
-                border-left: 8px solid;
+                border-left: 6px solid;
                 border-left-color: $purple-100;
-                border-radius: 8px;
+                border-radius: 6px;
 
                 .fas {
                     color: darken($light-blue, 20%);
                 }
 
                 &:hover {
-                    background: lighten($purple-100, 15%);
-                    border-left-color: lighten($purple-100, 15%);
+                    background: lighten($purple-100, 10%);
+                    border-left-color: lighten($purple-100, 10%);
                 }
             }
 
@@ -242,7 +242,7 @@ a.color-purple-500 {
 
                 a.nav-link {
                     color: $white;
-                    background: lighten($purple-100, 15%);
+                    background: lighten($purple-100, 10%);
                     border-left-color: $purple-500;
 
                     .fas {

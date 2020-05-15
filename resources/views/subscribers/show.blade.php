@@ -39,7 +39,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>{{ __('Segments') }}</td>
+                                <td><b>{{ __('Segments') }}</b></td>
                                 <td>
                                     @foreach($subscriber->segments as $segment)
                                         <span class="badge badge-light">{{ $segment->name }}</span>

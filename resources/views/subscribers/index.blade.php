@@ -40,6 +40,9 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <div class="dropdown-menu">
+                    <a href="{{ route('sendportal.segments.index') }}" class="dropdown-item">
+                        <i class="fa fa-tags mr-2"></i> {{ __('Segments') }}
+                    </a>
                     <a href="{{ route('sendportal.subscribers.import') }}" class="dropdown-item">
                         <i class="fa fa-upload mr-2"></i> {{ __('Import Subscribers') }}
                     </a>
@@ -49,9 +52,6 @@
 
                 </div>
             </div>
-            <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.segments.index') }}">
-                {{ __('Segments') }}
-            </a>
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.subscribers.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('New Subscriber') }}
             </a>

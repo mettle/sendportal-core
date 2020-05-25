@@ -8,11 +8,21 @@
 
 @section('content')
 
-{{ __('Your campaign is currently') }} {{ $campaign->status->name }}
 
-<div class="row text-center">
-    <div class="col-sm-6">
-        @include('sendportal::svgs.undraw_in_progress')
+
+<div class="card">
+    <div class="card-header card-header-accent">
+        <div class="card-header-inner">
+            {{ __('Your campaign is currently') }} <strong>{{ strtolower($campaign->status->name) }}</strong>
+        </div>
+    </div>
+    <div class="card-body">
+        @if ($campaign->status_id === \Sendportal\Base\Models\CampaignStatus::STATUS_QUEUED)
+            Your campaign is queued and will be sent out soon.
+        @else
+            <i class="fas fa-cog fa-spin"></i>
+            {{ $campaign->sent_count_formatted }} out of {{ $campaign->messages->count() }} messages sent.
+        @endif
     </div>
 </div>
 

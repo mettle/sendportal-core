@@ -7,6 +7,15 @@
 @stop
 
 @section('content')
+
+    @component('sendportal::layouts.partials.actions')
+        @slot('right')
+            <a class="btn btn-light btn-md btn-flat" href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}">
+                <i class="fa fa-edit mr-1"></i> {{ __('Edit Subscriber') }}
+            </a>
+        @endslot
+    @endcomponent
+
     <div class="row">
         <div class="col-sm-6">
             <div class="card">

@@ -35,6 +35,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Configure the Sendportal API throttling.
+    | For more information see https://laravel.com/docs/master/routing#rate-limiting
     |
     */
     'throttle_middleware' => 'throttle:60,1',

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\Subscriber;
 
 class SubscriberTenantRepository extends BaseTenantRepository

@@ -131,6 +131,13 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
             ->first();
     }
 
+    public function totalDelivered(int $workspaceId): int
+    {
+        return $this->getQueryBuilder($workspaceId)
+            ->whereNotNull('sent_at')
+            ->count();
+    }
+
     /**
      * @inheritDoc
      */

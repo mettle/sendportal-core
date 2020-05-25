@@ -24,6 +24,8 @@ interface MessageTenantRepositoryInterface extends BaseTenantInterface
 
     public function getFirstLastOpenedAt(int $workspaceId, string $sourceType, int $sourceId);
 
+    public function totalDelivered(int $workspaceId): int;
+
     /**
      * Count the number of unique opens per period for a campaign or automation schedule.
      */

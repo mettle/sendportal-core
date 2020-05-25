@@ -1,5 +1,10 @@
 <div class="sidebar-inner mx-3">
     <ul class="nav flex-column mt-4">
+        <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('sendportal.dashboard') }}">
+                <i class="fas fa-home mr-2"></i><span>{{ __('Dashboard') }}</span>
+            </a>
+        </li>
         <li class="nav-item {{ request()->is('campaigns*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.campaigns.index') }}">
                 <i class="fas fa-envelope mr-2"></i><span>{{ __('Campaigns') }}</span>

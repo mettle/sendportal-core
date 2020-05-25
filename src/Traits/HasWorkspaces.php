@@ -80,6 +80,11 @@ trait HasWorkspaces
         return null;
     }
 
+    public function getCurrentWorkspaceAttribute(): ?Workspace
+    {
+        return $this->currentWorkspace();
+    }
+
     /**
      * Determine if the user owns the current workspace.
      */

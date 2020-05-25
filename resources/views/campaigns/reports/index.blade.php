@@ -141,7 +141,7 @@
                     datasets: [{
                         data: {!! $chartData !!},
                         label: "{{ __("Opens") }}",
-                        backgroundColor: '#4098D7',
+                        backgroundColor: '#5D63FF',
                     }]
                 },
                 options: {

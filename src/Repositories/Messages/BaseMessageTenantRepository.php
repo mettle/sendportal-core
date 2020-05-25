@@ -121,14 +121,14 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
     /**
      * @inheritDoc
      */
-    public function getFirstLastOpenedAt(int $workspaceId, string $sourceType, int $sourceId)
+    public function getFirstOpenedAt(int $workspaceId, string $sourceType, int $sourceId)
     {
         return DB::table('messages')
-            ->select(DB::raw('MIN(opened_at) as first, MAX(opened_at) as last'))
+            ->select(DB::raw('MIN(opened_at) as first'))
             ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
-            ->first();
+            ->value('first');
     }
 
     /**

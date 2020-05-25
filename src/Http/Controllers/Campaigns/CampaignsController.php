@@ -9,15 +9,15 @@ use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
-use Sendportal\Base\Repositories\ProviderTenantRepository;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 
 class CampaignsController extends Controller
 {
-    /** @var CampaignTenantInterface */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaigns;
 
     /** @var TemplateTenantRepository */
@@ -26,23 +26,23 @@ class CampaignsController extends Controller
     /** @var SegmentTenantRepository */
     protected $segments;
 
-    /** @var ProviderTenantRepository */
-    protected $providers;
+    /** @var EmailServiceTenantRepository */
+    protected $emailServices;
 
     /** @var SubscriberTenantRepository */
     protected $subscribers;
 
     public function __construct(
-        CampaignTenantInterface $campaigns,
+        CampaignTenantRepositoryInterface $campaigns,
         TemplateTenantRepository $templates,
         SegmentTenantRepository $segments,
-        ProviderTenantRepository $providers,
+        EmailServiceTenantRepository $emailServices,
         SubscriberTenantRepository $subscribers
     ) {
         $this->campaigns = $campaigns;
         $this->templates = $templates;
         $this->segments = $segments;
-        $this->providers = $providers;
+        $this->emailServices = $emailServices;
         $this->subscribers = $subscribers;
     }
 
@@ -52,9 +52,9 @@ class CampaignsController extends Controller
     public function index(): ViewContract
     {
         $campaigns = $this->campaigns->paginate(auth()->user()->currentWorkspace()->id, 'created_atDesc', ['status']);
-        $providerCount = $this->providers->count(auth()->user()->currentWorkspace()->id);
+        $emailServicesCount = $this->emailServices->count(auth()->user()->currentWorkspace()->id);
 
-        return view('sendportal::campaigns.index', compact('campaigns', 'providerCount'));
+        return view('sendportal::campaigns.index', compact('campaigns', 'emailServicesCount'));
     }
 
     /**
@@ -63,9 +63,9 @@ class CampaignsController extends Controller
     public function create(): ViewContract
     {
         $templates = [null => '- None -'] + $this->templates->pluck(auth()->user()->currentWorkspace()->id);
-        $providers = $this->providers->all(auth()->user()->currentWorkspace()->id);
+        $emailServices = $this->emailServices->all(auth()->user()->currentWorkspace()->id);
 
-        return view('sendportal::campaigns.create', compact('templates', 'providers'));
+        return view('sendportal::campaigns.create', compact('templates', 'emailServices'));
     }
 
     /**
@@ -94,10 +94,10 @@ class CampaignsController extends Controller
     public function edit(int $id): ViewContract
     {
         $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
-        $providers = $this->providers->all(auth()->user()->currentWorkspace()->id);
+        $emailServices = $this->emailServices->all(auth()->user()->currentWorkspace()->id);
         $templates = [null => '- None -'] + $this->templates->pluck(auth()->user()->currentWorkspace()->id);
 
-        return view('sendportal::campaigns.edit', compact('campaign', 'providers', 'templates'));
+        return view('sendportal::campaigns.edit', compact('campaign', 'emailServices', 'templates'));
     }
 
     /**

@@ -7,8 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\ProviderType;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\EmailServiceType;
 use Tests\TestCase;
 
 class MailgunWebhooksTest extends TestCase
@@ -47,7 +47,8 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('delivered', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertNotNull($message->refresh()->delivered_at);
     }
@@ -64,7 +65,8 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('opened', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertEquals(1, $message->refresh()->open_count);
         $this->assertNotNull($message->opened_at);
@@ -84,7 +86,8 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook['event-data']['url'] = $this->faker->url;
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertEquals(1, $message->refresh()->click_count);
         $this->assertNotNull($message->clicked_at);
@@ -101,7 +104,8 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('complained', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertNotNull($message->refresh()->unsubscribed_at);
     }
@@ -119,7 +123,8 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook['event-data']['severity'] = 'permanent';
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertNotNull($message->refresh()->bounced_at);
 
@@ -127,7 +132,7 @@ class MailgunWebhooksTest extends TestCase
             'message_failures',
             [
                 'message_id' => $message->id,
-                'severity' => 'Permanent',
+                'severity' => 'permanent',
             ]
         );
     }
@@ -143,28 +148,29 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook['event-data']['severity'] = 'temporary';
 
-        $this->json('POST', route($this->route), $webhook);
+        $this->json('POST', route($this->route), $webhook)
+            ->assertOk();
 
         $this->assertDatabaseHas(
             'message_failures',
             [
                 'message_id' => $message->id,
-                'severity' => 'Temporary',
+                'severity' => 'temporary',
             ]
         );
     }
 
     protected function createMessage(): Message
     {
-        $provider = factory(Provider::class)->create([
-            'type_id' => ProviderType::MAILGUN,
+        $emailService = factory(EmailService::class)->create([
+            'type_id' => EmailServiceType::MAILGUN,
             'settings' => [
                 'key' => $this->apiKey,
             ],
         ]);
 
         $campaign = factory(Campaign::class)->create([
-            'provider_id' => $provider,
+            'email_service_id' => $emailService->id,
         ]);
 
         return factory(Message::class)->create([

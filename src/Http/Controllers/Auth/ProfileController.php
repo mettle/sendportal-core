@@ -12,24 +12,16 @@ use Sendportal\Base\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
-    /**
-     * Show the profile edit page.
-     *
-     * @return View
-     */
+    public function show(): View
+    {
+        return view('sendportal::profile.show');
+    }
+
     public function edit(): View
     {
         return view('sendportal::profile.edit');
     }
 
-    /**
-     * Update the active user's profile.
-     *
-     * @param ProfileUpdateRequest $request
-     *
-     * @return RedirectResponse
-     * @throws Exception
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->update($request->validated());

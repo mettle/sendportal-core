@@ -1,42 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers;
 
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Repositories\MessageTenantRepository;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Services\Content\MergeContent;
 use Sendportal\Base\Services\Messages\DispatchMessage;
 
 class MessagesController extends Controller
 {
-    /**
-     * @var MessageTenantRepository
-     */
+    /** @var MessageTenantRepositoryInterface */
     protected $messageRepo;
 
-    /**
-     * @var DispatchMessage
-     */
+    /** @var DispatchMessage */
     protected $dispatchMessage;
 
-    /**
-     * @var MergeContent
-     */
+    /** @var MergeContent */
     protected $mergeContent;
 
-    /**
-     * MessagesController constructor
-     *
-     * @param MessageTenantRepository $messageRepo
-     * @param DispatchMessage $dispatchMessage
-     * @param MergeContent $mergeContent
-     */
     public function __construct(
-        MessageTenantRepository $messageRepo,
+        MessageTenantRepositoryInterface $messageRepo,
         DispatchMessage $dispatchMessage,
         MergeContent $mergeContent
     ) {
@@ -46,42 +34,40 @@ class MessagesController extends Controller
     }
 
     /**
-     * Show all sent messages
+     * Show all sent messages.
      *
-     * @return Factory|View
      * @throws Exception
      */
-    public function index()
+    public function index(): View
     {
         $params = request()->only(['search', 'status']);
         $params['sent'] = true;
 
-        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'sent_atDesc', [], 50, $params);
+        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'sent_atDesc', [],
+            50, $params);
 
         return view('sendportal::messages.index', compact('messages'));
     }
 
     /**
-     * Show draft messages
+     * Show draft messages.
      *
-     * @return Factory|View
      * @throws Exception
      */
-    public function draft()
+    public function draft(): View
     {
-        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'created_atDesc', [], 50, ['draft' => true]);
+        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'created_atDesc', [],
+            50, ['draft' => true]);
 
         return view('sendportal::messages.index', compact('messages'));
     }
 
     /**
-     * Show a single message
+     * Show a single message.
      *
-     * @param int $messageId
-     * @return Factory|View
      * @throws Exception
      */
-    public function show(int $messageId)
+    public function show(int $messageId): View
     {
         $message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, $messageId);
 
@@ -91,14 +77,14 @@ class MessagesController extends Controller
     }
 
     /**
-     * Send a message
+     * Send a message.
      *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function send()
+    public function send(): RedirectResponse
     {
-        if (! $message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, request('id'), ['subscriber'])) {
+        if (!$message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, request('id'),
+            ['subscriber'])) {
             return redirect()->back()->withErrors(__('Unable to locate that message'));
         }
 
@@ -113,19 +99,18 @@ class MessagesController extends Controller
     }
 
     /**
-     * Send multiple messages
+     * Send multiple messages.
      *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function sendSelected()
+    public function sendSelected(): RedirectResponse
     {
-        if (! $messages = $this->messageRepo->getWhereIn(auth()->user()->currentWorkspace()->id, request('messages'), ['subscriber'])) {
+        if (!$messages = $this->messageRepo->getWhereIn(auth()->user()->currentWorkspace()->id, request('messages'),
+            ['subscriber'])) {
             return redirect()->back()->withErrors(__('Unable to locate messages'));
         }
 
-        $messages->each(function (Message $message)
-        {
+        $messages->each(function (Message $message) {
             if ($message->sent_at) {
                 return;
             }

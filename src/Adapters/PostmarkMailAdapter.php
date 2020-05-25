@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
-use Sendportal\Base\Services\Messages\MessageTrackingOptions;
+use Illuminate\Support\Arr;
 use Postmark\Models\DynamicResponseModel;
 use Postmark\PostmarkClient;
+use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 
 class PostmarkMailAdapter extends BaseMailAdapter
 {
@@ -40,7 +41,7 @@ class PostmarkMailAdapter extends BaseMailAdapter
             return $this->client;
         }
 
-        $this->client = new PostmarkClient(\Arr::get($this->config, 'key'));
+        $this->client = new PostmarkClient(Arr::get($this->config, 'key'));
 
         return $this->client;
     }

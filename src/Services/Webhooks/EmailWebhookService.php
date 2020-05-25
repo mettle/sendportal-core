@@ -1,145 +1,148 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Services\Webhooks;
 
-use Sendportal\Base\Interfaces\EmailWebhookServiceInterface;
-use Sendportal\Automations\Models\AutomationSchedule;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use RuntimeException;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\MessageFailure;
 use Sendportal\Base\Models\MessageUrl;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
+use Sendportal\Pro\Models\AutomationSchedule;
 
-class EmailWebhookService implements EmailWebhookServiceInterface
+class EmailWebhookService
 {
-    /**
-     * @inheritDoc
-     */
-    public function handleDelivery($messageId, Carbon $timestamp)
+    public function handleDelivery(string $messageId, Carbon $timestamp): void
     {
-        \DB::table('messages')->where('message_id', $messageId)->whereNull('delivered_at')->update([
+        DB::table('messages')->where('message_id', $messageId)->whereNull('delivered_at')->update([
             'delivered_at' => $timestamp
         ]);
     }
 
     /**
-     * @inheritDoc
+     * @throws Exception
      */
-    public function handleOpen($messageId, Carbon $timestamp, $ipAddress)
+    public function handleOpen(string $messageId, Carbon $timestamp, ?string $ipAddress): void
     {
-        if (! $message = Message::where('message_id', $messageId)->first()) {
+        /** @var Message $message */
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
             return;
         }
 
-        if (! $message->opened_at) {
+        if (!$message->opened_at) {
             $message->opened_at = $timestamp;
             $message->ip = $ipAddress;
         }
 
-        $message->open_count = $message->open_count + 1;
+        ++$message->open_count;
         $message->save();
 
-        // @todo not sure that this give much value? We can just derive the count
-        // from the messages table
+        // @todo not sure that this give much value? We can just derive the count from the messages table.
         if ($message->isAutomation()) {
             $automationStep = $this->resolveAutomationStepFromMessage($message);
-
-            \DB::table('automation_steps')->where('id', $automationStep->id)->increment('open_count');
+            DB::table('automation_steps')->where('id', $automationStep->id)->increment('open_count');
         }
     }
 
     /**
-     * @inheritDoc
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handleClick($messageId, Carbon $timestamp, $url)
+    public function handleClick(string $messageId, Carbon $timestamp, ?string $url): void
     {
         /* @var Message $message */
-        if (! $message = Message::where('message_id', $messageId)->first()) {
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
             return;
         }
 
-        // don't track unsubscribe clicks
+        // Don't track unsubscribe clicks.
         if (Str::contains($url, '/subscriptions/unsubscribe')) {
             return;
         }
 
-        if (! $message->clicked_at) {
+        if (!$message->clicked_at) {
             $message->clicked_at = $timestamp;
         }
 
-        // Since you have to open a campaign to click a link inside it, we'll
-        // consider those clicks as opens even if the tracking image didn't load.
-        if (! $message->opened_at) {
-            $message->open_count = $message->open_count + 1;
+        // Since you have to open a campaign to click a link inside it, we'll consider those clicks as opens
+        // even if the tracking image didn't load.
+        if (!$message->opened_at) {
+            ++$message->open_count;
             $message->opened_at = $timestamp;
         }
 
-        $message->click_count = $message->click_count + 1;
+        ++$message->click_count;
         $message->save();
 
-        // @todo not sure that this give much value? We can just derive the count
-        // from the messages table
+        // @todo not sure that this give much value? We can just derive the count/ from the messages table.
         if ($message->isAutomation()) {
             $automationStep = $this->resolveAutomationStepFromMessage($message);
-
-            \DB::table('automation_steps')->where('id', $automationStep->id)->increment('click_count');
+            DB::table('automation_steps')->where('id', $automationStep->id)->increment('click_count');
         }
 
-        MessageUrl::updateOrCreate([
+        /** @var MessageUrl $messageUrl */
+        $messageUrl = MessageUrl::updateOrCreate([
             'hash' => md5($message->source_type . '_' . $message->source_id . '_' . $url),
         ], [
             'source_type' => $message->source_type,
             'source_id' => $message->source_id,
-            'url' => $url,
-            'click_count' => \DB::raw('click_count+1')
+            'url' => $url
         ]);
+
+        if (!$messageUrl->wasRecentlyCreated) {
+            DB::table('message_urls')->where('id', $messageUrl->id)->increment('click_count');
+        }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function handleComplaint($messageId, $timestamp)
+    public function handleComplaint(string $messageId, Carbon $timestamp): void
     {
         /* @var Message $message */
-        if (! $message = Message::where('message_id', $messageId)->first()) {
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
             return;
         }
 
-        if (! $message->complained_at) {
+        if (!$message->complained_at) {
             $message->unsubscribed_at = $timestamp;
             $message->save();
         }
 
-        return $this->unsubscribe($messageId, UnsubscribeEventType::COMPLAINT);
+        $this->unsubscribe($messageId, UnsubscribeEventType::COMPLAINT);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function handlePermanentBounce($messageId, $timestamp)
+    public function handlePermanentBounce($messageId, $timestamp): void
     {
         /* @var Message $message */
-        if (! $message = Message::where('message_id', $messageId)->first()) {
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
             return;
         }
 
-        if (! $message->bounced_at) {
+        if (!$message->bounced_at) {
             $message->bounced_at = $timestamp;
             $message->save();
         }
 
-        return $this->unsubscribe($messageId, UnsubscribeEventType::BOUNCE);
+        $this->unsubscribe($messageId, UnsubscribeEventType::BOUNCE);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function handleFailure($messageId, $severity, $description, $timestamp)
+    public function handleFailure($messageId, $severity, $description, $timestamp): void
     {
         /* @var Message $message */
-        if (! $message = Message::where('message_id', $messageId)->first()) {
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
             return;
         }
 
@@ -149,24 +152,21 @@ class EmailWebhookService implements EmailWebhookServiceInterface
             'failed_at' => $timestamp,
         ]);
 
-        return $message->failures()->save($failure);
+        $message->failures()->save($failure);
     }
 
     /**
-     * Unsubscribe a subscriber
-     *
-     * @param $messageId
-     * @param $typeId
+     * Unsubscribe a subscriber.
      */
-    protected function unsubscribe($messageId, $typeId)
+    protected function unsubscribe(string $messageId, int $typeId): void
     {
-        $subscriberId = \DB::table('messages')->where('message_id', $messageId)->value('subscriber_id');
+        $subscriberId = DB::table('messages')->where('message_id', $messageId)->value('subscriber_id');
 
-        if (! $subscriberId) {
+        if (!$subscriberId) {
             return;
         }
 
-        \DB::table('subscribers')->where('id', $subscriberId)->update([
+        DB::table('subscribers')->where('id', $subscriberId)->update([
             'unsubscribed_at' => now(),
             'unsubscribe_event_id' => $typeId,
             'updated_at' => now()
@@ -178,16 +178,19 @@ class EmailWebhookService implements EmailWebhookServiceInterface
      *
      * @param Message $message
      * @return mixed
-     * @throws \Exception
      */
     protected function resolveAutomationStepFromMessage(Message $message)
     {
-        if (\Sendportal\Base\Facades\Helper::isPro() && $message->source_type != AutomationSchedule::class) {
-            throw new \Exception('Unable to resolve source for message id=' . $message->id);
+        if (Helper::isPro() && $message->source_type !== AutomationSchedule::class) {
+            throw new RuntimeException('Unable to resolve source for message id=' . $message->id);
         }
 
-        $automationSchedule = \DB::table('automation_schedules')->where('id', $message->source_id)->first();
+        $automationSchedule = DB::table('automation_schedules')->where('id', $message->source_id)->first();
 
-        return \DB::table('automation_steps')->where('id', $automationSchedule->automation_step_id)->first();
+        if (!$automationSchedule) {
+            throw new RuntimeException('Unable to find schedule matching message source id=' . $message->source_id);
+        }
+
+        return DB::table('automation_steps')->where('id', $automationSchedule->automation_step_id)->first();
     }
 }

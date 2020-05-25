@@ -9,18 +9,18 @@ use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Interfaces\MailAdapterInterface;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\ProviderType;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\EmailServiceType;
 use InvalidArgumentException;
 
 class MailAdapterFactory
 {
     /** @var array */
     public static $adapterMap = [
-        ProviderType::SES => SesMailAdapter::class,
-        ProviderType::SENDGRID => SendgridMailAdapter::class,
-        ProviderType::MAILGUN => MailgunMailAdapter::class,
-        ProviderType::POSTMARK => PostmarkMailAdapter::class
+        EmailServiceType::SES => SesMailAdapter::class,
+        EmailServiceType::SENDGRID => SendgridMailAdapter::class,
+        EmailServiceType::MAILGUN => MailgunMailAdapter::class,
+        EmailServiceType::POSTMARK => PostmarkMailAdapter::class
     ];
 
     /**
@@ -33,34 +33,34 @@ class MailAdapterFactory
     /**
      * Get a mail adapter instance.
      */
-    public function adapter(Provider $provider): MailAdapterInterface
+    public function adapter(EmailService $emailService): MailAdapterInterface
     {
-        return $this->adapters[$provider->id] ?? $this->cache($this->resolve($provider), $provider);
+        return $this->adapters[$emailService->id] ?? $this->cache($this->resolve($emailService), $emailService);
     }
 
     /**
      * Cache a resolved adapter for the given provider.
      */
-    private function cache(MailAdapterInterface $adapter, Provider $provider): MailAdapterInterface
+    private function cache(MailAdapterInterface $adapter, EmailService $emailService): MailAdapterInterface
     {
-        return $this->adapters[$provider->id] = $adapter;
+        return $this->adapters[$emailService->id] = $adapter;
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    private function resolve(Provider $provider): MailAdapterInterface
+    private function resolve(EmailService $emailService): MailAdapterInterface
     {
-        if (!$providerType = ProviderType::resolve($provider->type_id)) {
-            throw new InvalidArgumentException("Unable to resolve mail provider type from ID [$provider->type_id].");
+        if (!$emailServiceType = EmailServiceType::resolve($emailService->type_id)) {
+            throw new InvalidArgumentException("Unable to resolve mail provider type from ID [$emailService->type_id].");
         }
 
-        $adapterClass = self::$adapterMap[$provider->type_id] ?? null;
+        $adapterClass = self::$adapterMap[$emailService->type_id] ?? null;
 
         if (!$adapterClass) {
-            throw new InvalidArgumentException("Mail adapter type [{$providerType}] is not supported.");
+            throw new InvalidArgumentException("Mail adapter type [{$emailServiceType}] is not supported.");
         }
 
-        return new $adapterClass($provider->settings);
+        return new $adapterClass($emailService->settings);
     }
 }

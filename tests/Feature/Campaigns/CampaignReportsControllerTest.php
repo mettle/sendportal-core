@@ -18,21 +18,13 @@ class CampaignReportsControllerTest extends TestCase
         // given
         [$campaign, $user] = $this->getCampaignAndUser();
 
+        $this->withoutExceptionHandling();
+
         // when
         $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.index', $campaign->id));
 
         // then
         $response->assertOk();
-    }
-
-    private function getCampaignAndUser(): array
-    {
-        [$workspace, $user] = $this->createUserAndWorkspace();
-        $campaign = factory(Campaign::class)
-            ->state('sent')
-            ->create(['workspace_id' => $workspace->id]);
-
-        return [$campaign, $user];
     }
 
     /** @test */
@@ -98,5 +90,15 @@ class CampaignReportsControllerTest extends TestCase
 
         // then
         $response->assertOk();
+    }
+
+    private function getCampaignAndUser(): array
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $campaign = factory(Campaign::class)
+            ->state('sent')
+            ->create(['workspace_id' => $workspace->id]);
+
+        return [$campaign, $user];
     }
 }

@@ -1,39 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
 use Sendportal\Base\Models\CampaignStatus;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 
 class CampaignDuplicateController extends Controller
 {
-    /**
-     * @var CampaignTenantInterface
-     */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaigns;
 
-    /**
-     * CampaignsController constructor
-     *
-     * @param CampaignTenantInterface $campaigns
-     */
-    public function __construct(CampaignTenantInterface $campaigns)
+    public function __construct(CampaignTenantRepositoryInterface $campaigns)
     {
         $this->campaigns = $campaigns;
     }
 
     /**
-     * Duplicate a campaign
+     * Duplicate a campaign.
      *
-     * @param $campaignId
-     * @return RedirectResponse|Redirector
      * @throws Exception
      */
-    public function duplicate($campaignId)
+    public function duplicate(int $campaignId): RedirectResponse
     {
         $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $campaignId);
 
@@ -41,7 +33,7 @@ class CampaignDuplicateController extends Controller
             'name' => $campaign->name . ' - Duplicate',
             'status_id' => CampaignStatus::STATUS_DRAFT,
             'template_id' => $campaign->template_id,
-            'provider_id' => $campaign->provider_id,
+            'email_service_id' => $campaign->email_service_id,
             'subject' => $campaign->subject,
             'content' => $campaign->content,
             'from_name' => $campaign->from_name,

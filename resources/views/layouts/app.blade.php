@@ -24,12 +24,12 @@
     <div class="row">
 
         @auth()
-            <div class="sidebar bg-dark-blue min-vh-100 d-none d-xl-block">
+            <div class="sidebar bg-purple-100 min-vh-100 d-none d-xl-block">
 
                 <div class="mt-4">
                     <div class="logo text-center">
                         <a href="/">
-                            <img src="{{ asset('/vendor/sendportal/img/logo-blue.png') }}" alt="" width="175px">
+                            <img src="{{ asset('/vendor/sendportal/img/logo-main.png') }}" alt="" width="175px">
                         </a>
                     </div>
                 </div>

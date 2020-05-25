@@ -1,19 +1,20 @@
 <?php
 
-use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Workspace;
-use Faker\Generator as Faker;
+declare(strict_types=1);
 
-$factory->define(Segment::class, function (Faker $faker) {
+/** @var Factory $factory */
+
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
+use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Subscriber;
+
+$factory->define(Segment::class, static function (Faker $faker) {
     return [
         'name' => ucwords($faker->unique()->word),
     ];
 });
 
-$factory->state(Segment::class, 'subscribed', function (Faker $faker) {
-    return [];
-});
-
-$factory->afterCreatingState(Segment::class, 'subscribed', function ($subscriber, $faker) {
-    $subscriber->subscribers()->saveMany(factory(\Sendportal\Base\Models\Subscriber::class, 2)->make());
+$factory->afterCreatingState(Segment::class, 'subscribed', static function (Segment $segment) {
+    $segment->subscribers()->saveMany(factory(Subscriber::class, 2)->make());
 });

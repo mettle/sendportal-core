@@ -63,11 +63,11 @@ class Campaign extends BaseModel
     }
 
     /**
-     * Provider used for the campaign.
+     * Email Service used for the campaign.
      */
-    public function provider(): BelongsTo
+    public function email_service(): BelongsTo
     {
-        return $this->belongsTo(Provider::class);
+        return $this->belongsTo(EmailService::class);
     }
 
     /**

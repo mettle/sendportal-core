@@ -2,6 +2,11 @@
 
 namespace Sendportal\Base\Interfaces;
 
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
+
 interface BaseTenantInterface
 {
     /**
@@ -12,7 +17,7 @@ interface BaseTenantInterface
      * @param array $relations
      * @param array $parameters
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function all($workspaceId, $orderBy = 'id', array $relations = [], array $parameters = []);
 
@@ -25,7 +30,7 @@ interface BaseTenantInterface
      * @param int $paginate
      * @param array $parameters
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function paginate($workspaceId, $orderBy = 'name', array $relations = [], $paginate = 25, array $parameters = []);
 
@@ -36,7 +41,7 @@ interface BaseTenantInterface
      * @param array $parameters
      * @param array $relations
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getBy($workspaceId, array $parameters, array $relations = []);
 
@@ -47,7 +52,7 @@ interface BaseTenantInterface
      * @param string $fieldName
      * @param string $fieldId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function pluck($workspaceId, $fieldName = 'name', $fieldId = 'id');
 
@@ -60,7 +65,7 @@ interface BaseTenantInterface
      * @param string $listFieldName
      * @param string $listFieldId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function pluckBy($workspaceId, $field, $value, $listFieldName = 'name', $listFieldId = 'id');
 
@@ -71,7 +76,7 @@ interface BaseTenantInterface
      * @param int $id
      * @param array $relations
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function find($workspaceId, $id, array $relations = []);
 
@@ -83,7 +88,7 @@ interface BaseTenantInterface
      * @param mixed $value
      * @param array $relations
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function findBy($workspaceId, $field, $value, array $relations = []);
 
@@ -94,7 +99,7 @@ interface BaseTenantInterface
      * @param array $data
      * @param array $relations
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function findByMany($workspaceId, array $data, array $relations = []);
 
@@ -105,7 +110,7 @@ interface BaseTenantInterface
      * @param array $ids
      * @param array $relations
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getWhereIn($workspaceId, array $ids, array $relations = []);
 
@@ -115,7 +120,7 @@ interface BaseTenantInterface
      * @param int $workspaceId
      * @param array $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function store($workspaceId, array $data);
 
@@ -126,7 +131,7 @@ interface BaseTenantInterface
      * @param int $id
      * @param array $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($workspaceId, $id, array $data);
 
@@ -136,41 +141,35 @@ interface BaseTenantInterface
      * @param int $workspaceId
      * @param int $id
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($workspaceId, $id);
 
     /**
      * Count of all records
      *
-     * @param int $workspaceId
-     * @return mixed
-     * @throws \Exception
+     * @return int
+     * @throws Exception
      */
-    public function count($workspaceId);
+    public function count(): int;
 
     /**
      * Return model name
      *
      * @return string
-     * @throws \Exception If model has not been set.
+     * @throws RuntimeException If model has not been set.
      */
-    public function getModelName();
+    public function getModelName(): string;
 
     /**
-     * Return a new query builder instance
-     *
-     * @param int $workspaceId
-     * @return mixed
-     * @throws \Exception
+     * Return a new query builder instance.
      */
-    public function getQueryBuilder($workspaceId);
+    public function getQueryBuilder(int $workspaceId): Builder;
 
     /**
-     * Returns new model instance
+     * Returns new model instance.
      *
-     * @return mixed
-     * @throws \Exception
+     * @return Model
      */
     public function getNewInstance();
 

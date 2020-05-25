@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
 use Sendportal\Base\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller

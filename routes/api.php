@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Sendportal\Base\Http\Middleware\VerifyUserOnWorkspace;
 
@@ -16,41 +17,39 @@ use Sendportal\Base\Http\Middleware\VerifyUserOnWorkspace;
 |
 */
 
-Route::middleware(['auth:api'])->name('sendportal.api.')->namespace('Api')->group(static function () {
-    Route::apiResource('workspaces', 'WorkspacesController')->only('index');
+Route::middleware(['auth:api'])->name('sendportal.api.')->namespace('Api')->group(static function (Router $router) {
+    $router->apiResource('workspaces', 'WorkspacesController')->only('index');
 });
 
 Route::middleware([
     'auth:api',
     VerifyUserOnWorkspace::class
-])->name('sendportal.api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(function () {
-    Route::apiResource('subscribers', 'SubscribersController');
-    Route::apiResource('segments', 'SegmentsController');
+])->name('sendportal.api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(static function (Router $apiRouter) {
+    $apiRouter->apiResource('subscribers', 'SubscribersController');
+    $apiRouter->apiResource('segments', 'SegmentsController');
 
-    Route::apiResource('subscribers.segments', 'SubscriberSegmentsController')
+    $apiRouter->apiResource('subscribers.segments', 'SubscriberSegmentsController')
         ->except(['show', 'update', 'destroy']);
-    Route::put('subscribers/{subscriber}/segments', 'SubscriberSegmentsController@update')
+    $apiRouter->put('subscribers/{subscriber}/segments', 'SubscriberSegmentsController@update')
         ->name('subscribers.segments.update');
-    Route::delete('subscribers/{subscriber}/segments', 'SubscriberSegmentsController@destroy')
+    $apiRouter->delete('subscribers/{subscriber}/segments', 'SubscriberSegmentsController@destroy')
         ->name('subscribers.segments.destroy');
 
-    Route::apiResource('segments.subscribers', 'SegmentSubscribersController')
+    $apiRouter->apiResource('segments.subscribers', 'SegmentSubscribersController')
         ->except(['show', 'update', 'destroy']);
-    Route::put('segments/{segment}/subscribers', 'SegmentSubscribersController@update')
+    $apiRouter->put('segments/{segment}/subscribers', 'SegmentSubscribersController@update')
         ->name('segments.subscribers.update');
-    Route::delete('segments/{segment}/subscribers', 'SegmentSubscribersController@destroy')
+    $apiRouter->delete('segments/{segment}/subscribers', 'SegmentSubscribersController@destroy')
         ->name('segments.subscribers.destroy');
 });
 
-Route::name('api.')->namespace('Api')->group(function()
-{
-    Route::post('webhooks/aws', 'AwsWebhooksController@handle')->name('webhooks.aws');
-    Route::post('webhooks/mailgun', 'MailgunWebhooksController@handle')->name('webhooks.mailgun');
-    Route::post('webhooks/postmark', 'PostmarkWebhooksController@handle')->name('webhooks.postmark');
-    Route::post('webhooks/sendgrid', 'SendgridWebhooksController@handle')->name('webhooks.sendgrid');
+Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api')->group(static function (Router $webhookRouter) {
+    $webhookRouter->post('aws', 'AwsWebhooksController@handle')->name('aws');
+    $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
+    $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');
+    $webhookRouter->post('sendgrid', 'SendgridWebhooksController@handle')->name('sendgrid');
 });
 
-Route::get('ping', function() {
+Route::get('ping', static function () {
     return 'ok';
 });
-

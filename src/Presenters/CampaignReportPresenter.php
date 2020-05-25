@@ -1,60 +1,56 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Presenters;
 
-use Sendportal\Base\Interfaces\CampaignTenantInterface;
-use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Repositories\MessageTenantRepository;
-use Sendportal\Base\Repositories\MessageUrlRepository;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
+use Exception;
 use Illuminate\Support\Collection;
+use RuntimeException;
+use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\Workspace;
+use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
+use Sendportal\Base\Repositories\MessageUrlRepository;
+use stdClass;
 
 class CampaignReportPresenter
 {
-    /**
-     * @var Campaign
-     */
-    protected $campaign;
+    /** @var Campaign */
+    private $campaign;
 
-    /**
-     * @var CampaignTenantInterface
-     */
-    protected $campaignRepo;
+    /** @var Workspace */
+    private $currentWorkspace;
 
-    /**
-     * @var MessageTenantRepository
-     */
-    protected $messageRepo;
+    /** @var MessageTenantRepositoryInterface */
+    private $messageRepo;
 
-    /**
-     * @var MessageUrlRepository
-     */
-    protected $messageUrlRepo;
+    /** @var MessageUrlRepository */
+    private $messageUrlRepo;
 
-    /**
-     * CampaignReportPresenter constructor
-     *
-     * @param Campaign $campaign
-     */
-    public function __construct(Campaign $campaign)
+    private const ONE_DAY_IN_SECONDS = 86400;
+    private const THIRTY_DAYS_IN_SECONDS = self::ONE_DAY_IN_SECONDS * 30;
+
+    public function __construct(Campaign $campaign, Workspace $currentWorkspace)
     {
-        $this->campaignRepo = app(CampaignTenantInterface::class);
-        $this->messageRepo = app(MessageTenantRepository::class);
+        $this->messageRepo = app(MessageTenantRepositoryInterface::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
 
         $this->campaign = $campaign;
+        $this->currentWorkspace = $currentWorkspace;
     }
 
     /**
-     * Generate the data for the view
+     * Generate the data for the view.
      *
-     * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function generate()
+    public function generate(): array
     {
-        if (! $this->campaign) {
-            throw new \Exception('Campaign must be initialised');
+        if (!$this->campaign) {
+            throw new RuntimeException('Campaign must be initialised');
         }
 
         return [
@@ -64,39 +60,49 @@ class CampaignReportPresenter
     }
 
     /**
-     * Generate the chart data
+     * Generate the chart data.
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function getChartData()
+    private function getChartData(): array
     {
-        // get the boundaries of the first and last event from the database
-        $boundaries = $this->messageRepo->getFirstLastOpenedAt(auth()->user()->currentWorkspace()->id, Campaign::class, $this->campaign->id);
+        // Get the boundaries of the first and last event from the database.
+        $boundaries = $this->messageRepo->getFirstLastOpenedAt(
+            $this->currentWorkspace->id,
+            Campaign::class,
+            $this->campaign->id
+        );
 
-        // extract Carbon instances for $first and $last
-        list($first, $last) = $this->calculateFirstLast($boundaries);
+        // Extract Carbon instances for $first and $last.
+        [$first, $last] = $this->calculateFirstLast($boundaries);
 
-        // calculate the timespan between the first and last even
+        // Calculate the timespan between the first and last event.
         $timespan = $this->calculateTimespan($first, $last);
 
-        // calculate the number of seconds for the given timespan
+        // Calculate the number of seconds for the given timespan.
         $secondsPerInterval = $this->calculateSecondsInterval($timespan);
 
-        // modify first so that it matches with the database intervals (i.e. using DIV in mysql)
+        // Modify first so that it matches with the database intervals (i.e. using DIV in mysql).
         $first = Carbon::createFromTimestamp(floor($first->timestamp / $secondsPerInterval) * $secondsPerInterval);
 
-        // create the php DateTime intervals
+        // Create the PHP DateTime intervals.
         $intervals = $this->createIntervals($first, $last, $timespan);
 
-        // calculate the opens per period frm the database
-        $opensPerPeriod = $this->messageRepo->countUniqueOpensPerPeriod(auth()->user()->currentWorkspace()->id, Campaign::class, $this->campaign->id, $secondsPerInterval);
+        // Calculate the opens per period from the database.
+        $opensPerPeriod = $this->messageRepo->countUniqueOpensPerPeriod(
+            $this->currentWorkspace->id,
+            Campaign::class,
+            $this->campaign->id,
+            $secondsPerInterval
+        );
 
-        // merge in the actual opens to the intervals
+        // Merge in the actual opens to the intervals.
         $periods = $this->populatePeriods($opensPerPeriod, $intervals);
 
         $result = [];
 
-        // separate the periods into labels and data for chart.js
+        // Separate the periods into labels and data for chart.js.
+        /** @var array $period */
         foreach ($periods as $period) {
             $result['labels'][] = $period['opened_at'];
             $result['data'][] = $period['open_count'];
@@ -106,51 +112,43 @@ class CampaignReportPresenter
     }
 
     /**
-     * Create the DatePeriod intervals between the first and last opens
+     * Create the DatePeriod intervals between the first and last opens.
      *
-     * @param Carbon $first
-     * @param Carbon $last
-     * @param int $timespan
-     * @return \DatePeriod
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function createIntervals(Carbon $first, Carbon $last, $timespan): \DatePeriod
+    private function createIntervals(Carbon $first, Carbon $last, int $timespan): DatePeriod
     {
         $interval = $this->calculateDateTimeInterval($timespan);
 
-        return new \DatePeriod(
-            new \DateTime($first),
-            new \DateInterval('PT'.$interval),
-            new \DateTime($last)
+        return new DatePeriod(
+            $first,
+            new DateInterval('PT' . $interval),
+            $last
         );
     }
 
     /**
-     * Calculate the number of seconds between the first and last event
-     * rounded to the nearest timespan interval
-     *
-     * @param Carbon $first
-     * @param Carbon $last
-     * @return int
+     * Calculate the number of seconds between the first and last event, rounded to the nearest timespan interval.
      */
-    protected function calculateTimespan(Carbon $first, Carbon $last)
+    private function calculateTimespan(Carbon $first, Carbon $last): int
     {
+        /**
+         * @var int $timespan
+         * @var array $item
+         */
         foreach ($this->getTimeSpanIntervals() as $timespan => $item) {
             if ($last->lt($first->copy()->addSeconds($timespan))) {
                 return $timespan;
             }
         }
 
-        return 2592000; // 30 days
+        return self::THIRTY_DAYS_IN_SECONDS;
     }
 
     /**
-     * Calculate the first and last timestamps
-     *
-     * @param $boundaries
-     * @return array
+     * Calculate the first and last timestamps.
      */
-    protected function calculateFirstLast($boundaries)
+    private function calculateFirstLast(stdClass $boundaries): array
     {
         if (isset($boundaries->first)) {
             $first = Carbon::parse($boundaries->first);
@@ -160,19 +158,16 @@ class CampaignReportPresenter
             $last = $first->copy()->addHours(12);
         }
 
-        $first = $first->copy()->startOfHour();
-        $last = $last->copy()->endOfHour();
+        // by default we only show the first 24 hours of the campaign
+        $last = min($last->copy(), $first->copy()->addHours(24));
 
-        return [$first, $last];
+        return [$first->copy()->startOfHour(), $last->copy()->endOfHour()];
     }
 
     /**
-     * Calculate the DateTime interval for a given timespan
-     *
-     * @param int $timespan
-     * @return mixed|string
+     * Calculate the DateTime interval for a given timespan.
      */
-    protected function calculateDateTimeInterval($timespan)
+    private function calculateDateTimeInterval(int $timespan): string
     {
         $timespanIntervals = $this->getTimeSpanIntervals();
 
@@ -184,31 +179,25 @@ class CampaignReportPresenter
     }
 
     /**
-     * Calculate the interval in seconds for a given timespan
-     *
-     * @param int $timespan
-     * @return int|mixed
+     * Calculate the interval in seconds for a given timespan.
      */
-    protected function calculateSecondsInterval($timespan)
+    private function calculateSecondsInterval(int $timespan): int
     {
         $timespanIntervals = $this->getTimeSpanIntervals();
 
         if (isset($timespanIntervals[$timespan])) {
-            return $timespanIntervals[$timespan]['seconds'];
+            return (int)$timespanIntervals[$timespan]['seconds'];
         }
 
-        return 86400;
+        return self::ONE_DAY_IN_SECONDS;
     }
 
     /**
-     * Map the timespan between the first and last event
+     * Map the timespan between the first and last event.
      *
-     * The array key is the timespan and the elements are the intervals
-     * in seconds and DateTime interval
-     *
-     * @return array
+     * The array key is the timespan and the elements are the intervals in seconds and DateTime interval.
      */
-    protected function getTimeSpanIntervals()
+    private function getTimeSpanIntervals(): array
     {
         return [
             1800 => [ // 30 mins - 30 intervals of 1 min
@@ -259,17 +248,14 @@ class CampaignReportPresenter
     }
 
     /**
-     * Populate the periods into the intervals
-     *
-     * @param Collection $opensPerPeriod
-     * @param \DatePeriod $intervals
-     * @return array
+     * Populate the periods into the intervals.
      */
-    protected function populatePeriods(Collection $opensPerPeriod, \DatePeriod $intervals): array
+    private function populatePeriods(Collection $opensPerPeriod, DatePeriod $intervals): array
     {
         $periods = [];
 
-        // create an array periods, where the key for each item is the date
+        // Create an array periods, where the key for each item is the date.
+        /** @var Carbon $interval */
         foreach ($intervals as $interval) {
             $periods[$interval->format('Y-m-d H:i:s')] = [
                 'opened_at' => $interval->format('d-M H:i'),
@@ -277,7 +263,7 @@ class CampaignReportPresenter
             ];
         }
 
-        // Populate the actual opens per period into the intervals
+        // Populate the actual opens per period into the intervals.
         if ($opensPerPeriod) {
             foreach ($opensPerPeriod as $item) {
                 $periods[$item->period_start]['open_count'] = $item->open_count;
@@ -288,16 +274,15 @@ class CampaignReportPresenter
     }
 
     /**
-     * Get all clicked links for a campaign
+     * Get all clicked links for a campaign.
      *
-     * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function getCampaignUrls()
+    private function getCampaignUrls(): Collection
     {
         return $this->messageUrlRepo->getBy([
             'source_type' => Campaign::class,
             'source_id' => $this->campaign->id,
-        ]);
+        ])->toBase();
     }
 }

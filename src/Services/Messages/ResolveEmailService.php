@@ -4,11 +4,11 @@ namespace Sendportal\Base\Services\Messages;
 
 use Exception;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Pro\Repositories\AutomationScheduleRepository;
 
-class ResolveProvider
+class ResolveEmailService
 {
     /** @var CampaignTenantRepositoryInterface */
     protected $campaignTenantRepository;
@@ -21,57 +21,57 @@ class ResolveProvider
     /**
      * @throws Exception
      */
-    public function handle(Message $message): Provider
+    public function handle(Message $message): EmailService
     {
         if ($message->isAutomation()) {
-            return $this->resolveAutomationProvider($message);
+            return $this->resolveAutomationEmailService($message);
         }
 
         if ($message->isCampaign()) {
-            return $this->resolveCampaignProvider($message);
+            return $this->resolveCampaignEmailService($message);
         }
 
-        throw new Exception('Unable to resolve provider for message id=' . $message->id);
+        throw new Exception('Unable to resolve email service for message id=' . $message->id);
     }
 
     /**
-     * Resolve the provider for an automation
+     * Resolve the email service for an automation
      *
      * @param Message $message
-     * @return Provider
+     * @return EmailService
      * @throws Exception
      */
-    protected function resolveAutomationProvider(Message $message): Provider
+    protected function resolveAutomationEmailService(Message $message): EmailService
     {
         if (!$automationSchedule = app(AutomationScheduleRepository::class)->find($message->source_id,
-            ['automation_step.automation.provider.type'])) {
+            ['automation_step.automation.email_service.type'])) {
             throw new Exception('Unable to resolve automation schedule for message id=' . $message->id);
         }
 
-        if (!$provider = $automationSchedule->automation_step->automation->provider) {
-            throw new Exception('Unable to resolve provider for message id=' . $message->id);
+        if (!$emailService = $automationSchedule->automation_step->automation->email_service) {
+            throw new Exception('Unable to resolve email service for message id=' . $message->id);
         }
 
-        return $provider;
+        return $emailService;
     }
 
     /**
      * Resolve the provider for a campaign
      *
      * @param Message $message
-     * @return Provider
+     * @return EmailService
      * @throws Exception
      */
-    protected function resolveCampaignProvider(Message $message): Provider
+    protected function resolveCampaignEmailService(Message $message): EmailService
     {
-        if (! $campaign = $this->campaignTenantRepository->find($message->workspace_id, $message->source_id, ['provider'])) {
+        if (! $campaign = $this->campaignTenantRepository->find($message->workspace_id, $message->source_id, ['email_service'])) {
             throw new Exception('Unable to resolve campaign for message id=' . $message->id);
         }
 
-        if (! $provider = $campaign->provider) {
-            throw new Exception('Unable to resolve provider for message id=' . $message->id);
+        if (! $emailService = $campaign->email_service) {
+            throw new Exception('Unable to resolve email service for message id=' . $message->id);
         }
 
-        return $provider;
+        return $emailService;
     }
 }

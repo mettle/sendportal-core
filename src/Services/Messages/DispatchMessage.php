@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Messages;
 
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Services\Content\MergeContent;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class DispatchMessage
 {
-    /** @var ResolveProvider */
-    protected $resolveProvider;
+    /** @var ResolveEmailService */
+    protected $resolveEmailService;
 
     /** @var RelayMessage */
     protected $relayMessage;
@@ -26,18 +26,18 @@ class DispatchMessage
 
     public function __construct(
         MergeContent $mergeContent,
-        ResolveProvider $resolveProvider,
+        ResolveEmailService $resolveEmailService,
         RelayMessage $relayMessage,
         MarkAsSent $markAsSent
     ) {
-        $this->resolveProvider = $resolveProvider;
+        $this->resolveEmailService = $resolveEmailService;
         $this->relayMessage = $relayMessage;
         $this->mergeContent = $mergeContent;
         $this->markAsSent = $markAsSent;
     }
 
     /**
-     * Returns the message_id from the provider
+     * Returns the message_id from the email service
      *
      * @throws Exception
      */
@@ -51,11 +51,11 @@ class DispatchMessage
 
         $mergedContent = $this->getMergedContent($message);
 
-        $provider = $this->getProvider($message);
+        $emailService = $this->getEmailService($message);
 
         $trackingOptions = MessageTrackingOptions::fromMessage($message);
 
-        $messageId = $this->dispatch($message, $provider, $trackingOptions, $mergedContent);
+        $messageId = $this->dispatch($message, $emailService, $trackingOptions, $mergedContent);
 
         $this->markSent($message, $messageId);
 
@@ -73,7 +73,7 @@ class DispatchMessage
     /**
      * @throws Exception
      */
-    protected function dispatch(Message $message, Provider $provider, MessageTrackingOptions $trackingOptions, string $mergedContent): ?string
+    protected function dispatch(Message $message, EmailService $emailService, MessageTrackingOptions $trackingOptions, string $mergedContent): ?string
     {
         $messageOptions = (new MessageOptions)
             ->setTo($message->recipient_email)
@@ -81,7 +81,7 @@ class DispatchMessage
             ->setSubject($message->subject)
             ->setTrackingOptions($trackingOptions);
 
-        $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $provider);
+        $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
 
         Log::info('Message has been dispatched.', ['message_id' => $messageId]);
 
@@ -91,9 +91,9 @@ class DispatchMessage
     /**
      * @throws Exception
      */
-    protected function getProvider(Message $message): Provider
+    protected function getEmailService(Message $message): EmailService
     {
-        return $this->resolveProvider->handle($message);
+        return $this->resolveEmailService->handle($message);
     }
 
     protected function markSent(Message $message, string $messageId): Message

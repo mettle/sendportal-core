@@ -37,21 +37,21 @@
         @slot('right')
             <div class="btn-group mr-2">
                 <button class="btn btn-md btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fa fa-bars"></i>
+                    <i class="fa fa-bars color-gray-400"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <a href="{{ route('sendportal.segments.index') }}" class="dropdown-item">
-                        <i class="fa fa-tags mr-2"></i> {{ __('Segments') }}
-                    </a>
                     <a href="{{ route('sendportal.subscribers.import') }}" class="dropdown-item">
-                        <i class="fa fa-upload mr-2"></i> {{ __('Import Subscribers') }}
+                        <i class="fa fa-upload color-gray-400 mr-2"></i> {{ __('Import Subscribers') }}
                     </a>
                     <a href="{{ route('sendportal.subscribers.export') }}" class="dropdown-item">
-                        <i class="fa fa-download mr-2"></i> {{ __('Export Subscribers') }}
+                        <i class="fa fa-download color-gray-400 mr-2"></i> {{ __('Export Subscribers') }}
                     </a>
 
                 </div>
             </div>
+            <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.segments.index') }}">
+                <i class="fa fa-tag color-gray-400 mr-1"></i> {{ __('Segments') }}
+            </a>
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.subscribers.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('New Subscriber') }}
             </a>

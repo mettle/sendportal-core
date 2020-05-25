@@ -30,16 +30,20 @@ class CampaignReportPresenter
     /** @var MessageUrlRepository */
     private $messageUrlRepo;
 
+    /** @var int */
+    private $interval;
+
     private const ONE_DAY_IN_SECONDS = 86400;
     private const THIRTY_DAYS_IN_SECONDS = self::ONE_DAY_IN_SECONDS * 30;
 
-    public function __construct(Campaign $campaign, Workspace $currentWorkspace)
+    public function __construct(Campaign $campaign, Workspace $currentWorkspace, int $interval)
     {
         $this->messageRepo = app(MessageTenantRepositoryInterface::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
 
         $this->campaign = $campaign;
         $this->currentWorkspace = $currentWorkspace;
+        $this->interval = $interval;
     }
 
     /**
@@ -66,15 +70,19 @@ class CampaignReportPresenter
      */
     private function getChartData(): array
     {
-        // Get the boundaries of the first and last event from the database.
-        $boundaries = $this->messageRepo->getFirstLastOpenedAt(
+        // Get the first event from the database.
+        $first = $this->messageRepo->getFirstOpenedAt(
             $this->currentWorkspace->id,
             Campaign::class,
             $this->campaign->id
         );
 
+        if (is_null($first)) {
+            return [];
+        }
+
         // Extract Carbon instances for $first and $last.
-        [$first, $last] = $this->calculateFirstLast($boundaries);
+        [$first, $last] = $this->calculateFirstLast($first, $this->interval);
 
         // Calculate the timespan between the first and last event.
         $timespan = $this->calculateTimespan($first, $last);
@@ -137,7 +145,7 @@ class CampaignReportPresenter
          * @var array $item
          */
         foreach ($this->getTimeSpanIntervals() as $timespan => $item) {
-            if ($last->lt($first->copy()->addSeconds($timespan))) {
+            if ($last->copy()->subHour()->lte($first->copy()->addSeconds($timespan))) {
                 return $timespan;
             }
         }
@@ -148,18 +156,10 @@ class CampaignReportPresenter
     /**
      * Calculate the first and last timestamps.
      */
-    private function calculateFirstLast(stdClass $boundaries): array
+    private function calculateFirstLast(string $first, int $interval): array
     {
-        if (isset($boundaries->first)) {
-            $first = Carbon::parse($boundaries->first);
-            $last = Carbon::parse($boundaries->last);
-        } else {
-            $first = Carbon::parse($this->campaign->scheduled_at);
-            $last = $first->copy()->addHours(12);
-        }
-
-        // by default we only show the first 24 hours of the campaign
-        $last = min($last->copy(), $first->copy()->addHours(24));
+        $first = Carbon::parse($first);
+        $last = $first->copy()->addHours($interval);
 
         return [$first->copy()->startOfHour(), $last->copy()->endOfHour()];
     }
@@ -220,11 +220,7 @@ class CampaignReportPresenter
                 'seconds' => '600',
                 'interval' => '10M',
             ],
-            43200 => [ // 12 hours - 36 intervals of 20 min
-                'seconds' => '1200',
-                'interval' => '20M',
-            ],
-            64800 => [ // 18 hours - 36 intervals of 30 min
+            43200 => [ // 12 hours - 36 intervals of 30 min
                 'seconds' => '1800',
                 'interval' => '30M',
             ],
@@ -235,14 +231,6 @@ class CampaignReportPresenter
             172800 => [ // 2 days - 24 intervals of 2 hours
                 'seconds' => '7200',
                 'interval' => '2H',
-            ],
-            345600 => [ // 4 days - 24 intervals of 4 hours
-                'seconds' => '14400',
-                'interval' => '4H',
-            ],
-            1296000 => [ // 15 days - 15 intervals of 1 day
-                'seconds' => '86400',
-                'interval' => '24H',
             ],
         ];
     }
@@ -266,7 +254,9 @@ class CampaignReportPresenter
         // Populate the actual opens per period into the intervals.
         if ($opensPerPeriod) {
             foreach ($opensPerPeriod as $item) {
-                $periods[$item->period_start]['open_count'] = $item->open_count;
+                if (array_key_exists($item->period_start, $periods)) {
+                    $periods[$item->period_start]['open_count'] = $item->open_count;
+                }
             }
         }
 

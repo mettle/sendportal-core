@@ -70,6 +70,8 @@ class SesMailAdapter extends BaseMailAdapter
     }
 
     /**
+     * https://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendQuota.html
+     *
      * @throws BindingResolutionException
      */
     public function getSendQuota(): array

@@ -16,7 +16,7 @@
                     <div class="text-uppercase">{{ __('Unique Clicks') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fal fa-user-chart fa-2x"></em>
+                    <em class="far fa-hand-pointer fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                     <div class="text-uppercase">{{ __('Total Clicks') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fal fa-chart-bar fa-2x"></em>
+                    <em class="fas fa-hand-pointer fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
                     <div class="text-uppercase">{{ __('Avg. Time To Click') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fal fa-stopwatch fa-2x"></em>
+                    <em class="far fa-clock fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>

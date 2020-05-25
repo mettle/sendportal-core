@@ -29,7 +29,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-                <h1 class="h4 mb-0 color-purple-500">@yield('heading')</h1>
+                <h1 class="h3 mb-0">@yield('heading')</h1>
 
                 <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
                     @php $workspaces = auth()->user()->workspaces @endphp

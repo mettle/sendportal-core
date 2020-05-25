@@ -17,7 +17,7 @@ class WorkspaceUserControllerTest extends TestCase
      */
     function an_unauthenticated_user_cannot_view_the_workspace_user_index()
     {
-        $response = $this->get(route('sendportal.settings.users.index'));
+        $response = $this->get(route('sendportal.users.index'));
 
         $this->assertLoginRedirect($response);
     }
@@ -31,7 +31,7 @@ class WorkspaceUserControllerTest extends TestCase
     {
         $this->createUserAndLogin(['workspace-member']);
 
-        $response = $this->get(route('sendportal.settings.users.index'));
+        $response = $this->get(route('sendportal.users.index'));
 
         $response->assertStatus(404);
     }
@@ -45,9 +45,9 @@ class WorkspaceUserControllerTest extends TestCase
         $user = $this->createUserWithWorkspace();
 
         $this->actingAs($user);
-        $response = $this->get(route('sendportal.settings.users.index'));
+        $response = $this->get(route('sendportal.users.index'));
 
-        $response->assertOk();
+        $response->dump()->assertOk();
         $response->assertSee($user->name);
     }
 
@@ -65,7 +65,7 @@ class WorkspaceUserControllerTest extends TestCase
         $this->assertTrue($otherUser->onWorkspace($workspace));
 
         $this->actingAs($user);
-        $this->delete(route('sendportal.settings.users.destroy', $otherUser->id));
+        $this->delete(route('sendportal.users.destroy', $otherUser->id));
 
         $this->assertFalse($otherUser->fresh()->onWorkspace($workspace));
     }
@@ -79,7 +79,7 @@ class WorkspaceUserControllerTest extends TestCase
         [$workspace, $user] = $this->createUserAndWorkspace();
 
         $this->actingAs($user);
-        $response = $this->delete(route('sendportal.settings.users.destroy', $user->id));
+        $response = $this->delete(route('sendportal.users.destroy', $user->id));
 
         $response->assertRedirect();
 
@@ -98,7 +98,7 @@ class WorkspaceUserControllerTest extends TestCase
 
         $otherUser = $this->createWorkspaceUser($workspace);
 
-        $response = $this->delete(route('sendportal.settings.users.destroy', $otherUser->id));
+        $response = $this->delete(route('sendportal.users.destroy', $otherUser->id));
 
         $response->assertStatus(404);
     }

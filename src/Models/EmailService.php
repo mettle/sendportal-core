@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Sendportal\Base\Facades\Helper;
 use Sendportal\Pro\Models\Automation;
 
-class Provider extends BaseModel
+class EmailService extends BaseModel
 {
     /** @var array */
     protected $fillable = [
@@ -23,7 +23,7 @@ class Provider extends BaseModel
      */
     public function type(): BelongsTo
     {
-        return $this->belongsTo(ProviderType::class, 'type_id');
+        return $this->belongsTo(EmailServiceType::class, 'type_id');
     }
 
     /**
@@ -31,15 +31,15 @@ class Provider extends BaseModel
      */
     public function campaigns(): HasMany
     {
-        return $this->hasMany(Campaign::class, 'provider_id');
+        return $this->hasMany(Campaign::class, 'email_service_id');
     }
 
     /**
-     * Automations using this provider.
+     * Automations using this email service.
      */
     public function automations(): HasMany
     {
-        return $this->hasMany(Automation::class, 'provider_id');
+        return $this->hasMany(Automation::class, 'email_service_id');
     }
 
     public function setSettingsAttribute(array $data): void

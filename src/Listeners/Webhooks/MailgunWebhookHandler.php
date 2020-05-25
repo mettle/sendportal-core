@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
 
@@ -171,17 +171,17 @@ class MailgunWebhookHandler implements ShouldQueue
      */
     private function checkWebhookValidity(string $messageId, array $payload): bool
     {
-        $message = Message::with('source.provider')->where('message_id', $messageId)->first();
+        $message = Message::with('source.email_service')->where('message_id', $messageId)->first();
 
-        /** @var Provider|null $provider */
-        $provider = $message->source->provider ?? null;
+        /** @var EmailService|null $emailservice */
+        $emailservice = $message->source->email_service ?? null;
 
-        if (!$provider) {
+        if (!$emailservice) {
             return false;
         }
 
         /** @var string|null $signingKey */
-        $signingKey = $provider->settings['key'] ?? null;
+        $signingKey = $emailservice->settings['key'] ?? null;
 
         if (!$signingKey) {
             return false;

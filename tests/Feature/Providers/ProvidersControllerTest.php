@@ -97,7 +97,6 @@ class ProvidersControllerTest extends TestCase
 
         $providerUpdateData = [
             'name' => $this->faker->word,
-            'type_id' => ProviderType::POSTMARK,
             'settings' => [
                 'key' => Str::random()
             ]
@@ -111,8 +110,7 @@ class ProvidersControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('providers', [
             'id' => $provider->id,
-            'name' => $providerUpdateData['name'],
-            'type_id' => $providerUpdateData['type_id']
+            'name' => $providerUpdateData['name']
         ]);
     }
 

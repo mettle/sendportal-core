@@ -122,7 +122,7 @@
 
                         @else
 
-                            <p class="empty-table-text">In order to invite users, you have to enable the registration in the Sendportal configuration file.</p>
+                            <p class="empty-table-text">In order to invite users, you have to enable registration in the Sendportal configuration file.</p>
 
                         @endif
 

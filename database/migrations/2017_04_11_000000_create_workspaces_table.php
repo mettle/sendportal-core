@@ -20,11 +20,12 @@ class CreateWorkspacesTable extends Migration
         });
 
         Schema::create('workspace_users', function (Blueprint $table) {
-            $table->unsignedInteger('workspace_id')->index();
+            $table->unsignedInteger('workspace_id');
             $table->unsignedInteger('user_id')->index();
             $table->string('role', 20);
             $table->timestamps();
 
+            $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->unique(['workspace_id', 'user_id']);
         });
     }

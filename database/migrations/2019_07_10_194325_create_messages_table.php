@@ -28,6 +28,7 @@ class CreateMessagesTable extends Migration
             $table->string('ip')->nullable();
             $table->unsignedInteger('open_count')->default(0);
             $table->unsignedInteger('click_count')->default(0);
+            $table->timestamp('queued_at')->nullable()->default(null)->index();
             $table->timestamp('sent_at')->nullable()->default(null)->index();
             $table->timestamp('delivered_at')->nullable()->default(null)->index();
             $table->timestamp('bounced_at')->nullable()->default(null)->index();

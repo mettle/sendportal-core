@@ -28,4 +28,14 @@ return [
         'register' => env('SENDPORTAL_REGISTER', false),
         'password_reset' => env('SENDPORTAL_PASSWORD_RESET', true),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Throttle Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure the Sendportal API throttling.
+    |
+    */
+    'throttle_middleware' => 'throttle:60,1',
 ];

@@ -24,7 +24,7 @@
     <div class="offset-sm-2 col-sm-10">
         <div class="border border-light h-100">
             <iframe width="100%" height="100%" scrolling="yes" frameborder="0"
-                    srcdoc="{!! nl2br($template->content) ?? null  !!} "></iframe>
+                    srcdoc="{!! isset($template) ? nl2br($template->content) : null  !!} "></iframe>
         </div>
     </div>
 </div>

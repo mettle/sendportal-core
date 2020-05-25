@@ -52,7 +52,7 @@ class CampaignsController extends Controller
     public function index(): ViewContract
     {
         $campaigns = $this->campaigns->paginate(auth()->user()->currentWorkspace()->id, 'created_atDesc', ['status']);
-        $providerCount = $this->emailServices->count(auth()->user()->currentWorkspace()->id);
+        $emailServicesCount = $this->emailServices->count(auth()->user()->currentWorkspace()->id);
 
         return view('sendportal::campaigns.index', compact('campaigns', 'emailServicesCount'));
     }

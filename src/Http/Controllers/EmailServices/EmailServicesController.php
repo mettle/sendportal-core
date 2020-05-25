@@ -100,7 +100,7 @@ class EmailServicesController extends Controller
 
         $this->emailServices->destroy(auth()->user()->currentWorkspace()->id, $emailServiceId);
 
-        return redirect()->route('sendportal.email_service.index');
+        return redirect()->route('sendportal.email_services.index');
     }
 
     public function emailServicesTypeAjax($emailServiceTypeId): JsonResponse

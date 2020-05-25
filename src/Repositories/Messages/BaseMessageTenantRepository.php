@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Sendportal\Base\Facades\Helper;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\BaseTenantRepository;
 
@@ -34,6 +36,10 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
                     ]);
                 }
             ]);
+
+        $instance->when(!Helper::isPro(), function ($q) {
+            $q->where('source_type', '=', Campaign::class);
+        });
 
         $this->applyFilters($instance, $parameters);
 

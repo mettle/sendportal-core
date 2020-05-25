@@ -186,12 +186,13 @@ a.color-purple-500 {
 
         &.active {
             background-color: transparent;
-            border-bottom: 5px solid $purple-500;
+            border-bottom: 4px solid $purple-500;
             color: $purple-100;
+            border-radius: 4px;
         }
 
         &:hover {
-            border-bottom: 5px solid $purple-500;
+            border-bottom: 4px solid $purple-500;
         }
     }
 }
@@ -321,7 +322,7 @@ a.color-purple-500 {
     background-color: #fff;
     background-clip: border-box;
     border-radius: .25rem;
-    border-bottom: 3px solid $purple-500;
+    border-bottom: 3px solid $purple-800;
 
     .h2 {
         font-weight: 400;

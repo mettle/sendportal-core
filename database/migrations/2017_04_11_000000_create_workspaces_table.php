@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWorkspaceUsersTable extends Migration
+class CreateWorkspacesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,6 +12,13 @@ class CreateWorkspaceUsersTable extends Migration
      */
     public function up()
     {
+        Schema::create('workspaces', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('owner_id')->index();
+            $table->string('name');
+            $table->timestamps();
+        });
+
         Schema::create('workspace_users', function (Blueprint $table) {
             $table->unsignedInteger('workspace_id')->index();
             $table->unsignedInteger('user_id')->index();

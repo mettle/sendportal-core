@@ -24,14 +24,16 @@ class CreateCampaignsTable extends Migration
             $table->text('content')->nullable();
             $table->string('from_name')->nullable();
             $table->string('from_email')->nullable();
+            $table->boolean('is_open_tracking')->default(true);
+            $table->boolean('is_click_tracking')->default(true);
             $table->mediumInteger('sent_count')->nullable()->default(0);
             $table->mediumInteger('open_count')->nullable()->default(0);
             $table->mediumInteger('click_count')->nullable()->default(0);
+            $table->boolean('send_to_all')->default(false);
+            $table->boolean('save_as_draft')->default(true);
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamps();
-        });
 
-        Schema::table('campaigns', function(Blueprint $table) {
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('status_id')->references('id')->on('campaign_statuses');
             $table->foreign('template_id')->references('id')->on('templates');

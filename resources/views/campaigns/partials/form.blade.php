@@ -4,10 +4,10 @@
 {!! Form::textField('from_email', __('From Email')) !!}
 {!! Form::selectField('template_id', __('Template'), $templates, $campaign->template_id ?? null) !!}
 
-@if ($providers->count() === 1)
-    {!! Form::hidden('provider_id', $providers->first()->id) !!}
+@if ($emailServices->count() === 1)
+    {!! Form::hidden('email_service_id', $emailServices->first()->id) !!}
 @else
-    {!! Form::selectField('provider_id', __('Provider'), $providers->pluck('name', 'id'), isset($campaign->provider_id) ? $campaign->provider_id : null) !!}
+    {!! Form::selectField('email_service_id', __('Email Service'), $emailServices->pluck('name', 'id'), isset($campaign->email_service_id) ? $campaign->email_service_id : null) !!}
 @endif
 
 {!! Form::checkboxField('is_open_tracking', __('Track Opens'), 1, $campaign->is_open_tracking ?? 1) !!}

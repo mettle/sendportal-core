@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::group([
             'namespace' => 'Sendportal\Base\Http\Controllers',
-            'prefix' => 'api'
+            'prefix' => 'api/v1'
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
         });

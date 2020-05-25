@@ -4,7 +4,7 @@
 
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
 use Faker\Generator as Faker;
@@ -17,7 +17,7 @@ $factory->define(Campaign::class, function (Faker $faker) {
         'subject' => $faker->title,
         'from_name' => $faker->name,
         'from_email' => $faker->email,
-        'provider_id' => factory(Provider::class),
+        'email_service_id' => factory(EmailService::class),
         'is_open_tracking' => true,
         'is_click_tracking' => true,
     ];

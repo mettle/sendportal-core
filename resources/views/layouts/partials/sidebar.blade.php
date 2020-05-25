@@ -27,15 +27,15 @@
                 <i class="fas fa-paper-plane mr-2"></i><span>{{ __('Messages') }}</span>
             </a>
         </li>
-        <li class="nav-item {{ request()->is('providers*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('sendportal.providers.index') }}">
-                <i class="fas fa-envelope mr-2"></i><span>{{ __('Providers') }}</span>
+        <li class="nav-item {{ request()->is('email-services*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('sendportal.email_services.index') }}">
+                <i class="fas fa-envelope mr-2"></i><span>{{ __('Email Services') }}</span>
             </a>
         </li>
         @if ( auth()->user()->ownsCurrentWorkspace())
-            <li class="nav-item {{ request()->is('settings*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('sendportal.settings.index') }}">
-                    <i class="fas fa-cog mr-2"></i><span>{{ __('Settings') }}</span>
+            <li class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('sendportal.users.index') }}">
+                    <i class="fas fa-users mr-2"></i><span>{{ __('Manage Users') }}</span>
                 </a>
             </li>
         @endif

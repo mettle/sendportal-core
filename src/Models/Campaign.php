@@ -99,11 +99,6 @@ class Campaign extends BaseModel
         return $this->messages()->whereNotNull('sent_at')->count();
     }
 
-    public function getSentInLastDayCountAttribute(): int
-    {
-        return $this->messages()->where('sent_at', '>', now()->subDay())->count();
-    }
-
     /**
      * @return void
      */

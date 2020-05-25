@@ -54,7 +54,6 @@ class CampaignDispatchController extends Controller
         }
 
         if (! $this->quotaService->campaignCanBeSent($campaign)) {
-
             return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('The number of subscribers for this campaign exceeds your SES quota'));
         }

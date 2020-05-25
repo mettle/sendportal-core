@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Services;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Adapters\BaseMailAdapter;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
@@ -37,11 +38,26 @@ class QuotaService implements QuotaServiceInterface
 
         $quota = $mailAdapter->getSendQuota();
 
-        // 200 is the limit while in sandbox, so we'll assume it's the minimum
-        $limit = Arr::get($quota, 'Max24HourSend', 200);
+        if (empty($quota)) {
+            Log::error(
+                'Failed to fetch quota from SES',
+                [
+                    'campaign_id' => $campaign->id,
+                    'provider_id' => $campaign->provider->id,
+                ]
+            );
 
-        // Fall back to count of sent messages in the database
-        $sent = Arr::get($quota, 'SentLast24Hours', $campaign->sent_in_last_day_count);
+            return false;
+        }
+
+        $limit = Arr::get($quota, 'Max24HourSend');
+
+        // -1 signifies an unlimited quota
+        if ($limit === -1) {
+            return true;
+        }
+
+        $sent = Arr::get($quota, 'SentLast24Hours');
 
         $remaining = (int) floor($limit - $sent);
 

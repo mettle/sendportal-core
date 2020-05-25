@@ -66,6 +66,6 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->app->register(FormServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
 
-        //$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'automations');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sendportal');
     }
 }

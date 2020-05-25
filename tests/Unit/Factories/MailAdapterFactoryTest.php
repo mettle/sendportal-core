@@ -9,8 +9,8 @@ use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Factories\MailAdapterFactory;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\ProviderType;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\EmailServiceType;
 use InvalidArgumentException;
 use Tests\TestCase;
 
@@ -20,11 +20,11 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_a_mailgun_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::MAILGUN]);
+        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::MAILGUN]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
-        $adapter = $adapterFactory->adapter($provider);
+        $adapter = $adapterFactory->adapter($emailService);
 
         // then
         $this->assertEquals(MailgunMailAdapter::class, get_class($adapter));
@@ -34,11 +34,11 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_a_sendgrid_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::SENDGRID]);
+        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::SENDGRID]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
-        $adapter = $adapterFactory->adapter($provider);
+        $adapter = $adapterFactory->adapter($emailService);
 
         // then
         $this->assertEquals(SendgridMailAdapter::class, get_class($adapter));
@@ -48,11 +48,11 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_a_postmark_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::POSTMARK]);
+        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::POSTMARK]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
-        $adapter = $adapterFactory->adapter($provider);
+        $adapter = $adapterFactory->adapter($emailService);
 
         // then
         $this->assertEquals(PostmarkMailAdapter::class, get_class($adapter));
@@ -62,11 +62,11 @@ class MailAdapterFactoryTest extends TestCase
     function can_build_an_ses_adapter()
     {
         // given
-        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => ProviderType::SES]);
+        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::SES]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
-        $adapter = $adapterFactory->adapter($provider);
+        $adapter = $adapterFactory->adapter($emailService);
 
         // then
         $this->assertEquals(SesMailAdapter::class, get_class($adapter));
@@ -76,13 +76,13 @@ class MailAdapterFactoryTest extends TestCase
     function an_exception_is_thrown_when_building_an_unknown_adapater()
     {
         // given
-        $provider = factory(Provider::class)->make(['workspace_id' => null, 'type_id' => 100]);
+        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => 100]);
         $adapterFactory = new MailAdapterFactory();
 
         // then
         $this->expectException(InvalidArgumentException::class);
 
         // when
-        $adapterFactory->adapter($provider);
+        $adapterFactory->adapter($emailService);
     }
 }

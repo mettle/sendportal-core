@@ -5,9 +5,11 @@
         @guest
             <div class="container">
                 <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-                    <li class="nav-item mr-3">
-                        <b><a class="nav-link text-dark" href="/register">{{ __('Register') }}</a></b>
-                    </li>
+                    @if(config('sendportal.auth.register'))
+                        <li class="nav-item mr-3">
+                            <b><a class="nav-link text-dark" href="/register">{{ __('Register') }}</a></b>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <b><a class="nav-link text-dark" href="/login">{{ __('Login') }}</a></b>
                     </li>
@@ -27,7 +29,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-                <h1 class="h4 mb-0 color-purple-500">@yield('heading')</h1>
+                <h1 class="h3 mb-0">@yield('heading')</h1>
 
                 <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
                     @php $workspaces = auth()->user()->workspaces @endphp

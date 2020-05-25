@@ -7,7 +7,7 @@ namespace Tests\Feature\Campaigns;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
@@ -106,7 +106,7 @@ class CampaignControllerTest extends TestCase
             'subject' => $this->faker->sentence,
             'from_name' => $this->faker->name,
             'from_email' => $this->faker->safeEmail,
-            'provider_id' => $campaign->provider_id,
+            'email_service_id' => $campaign->email_service_id,
             'template_id' => $campaign->template_id,
             'content' => $this->faker->paragraph
         ];
@@ -206,7 +206,7 @@ class CampaignControllerTest extends TestCase
 
     private function generateCampaignStoreData(Workspace $workspace): array
     {
-        $provider = factory(Provider::class)->create(['workspace_id' => $workspace->id]);
+        $emailService = factory(EmailService::class)->create(['workspace_id' => $workspace->id]);
         $template = factory(Template::class)->create(['workspace_id' => $workspace->id]);
 
         return [
@@ -214,7 +214,7 @@ class CampaignControllerTest extends TestCase
             'subject' => $this->faker->sentence,
             'from_name' => $this->faker->name,
             'from_email' => $this->faker->safeEmail,
-            'provider_id' => $provider->id,
+            'email_service_id' => $emailService->id,
             'template_id' => $template->id,
             'content' => $this->faker->paragraph
         ];

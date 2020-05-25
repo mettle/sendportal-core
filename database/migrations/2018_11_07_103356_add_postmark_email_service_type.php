@@ -1,11 +1,11 @@
 <?php
 
+use Sendportal\Base\Models\EmailServiceType;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Sendportal\Base\Models\ProviderType;
 
-class AddSesProviderType extends Migration
+class AddPostmarkEmailServiceType extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,11 @@ class AddSesProviderType extends Migration
      */
     public function up()
     {
-        ProviderType::unguard();
+        EmailServiceType::unguard();
 
-        ProviderType::create([
-            'id' => ProviderType::SES,
-            'name' => 'SES'
+        EmailServiceType::create([
+            'id' => EmailServiceType::POSTMARK,
+            'name' => 'Postmark'
         ]);
     }
 }

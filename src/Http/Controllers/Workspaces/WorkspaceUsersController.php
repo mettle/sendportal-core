@@ -23,7 +23,7 @@ class WorkspaceUsersController extends Controller
 
     public function index(Request $request): ViewContract
     {
-        return view('sendportal::settings.users.index', [
+        return view('sendportal::users.index', [
             'users' => $request->user()->currentWorkspace->users,
             'invitations' => $request->user()->currentWorkspace->invitations,
         ]);
@@ -54,7 +54,7 @@ class WorkspaceUsersController extends Controller
         $this->removeUserFromWorkspace->handle($user, $workspace);
 
         return redirect()
-            ->route('sendportal.settings.users.index')
+            ->route('sendportal.users.index')
             ->with('success',
                 __(':user was removed from :workspace.', ['user' => $user->name, 'workspace' => $workspace->name]));
     }

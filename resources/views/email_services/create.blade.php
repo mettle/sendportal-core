@@ -1,21 +1,21 @@
 @extends('sendportal::layouts.app')
 
 @section('heading')
-    {{ __('Add Email Provider') }}
+    {{ __('Add Email Service') }}
 @stop
 
 @section('content')
 
     @component('sendportal::layouts.partials.card')
-        @slot('cardHeader', __('Create Provider'))
+        @slot('cardHeader', __('Create Email Service'))
 
         @slot('cardBody')
-            {!! Form::open(['method' => 'post', 'route' => 'sendportal.providers.store', 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['method' => 'post', 'route' => 'sendportal.email_services.store', 'class' => 'form-horizontal']) !!}
 
             {!! Form::textField('name', __('Name')) !!}
-            {!! Form::selectField('type_id', __('Provider'), $providerTypes) !!}
+            {!! Form::selectField('type_id', __('Email Service'), $emailServiceTypes) !!}
 
-            <div id="provider-fields"></div>
+            <div id="services-fields"></div>
 
             {!! Form::submitButton(__('Save')) !!}
             {!! Form::close() !!}
@@ -27,7 +27,7 @@
 @push('js')
     <script>
 
-        let url = '{{ route('sendportal.providers.ajax', 1) }}';
+        let url = '{{ route('sendportal.email_services.ajax', 1) }}';
 
         $(function () {
             let type_id = $('select[name="type_id"]').val();
@@ -39,11 +39,11 @@
             });
         });
 
-        function createFields(providerTypeId) {
-            url = url.substring(0, url.length - 1) + providerTypeId;
+        function createFields(serviceTypeId) {
+            url = url.substring(0, url.length - 1) + serviceTypeId;
 
             $.get(url, function (result) {
-                $('#provider-fields')
+                $('#services-fields')
                   .html('')
                   .append(result.view);
             });

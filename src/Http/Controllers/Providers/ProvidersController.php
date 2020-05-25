@@ -80,7 +80,6 @@ class ProvidersController extends Controller
         $settings = $request->get('settings');
 
         $provider->name = $request->name;
-        $provider->type_id = $request->type_id;
         $provider->settings = $settings;
         $provider->save();
 

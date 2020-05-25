@@ -24,7 +24,7 @@
     <div class="offset-sm-2 col-sm-10">
         <div class="border border-light h-100">
             <iframe width="100%" height="100%" scrolling="yes" frameborder="0"
-                    srcdoc="{!! isset($template) ? nl2br($template->content) : null  !!} "></iframe>
+                    srcdoc="{!! isset($template) ? $template->content : null  !!} "></iframe>
         </div>
     </div>
 </div>
@@ -50,7 +50,7 @@
                 var elButton = $('.btn-preview');
 
                 if (elContent.hasClass('d-none')) {
-                    $('.template-preview iframe').attr('srcdoc', nl2br(codeMirror.getValue()));
+                    $('.template-preview iframe').attr('srcdoc', codeMirror.getValue());
                     elContent.removeClass('d-none');
                     elPreview.addClass('d-none');
                     elButton.text('Show Design');
@@ -61,12 +61,5 @@
                 }
             });
         });
-
-        function nl2br(str) {
-            if (typeof str === 'undefined' || str === null) {
-                return '';
-            }
-            return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '</br>' + '$2');
-        }
     </script>
 @endpush

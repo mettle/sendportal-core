@@ -102,6 +102,8 @@
                     </div>
                     <div class="card-body">
 
+                        @if(config('sendportal.auth.register'))
+
                         <form action="{{ route('sendportal.settings.users.invitations.store') }}" method="post">
                             @csrf
                             <div class="form-group row">
@@ -117,6 +119,12 @@
                                 </div>
                             </div>
                         </form>
+
+                        @else
+
+                            <p class="empty-table-text">In order to invite users, you have to enable the registration in the Sendportal configuration file.</p>
+
+                        @endif
 
                     </div>
                 </div>

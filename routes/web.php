@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Sendportal\Base\Http\Middleware\OwnsCurrentWorkspace;
 
-// Auth.
-// TODO(david): we need a way to turn off auth for the situations where `sendportal/base` is getting included in other packages that already have auth.
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(static function () {
-    Auth::routes(['verify' => true, 'register' => true]); // config('auth.enable_register')]);
+    Auth::routes([
+        'verify' => config('sendportal.auth.register'),
+        'register' => config('sendportal.auth.register'),
+        'reset' => config('sendportal.auth.password_reset'),
+    ]);
 });
 
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('sendportal.')->group(static function (Router $router) {

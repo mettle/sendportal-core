@@ -102,21 +102,30 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="{{ route('sendportal.users.invitations.store') }}" method="post">
-                            @csrf
-                            <div class="form-group row">
-                                <label for="create-invitation-email" class="col-sm-2">{{ __('Email Address') }}</label>
+                        @if(config('sendportal.auth.register'))
 
-                                <div class="col-sm-6">
-                                    <input type="text" id="create-invitation-email" class="form-control" name="email">
+                            <form action="{{ route('sendportal.users.invitations.store') }}" method="post">
+
+                                @csrf
+                                <div class="form-group row">
+                                    <label for="create-invitation-email" class="col-sm-2">{{ __('Email Address') }}</label>
+
+                                    <div class="col-sm-6">
+                                        <input type="text" id="create-invitation-email" class="form-control" name="email">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="offset-sm-2 col-sm-10">
-                                    <input type="submit" class="btn btn-md btn-primary" value="{{ __('Send Invite') }}">
+                                <div class="form-group row">
+                                    <div class="offset-sm-2 col-sm-10">
+                                        <input type="submit" class="btn btn-md btn-primary" value="{{ __('Send Invite') }}">
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+
+                        @else
+
+                            <p class="empty-table-text">In order to invite users, you have to enable registration in the Sendportal configuration file.</p>
+
+                        @endif
 
                     </div>
                 </div>

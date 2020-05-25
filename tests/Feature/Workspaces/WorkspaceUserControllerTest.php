@@ -47,7 +47,7 @@ class WorkspaceUserControllerTest extends TestCase
         $this->actingAs($user);
         $response = $this->get(route('sendportal.users.index'));
 
-        $response->assertOk();
+        $response->dump()->assertOk();
         $response->assertSee($user->name);
     }
 

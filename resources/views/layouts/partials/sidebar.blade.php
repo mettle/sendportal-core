@@ -33,9 +33,9 @@
             </a>
         </li>
         @if ( auth()->user()->ownsCurrentWorkspace())
-            <li class="nav-item {{ request()->is('settings*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('sendportal.settings.index') }}">
-                    <i class="fas fa-cog mr-2"></i><span>{{ __('Settings') }}</span>
+            <li class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('sendportal.users.index') }}">
+                    <i class="fas fa-cog mr-2"></i><span>{{ __('Manage Users') }}</span>
                 </a>
             </li>
         @endif

@@ -85,30 +85,25 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         // Segments.
         $appRouter->resource('segments', 'Segments\SegmentsController')->except(['show', 'destroy']);
 
-        // Settings.
-        $appRouter->prefix('settings')->group(static function (Router $settingsRouter) {
-            $settingsRouter->get('', 'SettingsController@index')->name('settings.index');
+        // Workspace User Management.
+        $appRouter->namespace('Workspaces')
+            ->middleware(OwnsCurrentWorkspace::class)
+            ->name('users.')
+            ->prefix('users')
+            ->group(static function (Router $workspacesRouter) {
+                $workspacesRouter->get('/', 'WorkspaceUsersController@index')->name('index');
+                $workspacesRouter->delete('{userId}', 'WorkspaceUsersController@destroy')->name('destroy');
 
-            // Workspace User Management.
-            $settingsRouter->namespace('Workspaces')
-                ->middleware(OwnsCurrentWorkspace::class)
-                ->name('settings.users.')
-                ->prefix('users')
-                ->group(static function (Router $workspacesRouter) {
-                    $workspacesRouter->get('/', 'WorkspaceUsersController@index')->name('index');
-                    $workspacesRouter->delete('{userId}', 'WorkspaceUsersController@destroy')->name('destroy');
+                // Invitations.
+                $workspacesRouter->name('invitations.')->prefix('invitations')
+                    ->group(static function (Router $invitationsRouter) {
+                        $invitationsRouter->post('/', 'WorkspaceInvitationsController@store')->name('store');
+                        $invitationsRouter->delete('{invitation}', 'WorkspaceInvitationsController@destroy')
+                            ->name('destroy');
+                    });
+            });
 
-                    // Invitations.
-                    $workspacesRouter->name('invitations.')->prefix('invitations')
-                        ->group(static function (Router $invitationsRouter) {
-                            $invitationsRouter->post('/', 'WorkspaceInvitationsController@store')->name('store');
-                            $invitationsRouter->delete('{invitation}', 'WorkspaceInvitationsController@destroy')
-                                ->name('destroy');
-                        });
-                });
-
-            $settingsRouter->resource('templates', 'TemplatesController');
-        });
+        $appRouter->resource('templates', 'TemplatesController');
 
         // Subscribers.
         $appRouter->name('subscribers.')->prefix('subscribers')->namespace('Subscribers')->group(static function (

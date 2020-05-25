@@ -33,6 +33,6 @@ trait ThrottlesSending
 
     protected function resolveThrottleCacheKey(): string
     {
-        return sprintf('%s%s%d', 'spThrottleCacheKey', Arr::get($this->config, 'key'), time());
+        return sprintf('%s%s%d', 'spThrottleSentCount', Arr::get($this->config, 'key'), time());
     }
 }

@@ -17,7 +17,7 @@
                     <div class="text-uppercase">{{ __('Unique Opens') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fal fa-user-chart fa-2x"></em>
+                    <em class="far fa-envelope-open fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                     <div class="text-uppercase">{{ __('Total Opens') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fal fa-chart-bar fa-2x"></em>
+                    <em class="fas fa-envelope-open fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                     <div class="text-uppercase">{{ __('Avg. Time To Open') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fal fa-stopwatch fa-2x"></em>
+                    <em class="far fa-clock fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>

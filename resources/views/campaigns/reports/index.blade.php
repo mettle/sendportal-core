@@ -20,7 +20,7 @@
                         <div class="text-uppercase">{{ __('Emails Sent') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                        <em class="fal fa-paper-plane fa-2x"></em>
+                        <em class="far fa-paper-plane fa-2x color-gray-400"></em>
                     </div>
                 </div>
             </a>
@@ -35,7 +35,7 @@
                         <div class="text-uppercase">{{ __('Unique Opens') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                        <em class="fal fa-envelope-open fa-2x"></em>
+                        <em class="far fa-envelope-open fa-2x color-gray-400"></em>
                     </div>
                 </div>
             </a>
@@ -50,7 +50,7 @@
                         <div class="text-uppercase">{{ __('Click Rate') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                        <em class="fal fa-hand-pointer fa-2x"></em>
+                        <em class="far fa-hand-pointer fa-2x color-gray-400"></em>
                     </div>
                 </div>
             </a>
@@ -66,7 +66,7 @@
                         <div class="text-uppercase">{{ __('Bounce Rate') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                        <em class="fal fa-repeat fa-2x"></em>
+                        <em class="fas fa-exchange-alt fa-2x color-gray-400"></em>
                     </div>
                 </div>
             </a>

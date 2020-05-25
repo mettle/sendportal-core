@@ -8,33 +8,33 @@ use Sendportal\Base\Adapters\BaseMailAdapter;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\ProviderType;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\EmailServiceType;
 
 class QuotaService implements QuotaServiceInterface
 {
     public function campaignCanBeSent(Campaign $campaign): bool
     {
-        switch ($campaign->provider->type_id) {
-            case ProviderType::SES:
+        switch ($campaign->email_service->type_id) {
+            case EmailServiceType::SES:
                 return $this->campaignCanBeSentBySes($campaign);
-            case ProviderType::SENDGRID:
-            case ProviderType::MAILGUN:
-            case ProviderType::POSTMARK:
+            case EmailServiceType::SENDGRID:
+            case EmailServiceType::MAILGUN:
+            case EmailServiceType::POSTMARK:
                 return true;
         }
 
-        throw new \DomainException('Unrecognised provider type');
+        throw new \DomainException('Unrecognised email service type');
     }
 
-    protected function resolveMailAdapter(Provider $provider): BaseMailAdapter
+    protected function resolveMailAdapter(EmailService $emailService): BaseMailAdapter
     {
-        return app(MailAdapterFactory::class)->adapter($provider);
+        return app(MailAdapterFactory::class)->adapter($emailService);
     }
 
     protected function campaignCanBeSentBySes(Campaign $campaign): bool
     {
-        $mailAdapter = $this->resolveMailAdapter($campaign->provider);
+        $mailAdapter = $this->resolveMailAdapter($campaign->email_service);
 
         $quota = $mailAdapter->getSendQuota();
 
@@ -43,7 +43,7 @@ class QuotaService implements QuotaServiceInterface
                 'Failed to fetch quota from SES',
                 [
                     'campaign_id' => $campaign->id,
-                    'provider_id' => $campaign->provider->id,
+                    'email_service_id' => $campaign->email_service->id,
                 ]
             );
 

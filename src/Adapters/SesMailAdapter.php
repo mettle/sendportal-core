@@ -9,9 +9,12 @@ use Aws\Ses\SesClient;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Arr;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
+use Sendportal\Base\Traits\ThrottlesSending;
 
 class SesMailAdapter extends BaseMailAdapter
 {
+    use ThrottlesSending;
+
     /** @var SesClient */
     protected $client;
 
@@ -22,25 +25,27 @@ class SesMailAdapter extends BaseMailAdapter
     {
         // TODO(david): It isn't clear whether it is possible to set per-message tracking for SES.
 
-        $result = $this->resolveClient()->sendEmail([
-            'Source' => $fromEmail,
+        $result = $this->throttleSending(function () use ($fromEmail, $toEmail, $subject, $trackingOptions, $content) {
+            return $this->resolveClient()->sendEmail([
+                'Source' => $fromEmail,
 
-            'Destination' => [
-                'ToAddresses' => [$toEmail],
-            ],
-
-            'Message' => [
-                'Subject' => [
-                    'Data' => $subject,
+                'Destination' => [
+                    'ToAddresses' => [$toEmail],
                 ],
-                'Body' => array(
-                    'Html' => [
-                        'Data' => $content,
+
+                'Message' => [
+                    'Subject' => [
+                        'Data' => $subject,
                     ],
-                ),
-            ],
-            'ConfigurationSetName' => Arr::get($this->config, 'configuration_set_name'),
-        ]);
+                    'Body' => array(
+                        'Html' => [
+                            'Data' => $content,
+                        ],
+                    ),
+                ],
+                'ConfigurationSetName' => Arr::get($this->config, 'configuration_set_name'),
+            ]);
+        });
 
         return $this->resolveMessageId($result);
     }
@@ -78,5 +83,12 @@ class SesMailAdapter extends BaseMailAdapter
     public function getSendQuota(): array
     {
         return $this->resolveClient()->getSendQuota()->toArray();
+    }
+
+    protected function getSendRate(): float
+    {
+        return cache()->remember('spThrottlingSendRate', 60, function () {
+            return Arr::get($this->getSendQuota(), 'MaxSendRate');
+        });
     }
 }

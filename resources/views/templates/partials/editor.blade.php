@@ -5,6 +5,7 @@
         .CodeMirror {
             height: 600px;
         }
+
         .template-preview {
             height: 600px;
         }
@@ -14,17 +15,16 @@
 <div class="form-group row form-group-content template-content">
     <label for="id-field-content" class="control-label col-sm-2">{{ __('Content') }}</label>
     <div class="col-sm-10">
-        <textarea id="id-field-content" class="form-control" name="content" cols="50" rows="20">
-            {{ $template->content ?? null }}
-        </textarea>
-
+        <textarea id="id-field-content" class="form-control" name="content" cols="50"
+                  rows="20">{{ $template->content ?? null }}</textarea>
     </div>
 </div>
 
 <div class="form-group row template-preview d-none">
     <div class="offset-sm-2 col-sm-10">
         <div class="border border-light h-100">
-            <iframe width="100%" height="100%" scrolling="yes" frameborder="0" srcdoc="{{ $template->content ?? null }}"></iframe>
+            <iframe width="100%" height="100%" scrolling="yes" frameborder="0"
+                    srcdoc="{!! nl2br($template->content) ?? null  !!} "></iframe>
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
                 theme: 'monokai',
             });
 
-            $('.btn-preview').click(function(e) {
+            $('.btn-preview').click(function (e) {
                 e.preventDefault();
 
                 var elContent = $('.template-preview');
@@ -50,7 +50,7 @@
                 var elButton = $('.btn-preview');
 
                 if (elContent.hasClass('d-none')) {
-                    $('.template-preview iframe').attr('srcdoc', codeMirror.getValue());
+                    $('.template-preview iframe').attr('srcdoc', nl2br(codeMirror.getValue()));
                     elContent.removeClass('d-none');
                     elPreview.addClass('d-none');
                     elButton.text('Show Design');
@@ -61,5 +61,12 @@
                 }
             });
         });
+
+        function nl2br(str) {
+            if (typeof str === 'undefined' || str === null) {
+                return '';
+            }
+            return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '</br>' + '$2');
+        }
     </script>
 @endpush

@@ -33,7 +33,7 @@ class WorkspaceInvitationsController extends Controller
 
         $this->sendInvitation->handle($workspace, $request->email);
 
-        return redirect()->route('sendportal.settings.users.index');
+        return redirect()->route('sendportal.users.index');
     }
 
     /**
@@ -43,6 +43,6 @@ class WorkspaceInvitationsController extends Controller
     {
         $invitation->delete();
 
-        return redirect()->route('sendportal.settings.users.index');
+        return redirect()->route('sendportal.users.index');
     }
 }

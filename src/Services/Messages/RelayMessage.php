@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Messages;
 
 use Sendportal\Base\Factories\MailAdapterFactory;
-use Sendportal\Base\Models\Provider;
+use Sendportal\Base\Models\EmailService;
 use Exception;
 
 class RelayMessage
@@ -19,13 +19,13 @@ class RelayMessage
     }
 
     /**
-     * Dispatch the email via the given provider.
+     * Dispatch the email via the email service.
      *
      * @throws Exception
      */
-    public function handle(string $mergedContent, MessageOptions $messageOptions, Provider $provider): string
+    public function handle(string $mergedContent, MessageOptions $messageOptions, EmailService $emailService): string
     {
-        return $this->mailAdapter->adapter($provider)
+        return $this->mailAdapter->adapter($emailService)
             ->send(
                 $messageOptions->getFrom(),
                 $messageOptions->getTo(),

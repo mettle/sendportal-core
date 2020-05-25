@@ -24,7 +24,7 @@
         </div>
         <div class="card-body">
             <p>
-                {{ __('Are you sure that you want to delete the <b>:name</b> campaign?', ['name' => $campaign->name]) }}
+                {!! __('Are you sure that you want to delete the <b>:name</b> campaign?', ['name' => $campaign->name]) !!}
             </p>
             <form action="{{ route('sendportal.campaigns.destroy', $campaign->id) }}" method="post">
                 @csrf

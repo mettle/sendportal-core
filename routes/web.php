@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Sendportal\Base\Http\Middleware\OwnsCurrentWorkspace;
 
-// Auth.
-// TODO(david): we need a way to turn off auth for the situations where `sendportal/base` is getting included in other packages that already have auth.
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(static function () {
-    Auth::routes(['verify' => true, 'register' => true]); // config('auth.enable_register')]);
+    Auth::routes([
+        'verify' => config('sendportal.auth.register'),
+        'register' => config('sendportal.auth.register'),
+        'reset' => config('sendportal.auth.password_reset'),
+    ]);
 });
 
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('sendportal.')->group(static function (Router $router) {
@@ -71,44 +73,39 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
             $messageRouter->post('send-selected', 'MessagesController@sendSelected')->name('send-selected');
         });
 
-        // Providers.
-        $appRouter->name('providers.')->prefix('providers')->namespace('Providers')->group(static function (Router $providerRouter) {
-            $providerRouter->get('/', 'ProvidersController@index')->name('index');
-            $providerRouter->get('create', 'ProvidersController@create')->name('create');
-            $providerRouter->get('type/{id}', 'ProvidersController@providersTypeAjax')->name('ajax');
-            $providerRouter->post('/', 'ProvidersController@store')->name('store');
-            $providerRouter->get('{id}/edit', 'ProvidersController@edit')->name('edit');
-            $providerRouter->put('{id}', 'ProvidersController@update')->name('update');
-            $providerRouter->delete('{id}', 'ProvidersController@delete')->name('delete');
+        // Email Services.
+        $appRouter->name('email_services.')->prefix('email-services')->namespace('EmailServices')->group(static function (Router $servicesRouter) {
+            $servicesRouter->get('/', 'EmailServicesController@index')->name('index');
+            $servicesRouter->get('create', 'EmailServicesController@create')->name('create');
+            $servicesRouter->get('type/{id}', 'EmailServicesController@emailServicesTypeAjax')->name('ajax');
+            $servicesRouter->post('/', 'EmailServicesController@store')->name('store');
+            $servicesRouter->get('{id}/edit', 'EmailServicesController@edit')->name('edit');
+            $servicesRouter->put('{id}', 'EmailServicesController@update')->name('update');
+            $servicesRouter->delete('{id}', 'EmailServicesController@delete')->name('delete');
         });
 
         // Segments.
         $appRouter->resource('segments', 'Segments\SegmentsController')->except(['show', 'destroy']);
 
-        // Settings.
-        $appRouter->prefix('settings')->group(static function (Router $settingsRouter) {
-            $settingsRouter->get('', 'SettingsController@index')->name('settings.index');
+        // Workspace User Management.
+        $appRouter->namespace('Workspaces')
+            ->middleware(OwnsCurrentWorkspace::class)
+            ->name('users.')
+            ->prefix('users')
+            ->group(static function (Router $workspacesRouter) {
+                $workspacesRouter->get('/', 'WorkspaceUsersController@index')->name('index');
+                $workspacesRouter->delete('{userId}', 'WorkspaceUsersController@destroy')->name('destroy');
 
-            // Workspace User Management.
-            $settingsRouter->namespace('Workspaces')
-                ->middleware(OwnsCurrentWorkspace::class)
-                ->name('settings.users.')
-                ->prefix('users')
-                ->group(static function (Router $workspacesRouter) {
-                    $workspacesRouter->get('/', 'WorkspaceUsersController@index')->name('index');
-                    $workspacesRouter->delete('{userId}', 'WorkspaceUsersController@destroy')->name('destroy');
+                // Invitations.
+                $workspacesRouter->name('invitations.')->prefix('invitations')
+                    ->group(static function (Router $invitationsRouter) {
+                        $invitationsRouter->post('/', 'WorkspaceInvitationsController@store')->name('store');
+                        $invitationsRouter->delete('{invitation}', 'WorkspaceInvitationsController@destroy')
+                            ->name('destroy');
+                    });
+            });
 
-                    // Invitations.
-                    $workspacesRouter->name('invitations.')->prefix('invitations')
-                        ->group(static function (Router $invitationsRouter) {
-                            $invitationsRouter->post('/', 'WorkspaceInvitationsController@store')->name('store');
-                            $invitationsRouter->delete('{invitation}', 'WorkspaceInvitationsController@destroy')
-                                ->name('destroy');
-                        });
-                });
-
-            $settingsRouter->resource('templates', 'TemplatesController');
-        });
+        $appRouter->resource('templates', 'TemplatesController');
 
         // Subscribers.
         $appRouter->name('subscribers.')->prefix('subscribers')->namespace('Subscribers')->group(static function (

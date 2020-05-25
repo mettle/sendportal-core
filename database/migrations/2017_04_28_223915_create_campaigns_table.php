@@ -19,7 +19,7 @@ class CreateCampaignsTable extends Migration
             $table->string('name');
             $table->unsignedInteger('status_id')->default(1);
             $table->unsignedInteger('template_id')->nullable();
-            $table->unsignedInteger('provider_id')->nullable();
+            $table->unsignedInteger('email_service_id')->nullable();
             $table->string('subject')->nullable();
             $table->text('content')->nullable();
             $table->string('from_name')->nullable();
@@ -35,7 +35,7 @@ class CreateCampaignsTable extends Migration
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('status_id')->references('id')->on('campaign_statuses');
             $table->foreign('template_id')->references('id')->on('templates');
-            $table->foreign('provider_id')->references('id')->on('providers');
+            $table->foreign('email_service_id')->references('id')->on('email_services');
         });
     }
 }

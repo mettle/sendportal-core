@@ -32,10 +32,10 @@ class WorkspaceInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->post(route('sendportal.settings.users.invitations.store', $postData));
+        $response = $this->post(route('sendportal.users.invitations.store', $postData));
 
         // then
-        $response->assertRedirect(route('sendportal.settings.users.index'));
+        $response->assertRedirect(route('sendportal.users.index'));
 
         $this->assertDatabaseHas('invitations', [
             'workspace_id' => $workspace->id,
@@ -58,10 +58,10 @@ class WorkspaceInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->post(route('sendportal.settings.users.invitations.store', $postData));
+        $response = $this->post(route('sendportal.users.invitations.store', $postData));
 
         // then
-        $response->assertRedirect(route('sendportal.settings.users.index'));
+        $response->assertRedirect(route('sendportal.users.index'));
 
         $this->assertDatabaseHas('invitations', [
             'workspace_id' => $workspace->id,
@@ -87,7 +87,7 @@ class WorkspaceInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->post(route('sendportal.settings.users.invitations.store', $postData));
+        $response = $this->post(route('sendportal.users.invitations.store', $postData));
 
         // then
         $response->assertStatus(404);
@@ -110,10 +110,10 @@ class WorkspaceInvitationsControllerTest extends TestCase
 
         // when
         $this->actingAs($user);
-        $response = $this->delete(route('sendportal.settings.users.invitations.destroy', $invitation));
+        $response = $this->delete(route('sendportal.users.invitations.destroy', $invitation));
 
         // then
-        $response->assertRedirect(route('sendportal.settings.users.index'));
+        $response->assertRedirect(route('sendportal.users.index'));
 
         $this->assertDatabaseMissing('invitations', [
             'id' => $invitation->id

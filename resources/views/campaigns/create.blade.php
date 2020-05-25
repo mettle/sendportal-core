@@ -6,11 +6,11 @@
 
 @section('content')
 
-    @if( ! $providers)
+    @if( ! $emailServices)
         <div class="callout callout-danger">
-            <h4>{{ __('You haven\'t added any providers!') }}</h4>
+            <h4>{{ __('You haven\'t added any email service!') }}</h4>
             <p>{{ __('Before you can create a campaign, you must first') }} <a
-                    href="{{ route('sendportal.providers.create') }}">{{ __('add a provider') }}</a>.
+                    href="{{ route('sendportal.email_services.create') }}">{{ __('add an email service') }}</a>.
             </p>
         </div>
     @else

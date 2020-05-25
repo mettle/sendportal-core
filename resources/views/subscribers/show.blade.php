@@ -7,6 +7,15 @@
 @stop
 
 @section('content')
+
+    @component('sendportal::layouts.partials.actions')
+        @slot('right')
+            <a class="btn btn-light btn-md btn-flat" href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}">
+                <i class="fa fa-edit mr-1"></i> {{ __('Edit Subscriber') }}
+            </a>
+        @endslot
+    @endcomponent
+
     <div class="row">
         <div class="col-sm-6">
             <div class="card">
@@ -77,12 +86,12 @@
                             {{ $message->subject }}
                         </td>
                         <td>
-                            @if($message->is_campaign)
+                            @if($message->isCampaign())
                                 <i class="fas fa-envelope color-gray-300"></i>
                                 <a href="{{ route('sendportal.campaigns.reports.index', $message->source_id) }}">
                                     {{ $message->source->name }}
                                 </a>
-                            @elseif(\Sendportal\Base\Facades\Helper::isPro() && $message->is_automation)
+                            @elseif(\Sendportal\Base\Facades\Helper::isPro() && $message->isAutomation())
                                 <i class="fas fa-sync-alt color-gray-300"></i>
                                 <a href="{{ route('sendportal.automations.show', $message->source->automation_step->automation_id) }}">
                                     {{ $message->source->automation_step->automation->name }}

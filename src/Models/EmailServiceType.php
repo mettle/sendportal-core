@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Models;
 
-class ProviderType extends BaseModel
+class EmailServiceType extends BaseModel
 {
     public const SES = 1;
     public const SENDGRID = 2;

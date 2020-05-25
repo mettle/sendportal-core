@@ -4,6 +4,7 @@
 
         @guest
             <div class="container">
+                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="175px">
                 <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
                     @if(config('sendportal.auth.register'))
                         <li class="nav-item mr-3">

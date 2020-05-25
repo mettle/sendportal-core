@@ -13,7 +13,8 @@ class SubscriberUpdateRequest extends FormRequest
         return [
             'first_name' => ['nullable'],
             'last_name' => ['nullable'],
-            'email' => ['required', 'email']
+            'email' => ['required', 'email'],
+            'segments' => ['nullable', 'array'],
         ];
     }
 }

@@ -96,7 +96,6 @@ class EmailServicesControllerTest extends TestCase
 
         $emailServiceUpdateData = [
             'name' => $this->faker->word,
-            'type_id' => EmailServiceType::POSTMARK,
             'settings' => [
                 'key' => Str::random()
             ]
@@ -110,8 +109,7 @@ class EmailServicesControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('email_services', [
             'id' => $emailService->id,
-            'name' => $emailServiceUpdateData['name'],
-            'type_id' => $emailServiceUpdateData['type_id']
+            'name' => $emailServiceUpdateData['name']
         ]);
     }
 

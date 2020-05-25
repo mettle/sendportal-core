@@ -80,7 +80,6 @@ class EmailServicesController extends Controller
         $settings = $request->get('settings');
 
         $emailService->name = $request->name;
-        $emailService->type_id = $request->type_id;
         $emailService->settings = $settings;
         $emailService->save();
 

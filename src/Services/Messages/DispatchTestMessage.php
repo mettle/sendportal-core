@@ -6,10 +6,10 @@ namespace Sendportal\Base\Services\Messages;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\CampaignTenantRepository;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Services\Content\MergeContent;
 
 class DispatchTestMessage
@@ -23,11 +23,11 @@ class DispatchTestMessage
     /** @var MergeContent */
     protected $mergeContent;
 
-    /** @var CampaignTenantRepository */
+    /** @var CampaignTenantRepositoryInterface */
     protected $campaignTenant;
 
     public function __construct(
-        CampaignTenantRepository $campaignTenant,
+        CampaignTenantRepositoryInterface $campaignTenant,
         MergeContent $mergeContent,
         ResolveEmailService $resolveEmailService,
         RelayMessage $relayMessage

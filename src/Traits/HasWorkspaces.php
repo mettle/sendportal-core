@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Traits;
 
-use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Models\Workspace;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
+use Sendportal\Base\Models\Invitation;
+use Sendportal\Base\Models\Workspace;
 
 trait HasWorkspaces
 {
@@ -22,14 +24,6 @@ trait HasWorkspaces
             ->orderBy('name', 'asc')
             ->withPivot(['role'])
             ->withTimestamps();
-    }
-
-    /**
-     * Get all of the workspaces that the user owns.
-     */
-    public function ownedWorkspaces(): HasMany
-    {
-        return $this->hasMany(Workspace::class, 'owner_id');
     }
 
     /**
@@ -65,35 +59,6 @@ trait HasWorkspaces
     }
 
     /**
-     * Get the user's role on a given workspace.
-     */
-    public function roleOn(int $workspaceId): ?string
-    {
-        /** @var Workspace $workspace */
-        $workspace = $this->workspaces()->find($workspaceId);
-
-        return $workspace->pivot->role;
-    }
-
-    /**
-     * Get the user's role on the workspace currently being viewed.
-     */
-    public function roleOnCurrentWorkspace(): ?string
-    {
-        return $this->roleOn($this->activeWorkspace->id);
-    }
-
-    /**
-     * Accessor for the currentWorkspace method.
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function getCurrentWorkspaceAttribute()
-    {
-        return $this->currentWorkspace();
-    }
-
-    /**
      * Get the workspace that user is currently viewing.
      */
     public function currentWorkspace(): ?Workspace
@@ -103,29 +68,16 @@ trait HasWorkspaces
         }
 
         if ($this->current_workspace_id) {
-            $workspace = Workspace::find($this->current_workspace_id);
-            $this->switchToWorkspace($workspace);
-            $this->activeWorkspace = $workspace;
-
-            return $this->currentWorkspace();
+            $this->switchToWorkspace(Workspace::find($this->current_workspace_id));
+            return $this->activeWorkspace;
         }
 
         if ($this->activeWorkspace === null && $this->hasWorkspaces()) {
-
             $this->switchToWorkspace($this->workspaces()->first());
-
-            return $this->currentWorkspace();
+            return $this->activeWorkspace;
         }
 
         return null;
-    }
-
-    /**
-     * Determine if the current workspace is on a trial.
-     */
-    public function currentWorkspaceOnTrial(): bool
-    {
-        return $this->currentWorkspace() && $this->currentWorkspace()->has_active_trial;
     }
 
     /**
@@ -141,7 +93,7 @@ trait HasWorkspaces
      */
     public function switchToWorkspace(Workspace $workspace): void
     {
-        if (! $this->onWorkspace($workspace)) {
+        if (!$this->onWorkspace($workspace)) {
             throw new InvalidArgumentException('User does not belong to this workspace');
         }
 

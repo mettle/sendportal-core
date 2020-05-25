@@ -34,7 +34,7 @@ class CreateEmailServiceTables extends Migration
             $table->foreign('type_id')->references('id')->on('email_service_types');
         });
     }
-    
+
     protected function seedEmailServiceTypes()
     {
         EmailServiceType::unguard();

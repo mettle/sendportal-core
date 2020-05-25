@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
+use Sendportal\Base\SendportalBaseServiceProvider;
 
 class SetupProduction extends BaseCommand
 {
@@ -44,6 +45,7 @@ class SetupProduction extends BaseCommand
         $this->checkDatabaseConnection();
         $this->checkMigrations();
         $this->checkAdminUserAccount();
+        $this->checkVendorAssets();
 
         $this->line('');
         $this->info('Your application is ready!');
@@ -254,6 +256,20 @@ class SetupProduction extends BaseCommand
         ]);
 
         return $workspace;
+    }
+
+    /**
+     * Publish frontend assets
+     */
+    protected function checkVendorAssets(): void
+    {
+        $this->call('vendor:publish', [
+            '--provider' => SendportalBaseServiceProvider::class,
+            '--tag' => 'sendportal-assets',
+            '--force' => true
+        ]);
+
+        $this->info('Published frontend assets');
     }
 
     /**

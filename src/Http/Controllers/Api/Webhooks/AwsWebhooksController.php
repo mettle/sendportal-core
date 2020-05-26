@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Http\Controllers\Api;
+namespace Sendportal\Base\Http\Controllers\Api\Webhooks;
 
 use Carbon\Carbon;
 use Exception;

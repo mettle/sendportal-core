@@ -47,7 +47,7 @@ Route::middleware([
         ->name('segments.subscribers.destroy');
 });
 
-Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api')->group(static function (Router $webhookRouter) {
+Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->group(static function (Router $webhookRouter) {
     $webhookRouter->post('aws', 'AwsWebhooksController@handle')->name('aws');
     $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
     $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');

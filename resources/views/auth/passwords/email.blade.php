@@ -6,7 +6,7 @@
         <div class="col-md-8">
 
             <div class="logo text-center">
-                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="175px" class="my-5">
+                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="300px" class="my-5">
             </div>
 
             <div class="card">

@@ -19,7 +19,7 @@ use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
 class MailgunWebhookHandler implements ShouldQueue
 {
     /** @var string */
-    public $queue = 'webhook-process';
+    public $queue = 'sendportal-webhook-process';
 
     /** @var EmailWebhookService */
     private $emailWebhookService;

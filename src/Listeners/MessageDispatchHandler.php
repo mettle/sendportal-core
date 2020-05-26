@@ -11,7 +11,7 @@ class MessageDispatchHandler implements ShouldQueue
     /**
      * @var string
      */
-    public $queue = 'message-dispatch';
+    public $queue = 'sendportal-message-dispatch';
 
     /**
      * @var DispatchMessage

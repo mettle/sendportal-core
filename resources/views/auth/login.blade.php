@@ -5,9 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-            <div class="logo text-center">
-                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="300px" class="my-5">
-            </div>
+            @include('sendportal::auth.partials.logo')
 
             <div class="card">
                 <div class="card-header">

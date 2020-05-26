@@ -4,17 +4,7 @@
 
         @guest
             <div class="container">
-                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="175px">
-                <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-                    @if(config('sendportal.auth.register'))
-                        <li class="nav-item mr-3">
-                            <b><a class="nav-link text-dark" href="/register">{{ __('Register') }}</a></b>
-                        </li>
-                    @endif
-                    <li class="nav-item">
-                        <b><a class="nav-link text-dark" href="/login">{{ __('Login') }}</a></b>
-                    </li>
-                </ul>
+                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="175px" style="margin: 0 auto">
             </div>
         @endguest
 

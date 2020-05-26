@@ -4,6 +4,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+
+            <div class="logo text-center">
+                <img src="{{ asset('/vendor/sendportal/img/logo-gray.png') }}" alt="SendPortal" width="175px" class="my-5">
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-header-inner">
@@ -86,7 +91,6 @@
                 </div>
 
                 <hr>
-
                 <p class="text-center">{{ __('Already got an account?') }} <a href="{{ route('login') }}">{{ __('Login') }}</a></p>
             </div>
         </div>

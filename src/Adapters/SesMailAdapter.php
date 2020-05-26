@@ -84,13 +84,4 @@ class SesMailAdapter extends BaseMailAdapter
     {
         return $this->resolveClient()->getSendQuota()->toArray();
     }
-
-    protected function getSendRate(): float
-    {
-        $cacheKey = 'spThrottleSendRate' . Arr::get($this->config, 'key');
-
-        return cache()->remember($cacheKey, 60, function () {
-            return Arr::get($this->getSendQuota(), 'MaxSendRate');
-        });
-    }
 }

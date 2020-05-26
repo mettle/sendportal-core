@@ -2,37 +2,43 @@
 
 namespace Sendportal\Base\Traits;
 
+use Aws\Ses\Exception\SesException;
 use Closure;
-use Illuminate\Support\Arr;
 
 trait ThrottlesSending
 {
     protected function throttleSending(Closure $closure)
     {
-        $throttleCacheKey = $this->resolveThrottleCacheKey();
+        $attempt = 0;
 
-        if ($this->getSentCount($throttleCacheKey) >= $this->getSendRate()) {
-            sleep(1);
+        while ($attempt < 10) {
+            try {
+                $attempt++;
+
+                return $closure();
+            } catch (SesException $e) {
+                if ($e->getMessage() == 'Maximum sending rate exceeded.') {
+                    $sleepDuration = $this->resolveSleepDuration($attempt);
+
+                    info("Maximum send rate exceeded. Sleeping for {$sleepDuration}");
+
+                    usleep($sleepDuration);
+                } else {
+                    throw $e;
+                }
+            }
         }
-
-        $result = $closure();
-
-        cache()->increment($throttleCacheKey);
-
-        return $result;
     }
 
-    abstract function getSendRate();
-
-    protected function getSentCount(string $cacheKey)
+    protected function resolveSleepDuration(int $attempt = 1, int $minSleepMilli = 10, int $maxSleepMilli = 5000): int
     {
-        return cache()->remember($cacheKey, 1, function () {
-            return 0;
-        });
-    }
+        $sleepDuration = $minSleepMilli * ($attempt ** 2);
 
-    protected function resolveThrottleCacheKey(): string
-    {
-        return sprintf('%s%s%d', 'spThrottleSentCount', Arr::get($this->config, 'key'), time());
+        // usleep() uses microseconds
+        // rather than milliseconds
+        $sleepDuration *= 1000;
+        $maxSleepMilli *= 1000;
+
+        return min($sleepDuration, $maxSleepMilli);
     }
 }

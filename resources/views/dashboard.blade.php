@@ -34,8 +34,8 @@
         <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
-                    <div class="h2 m-0">{{ $subscribersThisMonth }}</div>
-                    <div class="text-uppercase">{{ __('Subscriptions This Month') }}</div>
+                    <div class="h2 m-0">{{ $newSubscribers }}</div>
+                    <div class="text-uppercase">{{ __('New Subscribers (30 Days)') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
                     <em class="fas fa-user fa-2x color-gray-400"></em>
@@ -49,18 +49,18 @@
                     <div class="text-uppercase">{{ __('Campaigns Completed') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fas fa-user fa-2x color-gray-400"></em>
+                    <em class="fas fa-envelope fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>
         <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
-                    <div class="h2 m-0">{{ number_format($campaignOpenRate, 2) }}%</div>
+                    <div class="h2 m-0">{{ $campaignOpenRate }}%</div>
                     <div class="text-uppercase">{{ __('Net Unique Open Rate') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fas fa-user fa-2x color-gray-400"></em>
+                    <em class="fas fa-envelope fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
                     <div class="text-uppercase">{{ __('Emails Delivered') }}</div>
                 </div>
                 <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
-                    <em class="fas fa-user fa-2x color-gray-400"></em>
+                    <em class="fas fa-envelope fa-2x color-gray-400"></em>
                 </div>
             </div>
         </div>

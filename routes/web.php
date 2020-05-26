@@ -36,10 +36,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
     $router->middleware(['auth', 'verified'])->group(static function (Router $appRouter) {
 
         // Dashboard.
-        $appRouter->get('dashboard', 'DashboardController@index')->name('dashboard');
-        $appRouter->get('/', static function () {
-            return redirect()->route('sendportal.campaigns.index');
-        });
+        $appRouter->get('/', 'DashboardController@index')->name('dashboard');
 
         // Campaigns.
         $appRouter->resource('campaigns', 'Campaigns\CampaignsController')->except(['destroy']);

@@ -1,6 +1,6 @@
 <div class="sidebar-inner mx-3">
     <ul class="nav flex-column mt-4">
-        <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
+        <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.dashboard') }}">
                 <i class="fas fa-home mr-2"></i><span>{{ __('Dashboard') }}</span>
             </a>

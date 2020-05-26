@@ -22,7 +22,7 @@ interface MessageTenantRepositoryInterface extends BaseTenantInterface
 
     public function unsubscribes(int $workspaceId, string $sourceType, int $sourceId): LengthAwarePaginator;
 
-    public function getFirstLastOpenedAt(int $workspaceId, string $sourceType, int $sourceId);
+    public function getFirstOpenedAt(int $workspaceId, string $sourceType, int $sourceId);
 
     public function totalDelivered(int $workspaceId): int;
 

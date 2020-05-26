@@ -20,6 +20,8 @@ class CreateInvitationsTable extends Migration
             $table->string('email');
             $table->string('token', 40)->unique();
             $table->timestamps();
+
+            $table->foreign('workspace_id')->references('id')->on('workspaces');
         });
     }
 }

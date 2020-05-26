@@ -17,13 +17,17 @@ use Sendportal\Base\Http\Middleware\VerifyUserOnWorkspace;
 |
 */
 
-Route::middleware(['auth:api'])->name('sendportal.api.')->namespace('Api')->group(static function (Router $router) {
+Route::middleware([
+    'auth:api',
+    config('sendportal.throttle_middleware'),
+])->name('sendportal.api.')->namespace('Api')->group(static function (Router $router) {
     $router->apiResource('workspaces', 'WorkspacesController')->only('index');
 });
 
 Route::middleware([
     'auth:api',
-    VerifyUserOnWorkspace::class
+    VerifyUserOnWorkspace::class,
+    config('sendportal.throttle_middleware'),
 ])->name('sendportal.api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(static function (Router $apiRouter) {
     $apiRouter->apiResource('subscribers', 'SubscribersController');
     $apiRouter->apiResource('segments', 'SegmentsController');
@@ -43,7 +47,7 @@ Route::middleware([
         ->name('segments.subscribers.destroy');
 });
 
-Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api')->group(static function (Router $webhookRouter) {
+Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->group(static function (Router $webhookRouter) {
     $webhookRouter->post('aws', 'AwsWebhooksController@handle')->name('aws');
     $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
     $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');

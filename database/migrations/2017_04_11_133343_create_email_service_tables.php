@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Sendportal\Base\Models\EmailServiceType;
 
 class CreateEmailServiceTables extends Migration
 {
@@ -19,6 +20,8 @@ class CreateEmailServiceTables extends Migration
             $table->timestamps();
         });
 
+        $this->seedEmailServiceTypes();
+
         \Schema::create('email_services', function(Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id');
@@ -30,5 +33,30 @@ class CreateEmailServiceTables extends Migration
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('type_id')->references('id')->on('email_service_types');
         });
+    }
+
+    protected function seedEmailServiceTypes()
+    {
+        EmailServiceType::unguard();
+
+        EmailServiceType::create([
+            'id' => EmailServiceType::SES,
+            'name' => 'SES'
+        ]);
+
+        EmailServiceType::create([
+            'id' => EmailServiceType::SENDGRID,
+            'name' => 'SendGrid'
+        ]);
+
+        EmailServiceType::create([
+            'id' => EmailServiceType::MAILGUN,
+            'name' => 'Mailgun'
+        ]);
+
+        EmailServiceType::create([
+            'id' => EmailServiceType::POSTMARK,
+            'name' => 'Postmark'
+        ]);
     }
 }

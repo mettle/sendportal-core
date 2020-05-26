@@ -6,6 +6,8 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Campaign;
@@ -35,7 +37,7 @@ class CampaignReportsController extends Controller
      * @return RedirectResponse|View
      * @throws Exception
      */
-    public function index(int $id)
+    public function index(int $id, Request $request)
     {
         $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
 
@@ -47,14 +49,14 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $presenter = new CampaignReportPresenter($campaign, auth()->user()->currentWorkspace());
+        $presenter = new CampaignReportPresenter($campaign, auth()->user()->currentWorkspace(), (int) $request->get('interval', 24));
         $presenterData = $presenter->generate();
 
         $data = [
             'campaign' => $campaign,
             'campaignUrls' => $presenterData['campaignUrls'],
-            'chartLabels' => json_encode($presenterData['chartData']['labels']),
-            'chartData' => json_encode($presenterData['chartData']['data']),
+            'chartLabels' => json_encode(Arr::get($presenterData['chartData'], 'labels', [])),
+            'chartData' => json_encode(Arr::get($presenterData['chartData'], 'data', [])),
         ];
 
         return view('sendportal::campaigns.reports.index', $data);

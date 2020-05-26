@@ -9,7 +9,7 @@
 @section('content')
 
     <div class="row mb-4">
-        <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
+        <div class="col-xl-2 mb-xl-0 col-lg-6 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
                     <div class="h2 m-0">{{ $subscribers->count() }}</div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
+        <div class="col-xl-2 mb-xl-0 col-lg-6 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
                     <div class="h2 m-0">{{ $unsubscribers }}</div>
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
+        <div class="col-xl-2 mb-xl-0 col-lg-6 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
                     <div class="h2 m-0">{{ $newSubscribers }}</div>
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
+        <div class="col-xl-2 mb-xl-0 col-lg-6 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
                     <div class="h2 m-0">{{ $completedCampaigns->count() }}</div>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
+        <div class="col-xl-2 mb-xl-0 col-lg-6 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
                     <div class="h2 m-0">{{ $campaignOpenRate }}%</div>
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-sm-6 mb-md-0 mb-3">
+        <div class="col-xl-2 mb-xl-0 col-lg-6 mb-3">
             <div class="widget flex-row align-items-center align-items-stretch">
                 <div class="col-8 py-4 rounded-right">
                     <div class="h2 m-0">{{ $emailsDelivered }}</div>

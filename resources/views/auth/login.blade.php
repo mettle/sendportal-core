@@ -4,6 +4,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+
+            @include('sendportal::auth.partials.logo')
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-header-inner">
@@ -71,7 +74,13 @@
                         </div>
                     </form>
                 </div>
+
+                @if(config('sendportal.auth.register'))
+                    <hr>
+                    <p class="text-center">{{ __('Don\'t have an account?') }} <a href="{{ route('register') }}">{{ __('Register') }}</a></p>
+                @endif
             </div>
+
         </div>
     </div>
 </div>

@@ -592,6 +592,10 @@ button:disabled {
   border: 1px solid #d5dadf;
 }
 
+a.btn-link {
+  color: #0056b3;
+}
+
 .btn-filter {
   padding: 0.26rem 1rem !important;
 }

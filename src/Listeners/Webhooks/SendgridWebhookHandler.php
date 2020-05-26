@@ -16,7 +16,7 @@ use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 class SendgridWebhookHandler implements ShouldQueue
 {
     /** @var string */
-    public $queue = 'sendportal-webhook-process';
+    public $queue;
 
     /** @var EmailWebhookService */
     private $emailWebhookService;
@@ -24,6 +24,7 @@ class SendgridWebhookHandler implements ShouldQueue
     public function __construct(EmailWebhookService $emailWebhookService)
     {
         $this->emailWebhookService = $emailWebhookService;
+        $this->queue = config('sendportal.queue.webhook-process');
     }
 
     public function handle(SendgridWebhookEvent $event): void

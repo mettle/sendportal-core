@@ -23,5 +23,5 @@ interface CampaignTenantRepositoryInterface extends BaseTenantInterface
     /**
      * Campaigns that have been completed (have a SENT status).
      */
-    public function completedCampaigns(int $workspaceId): Collection;
+    public function completedCampaigns(int $workspaceId, array $relations = []): Collection;
 }

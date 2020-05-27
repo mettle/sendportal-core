@@ -49,11 +49,10 @@ class DashboardController extends Controller
     public function index(): View {
         $workspace = auth()->user()->currentWorkspace();
         $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
-        $completedCampaigns = $this->campaigns->completedCampaigns($workspace->id, ['messages', 'opens']);
 
         return view('sendportal::dashboard', [
             'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspace->id),
-            'completedCampaigns' => $completedCampaigns,
+            'completedCampaigns' => $this->campaigns->completedCampaigns($workspace->id, ['messages', 'opens']),
             'subscriberGrowthChartLabels' => json_encode($subscriberGrowthChart['labels']),
             'subscriberGrowthChartData' => json_encode($subscriberGrowthChart['data']),
         ]);
@@ -85,31 +84,5 @@ class DashboardController extends Controller
         }
 
         return $growthChart;
-    }
-
-    protected function getNewSubscribers(Collection $subscribers): int {
-        return $subscribers->filter(function ($subscriber)
-        {
-            return $subscriber->created_at->gte(now()->subDays(30)) && $subscriber->created_at->lte(now());
-        })->count();
-    }
-
-    protected function getCampaignOpenRate(Collection $campaigns): string {
-        $sentMessages = $campaigns->sum(function ($campaign)
-        {
-            return $campaign->sent_count;
-        });
-
-        $uniqueOpens = $campaigns->sum(function ($campaign)
-        {
-            return $campaign->unique_open_count;
-        });
-
-        if ($sentMessages && $uniqueOpens)
-        {
-            return number_format(($uniqueOpens / $sentMessages) * 100, 2);
-        }
-
-        return '0.00';
     }
 }

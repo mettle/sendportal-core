@@ -10,10 +10,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use RuntimeException;
-use Sendportal\Base\Events\Webhooks\SendgridWebhookEvent;
+use Sendportal\Base\Events\Webhooks\SendgridWebhookReceived;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
-class SendgridWebhookHandler implements ShouldQueue
+class HandleSendgridWebhook implements ShouldQueue
 {
     /** @var string */
     public $queue = 'sendportal-webhook-process';
@@ -26,7 +26,7 @@ class SendgridWebhookHandler implements ShouldQueue
         $this->emailWebhookService = $emailWebhookService;
     }
 
-    public function handle(SendgridWebhookEvent $event): void
+    public function handle(SendgridWebhookReceived $event): void
     {
         // https://sendgrid.com/docs/for-developers/tracking-events/event/#events
         $messageId = $this->extractMessageId($event->payload);

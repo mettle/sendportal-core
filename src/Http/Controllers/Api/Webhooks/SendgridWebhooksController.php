@@ -6,7 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Api\Webhooks;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\Events\Webhooks\SendgridWebhookEvent;
+use Sendportal\Base\Events\Webhooks\SendgridWebhookReceived;
 use Sendportal\Base\Http\Controllers\Controller;
 
 class SendgridWebhooksController extends Controller
@@ -22,7 +22,7 @@ class SendgridWebhooksController extends Controller
         }
 
         foreach ($payload as $event) {
-            event(new SendgridWebhookEvent($event));
+            event(new SendgridWebhookReceived($event));
         }
 
         return response('OK');

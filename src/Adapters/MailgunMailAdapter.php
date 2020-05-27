@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Mailgun\Mailgun;
 use Mailgun\Model\Message\SendResponse;

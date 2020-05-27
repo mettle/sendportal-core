@@ -48,7 +48,7 @@ Route::middleware([
 });
 
 Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->group(static function (Router $webhookRouter) {
-    $webhookRouter->post('aws', 'AwsWebhooksController@handle')->name('aws');
+    $webhookRouter->post('aws', 'SesWebhooksController@handle')->name('aws');
     $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
     $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');
     $webhookRouter->post('sendgrid', 'SendgridWebhooksController@handle')->name('sendgrid');

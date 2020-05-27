@@ -6,7 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Api\Webhooks;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
+use Sendportal\Base\Events\Webhooks\PostmarkWebhookReceived;
 use Sendportal\Base\Http\Controllers\Controller;
 
 class PostmarkWebhooksController extends Controller
@@ -18,7 +18,7 @@ class PostmarkWebhooksController extends Controller
 
         Log::info('Postmark webhook received');
 
-        event(new PostmarkWebhookEvent($payload));
+        event(new PostmarkWebhookReceived($payload));
 
         return response('OK');
     }

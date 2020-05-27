@@ -4,13 +4,15 @@ namespace Sendportal\Base\Providers;
 
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Events\SubscriberAddedEvent;
-use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
-use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
-use Sendportal\Base\Events\Webhooks\SendgridWebhookEvent;
+use Sendportal\Base\Events\Webhooks\MailgunWebhookReceived;
+use Sendportal\Base\Events\Webhooks\PostmarkWebhookReceived;
+use Sendportal\Base\Events\Webhooks\SendgridWebhookReceived;
+use Sendportal\Base\Events\Webhooks\SesWebhookReceived;
 use Sendportal\Base\Listeners\MessageDispatchHandler;
-use Sendportal\Base\Listeners\Webhooks\MailgunWebhookHandler;
-use Sendportal\Base\Listeners\Webhooks\PostmarkWebhookHandler;
-use Sendportal\Base\Listeners\Webhooks\SendgridWebhookHandler;
+use Sendportal\Base\Listeners\Webhooks\HandleSesWebhook;
+use Sendportal\Base\Listeners\Webhooks\HandleMailgunWebhook;
+use Sendportal\Base\Listeners\Webhooks\HandlePostmarkWebhook;
+use Sendportal\Base\Listeners\Webhooks\HandleSendgridWebhook;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,17 +28,20 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        MailgunWebhookEvent::class => [
-            MailgunWebhookHandler::class,
+        MailgunWebhookReceived::class => [
+            HandleMailgunWebhook::class,
         ],
         MessageDispatchEvent::class => [
             MessageDispatchHandler::class,
         ],
-        PostmarkWebhookEvent::class => [
-            PostmarkWebhookHandler::class,
+        PostmarkWebhookReceived::class => [
+            HandlePostmarkWebhook::class,
         ],
-        SendgridWebhookEvent::class => [
-            SendgridWebhookHandler::class,
+        SendgridWebhookReceived::class => [
+            HandleSendgridWebhook::class,
+        ],
+        SesWebhookReceived::class => [
+            HandleSesWebhook::class
         ],
         SubscriberAddedEvent::class => [
             // ...

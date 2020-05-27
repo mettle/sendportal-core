@@ -9,10 +9,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use Sendportal\Base\Events\Webhooks\PostmarkWebhookEvent;
+use Sendportal\Base\Events\Webhooks\PostmarkWebhookReceived;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
-class PostmarkWebhookHandler implements ShouldQueue
+class HandlePostmarkWebhook implements ShouldQueue
 {
     /** @var string */
     public $queue = 'sendportal-webhook-process';
@@ -25,7 +25,7 @@ class PostmarkWebhookHandler implements ShouldQueue
         $this->emailWebhookService = $emailWebhookService;
     }
 
-    public function handle(PostmarkWebhookEvent $event): void
+    public function handle(PostmarkWebhookReceived $event): void
     {
         // https://postmarkapp.com/developer/webhooks/webhooks-overview
         $messageId = $this->extractMessageId($event->payload);

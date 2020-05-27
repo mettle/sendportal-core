@@ -22,8 +22,6 @@ class MailgunMailAdapter extends BaseMailAdapter
 
     public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
     {
-        return Str::random();
-
         $parameters = [
             'from' => $fromEmail,
             'to' => $toEmail,

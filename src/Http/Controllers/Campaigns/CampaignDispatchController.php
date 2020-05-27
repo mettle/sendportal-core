@@ -63,8 +63,6 @@ class CampaignDispatchController extends Controller
             'save_as_draft' => $request->get('behaviour') === 'draft',
         ]);
 
-        $campaign->segments()->sync($request->get('segments'));
-
         return redirect()->route('sendportal.campaigns.status', $id);
     }
 }

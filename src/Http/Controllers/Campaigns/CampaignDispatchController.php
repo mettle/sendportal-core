@@ -44,6 +44,12 @@ class CampaignDispatchController extends Controller
                 ->withErrors(__('Please select an Email Service'));
         }
 
+        $campaign->update([
+            'send_to_all' => $request->get('recipients') === 'send_to_all',
+        ]);
+
+        $campaign->segments()->sync($request->get('segments'));
+
         if ($this->quotaService->exceedsQuota($campaign)) {
             return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('The number of subscribers for this campaign exceeds your SES quota'));
@@ -52,7 +58,6 @@ class CampaignDispatchController extends Controller
         $scheduledAt = $request->get('schedule') === 'scheduled' ? Carbon::parse($request->get('scheduled_at')) : now();
 
         $campaign->update([
-            'send_to_all' => $request->get('recipients') === 'send_to_all',
             'scheduled_at' => $scheduledAt,
             'status_id' => CampaignStatus::STATUS_QUEUED,
             'save_as_draft' => $request->get('behaviour') === 'draft',

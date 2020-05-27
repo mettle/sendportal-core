@@ -105,8 +105,11 @@ class CampaignsController extends Controller
      */
     public function update(int $campaignId, CampaignStoreRequest $request): RedirectResponse
     {
-        $campaign = $this->campaigns->update(auth()->user()->currentWorkspace()->id, $campaignId,
-            $this->handleCheckboxes($request->validated()));
+        $campaign = $this->campaigns->update(
+            auth()->user()->currentWorkspace()->id,
+            $campaignId,
+            $this->handleCheckboxes($request->validated())
+        );
 
         return redirect()->route('sendportal.campaigns.preview', $campaign->id);
     }

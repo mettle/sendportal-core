@@ -37,7 +37,8 @@ class DashboardController extends Controller
      * @param CampaignTenantRepositoryInterface $campaigns
      * @param MessageTenantRepositoryInterface $messages
      */
-    public function __construct(SubscriberTenantRepository $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages) {
+    public function __construct(SubscriberTenantRepository $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages)
+    {
         $this->subscribers = $subscribers;
         $this->campaigns = $campaigns;
         $this->messages = $messages;
@@ -46,7 +47,8 @@ class DashboardController extends Controller
     /**
      * @throws Exception
      */
-    public function index(): View {
+    public function index(): View
+    {
         $workspace = auth()->user()->currentWorkspace();
         $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
 
@@ -58,8 +60,8 @@ class DashboardController extends Controller
         ]);
     }
 
-    protected function getSubscriberGrowthChart(Workspace $workspace): array {
-
+    protected function getSubscriberGrowthChart(Workspace $workspace): array
+    {
         $period = CarbonPeriod::create(now()->subDays(30)->startOfDay(), now()->endOfDay());
 
         $growthChartData = $this->subscribers->getGrowthChartData($period, $workspace->id);

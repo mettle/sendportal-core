@@ -52,8 +52,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
 
         if ($status === 'subscribed') {
             $instance->whereNull('unsubscribed_at');
-        }
-        elseif ($status === 'unsubscribed') {
+        } elseif ($status === 'unsubscribed') {
             $instance->whereNotNull('unsubscribed_at');
         }
     }
@@ -143,7 +142,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
     {
         $startingValue = DB::table('subscribers')
             ->where('workspace_id', $workspaceId)
-            ->where(function($q) use ($period) {
+            ->where(function ($q) use ($period) {
                 $q->whereDate('unsubscribed_at', '>=', $period->first())
                 ->orWhereNull('unsubscribed_at');
             })

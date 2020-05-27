@@ -54,7 +54,7 @@ class EmailService extends BaseModel
 
     public function getInUseAttribute(): bool
     {
-        if  (Helper::isPro()) {
+        if (Helper::isPro()) {
             return (bool)$this->campaigns()->count() + $this->automations()->count();
         }
 

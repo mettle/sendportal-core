@@ -43,8 +43,13 @@ class MessagesController extends Controller
         $params = request()->only(['search', 'status']);
         $params['sent'] = true;
 
-        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'sent_atDesc', [],
-            50, $params);
+        $messages = $this->messageRepo->paginateWithSource(
+            auth()->user()->currentWorkspace()->id,
+            'sent_atDesc',
+            [],
+            50,
+            $params
+        );
 
         return view('sendportal::messages.index', compact('messages'));
     }
@@ -56,8 +61,13 @@ class MessagesController extends Controller
      */
     public function draft(): View
     {
-        $messages = $this->messageRepo->paginateWithSource(auth()->user()->currentWorkspace()->id, 'created_atDesc', [],
-            50, ['draft' => true]);
+        $messages = $this->messageRepo->paginateWithSource(
+            auth()->user()->currentWorkspace()->id,
+            'created_atDesc',
+            [],
+            50,
+            ['draft' => true]
+        );
 
         return view('sendportal::messages.index', compact('messages'));
     }
@@ -83,8 +93,11 @@ class MessagesController extends Controller
      */
     public function send(): RedirectResponse
     {
-        if (!$message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, request('id'),
-            ['subscriber'])) {
+        if (!$message = $this->messageRepo->find(
+            auth()->user()->currentWorkspace()->id,
+            request('id'),
+            ['subscriber']
+        )) {
             return redirect()->back()->withErrors(__('Unable to locate that message'));
         }
 
@@ -94,8 +107,10 @@ class MessagesController extends Controller
 
         $this->dispatchMessage->handle($message);
 
-        return redirect()->route('sendportal.messages.draft')->with('success',
-            __('The message was sent successfully.'));
+        return redirect()->route('sendportal.messages.draft')->with(
+            'success',
+            __('The message was sent successfully.')
+        );
     }
 
     /**
@@ -105,8 +120,11 @@ class MessagesController extends Controller
      */
     public function sendSelected(): RedirectResponse
     {
-        if (!$messages = $this->messageRepo->getWhereIn(auth()->user()->currentWorkspace()->id, request('messages'),
-            ['subscriber'])) {
+        if (!$messages = $this->messageRepo->getWhereIn(
+            auth()->user()->currentWorkspace()->id,
+            request('messages'),
+            ['subscriber']
+        )) {
             return redirect()->back()->withErrors(__('Unable to locate messages'));
         }
 
@@ -118,7 +136,9 @@ class MessagesController extends Controller
             $this->dispatchMessage->handle($message);
         });
 
-        return redirect()->route('sendportal.messages.draft')->with('success',
-            __('The messages were sent successfully.'));
+        return redirect()->route('sendportal.messages.draft')->with(
+            'success',
+            __('The messages were sent successfully.')
+        );
     }
 }

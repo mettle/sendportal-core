@@ -55,7 +55,9 @@ class WorkspaceUsersController extends Controller
 
         return redirect()
             ->route('sendportal.users.index')
-            ->with('success',
-                __(':user was removed from :workspace.', ['user' => $user->name, 'workspace' => $workspace->name]));
+            ->with(
+                'success',
+                __(':user was removed from :workspace.', ['user' => $user->name, 'workspace' => $workspace->name])
+            );
     }
 }

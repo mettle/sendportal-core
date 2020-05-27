@@ -13,8 +13,10 @@ class SegmentUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required',
-                Rule::unique('segments', 'name')->where('workspace_id',
-                    $this->route('workspaceId'))->ignore($this->route('segment'))
+                Rule::unique('segments', 'name')->where(
+                    'workspace_id',
+                    $this->route('workspaceId')
+                )->ignore($this->route('segment'))
             ]
         ];
     }

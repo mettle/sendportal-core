@@ -5,8 +5,10 @@ namespace Sendportal\Base\Http\Controllers;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
@@ -47,7 +49,7 @@ class DashboardController extends Controller
     public function index(): View {
         $workspace = auth()->user()->currentWorkspace();
         $subscribers = $this->subscribers->all($workspace->id);
-        $subscriberGrowthChart = $this->getSubscriberGrowthChart($subscribers);
+        $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
         $completedCampaigns = $this->campaigns->completedCampaigns($workspace->id, ['messages', 'opens']);
 
         return view('sendportal::dashboard', [
@@ -71,22 +73,29 @@ class DashboardController extends Controller
         ]);
     }
 
-    protected function getSubscriberGrowthChart(Collection $subscribers): array {
-        $growthChart = [];
-        $period = CarbonPeriod::create(now()->subDays(30), now());
+    protected function getSubscriberGrowthChart(Workspace $workspace): array {
 
-        foreach ($period as $date)
-        {
+        $period = CarbonPeriod::create(now()->subDays(30), now());
+        $growthChartData = $this->subscribers->getGrowthChartData($period, $workspace->id);
+        $growthChart = [
+            'labels' => [],
+            'data' => [],
+        ];
+
+        $previousUnsubscribersValue = 0;
+
+        foreach ($period as $date) {
             /** @var Carbon $date */
             $formattedDate = $date->format('d-m-Y');
+            $previousValue = (collect($growthChart['data'])->last() ?? $growthChartData['startingValue']) + $previousUnsubscribersValue;
+
+            if($unsubscribers = Arr::get($growthChartData['unsubscribers'], $formattedDate))
+            {
+                $previousUnsubscribersValue = $unsubscribers->total;
+            }
 
             $growthChart['labels'][] = $formattedDate;
-            $growthChart['data'][] = $subscribers->filter(function ($subscriber) use ($formattedDate)
-            {
-                $parsedDate = Carbon::parse($formattedDate);
-                return $subscriber->created_at->startOfDay()->lte($parsedDate)
-                    && ( ! $subscriber->unsubscribed_at || $subscriber->unsubscribed_at->gte($parsedDate));
-            })->count();
+            $growthChart['data'][] = ($growthChartData['runningTotal'][$formattedDate]->total ?? $previousValue) - $previousUnsubscribersValue;
         }
 
         return $growthChart;

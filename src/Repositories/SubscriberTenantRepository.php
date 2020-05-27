@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories;
 
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,8 +30,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Filter by name or email.
      */
-    protected function applyNameFilter(Builder $instance, array $filters): void
-    {
+    protected function applyNameFilter(Builder $instance, array $filters): void {
         if ($name = Arr::get($filters, 'name')) {
             $filterString = '%' . $name . '%';
 
@@ -47,13 +45,13 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Filter by subscription status.
      */
-    protected function applyStatusFilter(Builder $instance, array $filters): void
-    {
+    protected function applyStatusFilter(Builder $instance, array $filters): void {
         $status = Arr::get($filters, 'status');
 
         if ($status === 'subscribed') {
             $instance->whereNull('unsubscribed_at');
-        } elseif ($status === 'unsubscribed') {
+        }
+        elseif ($status === 'unsubscribed') {
             $instance->whereNotNull('unsubscribed_at');
         }
     }
@@ -61,8 +59,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Filter by segment.
      */
-    protected function applySegmentFilter(Builder $instance, array $filters = []): void
-    {
+    protected function applySegmentFilter(Builder $instance, array $filters = []): void {
         if ($segmentId = Arr::get($filters, 'segment_id')) {
             $instance->select('subscribers.*')
                 ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
@@ -73,8 +70,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function store($workspaceId, array $data)
-    {
+    public function store($workspaceId, array $data) {
         $this->checkTenantData($data);
 
         /** @var Subscriber $instance */
@@ -94,8 +90,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function update($workspaceId, $id, array $data)
-    {
+    public function update($workspaceId, $id, array $data) {
         $this->checkTenantData($data);
 
         $instance = $this->find($workspaceId, $id);
@@ -116,10 +111,10 @@ class SubscriberTenantRepository extends BaseTenantRepository
      *
      * @param Subscriber $subscriber
      * @param array $segments
+     *
      * @return mixed
      */
-    public function syncSegments(Subscriber $subscriber, array $segments = [])
-    {
+    public function syncSegments(Subscriber $subscriber, array $segments = []) {
         return $subscriber->segments()->sync($segments);
     }
 
@@ -127,13 +122,43 @@ class SubscriberTenantRepository extends BaseTenantRepository
      * Return the count of active subscribers
      *
      * @param int $workspaceId
+     *
      * @return mixed
      * @throws Exception
      */
-    public function countActive($workspaceId): int
-    {
+    public function countActive($workspaceId): int {
         return $this->getQueryBuilder($workspaceId)
             ->whereNull('unsubscribed_at')
             ->count();
+    }
+
+    public function getGrowthChartData(CarbonPeriod $period, int $workspaceId): array {
+        $startingValue = DB::table('subscribers')
+            ->where('workspace_id', $workspaceId)
+            ->whereDate('created_at', '<=', $period->first())
+            ->count();
+
+        $runningTotal = DB::table('subscribers as s1')
+            ->select(DB::raw("date_format(created_at, '%d-%m-%Y') AS date"), DB::raw("(select count(s2.id) from subscribers s2 where s2.created_at <= s1.created_at) as total"))
+            ->where('workspace_id', $workspaceId)
+            ->whereDate('created_at', '>=', $period->first())
+            ->whereDate('created_at', '<=', $period->last())
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $unsubscribers = DB::table('subscribers as s1')
+            ->select(DB::raw("date_format(unsubscribed_at, '%d-%m-%Y') AS date"), DB::raw("(select count(s2.id) from subscribers s2 where s2.unsubscribed_at <= s1.unsubscribed_at) as total"))
+            ->whereDate('unsubscribed_at', '>=', $period->first())
+            ->whereDate('unsubscribed_at', '<=', $period->last())
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        return [
+            'startingValue' => $startingValue,
+            'runningTotal' => $runningTotal->flatten()->keyBy('date'),
+            'unsubscribers' => $unsubscribers->flatten()->keyBy('date'),
+        ];
     }
 }

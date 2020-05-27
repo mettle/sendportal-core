@@ -13,11 +13,12 @@ use Sendportal\Base\Models\EmailServiceType;
 
 class QuotaService implements QuotaServiceInterface
 {
-    public function campaignCanBeSent(Campaign $campaign): bool
+    public function exceedsQuota(Campaign $campaign): bool
     {
         switch ($campaign->email_service->type_id) {
             case EmailServiceType::SES:
-                return $this->campaignCanBeSentBySes($campaign);
+                return $this->exceedsSesQuota($campaign);
+
             case EmailServiceType::SENDGRID:
             case EmailServiceType::MAILGUN:
             case EmailServiceType::POSTMARK:
@@ -32,7 +33,7 @@ class QuotaService implements QuotaServiceInterface
         return app(MailAdapterFactory::class)->adapter($emailService);
     }
 
-    protected function campaignCanBeSentBySes(Campaign $campaign): bool
+    protected function exceedsSesQuota(Campaign $campaign): bool
     {
         $mailAdapter = $this->resolveMailAdapter($campaign->email_service);
 
@@ -59,8 +60,8 @@ class QuotaService implements QuotaServiceInterface
 
         $sent = Arr::get($quota, 'SentLast24Hours');
 
-        $remaining = (int) floor($limit - $sent);
+        $remaining = (int)floor($limit - $sent);
 
-        return $remaining > $campaign->unsent_count;
+        return $campaign->unsent_count > $remaining;
     }
 }

@@ -30,15 +30,14 @@ trait ThrottlesSending
         }
     }
 
-    protected function resolveSleepDuration(int $attempt = 1, int $minSleepMilli = 10, int $maxSleepMilli = 5000): int
+    protected function resolveSleepDuration(int $attempt = 1, int $minSleepMilliseconds = 10, int $maxSleepMilliseconds = 5000): int
     {
-        $sleepDuration = $minSleepMilli * ($attempt ** 2);
+        $sleepDuration = $minSleepMilliseconds * ($attempt ** 2);
 
-        // usleep() uses microseconds
-        // rather than milliseconds
+        // usleep() uses microseconds rather than milliseconds
         $sleepDuration *= 1000;
-        $maxSleepMilli *= 1000;
+        $maxSleepMilliseconds *= 1000;
 
-        return min($sleepDuration, $maxSleepMilli);
+        return min($sleepDuration, $maxSleepMilliseconds);
     }
 }

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories;
 
+use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\Subscriber;
 
 class SubscriberTenantRepository extends BaseTenantRepository
@@ -49,7 +52,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
 
         if ($status === 'subscribed') {
             $instance->whereNull('unsubscribed_at');
-        } elseif ($status === 'unsubscribed') {
+        }
+        elseif ($status === 'unsubscribed') {
             $instance->whereNotNull('unsubscribed_at');
         }
     }
@@ -112,6 +116,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
      *
      * @param Subscriber $subscriber
      * @param array $segments
+     *
      * @return mixed
      */
     public function syncSegments(Subscriber $subscriber, array $segments = [])
@@ -123,6 +128,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
      * Return the count of active subscribers
      *
      * @param int $workspaceId
+     *
      * @return mixed
      * @throws Exception
      */
@@ -131,5 +137,47 @@ class SubscriberTenantRepository extends BaseTenantRepository
         return $this->getQueryBuilder($workspaceId)
             ->whereNull('unsubscribed_at')
             ->count();
+    }
+
+    public function getGrowthChartData(CarbonPeriod $period, int $workspaceId): array
+    {
+        $startingValue = DB::table('subscribers')
+            ->where('workspace_id', $workspaceId)
+            ->where(function($q) use ($period) {
+                $q->whereDate('unsubscribed_at', '>=', $period->first())
+                ->orWhereNull('unsubscribed_at');
+            })
+            ->whereDate('created_at', '<', $period->first())
+            ->count();
+
+        $runningTotal = DB::table('subscribers')
+            ->select(DB::raw("date_format(created_at, '%d-%m-%Y') AS date, count(*) as total"))
+            ->where('workspace_id', $workspaceId)
+            ->whereDate('created_at', '>=', $period->first())
+            ->whereDate('created_at', '<=', $period->last())
+            ->groupBy('date')
+            ->get();
+
+        $unsubscribers = DB::table('subscribers')
+            ->select(DB::raw("date_format(unsubscribed_at, '%d-%m-%Y') AS date, count(*) as total"))
+            ->where('workspace_id', $workspaceId)
+            ->whereDate('unsubscribed_at', '>=', $period->first())
+            ->whereDate('unsubscribed_at', '<=', $period->last())
+            ->groupBy('date')
+            ->get();
+
+        return [
+            'startingValue' => $startingValue,
+            'runningTotal' => $runningTotal->flatten()->keyBy('date'),
+            'unsubscribers' => $unsubscribers->flatten()->keyBy('date'),
+        ];
+    }
+
+    public function getRecentSubscribers(int $workspaceId): Collection
+    {
+        return $this->getQueryBuilder($workspaceId)
+            ->orderBy('created_at', 'DESC')
+            ->take(10)
+            ->get();
     }
 }

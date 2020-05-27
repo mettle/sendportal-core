@@ -17,6 +17,10 @@ class Subscriber extends BaseModel
         'unsubscribe_event_id'
     ];
 
+    protected $dates = [
+        'unsubscribed_at',
+    ];
+
     protected static function boot()
     {
         parent::boot();

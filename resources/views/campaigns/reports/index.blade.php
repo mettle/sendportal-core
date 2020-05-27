@@ -77,6 +77,14 @@
         <div class="card-header card-header-accent">
             <div class="card-header-inner">
                 {{ __('Unique Opens') }}
+
+                <div class="float-right">
+                    {!! Form::select('interval', [
+                        12 => __("12 Hours"),
+                        24 => __("24 Hours"),
+                        48 => __("48 Hours")
+                    ], request()->get('interval', 24), ['class' => 'form-control']) !!}
+                </div>
             </div>
         </div>
         <div class="card-body">
@@ -133,7 +141,7 @@
                     datasets: [{
                         data: {!! $chartData !!},
                         label: "{{ __("Opens") }}",
-                        backgroundColor: '#4098D7',
+                        backgroundColor: '#5D63FF',
                     }]
                 },
                 options: {
@@ -157,6 +165,12 @@
                     }
                 }
             });
+
+            $("select[name=interval]").on("change", function () {
+                var url = new URL(window.location.href);
+                url.searchParams.set('interval', $(this).val());
+                window.location.href = url.href;
+            })
         });
     </script>
 @endpush

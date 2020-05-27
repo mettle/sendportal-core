@@ -88,12 +88,12 @@ class Campaign extends BaseModel
     {
         $value = $this->sent_count;
 
-        if ($value > 9999 && $value <= 999999) {
-            return round($value / 1000) . 'k';
-        }
-
         if ($value > 999999) {
             return round($value / 1000000) . 'm';
+        }
+
+        if ($value > 9999 && $value <= 999999) {
+            return round($value / 1000) . 'k';
         }
 
         return (string)$value;

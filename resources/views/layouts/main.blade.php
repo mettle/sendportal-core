@@ -22,10 +22,11 @@
                 </div>
             </div>
         </div>
+
+        @include('sendportal::layouts.partials.header')
+
     @endauth
 
-
-    @include('sendportal::layouts.partials.header')
 
     <div class="main-content pl-4-half pr-4-half pb-4-half">
 

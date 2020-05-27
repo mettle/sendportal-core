@@ -101,7 +101,7 @@ class SubscribersController extends Controller
     public function update(SubscriberRequest $request, int $id): RedirectResponse
     {
         $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
-        $data = $request->all();
+        $data = $request->validated();
 
         // updating subscriber from subscribed -> unsubscribed
         if (!$request->has('subscribed') && !$subscriber->unsubscribed_at) {
@@ -111,6 +111,10 @@ class SubscribersController extends Controller
         elseif ($request->has('subscribed') && $subscriber->unsubscribed_at) {
             $data['unsubscribed_at'] = null;
             $data['unsubscribe_event_id'] = null;
+        }
+
+        if (!$request->has('segments')) {
+            $data['segments'] = [];
         }
 
         $this->subscriberRepo->update(auth()->user()->currentWorkspace()->id, $id, $data);

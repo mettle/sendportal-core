@@ -60,6 +60,10 @@ button:disabled {
   }
 }
 
+a.btn-link {
+    color: $blue-hyperlink;
+}
+
 .btn-filter {
   padding: .26rem 1rem !important;
 }

@@ -4,7 +4,11 @@ namespace Sendportal\Base\Models;
 
 class CampaignStatus extends BaseModel
 {
-    public $incrementing = true;
+    
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
 
     const STATUS_DRAFT = 1;
     const STATUS_QUEUED = 2;

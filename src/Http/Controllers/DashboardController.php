@@ -50,7 +50,7 @@ class DashboardController extends Controller
         $workspace = auth()->user()->currentWorkspace();
         $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
 
-        return view('sendportal::dashboard', [
+        return view('sendportal::dashboard.index', [
             'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspace->id),
             'completedCampaigns' => $this->campaigns->completedCampaigns($workspace->id, ['messages', 'opens']),
             'subscriberGrowthChartLabels' => json_encode($subscriberGrowthChart['labels']),
@@ -60,27 +60,26 @@ class DashboardController extends Controller
 
     protected function getSubscriberGrowthChart(Workspace $workspace): array {
 
-        $period = CarbonPeriod::create(now()->subDays(30), now());
+        $period = CarbonPeriod::create(now()->subDays(30)->startOfDay(), now()->endOfDay());
+
         $growthChartData = $this->subscribers->getGrowthChartData($period, $workspace->id);
+
         $growthChart = [
             'labels' => [],
             'data' => [],
         ];
 
-        $previousUnsubscribersValue = 0;
+        $currentTotal = $growthChartData['startingValue'];
 
         foreach ($period as $date) {
-            /** @var Carbon $date */
             $formattedDate = $date->format('d-m-Y');
-            $previousValue = (collect($growthChart['data'])->last() ?? $growthChartData['startingValue']) + $previousUnsubscribersValue;
 
-            if($unsubscribers = Arr::get($growthChartData['unsubscribers'], $formattedDate))
-            {
-                $previousUnsubscribersValue = $unsubscribers->total;
-            }
+            $periodValue = $growthChartData['runningTotal'][$formattedDate]->total ?? 0;
+            $periodUnsubscribe = $growthChartData['unsubscribers'][$formattedDate]->total ?? 0;
+            $currentTotal += $periodValue - $periodUnsubscribe;
 
             $growthChart['labels'][] = $formattedDate;
-            $growthChart['data'][] = ($growthChartData['runningTotal'][$formattedDate]->total ?? $previousValue) - $previousUnsubscribersValue;
+            $growthChart['data'][] = $currentTotal;
         }
 
         return $growthChart;

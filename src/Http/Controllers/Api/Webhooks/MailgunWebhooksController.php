@@ -6,7 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Api\Webhooks;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
+use Sendportal\Base\Events\Webhooks\MailgunWebhookReceived;
 use Sendportal\Base\Http\Controllers\Controller;
 
 class MailgunWebhooksController extends Controller
@@ -21,7 +21,7 @@ class MailgunWebhooksController extends Controller
         Log::info('Mailgun webhook received');
 
         if (\Arr::get($payload, 'event-data.event')) {
-            event(new MailgunWebhookEvent($payload));
+            event(new MailgunWebhookReceived($payload));
 
             return response('OK');
         }

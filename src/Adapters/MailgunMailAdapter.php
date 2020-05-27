@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Mailgun\Mailgun;
 use Mailgun\Model\Message\SendResponse;
@@ -21,6 +22,8 @@ class MailgunMailAdapter extends BaseMailAdapter
 
     public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
     {
+        return Str::random();
+
         $parameters = [
             'from' => $fromEmail,
             'to' => $toEmail,

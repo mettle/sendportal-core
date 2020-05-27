@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Http\Controllers\Api\Webhooks;
+namespace Sendportal\Base\Listeners\Webhooks;
 
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Http\Response;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Events\Webhooks\SesWebhookReceived;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 
-class AwsWebhooksController extends Controller
+class HandleSesWebhook implements ShouldQueue
 {
     /** @var EmailWebhookService */
     private $emailWebhookService;
@@ -26,44 +26,40 @@ class AwsWebhooksController extends Controller
     /**
      * @throws Exception
      */
-    public function handle(): Response
+    public function handle(SesWebhookReceived $event): void
     {
-        $content = json_decode(request()->getContent(), true);
-
-        if (Arr::get($content, 'Type') === 'SubscriptionConfirmation') {
-            $subscribeUrl = Arr::get($content, 'SubscribeURL');
+        if ($event->payloadType === 'SubscriptionConfirmation') {
+            $subscribeUrl = Arr::get($event->payload, 'SubscribeURL');
 
             $httpClient = new Client();
             $httpClient->get($subscribeUrl);
 
             Log::info('subscribing', ['url' => $subscribeUrl]);
-
-            return response('OK');
+            return;
         }
 
-        if (!Arr::get($content, 'Type') === 'Notification') {
-            return response('OK (not processed).');
+        $event = json_decode(Arr::get($event->payload, 'Message'), true);
+
+        if (!$event) {
+            return;
         }
 
-        if ($event = json_decode(Arr::get($content, 'Message'), true)) {
-            return $this->processEmailEvent($event);
-        }
-
-        return response('OK (not processed).');
+        $this->processEmailEvent($event);
     }
 
     /**
      * @throws Exception
      */
-    private function processEmailEvent(array $event): Response
+    private function processEmailEvent(array $event): void
     {
         /** @var string|null $messageId */
         $messageId = $event['mail']['messageId'] ?? null;
+
         /** @var string|null $eventType */
         $eventType = $event['eventType'] ?? null;
 
         if (!$eventType || !$messageId) {
-            return response('OK (not processed).');
+            return;
         }
 
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-open
@@ -92,12 +88,7 @@ class AwsWebhooksController extends Controller
             case 'bounce':
                 $this->handleBounce($messageId, $event);
                 break;
-
-            default:
-                abort(404);
         }
-
-        return response('OK');
     }
 
     /**

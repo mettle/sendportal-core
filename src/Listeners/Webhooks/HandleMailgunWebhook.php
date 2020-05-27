@@ -10,13 +10,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use Sendportal\Base\Events\Webhooks\MailgunWebhookEvent;
-use Sendportal\Base\Models\Message;
+use Sendportal\Base\Events\Webhooks\MailgunWebhookReceived;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
 
-class MailgunWebhookHandler implements ShouldQueue
+class HandleMailgunWebhook implements ShouldQueue
 {
     /** @var string */
     public $queue = 'sendportal-webhook-process';
@@ -38,7 +38,7 @@ class MailgunWebhookHandler implements ShouldQueue
     /**
      * @throws Exception
      */
-    public function handle(MailgunWebhookEvent $event): void
+    public function handle(MailgunWebhookReceived $event): void
     {
         // https://documentation.mailgun.com/en/latest/user_manual.html#events
         $messageId = $this->extractMessageId($event->payload);

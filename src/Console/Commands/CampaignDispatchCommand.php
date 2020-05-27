@@ -29,8 +29,7 @@ class CampaignDispatchCommand extends Command
     public function handle(
         CampaignTenantRepositoryInterface $campaignRepo,
         CampaignDispatchService $campaignService
-    ): void
-    {
+    ): void {
         $this->campaignRepo = $campaignRepo;
         $this->campaignService = $campaignService;
 

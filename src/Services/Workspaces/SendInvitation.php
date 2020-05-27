@@ -29,10 +29,13 @@ class SendInvitation
 
     protected function emailInvitation(Invitation $invitation): void
     {
-        Mail::send($this->getInvitationViewName($invitation), compact('invitation'),
+        Mail::send(
+            $this->getInvitationViewName($invitation),
+            compact('invitation'),
             static function (Message $m) use ($invitation) {
                 $m->to($invitation->email)->subject(__('New Invitation!'));
-            });
+            }
+        );
     }
 
     /**

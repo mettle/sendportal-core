@@ -46,8 +46,10 @@ class DispatchTestMessage
         $campaign = $this->resolveCampaign($workspaceId, $campaignId);
 
         if (!$campaign) {
-            Log::error('Unable to get campaign to send test message.',
-                ['workspace_id' => $workspaceId, 'campaign_id' => $campaignId]);
+            Log::error(
+                'Unable to get campaign to send test message.',
+                ['workspace_id' => $workspaceId, 'campaign_id' => $campaignId]
+            );
             return null;
         }
 
@@ -118,4 +120,3 @@ class DispatchTestMessage
         ]);
     }
 }
-

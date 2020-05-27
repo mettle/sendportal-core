@@ -39,8 +39,13 @@ class SubscribersController extends Controller
      */
     public function index(): View
     {
-        $subscribers = $this->subscriberRepo->paginate(auth()->user()->currentWorkspace()->id, 'email', [], 50,
-            request()->all());
+        $subscribers = $this->subscriberRepo->paginate(
+            auth()->user()->currentWorkspace()->id,
+            'email',
+            [],
+            50,
+            request()->all()
+        );
 
         return view('sendportal::subscribers.index', compact('subscribers'));
     }
@@ -77,8 +82,11 @@ class SubscribersController extends Controller
      */
     public function show(int $id): View
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id,
-            ['segments', 'messages.source']);
+        $subscriber = $this->subscriberRepo->find(
+            auth()->user()->currentWorkspace()->id,
+            $id,
+            ['segments', 'messages.source']
+        );
 
         return view('sendportal::subscribers.show', compact('subscriber'));
     }

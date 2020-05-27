@@ -15,7 +15,7 @@ use Sendportal\Base\Services\Webhooks\EmailWebhookService;
 class PostmarkWebhookHandler implements ShouldQueue
 {
     /** @var string */
-    public $queue = 'webhook-process';
+    public $queue = 'sendportal-webhook-process';
 
     /** @var EmailWebhookService */
     private $emailWebhookService;

@@ -30,7 +30,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Filter by name or email.
      */
-    protected function applyNameFilter(Builder $instance, array $filters): void {
+    protected function applyNameFilter(Builder $instance, array $filters): void
+    {
         if ($name = Arr::get($filters, 'name')) {
             $filterString = '%' . $name . '%';
 
@@ -45,7 +46,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Filter by subscription status.
      */
-    protected function applyStatusFilter(Builder $instance, array $filters): void {
+    protected function applyStatusFilter(Builder $instance, array $filters): void
+    {
         $status = Arr::get($filters, 'status');
 
         if ($status === 'subscribed') {
@@ -59,7 +61,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * Filter by segment.
      */
-    protected function applySegmentFilter(Builder $instance, array $filters = []): void {
+    protected function applySegmentFilter(Builder $instance, array $filters = []): void
+    {
         if ($segmentId = Arr::get($filters, 'segment_id')) {
             $instance->select('subscribers.*')
                 ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
@@ -70,7 +73,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function store($workspaceId, array $data) {
+    public function store($workspaceId, array $data)
+    {
         $this->checkTenantData($data);
 
         /** @var Subscriber $instance */
@@ -90,7 +94,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
     /**
      * {@inheritDoc}
      */
-    public function update($workspaceId, $id, array $data) {
+    public function update($workspaceId, $id, array $data)
+    {
         $this->checkTenantData($data);
 
         $instance = $this->find($workspaceId, $id);
@@ -114,7 +119,8 @@ class SubscriberTenantRepository extends BaseTenantRepository
      *
      * @return mixed
      */
-    public function syncSegments(Subscriber $subscriber, array $segments = []) {
+    public function syncSegments(Subscriber $subscriber, array $segments = [])
+    {
         return $subscriber->segments()->sync($segments);
     }
 
@@ -126,13 +132,15 @@ class SubscriberTenantRepository extends BaseTenantRepository
      * @return mixed
      * @throws Exception
      */
-    public function countActive($workspaceId): int {
+    public function countActive($workspaceId): int
+    {
         return $this->getQueryBuilder($workspaceId)
             ->whereNull('unsubscribed_at')
             ->count();
     }
 
-    public function getGrowthChartData(CarbonPeriod $period, int $workspaceId): array {
+    public function getGrowthChartData(CarbonPeriod $period, int $workspaceId): array
+    {
         $startingValue = DB::table('subscribers')
             ->where('workspace_id', $workspaceId)
             ->whereDate('created_at', '<=', $period->first())
@@ -160,5 +168,13 @@ class SubscriberTenantRepository extends BaseTenantRepository
             'runningTotal' => $runningTotal->flatten()->keyBy('date'),
             'unsubscribers' => $unsubscribers->flatten()->keyBy('date'),
         ];
+    }
+
+    public function getRecentSubscribers(int $workspaceId): Collection
+    {
+        return $this->getQueryBuilder($workspaceId)
+            ->orderBy('created_at', 'DESC')
+            ->take(10)
+            ->get();
     }
 }

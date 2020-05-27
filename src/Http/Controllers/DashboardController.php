@@ -48,26 +48,12 @@ class DashboardController extends Controller
      */
     public function index(): View {
         $workspace = auth()->user()->currentWorkspace();
-        $subscribers = $this->subscribers->all($workspace->id);
         $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
         $completedCampaigns = $this->campaigns->completedCampaigns($workspace->id, ['messages', 'opens']);
 
         return view('sendportal::dashboard', [
-            'subscribers' => $subscribers->filter(function ($subscriber) {
-                return ! $subscriber->unsubscribed_at;
-            }),
-            'unsubscribers' => $subscribers->filter(function ($subscriber)
-            {
-                return $subscriber->unsubscribed_at;
-            })->count(),
-            'recentSubscribers' => $subscribers->sortByDesc(function ($subscriber)
-            {
-                return $subscriber->created_at;
-            })->take(10),
-            'newSubscribers' => $this->getNewSubscribers($subscribers),
+            'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspace->id),
             'completedCampaigns' => $completedCampaigns,
-            'campaignOpenRate' => $this->getCampaignOpenRate($completedCampaigns),
-            'emailsDelivered' => $this->messages->totalDelivered($workspace->id),
             'subscriberGrowthChartLabels' => json_encode($subscriberGrowthChart['labels']),
             'subscriberGrowthChartData' => json_encode($subscriberGrowthChart['data']),
         ]);

@@ -19,7 +19,7 @@ use Sendportal\Base\Services\Webhooks\Mailgun\WebhookVerifier;
 class MailgunWebhookHandler implements ShouldQueue
 {
     /** @var string */
-    public $queue;
+    public $queue = 'sendportal-webhook-process';
 
     /** @var EmailWebhookService */
     private $emailWebhookService;
@@ -33,7 +33,6 @@ class MailgunWebhookHandler implements ShouldQueue
     ) {
         $this->emailWebhookService = $emailWebhookService;
         $this->verifier = $verifier;
-        $this->queue = config('sendportal.queue.webhook-process');
     }
 
     /**

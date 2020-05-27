@@ -12,7 +12,7 @@ use Sendportal\Base\Services\Messages\DispatchMessage;
 class MessageDispatchHandler implements ShouldQueue
 {
     /** @var string */
-    public $queue;
+    public $queue = 'sendportal-message-dispatch';
 
     /** @var DispatchMessage */
     protected $dispatchMessage;
@@ -20,7 +20,6 @@ class MessageDispatchHandler implements ShouldQueue
     public function __construct(DispatchMessage $dispatchMessage)
     {
         $this->dispatchMessage = $dispatchMessage;
-        $this->queue = config('sendportal.queue.message-dispatch');
     }
 
     /**

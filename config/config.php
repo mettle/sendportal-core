@@ -39,17 +39,4 @@ return [
     |
     */
     'throttle_middleware' => 'throttle:' . env('SENDPORTAL_THROTTLE_MIDDLEWARE', '60,1'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Queues
-    |--------------------------------------------------------------------------
-    |
-    | Configuration for SendPortal queue names.
-    |
-    */
-    'queue' => [
-        'message-dispatch' => env('SENDPORTAL_QUEUE_MESSAGE_DISPATCH', 'sendportal-message-dispatch'),
-        'webhook-process' => env('SENDPORTAL_QUEUE_WEBHOOK_PROCESS', 'sendportal-webhook-process'),
-    ]
 ];

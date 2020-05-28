@@ -36,10 +36,8 @@ class Campaign extends BaseModel
     {
         return Subscriber::where('workspace_id', $this->workspace_id)
             ->whereNull('unsubscribed_at')
-            ->when(! $this->send_to_all, function (Builder $query)
-            {
-                $query->whereHas('segments', function (Builder $subQuery)
-                {
+            ->when(! $this->send_to_all, function (Builder $query) {
+                $query->whereHas('segments', function (Builder $subQuery) {
                     $subQuery->whereIn('id', $this->segments->pluck('id'));
                 });
             })

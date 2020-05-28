@@ -12,7 +12,7 @@
             <div class="card">
                 <div class="card-header card-header-accent">
                     <div class="card-header-inner">
-                        {{ __('Subscriber Growth') }}
+                        {{ __('Total Subscribers') }}
                     </div>
                 </div>
                 <div class="card-body">
@@ -186,8 +186,8 @@
                     datasets: [{
                         data: {!! $subscriberGrowthChartData !!},
                         label: "{{ __("Subscriber Count") }}",
-                        backgroundColor: '#5D63FF',
-
+                        borderColor: 'rgba(93,99,255)',
+                        backgroundColor: 'rgba(93,99,255,0.34)',
                     }]
                 },
                 options: {
@@ -208,6 +208,9 @@
                                 suggestedMax: 10
                             }
                         }]
+                    },
+                    tooltips: {
+                        intersect: false
                     }
                 }
             });

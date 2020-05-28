@@ -18,6 +18,6 @@ class SwitchWorkspaceController
 
         $user->switchToWorkspace($workspace);
 
-        return redirect()->route('sendportal.campaigns.index');
+        return redirect()->route('sendportal.dashboard');
     }
 }

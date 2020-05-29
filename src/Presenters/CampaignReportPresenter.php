@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 use RuntimeException;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Workspace;
+use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\MessageUrlRepository;
 use stdClass;
@@ -30,6 +31,11 @@ class CampaignReportPresenter
     /** @var MessageUrlRepository */
     private $messageUrlRepo;
 
+    /**
+     * @var CampaignTenantRepositoryInterface
+     */
+    private $campaignRepo;
+
     /** @var int */
     private $interval;
 
@@ -40,6 +46,7 @@ class CampaignReportPresenter
     {
         $this->messageRepo = app(MessageTenantRepositoryInterface::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
+        $this->campaignRepo = app(CampaignTenantRepositoryInterface::class);
 
         $this->campaign = $campaign;
         $this->currentWorkspace = $currentWorkspace;
@@ -60,6 +67,7 @@ class CampaignReportPresenter
         return [
             'chartData' => $this->getChartData(),
             'campaignUrls' => $this->getCampaignUrls(),
+            'campaignStats' => $this->getCampaignStats(),
         ];
     }
 
@@ -274,5 +282,29 @@ class CampaignReportPresenter
             'source_type' => Campaign::class,
             'source_id' => $this->campaign->id,
         ])->toBase();
+    }
+
+    /**
+     * Get count and ratio statistics for a campaign.
+     *
+     * @return array
+     */
+    private function getCampaignStats(): array
+    {
+        $countData = $this->campaignRepo->getCounts(collect($this->campaign->id), $this->currentWorkspace->id);
+
+        return [
+            'counts' => [
+                'open' =>  $countData[$this->campaign->id]->opened,
+                'click' =>  $countData[$this->campaign->id]->clicked,
+                'sent' => $this->campaign->formatCount($countData[$this->campaign->id]->sent),
+                'bounce' => $countData[$this->campaign->id]->bounced,
+            ],
+            'ratios' => [
+                'open' => $this->campaign->getActionRatio($countData[$this->campaign->id]->opened, $countData[$this->campaign->id]->sent),
+                'click' => $this->campaign->getActionRatio($countData[$this->campaign->id]->clicked, $countData[$this->campaign->id]->sent),
+                'bounce' => $this->campaign->getActionRatio($countData[$this->campaign->id]->bounced, $countData[$this->campaign->id]->sent),
+            ],
+        ];
     }
 }

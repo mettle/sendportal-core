@@ -42,9 +42,9 @@
                                 <a href="{{ route('sendportal.campaigns.status', $campaign->id) }}">{{ $campaign->name }}</a>
                             @endif
                         </td>
-                        <td>{{ $campaign->sent_count_formatted }}</td>
-                        <td>{{ number_format($campaign->open_ratio * 100, 1) . '%' }}</td>
-                        <td>{{ number_format($campaign->click_ratio * 100, 1) . '%' }}</td>
+                        <td>{{ $campaignStats[$campaign->id]['counts']['sent'] }}</td>
+                        <td>{{ number_format($campaignStats[$campaign->id]['ratios']['open'] * 100, 1) . '%' }}</td>
+                        <td>{{ number_format($campaignStats[$campaign->id]['ratios']['click'] * 100, 1) . '%' }}</td>
                         <td><span title="{{ $campaign->created_at }}">{{ $campaign->created_at->diffForHumans() }}</span></td>
                         <td>
                             @include('sendportal::campaigns.partials.status')

@@ -39,7 +39,8 @@ class CampaignReportsController extends Controller
      */
     public function index(int $id, Request $request)
     {
-        $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $workspace = auth()->user()->currentWorkspace();
+        $campaign = $this->campaignRepo->find($workspace->id, $id);
 
         if ($campaign->draft) {
             return redirect()->route('sendportal.campaigns.edit', $id);
@@ -55,6 +56,7 @@ class CampaignReportsController extends Controller
         $data = [
             'campaign' => $campaign,
             'campaignUrls' => $presenterData['campaignUrls'],
+            'campaignStats' => $presenterData['campaignStats'],
             'chartLabels' => json_encode(Arr::get($presenterData['chartData'], 'labels', [])),
             'chartData' => json_encode(Arr::get($presenterData['chartData'], 'data', [])),
         ];

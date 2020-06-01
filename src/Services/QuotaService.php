@@ -22,7 +22,7 @@ class QuotaService implements QuotaServiceInterface
             case EmailServiceType::SENDGRID:
             case EmailServiceType::MAILGUN:
             case EmailServiceType::POSTMARK:
-                return true;
+                return false;
         }
 
         throw new \DomainException('Unrecognised email service type');

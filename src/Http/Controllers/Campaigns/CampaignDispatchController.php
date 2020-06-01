@@ -18,6 +18,11 @@ class CampaignDispatchController extends Controller
     /** @var CampaignTenantRepositoryInterface */
     protected $campaigns;
 
+    /**
+     * @var QuotaServiceInterface
+     */
+    protected $quotaService;
+
     public function __construct(
         CampaignTenantRepositoryInterface $campaigns,
         QuotaServiceInterface $quotaService

@@ -36,7 +36,7 @@ class Campaign extends BaseModel
     {
         return Subscriber::where('workspace_id', $this->workspace_id)
             ->whereNull('unsubscribed_at')
-            ->when(! $this->send_to_all, function (Builder $query) {
+            ->when(!$this->send_to_all, function (Builder $query) {
                 $query->whereHas('segments', function (Builder $subQuery) {
                     $subQuery->whereIn('id', $this->segments->pluck('id'));
                 });
@@ -77,6 +77,14 @@ class Campaign extends BaseModel
     }
 
     /**
+     * All of a campaign's sent messages.
+     */
+    public function sentMessages(): MorphMany
+    {
+        return $this->morphMany(Message::class, 'source')->whereNotNull('sent_at');
+    }
+
+    /**
      * All of a campaign's opened messages.
      */
     public function opens(): MorphMany
@@ -94,7 +102,7 @@ class Campaign extends BaseModel
 
     public function getSentCountAttribute(): int
     {
-        return $this->messages()->whereNotNull('sent_at')->count();
+        return $this->sentMessages->count();
     }
 
     /**
@@ -124,6 +132,19 @@ class Campaign extends BaseModel
         return (string)$value;
     }
 
+    public function formatCount(int $count): string
+    {
+        if ($count > 999999) {
+            return round($count / 1000000) . 'm';
+        }
+
+        if ($count > 9999 && $count <= 999999) {
+            return round($count / 1000) . 'k';
+        }
+
+        return (string)$count;
+    }
+
     /**
      * Get the campaigns's open ratio as an attribute.
      *
@@ -132,8 +153,17 @@ class Campaign extends BaseModel
      */
     public function getOpenRatioAttribute()
     {
-        if ($openCount = $this->messages()->where('open_count', '>', 0)->count()) {
+        if ($openCount = $this->opens->count()) {
             return $openCount / $this->sent_count;
+        }
+
+        return 0;
+    }
+
+    public function getActionRatio(int $actionCount, int $sentCount)
+    {
+        if ($actionCount) {
+            return $actionCount / $sentCount;
         }
 
         return 0;
@@ -147,7 +177,7 @@ class Campaign extends BaseModel
      */
     public function getClickRatioAttribute()
     {
-        if ($clickCount = $this->messages()->where('click_count', '>', 0)->count()) {
+        if ($clickCount = $this->clicks->count()) {
             return $clickCount / $this->sent_count;
         }
 
@@ -162,7 +192,7 @@ class Campaign extends BaseModel
      */
     public function getBounceRatioAttribute()
     {
-        if ($bounceCount = $this->messages()->whereNotNull('bounced_at')->count()) {
+        if ($bounceCount = $this->messages->whereNotNull('bounced_at')->count()) {
             return $bounceCount / $this->sent_count;
         }
 

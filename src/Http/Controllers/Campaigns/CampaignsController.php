@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
@@ -51,10 +52,29 @@ class CampaignsController extends Controller
      */
     public function index(): ViewContract
     {
-        $campaigns = $this->campaigns->paginate(auth()->user()->currentWorkspace()->id, 'created_atDesc', ['status']);
+        $workspace = auth()->user()->currentWorkspace();
+        $campaigns = $this->campaigns->paginate($workspace->id, 'created_atDesc', ['status']);
+        $countData = $this->campaigns->getCounts(collect($campaigns->items())->pluck('id'), $workspace->id);
+
+        $campaignStats = collect($campaigns->items())->map(function ($campaign) use ($countData) {
+            /** @var Campaign $campaign */
+            return [
+                'campaign_id' => $campaign->id,
+                'counts' => [
+                    'open' =>  $countData[$campaign->id]->opened,
+                    'click' =>  $countData[$campaign->id]->clicked,
+                    'sent' => $campaign->formatCount($countData[$campaign->id]->sent),
+                ],
+                'ratios' => [
+                    'open' => $campaign->getActionRatio($countData[$campaign->id]->opened, $countData[$campaign->id]->sent),
+                    'click' => $campaign->getActionRatio($countData[$campaign->id]->clicked, $countData[$campaign->id]->sent),
+                ],
+            ];
+        })->keyBy('campaign_id');
+
         $emailServicesCount = $this->emailServices->count(auth()->user()->currentWorkspace()->id);
 
-        return view('sendportal::campaigns.index', compact('campaigns', 'emailServicesCount'));
+        return view('sendportal::campaigns.index', compact('campaigns', 'emailServicesCount', 'campaignStats'));
     }
 
     /**

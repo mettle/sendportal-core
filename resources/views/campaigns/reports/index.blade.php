@@ -16,7 +16,7 @@
                class="text-decoration-none text-reset">
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
-                        <div class="h2 m-0">{{ $campaign->sent_count }}</div>
+                        <div class="h2 m-0">{{ $campaignStats['counts']['sent'] }}</div>
                         <div class="text-uppercase">{{ __('Emails Sent') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
@@ -31,7 +31,7 @@
                class="text-decoration-none text-reset">
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
-                        <div class="h2 m-0">{{ round($campaign->open_ratio * 100, 1) }}%</div>
+                        <div class="h2 m-0">{{ round($campaignStats['ratios']['open'] * 100, 1) }}%</div>
                         <div class="text-uppercase">{{ __('Unique Opens') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
@@ -46,7 +46,7 @@
                class="text-decoration-none text-reset">
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
-                        <div class="h2 m-0">{{ round($campaign->click_ratio * 100, 1) }}%</div>
+                        <div class="h2 m-0">{{ round($campaignStats['ratios']['click'] * 100, 1) }}%</div>
                         <div class="text-uppercase">{{ __('Click Rate') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">
@@ -62,7 +62,7 @@
 
                 <div class="widget flex-row align-items-center align-items-stretch">
                     <div class="col-8 py-4 rounded-right">
-                        <div class="h2 m-0">{{ round($campaign->bounce_ratio * 100, 1) }}%</div>
+                        <div class="h2 m-0">{{ round($campaignStats['ratios']['bounce'] * 100, 1) }}%</div>
                         <div class="text-uppercase">{{ __('Bounce Rate') }}</div>
                     </div>
                     <div class="col-4 d-flex align-items-center justify-content-center rounded-left">

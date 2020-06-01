@@ -40,7 +40,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/campaigns';
+    protected $redirectTo = '/';
 
     /** @var AcceptInvitation */
     private $acceptInvitation;

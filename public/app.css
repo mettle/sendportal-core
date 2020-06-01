@@ -939,6 +939,7 @@ a.color-purple-500:active {
 
 .nav-pills a.nav-link:hover {
   border-bottom: 4px solid #5D63FF;
+  border-radius: 4px;
 }
 
 /*

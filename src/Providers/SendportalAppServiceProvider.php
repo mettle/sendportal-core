@@ -6,6 +6,7 @@ namespace Sendportal\Base\Providers;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
 use Sendportal\Base\Repositories\Campaigns\PostgresCampaignTenantRepository;
@@ -13,6 +14,7 @@ use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MySqlMessageTenantRepository;
 use Sendportal\Base\Repositories\Messages\PostgresMessageTenantRepository;
 use Sendportal\Base\Services\Helper;
+use Sendportal\Base\Services\QuotaService;
 use Sendportal\Base\Traits\ResolvesDatabaseDriver;
 
 class SendportalAppServiceProvider extends ServiceProvider
@@ -43,6 +45,8 @@ class SendportalAppServiceProvider extends ServiceProvider
 
             return $app->make(MySqlMessageTenantRepository::class);
         });
+
+        $this->app->bind(QuotaServiceInterface::class, QuotaService::class);
 
         $this->app->singleton('sendportal.helper', function () {
             return new Helper();

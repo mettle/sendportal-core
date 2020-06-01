@@ -15,7 +15,6 @@ use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\MessageUrlRepository;
-use stdClass;
 
 class CampaignReportPresenter
 {
@@ -31,9 +30,7 @@ class CampaignReportPresenter
     /** @var MessageUrlRepository */
     private $messageUrlRepo;
 
-    /**
-     * @var CampaignTenantRepositoryInterface
-     */
+    /** @var CampaignTenantRepositoryInterface */
     private $campaignRepo;
 
     /** @var int */
@@ -166,10 +163,10 @@ class CampaignReportPresenter
      */
     private function calculateFirstLast(string $first, int $interval): array
     {
-        $first = Carbon::parse($first);
-        $last = $first->copy()->addHours($interval);
+        $cFirst = Carbon::parse($first);
+        $last = $cFirst->copy()->addHours($interval);
 
-        return [$first->copy()->startOfHour(), $last->copy()->endOfHour()];
+        return [$cFirst->copy()->startOfHour(), $last->copy()->endOfHour()];
     }
 
     /**
@@ -286,8 +283,6 @@ class CampaignReportPresenter
 
     /**
      * Get count and ratio statistics for a campaign.
-     *
-     * @return array
      */
     private function getCampaignStats(): array
     {
@@ -295,8 +290,8 @@ class CampaignReportPresenter
 
         return [
             'counts' => [
-                'open' =>  $countData[$this->campaign->id]->opened,
-                'click' =>  $countData[$this->campaign->id]->clicked,
+                'open' => $countData[$this->campaign->id]->opened,
+                'click' => $countData[$this->campaign->id]->clicked,
                 'sent' => $this->campaign->formatCount($countData[$this->campaign->id]->sent),
                 'bounce' => $countData[$this->campaign->id]->bounced,
             ],

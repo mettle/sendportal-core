@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -29,6 +30,18 @@ class Campaign extends BaseModel
     public function segments(): BelongsToMany
     {
         return $this->belongsToMany(Segment::class)->withTimestamps();
+    }
+
+    public function getActiveSubscriberCountAttribute(): int
+    {
+        return Subscriber::where('workspace_id', $this->workspace_id)
+            ->whereNull('unsubscribed_at')
+            ->when(!$this->send_to_all, function (Builder $query) {
+                $query->whereHas('segments', function (Builder $subQuery) {
+                    $subQuery->whereIn('id', $this->segments->pluck('id'));
+                });
+            })
+            ->count();
     }
 
     /**
@@ -92,6 +105,18 @@ class Campaign extends BaseModel
         return $this->sentMessages->count();
     }
 
+    /**
+     * @return void
+     */
+    public function getUnsentCountAttribute()
+    {
+        if ($this->messages->count()) {
+            return ($this->messages->count() - $this->sent_count);
+        }
+
+        return $this->active_subscriber_count;
+    }
+
     public function getSentCountFormattedAttribute(): string
     {
         $value = $this->sent_count;
@@ -137,8 +162,7 @@ class Campaign extends BaseModel
 
     public function getActionRatio(int $actionCount, int $sentCount)
     {
-        if($actionCount)
-        {
+        if ($actionCount) {
             return $actionCount / $sentCount;
         }
 

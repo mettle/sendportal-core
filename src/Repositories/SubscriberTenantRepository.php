@@ -143,25 +143,25 @@ class SubscriberTenantRepository extends BaseTenantRepository
         $startingValue = DB::table('subscribers')
             ->where('workspace_id', $workspaceId)
             ->where(function ($q) use ($period) {
-                $q->whereDate('unsubscribed_at', '>=', $period->first())
+                $q->where('unsubscribed_at', '>=', $period->first())
                 ->orWhereNull('unsubscribed_at');
             })
-            ->whereDate('created_at', '<', $period->first())
+            ->where('created_at', '<', $period->first())
             ->count();
 
         $runningTotal = DB::table('subscribers')
             ->select(DB::raw("date_format(created_at, '%d-%m-%Y') AS date, count(*) as total"))
             ->where('workspace_id', $workspaceId)
-            ->whereDate('created_at', '>=', $period->first())
-            ->whereDate('created_at', '<=', $period->last())
+            ->where('created_at', '>=', $period->first())
+            ->where('created_at', '<=', $period->last())
             ->groupBy('date')
             ->get();
 
         $unsubscribers = DB::table('subscribers')
             ->select(DB::raw("date_format(unsubscribed_at, '%d-%m-%Y') AS date, count(*) as total"))
             ->where('workspace_id', $workspaceId)
-            ->whereDate('unsubscribed_at', '>=', $period->first())
-            ->whereDate('unsubscribed_at', '<=', $period->last())
+            ->where('unsubscribed_at', '>=', $period->first())
+            ->where('unsubscribed_at', '<=', $period->last())
             ->groupBy('date')
             ->get();
 

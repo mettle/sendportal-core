@@ -21,10 +21,11 @@ class CreateSubscribersTable extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->jsonb('meta')->nullable();
-            $table->timestamp('unsubscribed_at')->nullable();
+            $table->timestamp('unsubscribed_at')->nullable()->index();
             $table->unsignedInteger('unsubscribe_event_id')->nullable();
             $table->timestamps();
 
+            $table->index('created_at');
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('unsubscribe_event_id')->references('id')->on('unsubscribe_event_types');
         });

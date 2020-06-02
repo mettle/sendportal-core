@@ -10,11 +10,13 @@ use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
+use Sendportal\Base\Services\Campaigns\CampaignStatistics;
 
 class CampaignsController extends Controller
 {
@@ -39,7 +41,8 @@ class CampaignsController extends Controller
         SegmentTenantRepository $segments,
         EmailServiceTenantRepository $emailServices,
         SubscriberTenantRepository $subscribers
-    ) {
+    )
+    {
         $this->campaigns = $campaigns;
         $this->templates = $templates;
         $this->segments = $segments;
@@ -54,28 +57,11 @@ class CampaignsController extends Controller
     {
         $workspace = auth()->user()->currentWorkspace();
         $campaigns = $this->campaigns->paginate($workspace->id, 'created_atDesc', ['status']);
-        $countData = $this->campaigns->getCounts(collect($campaigns->items())->pluck('id'), $workspace->id);
 
-        $campaignStats = collect($campaigns->items())->map(function ($campaign) use ($countData) {
-            /** @var Campaign $campaign */
-            return [
-                'campaign_id' => $campaign->id,
-                'counts' => [
-                    'total' => $countData[$campaign->id]->total,
-                    'open' =>  $countData[$campaign->id]->opened,
-                    'click' =>  $countData[$campaign->id]->clicked,
-                    'sent' => $campaign->formatCount($countData[$campaign->id]->sent),
-                ],
-                'ratios' => [
-                    'open' => $campaign->getActionRatio($countData[$campaign->id]->opened, $countData[$campaign->id]->sent),
-                    'click' => $campaign->getActionRatio($countData[$campaign->id]->clicked, $countData[$campaign->id]->sent),
-                ],
-            ];
-        })->keyBy('campaign_id');
-
-        $emailServicesCount = $this->emailServices->count(auth()->user()->currentWorkspace()->id);
-
-        return view('sendportal::campaigns.index', compact('campaigns', 'emailServicesCount', 'campaignStats'));
+        return view('sendportal::campaigns.index', [
+            'campaigns' => $campaigns,
+            'campaignStats' => (new CampaignStatistics($workspace))->forPaginatedCampaigns($campaigns)->get(),
+        ]);
     }
 
     /**
@@ -159,13 +145,17 @@ class CampaignsController extends Controller
      */
     public function status(int $id)
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id, ['status']);
+        $workspace = auth()->user()->currentWorkspace();
+        $campaign = $this->campaigns->find($workspace->id, $id, ['status']);
 
         if ($campaign->sent) {
             return redirect()->route('sendportal.campaigns.reports.index', $id);
         }
 
-        return view('sendportal::campaigns.status', compact('campaign'));
+        return view('sendportal::campaigns.status', [
+            'campaign' => $campaign,
+            'campaignStats' => (new CampaignStatistics($workspace))->forCampaign($campaign)->get(),
+        ]);
     }
 
     /**

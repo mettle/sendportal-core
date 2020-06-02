@@ -150,7 +150,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
             ->count();
 
         $runningTotal = DB::table('subscribers')
-            ->select(DB::raw("date_format(created_at, '%d-%m-%Y') AS date, count(*) as total"))
+            ->selectRaw("date_format(created_at, '%d-%m-%Y') AS date, count(*) as total")
             ->where('workspace_id', $workspaceId)
             ->where('created_at', '>=', $period->first())
             ->where('created_at', '<=', $period->last())
@@ -158,7 +158,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
             ->get();
 
         $unsubscribers = DB::table('subscribers')
-            ->select(DB::raw("date_format(unsubscribed_at, '%d-%m-%Y') AS date, count(*) as total"))
+            ->selectRaw("date_format(unsubscribed_at, '%d-%m-%Y') AS date, count(*) as total")
             ->where('workspace_id', $workspaceId)
             ->where('unsubscribed_at', '>=', $period->first())
             ->where('unsubscribed_at', '<=', $period->last())

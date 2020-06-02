@@ -8,10 +8,12 @@ use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Services\Campaigns\CampaignStatistics;
 
 class DashboardController extends Controller
 {
@@ -50,11 +52,13 @@ class DashboardController extends Controller
     public function index(): View
     {
         $workspace = auth()->user()->currentWorkspace();
+        $completedCampaigns = $this->campaigns->completedCampaigns($workspace->id, ['status']);
         $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
 
         return view('sendportal::dashboard.index', [
             'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspace->id),
-            'completedCampaigns' => $this->campaigns->completedCampaigns($workspace->id, ['messages', 'opens']),
+            'completedCampaigns' => $completedCampaigns,
+            'campaignStats' => (new CampaignStatistics($workspace))->forCampaigns($completedCampaigns)->get(),
             'subscriberGrowthChartLabels' => json_encode($subscriberGrowthChart['labels']),
             'subscriberGrowthChartData' => json_encode($subscriberGrowthChart['data']),
         ]);

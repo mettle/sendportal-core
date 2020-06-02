@@ -36,13 +36,14 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
     public function getCounts(Collection $campaignIds, int $workspaceId): array
     {
         $counts = DB::table('campaigns')
-            ->join('messages', function ($join) use ($campaignIds, $workspaceId) {
+            ->leftJoin('messages', function ($join) use ($campaignIds, $workspaceId) {
                 $join->on('messages.source_id', '=', 'campaigns.id')
                     ->where('messages.source_type', Campaign::class)
                     ->whereIn('messages.source_id', $campaignIds)
                     ->where('messages.workspace_id', $workspaceId);
             })
             ->select('campaigns.id as campaign_id')
+            ->selectRaw('count(messages.id) as total')
             ->selectRaw('count(case when messages.opened_at IS NOT NULL then 1 end) as opened')
             ->selectRaw('count(case when messages.clicked_at IS NOT NULL then 1 end) as clicked')
             ->selectRaw('count(case when messages.sent_at IS NOT NULL then 1 end) as sent')

@@ -21,7 +21,7 @@
             Your campaign is queued and will be sent out soon.
         @else
             <i class="fas fa-cog fa-spin"></i>
-            {{ $campaign->sent_count_formatted }} out of {{ $campaign->messages->count() }} messages sent.
+            {{ $campaign->formatCount($campaignStats[$campaign->id]['counts']['sent']) }} out of {{ $campaignStats[$campaign->id]['counts']['total'] }} messages sent.
         @endif
     </div>
 </div>

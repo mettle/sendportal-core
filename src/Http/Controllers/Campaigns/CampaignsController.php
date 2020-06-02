@@ -61,6 +61,7 @@ class CampaignsController extends Controller
             return [
                 'campaign_id' => $campaign->id,
                 'counts' => [
+                    'total' => $countData[$campaign->id]->total,
                     'open' =>  $countData[$campaign->id]->opened,
                     'click' =>  $countData[$campaign->id]->clicked,
                     'sent' => $campaign->formatCount($countData[$campaign->id]->sent),

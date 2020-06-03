@@ -2,13 +2,9 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;

@@ -13,7 +13,7 @@ use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
-use Sendportal\Base\Services\Campaigns\CampaignStatistics;
+use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
 
 class DashboardController extends Controller
 {
@@ -33,17 +33,23 @@ class DashboardController extends Controller
     protected $messages;
 
     /**
+     * @var CampaignStatisticsService
+     */
+    protected $campaignStatisticsService;
+
+    /**
      * DashboardController constructor.
      *
      * @param SubscriberTenantRepository $subscribers
      * @param CampaignTenantRepositoryInterface $campaigns
      * @param MessageTenantRepositoryInterface $messages
      */
-    public function __construct(SubscriberTenantRepository $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages)
+    public function __construct(SubscriberTenantRepository $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages, CampaignStatisticsService $campaignStatisticsService)
     {
         $this->subscribers = $subscribers;
         $this->campaigns = $campaigns;
         $this->messages = $messages;
+        $this->campaignStatisticsService = $campaignStatisticsService;
     }
 
     /**
@@ -58,7 +64,7 @@ class DashboardController extends Controller
         return view('sendportal::dashboard.index', [
             'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspace->id),
             'completedCampaigns' => $completedCampaigns,
-            'campaignStats' => (new CampaignStatistics($workspace))->forCampaigns($completedCampaigns)->get(),
+            'campaignStats' => $this->campaignStatisticsService->getForCollection($completedCampaigns, $workspace),
             'subscriberGrowthChartLabels' => json_encode($subscriberGrowthChart['labels']),
             'subscriberGrowthChartData' => json_encode($subscriberGrowthChart['data']),
         ]);

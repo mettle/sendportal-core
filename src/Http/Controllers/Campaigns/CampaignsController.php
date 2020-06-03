@@ -9,14 +9,12 @@ use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
-use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
-use Sendportal\Base\Services\Campaigns\CampaignStatistics;
+use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
 
 class CampaignsController extends Controller
 {
@@ -35,12 +33,18 @@ class CampaignsController extends Controller
     /** @var SubscriberTenantRepository */
     protected $subscribers;
 
+    /**
+     * @var CampaignStatisticsService
+     */
+    protected $campaignStatisticsService;
+
     public function __construct(
         CampaignTenantRepositoryInterface $campaigns,
         TemplateTenantRepository $templates,
         SegmentTenantRepository $segments,
         EmailServiceTenantRepository $emailServices,
-        SubscriberTenantRepository $subscribers
+        SubscriberTenantRepository $subscribers,
+        CampaignStatisticsService $campaignStatisticsService
     )
     {
         $this->campaigns = $campaigns;
@@ -48,6 +52,7 @@ class CampaignsController extends Controller
         $this->segments = $segments;
         $this->emailServices = $emailServices;
         $this->subscribers = $subscribers;
+        $this->campaignStatisticsService = $campaignStatisticsService;
     }
 
     /**
@@ -60,7 +65,7 @@ class CampaignsController extends Controller
 
         return view('sendportal::campaigns.index', [
             'campaigns' => $campaigns,
-            'campaignStats' => (new CampaignStatistics($workspace))->forPaginatedCampaigns($campaigns)->get(),
+            'campaignStats' => $this->campaignStatisticsService->getForPaginator($campaigns, $workspace),
         ]);
     }
 
@@ -154,7 +159,7 @@ class CampaignsController extends Controller
 
         return view('sendportal::campaigns.status', [
             'campaign' => $campaign,
-            'campaignStats' => (new CampaignStatistics($workspace))->forCampaign($campaign)->get(),
+            'campaignStats' => $this->campaignStatisticsService->getForCampaign($campaign, $workspace),
         ]);
     }
 

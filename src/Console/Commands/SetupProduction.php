@@ -372,7 +372,7 @@ class SetupProduction extends BaseCommand
     /**
      * Write a value to a given key within the environment file.
      */
-    protected function writeToEnvironmentFile(string $key, string $value): void
+    protected function writeToEnvironmentFile(string $key, ?string $value): void
     {
         file_put_contents($this->laravel->environmentFilePath(), preg_replace(
             $this->keyReplacementPattern($key),
@@ -395,7 +395,7 @@ class SetupProduction extends BaseCommand
     /**
      * Write to a given key within the Laravel configuration file.
      */
-    protected function writeToConfig(string $key, string $value): void
+    protected function writeToConfig(string $key, ?string $value): void
     {
         $this->laravel['config'][$key] = $value;
     }

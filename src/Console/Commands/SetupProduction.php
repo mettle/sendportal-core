@@ -37,6 +37,7 @@ class SetupProduction extends BaseCommand
     public function handle(): void
     {
         $this->migrator = app('migrator');
+
         $this->intro();
         $this->line('');
         $this->checkEnvironment();
@@ -45,6 +46,7 @@ class SetupProduction extends BaseCommand
         $this->checkMigrations();
         $this->checkAdminUserAccount();
         $this->checkVendorAssets();
+
         $this->line('');
         $this->info('Your application is ready!');
         $this->line('');
@@ -61,14 +63,18 @@ class SetupProduction extends BaseCommand
 
             return;
         }
+
         $createFile = $this->confirm('The .env file does not yet exist. Would you like to create it now?', true);
+
         if ($createFile && copy(base_path('.env.example'), base_path('.env'))) {
             $this->line('✅ .env file has been created');
             $this->call('key:generate');
 
             return;
         }
+
         $this->error('The .env file must be created before you can continue.');
+
         exit;
     }
 
@@ -141,6 +147,7 @@ class SetupProduction extends BaseCommand
 
         if (! $this->runMigrations()) {
             $this->error("Database migrations must be run before setup can be completed.");
+
             exit;
         }
     }
@@ -153,9 +160,11 @@ class SetupProduction extends BaseCommand
     protected function runMigrations(): bool
     {
         $runMigrations = $this->confirm("There are pending database migrations. Would you like to run migrations now?", true);
+
         if (! $runMigrations) {
             return false;
         }
+
         $this->call('migrate');
         $this->line('✅ Database migrations successful');
 
@@ -172,8 +181,10 @@ class SetupProduction extends BaseCommand
 
             return;
         }
+
         $companyName = $this->getCompanyName();
         $this->createAdminUserAccount($companyName);
+
         $this->line('✅ Admin user account has been created');
     }
 
@@ -185,6 +196,7 @@ class SetupProduction extends BaseCommand
         $this->line('');
         $this->info("Creating first admin user account and company/workspace");
         $companyName = $this->ask("Company/Workspace name");
+
         if (! $companyName) {
             return $this->getCompanyName();
         }
@@ -199,9 +211,11 @@ class SetupProduction extends BaseCommand
     {
         $this->line('');
         $this->info("Create the administrator user account");
+
         $name = $this->getUserParam('name');
         $email = $this->getUserParam('email');
         $password = $this->getUserParam('password');
+
         $user = User::create([
             'name' => $name,
             'email' => $email,
@@ -209,6 +223,7 @@ class SetupProduction extends BaseCommand
             'password' => Hash::make($password),
             'api_token' => Str::random(80),
         ]);
+
         $this->storeWorkspace($user, $companyName);
 
         return $user;
@@ -224,10 +239,13 @@ class SetupProduction extends BaseCommand
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ];
+
         $value = $this->ask(ucfirst($param));
+
         $validator = Validator::make([$param => $value], [
             $param => $validationRules[$param],
         ]);
+
         if ($validator->fails()) {
             foreach ($validator->errors()->getMessages() as $error) {
                 $this->line("{$error[0]}");
@@ -248,6 +266,7 @@ class SetupProduction extends BaseCommand
             'name' => $companyName,
             'owner_id' => $user->id,
         ]);
+
         $user->workspaces()->attach($workspace->id, [
             'role' => Workspace::ROLE_OWNER,
         ]);
@@ -265,6 +284,7 @@ class SetupProduction extends BaseCommand
             '--tag' => 'sendportal-assets',
             '--force' => true
         ]);
+
         $this->info('Published frontend assets');
     }
 
@@ -274,6 +294,7 @@ class SetupProduction extends BaseCommand
     protected function printDatabaseConfig(): void
     {
         $connection = config('database.default');
+
         $this->line('');
         $this->info("Database Configuration:");
         $this->line("- Connection: {$connection}");

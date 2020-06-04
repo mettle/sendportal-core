@@ -347,7 +347,7 @@ class SetupProduction extends BaseCommand
             $this->writeToConfig($configMap[$envKey], $value);
         }
 
-        DB::purge('mysql');
+        DB::purge($this->laravel['config']['database.default']);
     }
 
     /**

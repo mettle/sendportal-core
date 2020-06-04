@@ -96,12 +96,10 @@ class SetupProduction extends BaseCommand
      */
     protected function checkDatabaseConnection(): void
     {
-        try
-        {
+        try {
             DB::connection()->getPdo();
         }
-        catch (Exception $e)
-        {
+        catch (Exception $e) {
             if (! $this->createDatabaseCredentials()) {
                 $this->error('A database connection could not be established. Please update your configuration and try again.');
                 $this->printDatabaseConfig();

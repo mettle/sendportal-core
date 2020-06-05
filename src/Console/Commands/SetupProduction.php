@@ -42,6 +42,7 @@ class SetupProduction extends BaseCommand
         $this->line('');
         $this->checkEnvironment();
         $this->checkApplicationKey();
+        $this->checkAppUrl();
         $this->checkDatabaseConnection();
         $this->checkMigrations();
         $this->checkAdminUserAccount();
@@ -92,12 +93,27 @@ class SetupProduction extends BaseCommand
     }
 
     /**
+     * Check that the app url has been set.
+     */
+    protected function checkAppUrl(): void
+    {
+        if (config('app.url') !== 'http://localhost') {
+            $this->line('✅ Application url set to ' . config('app.url'));
+
+            return;
+        }
+
+        $this->writeToEnvironmentFile('APP_URL', $this->ask('Application URL', 'https://sendportal.yourdomain.com'));
+    }
+
+    /**
      * Check to see if the app can make a database connection
      */
     protected function checkDatabaseConnection(): void
     {
         try {
             DB::connection()->getPdo();
+            $this->line('✅ Database connection successful.');
         }
         catch (Exception $e) {
             if (! $this->createDatabaseCredentials()) {
@@ -118,13 +134,25 @@ class SetupProduction extends BaseCommand
             return false;
         }
 
+        $connection = $this->choice('Type', ['mysql', 'pgsql'], 0);
+
         $variables = [
-            'DB_CONNECTION' => $this->choice('Type', ['mysql', 'pgsql'], 0),
-            'DB_HOST' => $this->anticipate("Host", ["127.0.0.1", "localhost"], "127.0.0.1"),
-            'DB_PORT' => $this->ask("Port", "3306"),
-            'DB_DATABASE' => $this->ask("Database"),
-            'DB_USERNAME' => $this->ask("User"),
-            'DB_PASSWORD' => $this->secret("Password"),
+            'DB_CONNECTION' => $connection,
+
+            'DB_HOST' => $this->anticipate('Host', ['127.0.0.1', 'localhost'],
+                config('database.connections.{$connection}.host', '127.0.0.1')),
+
+            'DB_PORT' => $this->ask('Port',
+                config('database.connections.{$connection}.port', '3306')),
+
+            'DB_DATABASE' => $this->ask('Database',
+                config('database.connections.{$connection}.database')),
+
+            'DB_USERNAME' => $this->ask('Username',
+                config('database.connections.{$connection}.username')),
+
+            'DB_PASSWORD' => $this->secret('Password',
+                config('database.connections.{$connection}.password')),
         ];
 
         $this->persistVariables($variables);
@@ -144,7 +172,7 @@ class SetupProduction extends BaseCommand
         }
 
         if (! $this->runMigrations()) {
-            $this->error("Database migrations must be run before setup can be completed.");
+            $this->error('Database migrations must be run before setup can be completed.');
 
             exit;
         }
@@ -157,7 +185,7 @@ class SetupProduction extends BaseCommand
      */
     protected function runMigrations(): bool
     {
-        $runMigrations = $this->confirm("There are pending database migrations. Would you like to run migrations now?", true);
+        $runMigrations = $this->confirm('There are pending database migrations. Would you like to run migrations now?', true);
 
         if (! $runMigrations) {
             return false;
@@ -192,8 +220,8 @@ class SetupProduction extends BaseCommand
     protected function getCompanyName(): string
     {
         $this->line('');
-        $this->info("Creating first admin user account and company/workspace");
-        $companyName = $this->ask("Company/Workspace name");
+        $this->info('Creating first admin user account and company/workspace');
+        $companyName = $this->ask('Company/Workspace name');
 
         if (! $companyName) {
             return $this->getCompanyName();
@@ -208,7 +236,7 @@ class SetupProduction extends BaseCommand
     protected function createAdminUserAccount(string $companyName): User
     {
         $this->line('');
-        $this->info("Create the administrator user account");
+        $this->info('Create the administrator user account');
 
         $name = $this->getUserParam('name');
         $email = $this->getUserParam('email');
@@ -294,13 +322,13 @@ class SetupProduction extends BaseCommand
         $connection = config('database.default');
 
         $this->line('');
-        $this->info("Database Configuration:");
-        $this->line("- Connection: {$connection}");
-        $this->line("- Host: " . config("database.connections.{$connection}.host"));
-        $this->line("- Port: " . config("database.connections.{$connection}.port"));
-        $this->line("- Database: " . config("database.connections.{$connection}.database"));
-        $this->line("- Username: " . config("database.connections.{$connection}.username"));
-        $this->line("- Password: " . config("database.connections.{$connection}.password"));
+        $this->info('Database Configuration:');
+        $this->line('- Connection: {$connection}');
+        $this->line('- Host: ' . config('database.connections.{$connection}.host'));
+        $this->line('- Port: ' . config('database.connections.{$connection}.port'));
+        $this->line('- Database: ' . config('database.connections.{$connection}.database'));
+        $this->line('- Username: ' . config('database.connections.{$connection}.username'));
+        $this->line('- Password: ' . config('database.connections.{$connection}.password'));
     }
 
     /**
@@ -354,11 +382,11 @@ class SetupProduction extends BaseCommand
 
         $configMap = [
             'DB_CONNECTION' => 'database.default',
-            'DB_HOST' => "database.connections.{$connection}.host",
-            'DB_PORT' => "database.connections.{$connection}.port",
-            'DB_DATABASE' => "database.connections.{$connection}.database",
-            'DB_USERNAME' => "database.connections.{$connection}.username",
-            'DB_PASSWORD' => "database.connections.{$connection}.password",
+            'DB_HOST' => 'database.connections.{$connection}.host',
+            'DB_PORT' => 'database.connections.{$connection}.port',
+            'DB_DATABASE' => 'database.connections.{$connection}.database',
+            'DB_USERNAME' => 'database.connections.{$connection}.username',
+            'DB_PASSWORD' => 'database.connections.{$connection}.password',
         ];
 
         foreach($connectionData as $envKey => $value) {
@@ -386,10 +414,7 @@ class SetupProduction extends BaseCommand
      */
     protected function keyReplacementPattern(string $key): string
     {
-        $currentValue = $this->laravel['config'][$key];
-        $escaped = preg_quote("={$currentValue}", '/');
-
-        return "/^{$key}{$escaped}/m";
+        return '/^{$key}.*/m';
     }
 
     /**

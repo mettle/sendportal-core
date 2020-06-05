@@ -85,7 +85,7 @@ class SetupProduction extends BaseCommand
      */
     protected function checkApplicationKey(): void
     {
-        if (! config('app.key')) {
+        if (!config('app.key')) {
             $this->call('key:generate');
         }
 
@@ -115,21 +115,22 @@ class SetupProduction extends BaseCommand
             DB::connection()->getPdo();
             $this->line('✅ Database connection successful.');
         } catch (Exception $e) {
-            if (! $this->createDatabaseCredentials()) {
+            if (!$this->createDatabaseCredentials()) {
                 $this->error('A database connection could not be established. Please update your configuration and try again.');
                 $this->printDatabaseConfig();
                 exit();
-            } else {
-                $this->checkDatabaseConnection();
             }
+
+            $this->checkDatabaseConnection();
         }
     }
 
-    protected function createDatabaseCredentials()
+    protected function createDatabaseCredentials(): bool
     {
-        $storeCredentials = $this->confirm('Unable to connect to your database. Would you like to enter your credentials now?', true);
+        $storeCredentials = $this->confirm('Unable to connect to your database. Would you like to enter your credentials now?',
+            true);
 
-        if (! $storeCredentials) {
+        if (!$storeCredentials) {
             return false;
         }
 
@@ -141,27 +142,27 @@ class SetupProduction extends BaseCommand
             'DB_HOST' => $this->anticipate(
                 'Host',
                 ['127.0.0.1', 'localhost'],
-                config('database.connections.{$connection}.host', '127.0.0.1')
+                config("database.connections.{$connection}.host", '127.0.0.1')
             ),
 
             'DB_PORT' => $this->ask(
                 'Port',
-                config('database.connections.{$connection}.port', '3306')
+                config("database.connections.{$connection}.port", '3306')
             ),
 
             'DB_DATABASE' => $this->ask(
                 'Database',
-                config('database.connections.{$connection}.database')
+                config("database.connections.{$connection}.database")
             ),
 
             'DB_USERNAME' => $this->ask(
                 'Username',
-                config('database.connections.{$connection}.username')
+                config("database.connections.{$connection}.username")
             ),
 
             'DB_PASSWORD' => $this->secret(
                 'Password',
-                config('database.connections.{$connection}.password')
+                config("database.connections.{$connection}.password")
             ),
         ];
 
@@ -175,13 +176,13 @@ class SetupProduction extends BaseCommand
      */
     protected function checkMigrations(): void
     {
-        if (! $this->pendingMigrations()) {
+        if (!$this->pendingMigrations()) {
             $this->line('✅ Database migrations are up to date');
 
             return;
         }
 
-        if (! $this->runMigrations()) {
+        if (!$this->runMigrations()) {
             $this->error('Database migrations must be run before setup can be completed.');
 
             exit;
@@ -195,9 +196,10 @@ class SetupProduction extends BaseCommand
      */
     protected function runMigrations(): bool
     {
-        $runMigrations = $this->confirm('There are pending database migrations. Would you like to run migrations now?', true);
+        $runMigrations = $this->confirm('There are pending database migrations. Would you like to run migrations now?',
+            true);
 
-        if (! $runMigrations) {
+        if (!$runMigrations) {
             return false;
         }
 
@@ -233,7 +235,7 @@ class SetupProduction extends BaseCommand
         $this->info('Creating first admin user account and company/workspace');
         $companyName = $this->ask('Company/Workspace name');
 
-        if (! $companyName) {
+        if (!$companyName) {
             return $this->getCompanyName();
         }
 
@@ -333,12 +335,12 @@ class SetupProduction extends BaseCommand
 
         $this->line('');
         $this->info('Database Configuration:');
-        $this->line('- Connection: {$connection}');
-        $this->line('- Host: ' . config('database.connections.{$connection}.host'));
-        $this->line('- Port: ' . config('database.connections.{$connection}.port'));
-        $this->line('- Database: ' . config('database.connections.{$connection}.database'));
-        $this->line('- Username: ' . config('database.connections.{$connection}.username'));
-        $this->line('- Password: ' . config('database.connections.{$connection}.password'));
+        $this->line("- Connection: {$connection}");
+        $this->line('- Host: ' . config("database.connections.{$connection}.host"));
+        $this->line('- Port: ' . config("database.connections.{$connection}.port"));
+        $this->line('- Database: ' . config("database.connections.{$connection}.database"));
+        $this->line('- Username: ' . config("database.connections.{$connection}.username"));
+        $this->line('- Password: ' . config("database.connections.{$connection}.password"));
     }
 
     /**
@@ -363,7 +365,7 @@ class SetupProduction extends BaseCommand
      */
     protected function getPastMigrations(): array
     {
-        if (! $this->migrator->repositoryExists()) {
+        if (!$this->migrator->repositoryExists()) {
             return [];
         }
 
@@ -391,12 +393,12 @@ class SetupProduction extends BaseCommand
         $connection = $connectionData['DB_CONNECTION'];
 
         $configMap = [
-            'DB_CONNECTION' => 'database.default',
-            'DB_HOST' => 'database.connections.{$connection}.host',
-            'DB_PORT' => 'database.connections.{$connection}.port',
-            'DB_DATABASE' => 'database.connections.{$connection}.database',
-            'DB_USERNAME' => 'database.connections.{$connection}.username',
-            'DB_PASSWORD' => 'database.connections.{$connection}.password',
+            'DB_CONNECTION' => "database.default",
+            'DB_HOST' => "database.connections.{$connection}.host",
+            'DB_PORT' => "database.connections.{$connection}.port",
+            'DB_DATABASE' => "database.connections.{$connection}.database",
+            'DB_USERNAME' => "database.connections.{$connection}.username",
+            'DB_PASSWORD' => "database.connections.{$connection}.password",
         ];
 
         foreach ($connectionData as $envKey => $value) {
@@ -424,7 +426,7 @@ class SetupProduction extends BaseCommand
      */
     protected function keyReplacementPattern(string $key): string
     {
-        return '/^{$key}.*/m';
+        return "/^{$key}.*/m";
     }
 
     /**

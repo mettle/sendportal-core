@@ -114,8 +114,7 @@ class SetupProduction extends BaseCommand
         try {
             DB::connection()->getPdo();
             $this->line('✅ Database connection successful.');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             if (! $this->createDatabaseCredentials()) {
                 $this->error('A database connection could not be established. Please update your configuration and try again.');
                 $this->printDatabaseConfig();
@@ -130,7 +129,7 @@ class SetupProduction extends BaseCommand
     {
         $storeCredentials = $this->confirm('Unable to connect to your database. Would you like to enter your credentials now?', true);
 
-        if ( ! $storeCredentials) {
+        if (! $storeCredentials) {
             return false;
         }
 
@@ -139,20 +138,31 @@ class SetupProduction extends BaseCommand
         $variables = [
             'DB_CONNECTION' => $connection,
 
-            'DB_HOST' => $this->anticipate('Host', ['127.0.0.1', 'localhost'],
-                config('database.connections.{$connection}.host', '127.0.0.1')),
+            'DB_HOST' => $this->anticipate(
+                'Host',
+                ['127.0.0.1', 'localhost'],
+                config('database.connections.{$connection}.host', '127.0.0.1')
+            ),
 
-            'DB_PORT' => $this->ask('Port',
-                config('database.connections.{$connection}.port', '3306')),
+            'DB_PORT' => $this->ask(
+                'Port',
+                config('database.connections.{$connection}.port', '3306')
+            ),
 
-            'DB_DATABASE' => $this->ask('Database',
-                config('database.connections.{$connection}.database')),
+            'DB_DATABASE' => $this->ask(
+                'Database',
+                config('database.connections.{$connection}.database')
+            ),
 
-            'DB_USERNAME' => $this->ask('Username',
-                config('database.connections.{$connection}.username')),
+            'DB_USERNAME' => $this->ask(
+                'Username',
+                config('database.connections.{$connection}.username')
+            ),
 
-            'DB_PASSWORD' => $this->secret('Password',
-                config('database.connections.{$connection}.password')),
+            'DB_PASSWORD' => $this->secret(
+                'Password',
+                config('database.connections.{$connection}.password')
+            ),
         ];
 
         $this->persistVariables($variables);
@@ -389,7 +399,7 @@ class SetupProduction extends BaseCommand
             'DB_PASSWORD' => 'database.connections.{$connection}.password',
         ];
 
-        foreach($connectionData as $envKey => $value) {
+        foreach ($connectionData as $envKey => $value) {
             $this->writeToEnvironmentFile($envKey, $value);
             $this->writeToConfig($configMap[$envKey], $value);
         }

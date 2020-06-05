@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\SendportalBaseServiceProvider;
@@ -42,6 +43,7 @@ class SetupProduction extends BaseCommand
         $this->line('');
         $this->checkEnvironment();
         $this->checkApplicationKey();
+        $this->checkAppUrl();
         $this->checkDatabaseConnection();
         $this->checkMigrations();
         $this->checkAdminUserAccount();
@@ -66,13 +68,11 @@ class SetupProduction extends BaseCommand
 
         $createFile = $this->confirm('The .env file does not yet exist. Would you like to create it now?', true);
 
-        if ($createFile) {
-            if (copy(base_path('.env.example'), base_path('.env'))) {
-                $this->line('✅ .env file has been created');
-                $this->call('key:generate');
+        if ($createFile && copy(base_path('.env.example'), base_path('.env'))) {
+            $this->line('✅ .env file has been created');
+            $this->call('key:generate');
 
-                return;
-            }
+            return;
         }
 
         $this->error('The .env file must be created before you can continue.');
@@ -86,11 +86,25 @@ class SetupProduction extends BaseCommand
      */
     protected function checkApplicationKey(): void
     {
-        if (! config('app.key')) {
+        if (!config('app.key')) {
             $this->call('key:generate');
         }
 
         $this->line('✅ Application key has been set');
+    }
+
+    /**
+     * Check that the app url has been set.
+     */
+    protected function checkAppUrl(): void
+    {
+        if (config('app.url') !== 'http://localhost') {
+            $this->line('✅ Application url set to ' . config('app.url'));
+
+            return;
+        }
+
+        $this->writeToEnvironmentFile('APP_URL', $this->ask('Application URL', 'https://sendportal.yourdomain.com'));
     }
 
     /**
@@ -100,13 +114,67 @@ class SetupProduction extends BaseCommand
     {
         try {
             DB::connection()->getPdo();
+            $this->line('✅ Database connection successful.');
         } catch (Exception $e) {
-            $this->error('A database connection could not be established. Please update your configuration and try again.');
-            $this->printDatabaseConfig();
-            exit();
+            try {
+                if (!$this->createDatabaseCredentials()) {
+                    $this->error('A database connection could not be established. Please update your configuration and try again.');
+                    $this->printDatabaseConfig();
+                    exit();
+                }
+            } catch (RuntimeException $e) {
+                $this->error('Failed to persist environment configuration.');
+                exit();
+            }
+
+            $this->checkDatabaseConnection();
+        }
+    }
+
+    protected function createDatabaseCredentials(): bool
+    {
+        $storeCredentials = $this->confirm('Unable to connect to your database. Would you like to enter your credentials now?',
+            true);
+
+        if (!$storeCredentials) {
+            return false;
         }
 
-        $this->line('✅ Database connection successful');
+        $connection = $this->choice('Type', ['mysql', 'pgsql'], 0);
+
+        $variables = [
+            'DB_CONNECTION' => $connection,
+
+            'DB_HOST' => $this->anticipate(
+                'Host',
+                ['127.0.0.1', 'localhost'],
+                config("database.connections.{$connection}.host", '127.0.0.1')
+            ),
+
+            'DB_PORT' => $this->ask(
+                'Port',
+                config("database.connections.{$connection}.port", '3306')
+            ),
+
+            'DB_DATABASE' => $this->ask(
+                'Database',
+                config("database.connections.{$connection}.database")
+            ),
+
+            'DB_USERNAME' => $this->ask(
+                'Username',
+                config("database.connections.{$connection}.username")
+            ),
+
+            'DB_PASSWORD' => $this->secret(
+                'Password',
+                config("database.connections.{$connection}.password")
+            ),
+        ];
+
+        $this->persistVariables($variables);
+
+        return true;
     }
 
     /**
@@ -114,13 +182,14 @@ class SetupProduction extends BaseCommand
      */
     protected function checkMigrations(): void
     {
-        if (! $this->pendingMigrations()) {
+        if (!$this->pendingMigrations()) {
             $this->line('✅ Database migrations are up to date');
+
             return;
         }
 
-        if (! $this->runMigrations()) {
-            $this->error("Database migrations must be run before setup can be completed.");
+        if (!$this->runMigrations()) {
+            $this->error('Database migrations must be run before setup can be completed.');
 
             exit;
         }
@@ -133,9 +202,10 @@ class SetupProduction extends BaseCommand
      */
     protected function runMigrations(): bool
     {
-        $runMigrations = $this->confirm("There are pending database migrations. Would you like to run migrations now?", true);
+        $runMigrations = $this->confirm('There are pending database migrations. Would you like to run migrations now?',
+            true);
 
-        if (! $runMigrations) {
+        if (!$runMigrations) {
             return false;
         }
 
@@ -168,10 +238,10 @@ class SetupProduction extends BaseCommand
     protected function getCompanyName(): string
     {
         $this->line('');
-        $this->info("Creating first admin user account and company/workspace");
-        $companyName = $this->ask("Company/Workspace name");
+        $this->info('Creating first admin user account and company/workspace');
+        $companyName = $this->ask('Company/Workspace name');
 
-        if (! $companyName) {
+        if (!$companyName) {
             return $this->getCompanyName();
         }
 
@@ -180,14 +250,11 @@ class SetupProduction extends BaseCommand
 
     /**
      * Create the first admin user account and associate it with the company/workspace
-     *
-     * @param string $companyName
-     * @return User
      */
     protected function createAdminUserAccount(string $companyName): User
     {
         $this->line('');
-        $this->info("Create the administrator user account");
+        $this->info('Create the administrator user account');
 
         $name = $this->getUserParam('name');
         $email = $this->getUserParam('email');
@@ -208,11 +275,8 @@ class SetupProduction extends BaseCommand
 
     /**
      * Validate user input
-     *
-     * @param $param
-     * @return string
      */
-    protected function getUserParam($param): string
+    protected function getUserParam(string $param): string
     {
         $validationRules = [
             'name' => ['required', 'string', 'max:255'],
@@ -239,10 +303,6 @@ class SetupProduction extends BaseCommand
 
     /**
      * Store the workspace
-     *
-     * @param User $user
-     * @param string $companyName
-     * @return Workspace
      */
     protected function storeWorkspace(User $user, string $companyName): Workspace
     {
@@ -280,13 +340,13 @@ class SetupProduction extends BaseCommand
         $connection = config('database.default');
 
         $this->line('');
-        $this->info("Database Configuration:");
+        $this->info('Database Configuration:');
         $this->line("- Connection: {$connection}");
-        $this->line("- Host: " . config("database.connections.{$connection}.host"));
-        $this->line("- Port: " . config("database.connections.{$connection}.port"));
-        $this->line("- Database: " . config("database.connections.{$connection}.database"));
-        $this->line("- Username: " . config("database.connections.{$connection}.username"));
-        $this->line("- Password: " . config("database.connections.{$connection}.password"));
+        $this->line('- Host: ' . config("database.connections.{$connection}.host"));
+        $this->line('- Port: ' . config("database.connections.{$connection}.port"));
+        $this->line('- Database: ' . config("database.connections.{$connection}.database"));
+        $this->line('- Username: ' . config("database.connections.{$connection}.username"));
+        $this->line('- Password: ' . config("database.connections.{$connection}.password"));
     }
 
     /**
@@ -311,7 +371,7 @@ class SetupProduction extends BaseCommand
      */
     protected function getPastMigrations(): array
     {
-        if (! $this->migrator->repositoryExists()) {
+        if (!$this->migrator->repositoryExists()) {
             return [];
         }
 
@@ -329,5 +389,70 @@ class SetupProduction extends BaseCommand
         $this->line('\___ \ / _ \ \'_ \ / _` | |_) / _ \| \'__| __/ _` | |');
         $this->line(' ___) |  __/ | | | (_| |  __/ (_) | |  | || (_| | |');
         $this->line('|____/ \___|_| |_|\__,_|_|   \___/|_|   \__\__,_|_|');
+    }
+
+    /**
+     * Persist database configuration variables and purge the currently loaded connection.
+     */
+    protected function persistVariables(array $connectionData): void
+    {
+        $connection = $connectionData['DB_CONNECTION'];
+
+        $configMap = [
+            'DB_CONNECTION' => "database.default",
+            'DB_HOST' => "database.connections.{$connection}.host",
+            'DB_PORT' => "database.connections.{$connection}.port",
+            'DB_DATABASE' => "database.connections.{$connection}.database",
+            'DB_USERNAME' => "database.connections.{$connection}.username",
+            'DB_PASSWORD' => "database.connections.{$connection}.password",
+        ];
+
+        foreach ($connectionData as $envKey => $value) {
+            $this->writeToEnvironmentFile($envKey, $value);
+            $this->writeToConfig($configMap[$envKey], $value);
+        }
+
+        DB::purge($this->laravel['config']['database.default']);
+    }
+
+    /**
+     * Write a value to a given key within the environment file.
+     */
+    protected function writeToEnvironmentFile(string $key, ?string $value): void
+    {
+        file_put_contents($this->laravel->environmentFilePath(), preg_replace(
+            $this->keyReplacementPattern($key),
+            "{$key}={$value}",
+            file_get_contents($this->laravel->environmentFilePath())
+        ));
+
+        if (!$this->checkEnvValuePresent($key, $value)) {
+            throw new RuntimeException("Failed to persist environment variable value. {$key}={$value}");
+        }
+    }
+
+    protected function checkEnvValuePresent(string $key, ?string $value): bool
+    {
+        $envContents = file_get_contents($this->laravel->environmentFilePath());
+
+        $needle = "{$key}={$value}";
+
+        return Str::contains($envContents, $needle);
+    }
+
+    /**
+     * Get a regex pattern that will match a given environment variable by its key.
+     */
+    protected function keyReplacementPattern(string $key): string
+    {
+        return "/^{$key}.*/m";
+    }
+
+    /**
+     * Write to a given key within the Laravel configuration file.
+     */
+    protected function writeToConfig(string $key, ?string $value): void
+    {
+        $this->laravel['config'][$key] = $value;
     }
 }

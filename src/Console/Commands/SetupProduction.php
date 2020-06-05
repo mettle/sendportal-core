@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\SendportalBaseServiceProvider;
@@ -115,9 +116,14 @@ class SetupProduction extends BaseCommand
             DB::connection()->getPdo();
             $this->line('✅ Database connection successful.');
         } catch (Exception $e) {
-            if (!$this->createDatabaseCredentials()) {
-                $this->error('A database connection could not be established. Please update your configuration and try again.');
-                $this->printDatabaseConfig();
+            try {
+                if (!$this->createDatabaseCredentials()) {
+                    $this->error('A database connection could not be established. Please update your configuration and try again.');
+                    $this->printDatabaseConfig();
+                    exit();
+                }
+            } catch (RuntimeException $e) {
+                $this->error('Failed to persist environment configuration.');
                 exit();
             }
 
@@ -419,6 +425,19 @@ class SetupProduction extends BaseCommand
             "{$key}={$value}",
             file_get_contents($this->laravel->environmentFilePath())
         ));
+
+        if (!$this->checkEnvValuePresent($key, $value)) {
+            throw new RuntimeException("Failed to persist environment variable value. {$key}={$value}");
+        }
+    }
+
+    protected function checkEnvValuePresent(string $key, ?string $value): bool
+    {
+        $envContents = file_get_contents($this->laravel->environmentFilePath());
+
+        $needle = "{$key}={$value}";
+
+        return Str::contains($envContents, $needle);
     }
 
     /**

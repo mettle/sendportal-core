@@ -45,8 +45,7 @@ class CampaignsController extends Controller
         EmailServiceTenantRepository $emailServices,
         SubscriberTenantRepository $subscribers,
         CampaignStatisticsService $campaignStatisticsService
-    )
-    {
+    ) {
         $this->campaigns = $campaigns;
         $this->templates = $templates;
         $this->segments = $segments;

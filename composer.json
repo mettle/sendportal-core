@@ -3,6 +3,7 @@
     "homepage": "https://github.com/mettle/sendportal-core",
     "description": "Sendportal core functionality.",
     "type": "library",
+    "license": "MIT",
     "authors": [],
     "require": {
         "php": "^7.2.5",

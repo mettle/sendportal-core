@@ -90,8 +90,8 @@ class EmailWebhookService
         }
 
         $messageUrlHash = $this->generateMessageUrlHash($message, $url);
-        
-        if($messageUrl = MessageUrl::where('hash', $messageUrlHash)->first()) {
+
+        if ($messageUrl = MessageUrl::where('hash', $messageUrlHash)->first()) {
             $messageUrl->update([
                 'click_count' => $messageUrl->click_count + 1,
             ]);

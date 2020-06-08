@@ -89,17 +89,20 @@ class EmailWebhookService
             DB::table('automation_steps')->where('id', $automationStep->id)->increment('click_count');
         }
 
-        /** @var MessageUrl $messageUrl */
-        $messageUrl = MessageUrl::updateOrCreate([
-            'hash' => md5($message->source_type . '_' . $message->source_id . '_' . $url),
-        ], [
-            'source_type' => $message->source_type,
-            'source_id' => $message->source_id,
-            'url' => $url
-        ]);
+        $messageUrlHash = $this->generateMessageUrlHash($message, $url);
 
-        if (!$messageUrl->wasRecentlyCreated) {
-            DB::table('message_urls')->where('id', $messageUrl->id)->increment('click_count');
+        if ($messageUrl = MessageUrl::where('hash', $messageUrlHash)->first()) {
+            $messageUrl->update([
+                'click_count' => $messageUrl->click_count + 1,
+            ]);
+        } else {
+            MessageUrl::create([
+                'hash' => $messageUrlHash,
+                'source_type' => $message->source_type,
+                'source_id' => $message->source_id,
+                'url' => $url,
+                'click_count' => 1,
+            ]);
         }
     }
 
@@ -192,5 +195,10 @@ class EmailWebhookService
         }
 
         return DB::table('automation_steps')->where('id', $automationSchedule->automation_step_id)->first();
+    }
+
+    protected function generateMessageUrlHash(Message $message, string $url): string
+    {
+        return md5($message->source_type . '_' . $message->source_id . '_' . $url);
     }
 }

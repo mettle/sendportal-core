@@ -140,10 +140,6 @@ class SubscriberTenantRepository extends BaseTenantRepository
 
     public function getGrowthChartData(CarbonPeriod $period, int $workspaceId): array
     {
-        $rawSelectQuery = config('database.default') === 'pgsql'
-            ? "to_char(%s, 'dd-mm-YYYY') AS date, count(*) as total"
-            : "date_format(%s, '%%d-%%m-%%Y') AS date, count(*) as total";
-
         $startingValue = DB::table('subscribers')
             ->where('workspace_id', $workspaceId)
             ->where(function ($q) use ($period) {
@@ -154,7 +150,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
             ->count();
 
         $runningTotal = DB::table('subscribers')
-            ->selectRaw(sprintf($rawSelectQuery, "created_at"))
+            ->selectRaw("date_format(created_at, '%d-%m-%Y') AS date, count(*) as total")
             ->where('workspace_id', $workspaceId)
             ->where('created_at', '>=', $period->getStartDate())
             ->where('created_at', '<=', $period->getEndDate())
@@ -162,7 +158,7 @@ class SubscriberTenantRepository extends BaseTenantRepository
             ->get();
 
         $unsubscribers = DB::table('subscribers')
-            ->selectRaw(sprintf($rawSelectQuery, "unsubscribed_at"))
+            ->selectRaw("date_format(unsubscribed_at, '%d-%m-%Y') AS date, count(*) as total")
             ->where('workspace_id', $workspaceId)
             ->where('unsubscribed_at', '>=', $period->getStartDate())
             ->where('unsubscribed_at', '<=', $period->getEndDate())

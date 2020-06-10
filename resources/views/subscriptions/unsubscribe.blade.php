@@ -1,4 +1,4 @@
-@extends('layouts.subscriptions')
+@extends('sendportal::layouts.subscriptions')
 
 @section('content')
     <div class="text-center">

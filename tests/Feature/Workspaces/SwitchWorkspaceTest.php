@@ -28,7 +28,7 @@ class SwitchWorkspaceTest extends TestCase
         $response = $this->get(route('sendportal.workspaces.switch', $secondWorkspace->id));
 
         // then
-        $response->assertRedirect(route('sendportal.campaigns.index'));
+        $response->assertRedirect(route('sendportal.dashboard'));
 
         $this->assertEquals($secondWorkspace->id, $user->currentWorkspace()->id);
     }

@@ -8,8 +8,10 @@ use Box\Spout\Reader\Exception\ReaderNotOpenedException;
 use Exception;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscribersImportRequest;
@@ -44,14 +46,14 @@ class SubscribersImportController extends Controller
     public function store(SubscribersImportRequest $request): RedirectResponse
     {
         if ($request->file('file')->isValid()) {
-            $filename = str_random(16) . '.csv';
+            $filename = Str::random(16) . '.csv';
 
             $path = $request->file('file')->storeAs('imports', $filename);
 
             $subscribers = (new FastExcel)->import(storage_path('app/' . $path), function (array $line) use ($request) {
                 // TODO: validate each row beforehand
                 try {
-                    $data = array_only($line, ['id', 'email', 'first_name', 'last_name']);
+                    $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
                     $data['segments'] = $request->get('segments') ?? [];
 

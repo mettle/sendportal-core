@@ -23,12 +23,18 @@ class SubscriberRequest extends FormRequest
      */
     public function rules()
     {
+        $uniqueRule = sprintf(
+            'unique:subscribers,email,%d,id,workspace_id,%d',
+            $this->subscriber ?? 0,
+            auth()->user()->currentWorkspace()->id
+        );
+
         return [
             'email' => [
                 'required',
                 'email',
                 'max:255',
-                'unique:subscribers,email,' . $this->subscriber . ',id,workspace_id, ' . auth()->user()->currentWorkspace()->id
+                $uniqueRule,
             ],
             'first_name' => [
                 'max:255',

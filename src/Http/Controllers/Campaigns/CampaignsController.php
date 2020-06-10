@@ -12,7 +12,7 @@ use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
 
@@ -30,7 +30,7 @@ class CampaignsController extends Controller
     /** @var EmailServiceTenantRepository */
     protected $emailServices;
 
-    /** @var SubscriberTenantRepository */
+    /** @var SubscriberTenantRepositoryInterface */
     protected $subscribers;
 
     /**
@@ -43,7 +43,7 @@ class CampaignsController extends Controller
         TemplateTenantRepository $templates,
         SegmentTenantRepository $segments,
         EmailServiceTenantRepository $emailServices,
-        SubscriberTenantRepository $subscribers,
+        SubscriberTenantRepositoryInterface $subscribers,
         CampaignStatisticsService $campaignStatisticsService
     ) {
         $this->campaigns = $campaigns;

@@ -33,13 +33,6 @@ class DashboardController extends Controller
      */
     protected $campaignStatisticsService;
 
-    /**
-     * DashboardController constructor.
-     *
-     * @param SubscriberTenantRepository $subscribers
-     * @param CampaignTenantRepositoryInterface $campaigns
-     * @param MessageTenantRepositoryInterface $messages
-     */
     public function __construct(SubscriberTenantRepositoryInterface $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages, CampaignStatisticsService $campaignStatisticsService)
     {
         $this->subscribers = $subscribers;

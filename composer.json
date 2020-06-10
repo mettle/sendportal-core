@@ -9,6 +9,7 @@
         "php": "^7.2.5",
         "ext-json": "*",
         "aws/aws-sdk-php-laravel": "^3.4",
+        "elastic-email/web-api-client": "^1.0",
         "illuminate/support": "^7.0",
         "kriswallsmith/buzz": "^1.1",
         "laravel/ui": "^2.0",

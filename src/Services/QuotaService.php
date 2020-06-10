@@ -22,6 +22,7 @@ class QuotaService implements QuotaServiceInterface
             case EmailServiceType::SENDGRID:
             case EmailServiceType::MAILGUN:
             case EmailServiceType::POSTMARK:
+            case EmailServiceType::ELASTIC:
                 return false;
         }
 

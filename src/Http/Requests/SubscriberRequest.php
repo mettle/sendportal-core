@@ -6,35 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SubscriberRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function rules(): array
     {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        $uniqueRule = sprintf(
-            'unique:subscribers,email,%d,id,workspace_id,%d',
-            $this->subscriber ?? 0,
-            auth()->user()->currentWorkspace()->id
-        );
-
         return [
             'email' => [
                 'required',
                 'email',
                 'max:255',
-                $uniqueRule,
+                $this->getUniqueEmailRule(),
             ],
             'first_name' => [
                 'max:255',
@@ -47,5 +26,16 @@ class SubscriberRequest extends FormRequest
                 'array',
             ],
         ];
+    }
+
+    protected function getUniqueEmailRule(): string
+    {
+        $rule = sprintf(
+            'unique:subscribers,email,%d,id,workspace_id,%d',
+            $this->subscriber ?? 0,
+            auth()->user()->currentWorkspace()->id
+        );
+
+        return $rule;
     }
 }

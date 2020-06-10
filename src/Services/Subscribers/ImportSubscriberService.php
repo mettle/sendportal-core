@@ -2,6 +2,7 @@
 
 namespace Sendportal\Base\Services\Subscribers;
 
+use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Repositories\SubscriberTenantRepository;
 use Exception;
@@ -28,19 +29,19 @@ class ImportSubscriberService
     {
         $subscriber = null;
 
-        if (!empty(\Arr::get($data, 'id'))) {
+        if (!empty(Arr::get($data, 'id'))) {
             $subscriber = $this->subscribers->findBy($workspaceId, 'id', $data['id'], ['segments']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->findBy($workspaceId, 'email', \Arr::get($data, 'email'), ['segments']);
+            $subscriber = $this->subscribers->findBy($workspaceId, 'email', Arr::get($data, 'email'), ['segments']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->store($workspaceId, array_except($data, ['id', 'segments']));
+            $subscriber = $this->subscribers->store($workspaceId, Arr::except($data, ['id', 'segments']));
         }
 
-        $data['segments'] = array_merge($subscriber->segments->pluck('id')->toArray(), \Arr::get($data, 'segments'));
+        $data['segments'] = array_merge($subscriber->segments->pluck('id')->toArray(), Arr::get($data, 'segments'));
 
         $this->subscribers->update($workspaceId, $subscriber->id, $data);
 

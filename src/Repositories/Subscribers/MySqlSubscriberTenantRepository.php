@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Repositories\Subscribers;
 
 use Carbon\CarbonPeriod;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class MySqlSubscriberTenantRepository extends BaseSubscriberTenantRepository
@@ -14,7 +15,7 @@ class MySqlSubscriberTenantRepository extends BaseSubscriberTenantRepository
     {
         $startingValue = DB::table('subscribers')
             ->where('workspace_id', $workspaceId)
-            ->where(function ($q) use ($period) {
+            ->where(function (Builder $q) use ($period) {
                 $q->where('unsubscribed_at', '>=', $period->getStartDate())
                     ->orWhereNull('unsubscribed_at');
             })

@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SubscriberRequest extends FormRequest
 {
@@ -24,19 +25,23 @@ class SubscriberRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => [
+            'email'      => [
                 'required',
                 'email',
                 'max:255',
-                'unique:subscribers,email,' . $this->subscriber . ',id,workspace_id, ' . auth()->user()->currentWorkspace()->id
+                Rule::unique('subscribers', 'email')
+                    ->ignore($this->subscriber, 'id')
+                    ->where(function ($query) {
+                        $query->where('workspace_id', auth()->user()->currentWorkspace()->id);
+                    }),
             ],
             'first_name' => [
                 'max:255',
             ],
-            'last_name' => [
+            'last_name'  => [
                 'max:255',
             ],
-            'segments' => [
+            'segments'   => [
                 'nullable',
                 'array',
             ],

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Subscribers\Segments;
 
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Exception;
 use Illuminate\Support\Collection;
 
 class ApiSubscriberSegmentService
 {
-    /** @var SubscriberTenantRepository */
+    /** @var SubscriberTenantRepositoryInterface */
     private $subscribers;
 
-    public function __construct(SubscriberTenantRepository $subscribers)
+    public function __construct(SubscriberTenantRepositoryInterface $subscribers)
     {
         $this->subscribers = $subscribers;
     }

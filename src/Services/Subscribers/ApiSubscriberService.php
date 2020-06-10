@@ -6,23 +6,27 @@ namespace Sendportal\Base\Services\Subscribers;
 
 use Sendportal\Base\Events\SubscriberAddedEvent;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ApiSubscriberService
 {
-    /** @var SubscriberTenantRepository */
+    /** @var SubscriberTenantRepositoryInterface */
     protected $subscribers;
 
-    public function __construct(SubscriberTenantRepository $subscribers)
+    public function __construct(SubscriberTenantRepositoryInterface $subscribers)
     {
         $this->subscribers = $subscribers;
     }
 
     /**
-     * @throws Exception
+     * @param int                            $workspaceId
+     * @param \Illuminate\Support\Collection $data
+     *
+     * @return \Sendportal\Base\Models\Subscriber
+     * @throws \Exception
      */
     public function store(int $workspaceId, Collection $data): Subscriber
     {

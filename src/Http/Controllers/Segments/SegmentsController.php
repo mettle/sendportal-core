@@ -10,7 +10,7 @@ use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SegmentRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 
 class SegmentsController extends Controller
 {
@@ -50,7 +50,7 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function edit(int $id, SubscriberTenantRepository $subscriberRepository): View
+    public function edit(int $id, SubscriberTenantRepositoryInterface $subscriberRepository): View
     {
         $segment = $this->segmentRepository->find(auth()->user()->currentWorkspace()->id, $id, ['subscribers']);
 

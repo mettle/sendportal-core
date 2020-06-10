@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Subscribers\Segments;
 
-use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Exception;
 use Illuminate\Support\Collection;
 

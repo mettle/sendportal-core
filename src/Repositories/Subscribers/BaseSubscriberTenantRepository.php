@@ -40,7 +40,7 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
      * Sync Segments to a Subscriber.
      *
      * @param Subscriber $subscriber
-     * @param array      $segments
+     * @param array $segments
      *
      * @return mixed
      */
@@ -80,16 +80,16 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
     public function countActive($workspaceId): int
     {
         return $this->getQueryBuilder($workspaceId)
-                    ->whereNull('unsubscribed_at')
-                    ->count();
+            ->whereNull('unsubscribed_at')
+            ->count();
     }
 
     public function getRecentSubscribers(int $workspaceId): Collection
     {
         return $this->getQueryBuilder($workspaceId)
-                    ->orderBy('created_at', 'DESC')
-                    ->take(10)
-                    ->get();
+            ->orderBy('created_at', 'DESC')
+            ->take(10)
+            ->get();
     }
 
     /**
@@ -112,8 +112,8 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
 
             $instance->where(static function (Builder $instance) use ($filterString) {
                 $instance->where('subscribers.first_name', 'like', $filterString)
-                         ->orWhere('subscribers.last_name', 'like', $filterString)
-                         ->orWhere('subscribers.email', 'like', $filterString);
+                    ->orWhere('subscribers.last_name', 'like', $filterString)
+                    ->orWhere('subscribers.email', 'like', $filterString);
             });
         }
     }
@@ -139,8 +139,8 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
     {
         if ($segmentId = Arr::get($filters, 'segment_id')) {
             $instance->select('subscribers.*')
-                     ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
-                     ->whereIn('segment_subscriber.segment_id', $segmentId);
+                ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
+                ->whereIn('segment_subscriber.segment_id', $segmentId);
         }
     }
 }

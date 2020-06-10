@@ -6,7 +6,7 @@ namespace Sendportal\Base\Services\Subscribers;
 
 use Sendportal\Base\Events\SubscriberAddedEvent;
 use Sendportal\Base\Models\Subscriber;
-use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

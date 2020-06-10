@@ -12,7 +12,7 @@ use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
-use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
 

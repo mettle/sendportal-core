@@ -10,7 +10,7 @@ use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SegmentRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
-use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 
 class SegmentsController extends Controller
 {

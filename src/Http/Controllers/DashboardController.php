@@ -8,7 +8,7 @@ use Illuminate\View\View;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
-use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
 
 class DashboardController extends Controller

@@ -3,7 +3,7 @@
 namespace Sendportal\Base\Services\Subscribers;
 
 use Sendportal\Base\Models\Subscriber;
-use \Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Exception;
 
 class ImportSubscriberService
@@ -17,13 +17,7 @@ class ImportSubscriberService
     }
 
     /**
-     * Create or update a subscriber.
-     *
-     * @param int   $workspaceId
-     * @param array $data
-     *
-     * @return Subscriber
-     * @throws \Exception
+     * @throws Exception
      */
     public function import(int $workspaceId, array $data): Subscriber
     {

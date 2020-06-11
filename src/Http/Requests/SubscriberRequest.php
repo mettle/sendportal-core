@@ -2,9 +2,13 @@
 
 namespace Sendportal\Base\Http\Requests;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property-read string $subscriber
+ */
 class SubscriberRequest extends FormRequest
 {
     public function rules(): array
@@ -14,7 +18,11 @@ class SubscriberRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                $this->getUniqueEmailRule(),
+                Rule::unique('subscribers', 'email')
+                    ->ignore($this->subscriber, 'id')
+                    ->where(static function (Builder $query) {
+                        $query->where('workspace_id', auth()->user()->currentWorkspace()->id);
+                    })
             ],
             'first_name' => [
                 'max:255',
@@ -27,16 +35,5 @@ class SubscriberRequest extends FormRequest
                 'array',
             ],
         ];
-    }
-
-    protected function getUniqueEmailRule(): string
-    {
-        $rule = Rule::unique('subscribers', 'email')
-            ->ignore($this->subscriber, 'id')
-            ->where(function ($query) {
-                $query->where('workspace_id', auth()->user()->currentWorkspace()->id);
-            });
-
-        return $rule;
     }
 }

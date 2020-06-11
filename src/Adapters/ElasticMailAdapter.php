@@ -32,6 +32,7 @@ class ElasticMailAdapter extends BaseMailAdapter
         $result = $this->resolveClient()->Email->Send(
             $subject,
             $fromEmail,
+            //TODO Need to get fromName from the campaign
             null,
             $fromEmail,
             null,
@@ -63,7 +64,7 @@ class ElasticMailAdapter extends BaseMailAdapter
             null,
             null,
             []
-            //TODO Figure out why keep getting Parameter trackOpens is in an incorrect format exception.
+            //TODO ElasticEmail API rejects request when tracking options are set. Maybe because my account is trial.
 //            $trackingOptions->isOpenTracking(),
 //            $trackingOptions->isClickTracking()
         );

@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 use Exception;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
@@ -59,7 +60,7 @@ class CampaignsController extends Controller
      */
     public function index(): ViewContract
     {
-        $workspace = auth()->user()->currentWorkspace();
+        $workspace = Helper::getCurrentWorkspace();
         $campaigns = $this->campaigns->paginate($workspace->id, 'created_atDesc', ['status']);
 
         return view('sendportal::campaigns.index', [
@@ -73,8 +74,8 @@ class CampaignsController extends Controller
      */
     public function create(): ViewContract
     {
-        $templates = [null => '- None -'] + $this->templates->pluck(auth()->user()->currentWorkspace()->id);
-        $emailServices = $this->emailServices->all(auth()->user()->currentWorkspace()->id);
+        $templates = [null => '- None -'] + $this->templates->pluck(Helper::getCurrentWorkspace()->id);
+        $emailServices = $this->emailServices->all(Helper::getCurrentWorkspace()->id);
 
         return view('sendportal::campaigns.create', compact('templates', 'emailServices'));
     }
@@ -84,7 +85,7 @@ class CampaignsController extends Controller
      */
     public function store(CampaignStoreRequest $request): RedirectResponse
     {
-        $campaign = $this->campaigns->store(auth()->user()->currentWorkspace()->id, $this->handleCheckboxes($request->validated()));
+        $campaign = $this->campaigns->store(Helper::getCurrentWorkspace()->id, $this->handleCheckboxes($request->validated()));
 
         return redirect()->route('sendportal.campaigns.preview', $campaign->id);
     }
@@ -94,7 +95,7 @@ class CampaignsController extends Controller
      */
     public function show(int $id): ViewContract
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaigns->find(Helper::getCurrentWorkspace()->id, $id);
 
         return view('sendportal::campaigns.show', compact('campaign'));
     }
@@ -104,9 +105,9 @@ class CampaignsController extends Controller
      */
     public function edit(int $id): ViewContract
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
-        $emailServices = $this->emailServices->all(auth()->user()->currentWorkspace()->id);
-        $templates = [null => '- None -'] + $this->templates->pluck(auth()->user()->currentWorkspace()->id);
+        $campaign = $this->campaigns->find(Helper::getCurrentWorkspace()->id, $id);
+        $emailServices = $this->emailServices->all(Helper::getCurrentWorkspace()->id);
+        $templates = [null => '- None -'] + $this->templates->pluck(Helper::getCurrentWorkspace()->id);
 
         return view('sendportal::campaigns.edit', compact('campaign', 'emailServices', 'templates'));
     }
@@ -117,7 +118,7 @@ class CampaignsController extends Controller
     public function update(int $campaignId, CampaignStoreRequest $request): RedirectResponse
     {
         $campaign = $this->campaigns->update(
-            auth()->user()->currentWorkspace()->id,
+            Helper::getCurrentWorkspace()->id,
             $campaignId,
             $this->handleCheckboxes($request->validated())
         );
@@ -131,14 +132,14 @@ class CampaignsController extends Controller
      */
     public function preview(int $id)
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
-        $subscriberCount = $this->subscribers->countActive(auth()->user()->currentWorkspace()->id);
+        $campaign = $this->campaigns->find(Helper::getCurrentWorkspace()->id, $id);
+        $subscriberCount = $this->subscribers->countActive(Helper::getCurrentWorkspace()->id);
 
         if (!$campaign->draft) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $segments = $this->segments->all(auth()->user()->currentWorkspace()->id, 'name');
+        $segments = $this->segments->all(Helper::getCurrentWorkspace()->id, 'name');
 
         return view('sendportal::campaigns.preview', compact('campaign', 'segments', 'subscriberCount'));
     }
@@ -149,7 +150,7 @@ class CampaignsController extends Controller
      */
     public function status(int $id)
     {
-        $workspace = auth()->user()->currentWorkspace();
+        $workspace = Helper::getCurrentWorkspace();
         $campaign = $this->campaigns->find($workspace->id, $id, ['status']);
 
         if ($campaign->sent) {

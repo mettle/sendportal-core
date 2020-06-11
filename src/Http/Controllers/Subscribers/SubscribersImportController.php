@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscribersImportRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
@@ -33,7 +34,7 @@ class SubscribersImportController extends Controller
      */
     public function show(SegmentTenantRepository $segmentRepo): ViewContract
     {
-        $segments = $segmentRepo->pluck(auth()->user()->currentWorkspace()->id, 'name', 'id');
+        $segments = $segmentRepo->pluck(Helper::getCurrentWorkspace()->id, 'name', 'id');
 
         return view('sendportal::subscribers.import', compact('segments'));
     }
@@ -57,7 +58,7 @@ class SubscribersImportController extends Controller
 
                     $data['segments'] = $request->get('segments') ?? [];
 
-                    return $this->subscriberService->import(auth()->user()->currentWorkspace()->id, $data);
+                    return $this->subscriberService->import(Helper::getCurrentWorkspace()->id, $data);
                 } catch (Exception $e) {
                     Log::warning($e->getMessage());
                 }

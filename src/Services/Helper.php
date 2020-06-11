@@ -3,10 +3,10 @@
 namespace Sendportal\Base\Services;
 
 use Carbon\Carbon;
+use Sendportal\Base\Models\Workspace;
 
 class Helper
 {
-
     /**
      * Display a given date in the active user's timezone.
      *
@@ -21,6 +21,11 @@ class Helper
         }
 
         return Carbon::parse($date)->copy()->setTimezone($timezone);
+    }
+
+    public function getCurrentWorkspace(): ?Workspace
+    {
+        return auth()->user()->currentWorkspace();
     }
 
     public function isPro(): bool

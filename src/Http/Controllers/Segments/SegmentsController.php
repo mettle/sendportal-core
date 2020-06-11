@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Segments;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SegmentRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
@@ -27,7 +28,7 @@ class SegmentsController extends Controller
      */
     public function index(): View
     {
-        $segments = $this->segmentRepository->paginate(auth()->user()->currentWorkspace()->id, 'name');
+        $segments = $this->segmentRepository->paginate(Helper::getCurrentWorkspace()->id, 'name');
 
         return view('sendportal::segments.index', compact('segments'));
     }
@@ -42,7 +43,7 @@ class SegmentsController extends Controller
      */
     public function store(SegmentRequest $request): RedirectResponse
     {
-        $this->segmentRepository->store(auth()->user()->currentWorkspace()->id, $request->all());
+        $this->segmentRepository->store(Helper::getCurrentWorkspace()->id, $request->all());
 
         return redirect()->route('sendportal.segments.index');
     }
@@ -52,7 +53,7 @@ class SegmentsController extends Controller
      */
     public function edit(int $id, SubscriberTenantRepositoryInterface $subscriberRepository): View
     {
-        $segment = $this->segmentRepository->find(auth()->user()->currentWorkspace()->id, $id, ['subscribers']);
+        $segment = $this->segmentRepository->find(Helper::getCurrentWorkspace()->id, $id, ['subscribers']);
 
         return view('sendportal::segments.edit', compact('segment'));
     }
@@ -62,7 +63,7 @@ class SegmentsController extends Controller
      */
     public function update(int $id, SegmentRequest $request): RedirectResponse
     {
-        $this->segmentRepository->update(auth()->user()->currentWorkspace()->id, $id, $request->all());
+        $this->segmentRepository->update(Helper::getCurrentWorkspace()->id, $id, $request->all());
 
         return redirect()->route('sendportal.segments.index');
     }

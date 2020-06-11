@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Helper;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
@@ -38,7 +39,7 @@ class CampaignDispatchController extends Controller
      */
     public function send(CampaignDispatchRequest $request, int $id): RedirectResponse
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id, ['email_service']);
+        $campaign = $this->campaigns->find(Helper::getCurrentWorkspace()->id, $id, ['email_service']);
 
         if ($campaign->status_id > CampaignStatus::STATUS_DRAFT) {
             return redirect()->route('sendportal.campaigns.status', $id);

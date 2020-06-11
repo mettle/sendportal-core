@@ -4,11 +4,13 @@ namespace Sendportal\Base\Providers;
 
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Events\SubscriberAddedEvent;
+use Sendportal\Base\Events\Webhooks\ElasticWebhookReceived;
 use Sendportal\Base\Events\Webhooks\MailgunWebhookReceived;
 use Sendportal\Base\Events\Webhooks\PostmarkWebhookReceived;
 use Sendportal\Base\Events\Webhooks\SendgridWebhookReceived;
 use Sendportal\Base\Events\Webhooks\SesWebhookReceived;
 use Sendportal\Base\Listeners\MessageDispatchHandler;
+use Sendportal\Base\Listeners\Webhooks\HandleElasticWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandleSesWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandleMailgunWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandlePostmarkWebhook;
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         SesWebhookReceived::class => [
             HandleSesWebhook::class
+        ],
+        ElasticWebhookReceived::class => [
+            HandleElasticWebhook::class
         ],
         SubscriberAddedEvent::class => [
             // ...

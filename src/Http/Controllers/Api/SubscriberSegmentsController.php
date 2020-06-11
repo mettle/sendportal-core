@@ -10,21 +10,21 @@ use Sendportal\Base\Http\Requests\Api\SubscriberSegmentStoreRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberSegmentUpdateRequest;
 use Sendportal\Base\Http\Resources\Segment;
 use Sendportal\Base\Http\Resources\Segment as SegmentResource;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Subscribers\Segments\ApiSubscriberSegmentService;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriberSegmentsController extends Controller
 {
-    /** @var SubscriberTenantRepository */
+    /** @var SubscriberTenantRepositoryInterface */
     private $subscribers;
 
     /** @var ApiSubscriberSegmentService */
     private $apiService;
 
     public function __construct(
-        SubscriberTenantRepository $subscribers,
+        SubscriberTenantRepositoryInterface $subscribers,
         ApiSubscriberSegmentService $apiService
     ) {
         $this->subscribers = $subscribers;

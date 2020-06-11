@@ -12,7 +12,10 @@ use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
 use Sendportal\Base\Repositories\Campaigns\PostgresCampaignTenantRepository;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MySqlMessageTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\MySqlSubscriberTenantRepository;
 use Sendportal\Base\Repositories\Messages\PostgresMessageTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\PostgresSubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Helper;
 use Sendportal\Base\Services\QuotaService;
 use Sendportal\Base\Traits\ResolvesDatabaseDriver;
@@ -44,6 +47,15 @@ class SendportalAppServiceProvider extends ServiceProvider
             }
 
             return $app->make(MySqlMessageTenantRepository::class);
+        });
+
+        // Subscriber repository.
+        $this->app->bind(SubscriberTenantRepositoryInterface::class, function (Application $app) {
+            if ($this->usingPostgres()) {
+                return $app->make(PostgresSubscriberTenantRepository::class);
+            }
+
+            return $app->make(MySqlSubscriberTenantRepository::class);
         });
 
         $this->app->bind(QuotaServiceInterface::class, QuotaService::class);

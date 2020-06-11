@@ -17,18 +17,18 @@ use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriberRequest;
 use Sendportal\Base\Models\UnsubscribeEventType;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubscribersController extends Controller
 {
-    /** @var SubscriberTenantRepository */
+    /** @var SubscriberTenantRepositoryInterface */
     private $subscriberRepo;
 
     /** @var SegmentTenantRepository */
     private $segmentRepo;
 
-    public function __construct(SubscriberTenantRepository $subscriberRepo, SegmentTenantRepository $segmentRepo)
+    public function __construct(SubscriberTenantRepositoryInterface $subscriberRepo, SegmentTenantRepository $segmentRepo)
     {
         $this->subscriberRepo = $subscriberRepo;
         $this->segmentRepo = $segmentRepo;

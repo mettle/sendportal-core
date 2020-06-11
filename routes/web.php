@@ -10,7 +10,7 @@ use Sendportal\Base\Http\Middleware\OwnsCurrentWorkspace;
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(static function () {
     Auth::routes([
         'verify' => config('sendportal.auth.register', false),
-        'register' => config('sendportal.auth.register, false'),
+        'register' => config('sendportal.auth.register', false),
         'reset' => config('sendportal.auth.password_reset'),
     ]);
 });

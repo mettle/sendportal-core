@@ -4,25 +4,20 @@ namespace Sendportal\Base\Services\Subscribers;
 
 use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Exception;
 
 class ImportSubscriberService
 {
-    /** @var SubscriberTenantRepository */
+    /** @var SubscriberTenantRepositoryInterface */
     protected $subscribers;
 
-    public function __construct(SubscriberTenantRepository $subscribers)
+    public function __construct(SubscriberTenantRepositoryInterface $subscribers)
     {
         $this->subscribers = $subscribers;
     }
 
     /**
-     * Create or update a subscriber.
-     *
-     * @param array $data
-     *
-     * @return Subscriber
      * @throws Exception
      */
     public function import(int $workspaceId, array $data): Subscriber

@@ -8,13 +8,13 @@ use Illuminate\View\View;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
-use Sendportal\Base\Repositories\SubscriberTenantRepository;
+use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
 
 class DashboardController extends Controller
 {
     /**
-     * @var SubscriberTenantRepository
+     * @var SubscriberTenantRepositoryInterface
      */
     protected $subscribers;
 
@@ -33,14 +33,7 @@ class DashboardController extends Controller
      */
     protected $campaignStatisticsService;
 
-    /**
-     * DashboardController constructor.
-     *
-     * @param SubscriberTenantRepository $subscribers
-     * @param CampaignTenantRepositoryInterface $campaigns
-     * @param MessageTenantRepositoryInterface $messages
-     */
-    public function __construct(SubscriberTenantRepository $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages, CampaignStatisticsService $campaignStatisticsService)
+    public function __construct(SubscriberTenantRepositoryInterface $subscribers, CampaignTenantRepositoryInterface $campaigns, MessageTenantRepositoryInterface $messages, CampaignStatisticsService $campaignStatisticsService)
     {
         $this->subscribers = $subscribers;
         $this->campaigns = $campaigns;

@@ -62,6 +62,8 @@ class CampaignDispatchCommand extends Command
      */
     protected function getQueuedCampaigns(): EloquentCollection
     {
-        return Campaign::where('status_id', CampaignStatus::STATUS_QUEUED)->get();
+        return Campaign::where('status_id', CampaignStatus::STATUS_QUEUED)
+            ->where('scheduled_at', '<=', now())
+            ->get();
     }
 }

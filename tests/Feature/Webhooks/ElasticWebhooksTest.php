@@ -44,13 +44,14 @@ class ElasticWebhooksTest extends TestCase
         ]);
     }
 
-    protected function resolveWebhook(Message $message, $status)
+    protected function resolveWebhook(Message $message, $status, $category = 'NotDelivered')
     {
         return [
             'date'      => now()->toIso8601String(),
             'messageid' => $message->message_id,
             'target'    => $this->faker->url,
             'status'    => $status,
+            'category'  => $category,
         ];
     }
 

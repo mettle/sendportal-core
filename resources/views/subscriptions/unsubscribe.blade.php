@@ -3,7 +3,7 @@
 @section('content')
     <div class="text-center">
         <h1>{{ __('Unsubscribe') }}</h1>
-        <p>{{ __('Remove <b>:email</b> from this email list?', ['email' => $message->subscriber->email]) }}</p>
+        <p>{!! __('Remove <b>:email</b> from this email list?', ['email' => $message->subscriber->email])  !!}</p>
 
         <form action="{{ route('sendportal.subscriptions.update', $message->hash) }}" method="post">
             @csrf

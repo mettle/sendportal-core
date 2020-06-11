@@ -220,7 +220,7 @@ class Campaign extends BaseModel
     }
 
     /**
-     * Whether the campaign has been sent.
+     * Whether the campaign has been queued for sending.
      */
     public function getQueuedAttribute(): bool
     {

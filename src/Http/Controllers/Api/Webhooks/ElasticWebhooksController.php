@@ -14,7 +14,7 @@ class ElasticWebhooksController extends Controller
     public function handle(): Response
     {
         /** @var array $payload */
-        $payload = request()->only('to', 'date', 'subject', 'status', 'channel', 'account', 'category', 'messageid', 'transaction', 'target');
+        $payload = request()->only('date', 'status', 'category', 'messageid', 'target');
 
         Log::info('ElasticEmail webhook received');
 

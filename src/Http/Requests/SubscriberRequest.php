@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SubscriberRequest extends FormRequest
 {
@@ -30,11 +31,11 @@ class SubscriberRequest extends FormRequest
 
     protected function getUniqueEmailRule(): string
     {
-        $rule = sprintf(
-            'unique:subscribers,email,%d,id,workspace_id,%d',
-            $this->subscriber ?? 0,
-            auth()->user()->currentWorkspace()->id
-        );
+        $rule = Rule::unique('subscribers', 'email')
+            ->ignore($this->subscriber, 'id')
+            ->where(function ($query) {
+                $query->where('workspace_id', auth()->user()->currentWorkspace()->id);
+            });
 
         return $rule;
     }

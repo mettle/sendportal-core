@@ -32,8 +32,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Show Databases
         run: mysql -h 127.0.0.1 --port 3306 -u homestead -psecret -e 'SHOW DATABASES;'
-      - name: Install Prestissimo
-        run: composer global require hirak/prestissimo
       - name: Install composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Run Testsuite against MySQL

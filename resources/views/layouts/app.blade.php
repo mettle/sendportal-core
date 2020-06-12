@@ -30,7 +30,7 @@
 
                 <div class="mt-4">
                     <div class="logo text-center">
-                        <a href="/">
+                        <a href="{{ url('/') }}">
                             <img src="{{ asset('/vendor/sendportal/img/logo-main.png') }}" alt="" width="175px">
                         </a>
                     </div>

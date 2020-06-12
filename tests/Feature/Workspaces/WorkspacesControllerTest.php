@@ -34,8 +34,8 @@ class WorkspacesControllerTest extends TestCase
 
         // then
         $response->assertOk();
-        $response->assertSee(e($workspaces[0]->name));
-        $response->assertSee(e($workspaces[1]->name));
+        $response->assertSee($workspaces[0]->name);
+        $response->assertSee($workspaces[1]->name);
     }
 
     /** @test */

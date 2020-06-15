@@ -25,8 +25,6 @@ class MergeContentTest extends TestCase
         $content = $this->faker->sentence;
         $message = $this->generateCampaignMessage($content);
 
-        $this->withoutExceptionHandling();
-
         // when
         $mergedContent = $this->mergeContent($message);
 

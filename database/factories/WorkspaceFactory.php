@@ -2,16 +2,14 @@
 
 /** @var Factory $factory */
 
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 
 $factory->define(Workspace::class, static function (Faker $faker) {
-    $name = $faker->company;
-
     return [
-        'name' => $name,
+        'name' => $faker->company,
         'owner_id' => factory(User::class),
     ];
 });

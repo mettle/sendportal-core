@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
 /** @var Factory $factory */
 
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Workspace;
 
 $factory->define(Segment::class, static function (Faker $faker) {
     return [
-        'name' => ucwords($faker->unique()->word),
+        'workspace_id' => factory(Workspace::class),
+        'name' => ucwords($faker->unique()->word)
     ];
 });
 

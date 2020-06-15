@@ -1,16 +1,16 @@
 <?php
 
+/** @var Factory $factory */
+
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Email;
-use Faker\Generator as Faker;
 
 $factory->define(Email::class, function (Faker $faker)
 {
     return [
-        'mailable_id' => function ()
-        {
-            return factory(Campaign::class)->create()->id;
-        },
+        'mailable_id' => factory(Campaign::class),
         'mailable_type' => Campaign::class,
         'subject' => $faker->sentence,
         'content' => $faker->paragraph,

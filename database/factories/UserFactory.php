@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 /** @var Factory $factory */
 
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 
 /*
 |--------------------------------------------------------------------------

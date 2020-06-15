@@ -2,13 +2,13 @@
 
 /** @var Factory $factory */
 
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\Template;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Sendportal\Base\Models\Workspace;
 
 $factory->define(Campaign::class, function (Faker $faker) {
     return [
@@ -30,10 +30,8 @@ $factory->state(Campaign::class, 'withContent', function (Faker $faker) {
 });
 
 $factory->state(Campaign::class, 'withTemplate', function () {
-    $template = factory(Template::class)->create();
-
     return [
-        'template_id' => $template->id,
+        'template_id' => factory(Template::class),
     ];
 });
 

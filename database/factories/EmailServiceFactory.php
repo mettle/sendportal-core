@@ -1,9 +1,12 @@
 <?php
 
+/** @var Factory $factory */
+
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
 use Sendportal\Base\Models\Workspace;
-use Faker\Generator as Faker;
 
 $factory->define(EmailService::class, function (Faker $faker)
 {

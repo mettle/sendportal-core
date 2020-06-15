@@ -2,12 +2,12 @@
 
 /** @var Factory $factory */
 
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Workspace;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Message::class, function (Faker $faker) {
     return [

@@ -52,6 +52,7 @@ Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->gro
     $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
     $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');
     $webhookRouter->post('sendgrid', 'SendgridWebhooksController@handle')->name('sendgrid');
+    $webhookRouter->get('elastic', 'ElasticWebhooksController@handle')->name('elastic');
 });
 
 Route::get('ping', static function () {

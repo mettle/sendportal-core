@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Factories;
 
+use Sendportal\Base\Adapters\ElasticMailAdapter;
 use Sendportal\Base\Adapters\MailgunMailAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
@@ -17,10 +18,11 @@ class MailAdapterFactory
 {
     /** @var array */
     public static $adapterMap = [
-        EmailServiceType::SES => SesMailAdapter::class,
+        EmailServiceType::SES      => SesMailAdapter::class,
         EmailServiceType::SENDGRID => SendgridMailAdapter::class,
-        EmailServiceType::MAILGUN => MailgunMailAdapter::class,
-        EmailServiceType::POSTMARK => PostmarkMailAdapter::class
+        EmailServiceType::MAILGUN  => MailgunMailAdapter::class,
+        EmailServiceType::POSTMARK => PostmarkMailAdapter::class,
+        EmailServiceType::ELASTIC  => ElasticMailAdapter::class,
     ];
 
     /**

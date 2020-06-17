@@ -21,26 +21,8 @@ use Sendportal\Base\Traits\ChecksInvitations;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers,
         ChecksInvitations;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
 
     /** @var AcceptInvitation */
     private $acceptInvitation;
@@ -57,10 +39,6 @@ class RegisterController extends Controller
     }
 
     /**
-     * Show the application registration form.
-     *
-     * @param Request $request
-     *
      * @return mixed
      */
     public function showRegistrationForm(Request $request)
@@ -75,13 +53,6 @@ class RegisterController extends Controller
         return view('sendportal::auth.register');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param array $data
-     *
-     * @return ValidatorContract
-     */
     protected function validator(array $data): ValidatorContract
     {
         return Validator::make($data, [
@@ -92,13 +63,6 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param array $data
-     *
-     * @return User
-     */
     protected function create(array $data): User
     {
         return DB::transaction(function () use ($data) {
@@ -119,5 +83,10 @@ class RegisterController extends Controller
 
             return $user;
         });
+    }
+
+    protected function redirectTo(): string
+    {
+        return route('sendportal.dashboard');
     }
 }

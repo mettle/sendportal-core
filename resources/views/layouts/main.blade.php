@@ -12,7 +12,7 @@
                         </button>
 
                         <div class="logo text-center mt-4">
-                            <a href="/">
+                            <a href="{{ route('sendportal.dashboard') }}">
                                 <img src="{{ asset('/vendor/sendportal/img/logo-main.png') }}" alt="SendPortal" width="130">
                             </a>
                         </div>

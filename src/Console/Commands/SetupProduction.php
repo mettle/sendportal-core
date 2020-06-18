@@ -49,8 +49,7 @@ class SetupProduction extends BaseCommand
         $this->checkAdminUserAccount();
         $this->checkVendorAssets();
 
-        $this->line('');
-        $this->info('Your application is ready!');
+        $this->info('✅ Your application is ready!');
         $this->line('');
     }
 
@@ -61,7 +60,7 @@ class SetupProduction extends BaseCommand
     protected function checkEnvironment(): void
     {
         if (file_exists(base_path('.env'))) {
-            $this->line('✅ .env file already exists');
+            $this->info('✅ .env file already exists');
 
             return;
         }
@@ -69,7 +68,7 @@ class SetupProduction extends BaseCommand
         $createFile = $this->confirm('The .env file does not yet exist. Would you like to create it now?', true);
 
         if ($createFile && copy(base_path('.env.example'), base_path('.env'))) {
-            $this->line('✅ .env file has been created');
+            $this->info('✅ .env file has been created');
             $this->call('key:generate');
 
             return;
@@ -90,7 +89,7 @@ class SetupProduction extends BaseCommand
             $this->call('key:generate');
         }
 
-        $this->line('✅ Application key has been set');
+        $this->info('✅ Application key has been set');
     }
 
     /**
@@ -99,7 +98,7 @@ class SetupProduction extends BaseCommand
     protected function checkAppUrl(): void
     {
         if (config('app.url') !== 'http://localhost') {
-            $this->line('✅ Application url set to ' . config('app.url'));
+            $this->info('✅ Application url set to ' . config('app.url'));
 
             return;
         }
@@ -114,7 +113,7 @@ class SetupProduction extends BaseCommand
     {
         try {
             DB::connection()->getPdo();
-            $this->line('✅ Database connection successful.');
+            $this->info('✅ Database connection successful.');
         } catch (Exception $e) {
             try {
                 if (!$this->createDatabaseCredentials()) {
@@ -183,7 +182,7 @@ class SetupProduction extends BaseCommand
     protected function checkMigrations(): void
     {
         if (!$this->pendingMigrations()) {
-            $this->line('✅ Database migrations are up to date');
+            $this->info('✅ Database migrations are up to date');
 
             return;
         }
@@ -210,7 +209,7 @@ class SetupProduction extends BaseCommand
         }
 
         $this->call('migrate');
-        $this->line('✅ Database migrations successful');
+        $this->info('✅ Database migrations successful');
 
         return true;
     }
@@ -221,7 +220,7 @@ class SetupProduction extends BaseCommand
     protected function checkAdminUserAccount(): void
     {
         if (User::count()) {
-            $this->line('✅ Admin user account exists');
+            $this->info('✅ Admin user account exists');
 
             return;
         }
@@ -238,7 +237,7 @@ class SetupProduction extends BaseCommand
     protected function getCompanyName(): string
     {
         $this->line('');
-        $this->info('Creating first admin user account and company/workspace');
+        $this->line('Creating first admin user account and company/workspace');
         $companyName = $this->ask('Company/Workspace name');
 
         if (!$companyName) {
@@ -254,7 +253,7 @@ class SetupProduction extends BaseCommand
     protected function createAdminUserAccount(string $companyName): User
     {
         $this->line('');
-        $this->info('Create the administrator user account');
+        $this->line('Create the administrator user account');
 
         $name = $this->getUserParam('name');
         $email = $this->getUserParam('email');
@@ -323,13 +322,15 @@ class SetupProduction extends BaseCommand
      */
     protected function checkVendorAssets(): void
     {
-        $this->call('vendor:publish', [
+        $this->callSilent('vendor:publish', [
             '--provider' => SendportalBaseServiceProvider::class,
             '--tag' => 'sendportal-assets',
             '--force' => true
         ]);
 
-        $this->info('Published frontend assets');
+        $this->callSilent('horizon:publish');
+
+        $this->info('✅ Published frontend assets');
     }
 
     /**

@@ -328,8 +328,6 @@ class SetupProduction extends BaseCommand
             '--force' => true
         ]);
 
-        $this->callSilent('horizon:publish');
-
         $this->info('✅ Published frontend assets');
     }
 

@@ -36,14 +36,28 @@ class MergeContentTest extends TestCase
         $this->assertEquals($expectedHtml, $mergedContent);
     }
 
-    private function generateCampaignMessage(string $campaignContent): Message
+    /** @test */
+    function it_can_handle_a_null_value_for_campaign_content()
+    {
+        $content = null;
+        $message = $this->generateCampaignMessage(null, '<p>Hello this is some {{content}}</p>');
+
+        $mergedContent = $this->mergeContent($message);
+
+        $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><p>Hello this is some </p></body></html>';
+
+        $this->assertEquals($expectedHtml, $mergedContent);
+    }
+
+    private function generateCampaignMessage(?string $campaignContent, ?string $templateContent = null): Message
     {
         /** @var Workspace $workspace */
         $workspace = factory(Workspace::class)->create();
 
         /** @var Template $template */
         $template = factory(Template::class)->create([
-            'content' => '<p>{{content}}</p>',
+            'content' => $templateContent ?? '<p>{{content}}</p>',
             'workspace_id' => $workspace->id
         ]);
 

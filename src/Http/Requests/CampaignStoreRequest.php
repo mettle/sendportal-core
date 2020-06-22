@@ -40,12 +40,10 @@ class CampaignStoreRequest extends FormRequest
             'content' => [
                 'nullable',
             ],
-
             'is_open_tracking' => [
                 'boolean',
                 'nullable'
             ],
-
             'is_click_tracking' => [
                 'boolean',
                 'nullable'

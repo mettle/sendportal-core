@@ -25,7 +25,7 @@ class CampaignsController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId): CampaignResource
+    public function index(int $workspaceId): AnonymousResourceCollection
     {
         return CampaignResource::collection($this->campaigns->paginate($workspaceId, 'id', ['segments']));
     }
@@ -35,9 +35,7 @@ class CampaignsController extends Controller
      */
     public function store(CampaignStoreRequest $request, int $workspaceId): CampaignResource
     {
-        $input = $request->validated();
-
-        $campaign = $this->campaigns->store($workspaceId, collect($input));
+        $campaign = $this->campaigns->store($workspaceId, $request->validated());
 
         return new CampaignResource($campaign);
     }

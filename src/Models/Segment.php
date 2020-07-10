@@ -19,6 +19,11 @@ class Segment extends BaseModel
         'subscribers'
     ];
 
+    public function campaigns(): BelongsToMany
+    {
+        return $this->belongsToMany(Campaign::class);
+    }
+
     /**
      * The workspace this segment belongs to.
      */

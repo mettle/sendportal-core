@@ -37,4 +37,17 @@ class SegmentTenantRepository extends BaseTenantRepository
     {
         return $segment->subscribers()->sync($subscribers);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy($workspaceId, $id): bool
+    {
+        $instance = $this->find($workspaceId, $id);
+
+        $instance->subscribers()->detach();
+        $instance->campaigns()->detach();
+
+        return $instance->delete();
+    }
 }

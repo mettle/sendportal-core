@@ -66,4 +66,14 @@ class SegmentsController extends Controller
 
         return redirect()->route('sendportal.segments.index');
     }
+
+    /**
+     * @throws Exception
+     */
+    public function destroy(int $id): RedirectResponse
+    {
+        $this->segmentRepository->destroy(auth()->user()->currentWorkspace()->id, $id);
+
+        return redirect()->route('sendportal.segments.index');
+    }
 }

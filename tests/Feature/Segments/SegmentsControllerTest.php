@@ -101,5 +101,19 @@ class SegmentsControllerTest extends TestCase
         ]);
     }
 
+    /* @test */
+    public function a_segment_can_be_deleted()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
 
+        $segment = factory(Segment::class)->create(['workspace_id' => $workspace->id]);
+
+        $response = $this->actingAs($user)
+            ->delete(route('sendportal.segments.destroy', $segment->id));
+
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('segments', [
+            'id' => $segment->id,
+        ]);
+    }
 }

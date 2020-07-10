@@ -82,7 +82,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         });
 
         // Segments.
-        $appRouter->resource('segments', 'Segments\SegmentsController')->except(['show', 'destroy']);
+        $appRouter->resource('segments', 'Segments\SegmentsController')->except(['show']);
 
         // Workspace User Management.
         $appRouter->namespace('Workspaces')

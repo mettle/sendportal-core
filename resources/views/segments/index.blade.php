@@ -35,8 +35,9 @@
                             </a>
                         </td>
                         <td>{{ $segment->subscribers_count }}</td>
-                        <td><a class="btn btn-sm btn-light"
-                               href="{{ route('sendportal.segments.edit', $segment->id) }}">{{ __('Edit') }}</a></td>
+                        <td>
+                            @include('sendportal::segments.partials.actions')
+                        </td>
                     </tr>
                 @empty
                     <tr>

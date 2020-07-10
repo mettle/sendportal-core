@@ -204,12 +204,43 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    private function generateCampaignStoreData(Workspace $workspace): array
+    /** @test */
+    function campaign_content_is_required_if_no_template_is_selected()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $campaignStoreData = $this->generateCampaignStoreData($workspace, [
+            'template_id' => null,
+            'content' => null,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
+
+        $response->assertSessionHasErrors('content');
+    }
+
+    /** @test */
+    function campaign_content_is_not_required_if_a_template_is_selected()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $campaignStoreData = $this->generateCampaignStoreData($workspace, [
+            'content' => null,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->post(route('sendportal.campaigns.store'), $campaignStoreData);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    private function generateCampaignStoreData(Workspace $workspace, array $overrides = []): array
     {
         $emailService = factory(EmailService::class)->create(['workspace_id' => $workspace->id]);
         $template = factory(Template::class)->create(['workspace_id' => $workspace->id]);
 
-        return [
+        return array_merge([
             'name' => $this->faker->word,
             'subject' => $this->faker->sentence,
             'from_name' => $this->faker->name,
@@ -217,6 +248,6 @@ class CampaignControllerTest extends TestCase
             'email_service_id' => $emailService->id,
             'template_id' => $template->id,
             'content' => $this->faker->paragraph
-        ];
+        ], $overrides);
     }
 }

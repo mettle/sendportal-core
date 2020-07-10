@@ -4,6 +4,7 @@ namespace Tests\Feature\Templates;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Template;
 use Tests\TestCase;
 
@@ -269,6 +270,32 @@ class TemplatesControllerTest extends TestCase
         $response->assertRedirect(route('sendportal.templates.index'));
 
         $this->assertDatabaseMissing('templates', [
+            'id' => $template->id,
+            'name' => $template->name
+        ]);
+    }
+
+    /** @test */
+    function a_logged_in_user_cannot_delete_a_template_if_it_is_used()
+    {
+        $user = $this->createUserWithWorkspace();
+        $this->loginUser($user);
+
+        $template = factory(Template::class)->create([
+            'workspace_id' => $user->currentWorkspace()->id
+        ]);
+
+        $campaign = factory(Campaign::class)->create([
+            'template_id' => $template->id
+        ]);
+
+        $response = $this->from(route('sendportal.templates.index'))
+            ->delete(route('sendportal.templates.destroy', $template->id));
+
+        $response->assertRedirect(route('sendportal.templates.index'))
+            ->assertSessionHasErrors(['template']);
+
+        $this->assertDatabaseHas('templates', [
             'id' => $template->id,
             'name' => $template->name
         ]);

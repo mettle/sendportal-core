@@ -18,10 +18,15 @@ class Template extends BaseModel
     }
 
     /**
-     * Emails using this template
+     * Campaigns using this template
      */
-    public function emails(): HasMany
+    public function campaigns(): HasMany
     {
-        return $this->hasMany(Email::class);
+        return $this->hasMany(Campaign::class);
+    }
+
+    public function isInUse(): bool
+    {
+        return $this->campaigns()->count() > 0;
     }
 }

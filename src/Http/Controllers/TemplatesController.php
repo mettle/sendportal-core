@@ -12,6 +12,7 @@ use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Services\Templates\TemplateService;
 use Sendportal\Base\Traits\NormalizeTags;
+use Throwable;
 
 class TemplatesController extends Controller
 {
@@ -81,19 +82,10 @@ class TemplatesController extends Controller
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function destroy(int $id): RedirectResponse
     {
-        $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
-
-        // TODO(david): I don't think `is_in_use` has been implemented.
-        if ($template->is_in_use) {
-            return redirect()
-                ->back()
-                ->withErrors(['template' => __('Cannot delete a template that has been used.')]);
-        }
-
         $this->service->delete(auth()->user()->currentWorkspace()->id, $id);
 
         return redirect()

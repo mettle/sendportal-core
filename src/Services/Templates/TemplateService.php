@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Templates;
 
 use Exception;
+use Illuminate\Validation\ValidationException;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Traits\NormalizeTags;
@@ -42,10 +43,16 @@ class TemplateService
     }
 
     /**
-     * @throws Exception
+     * @throws \Throwable
      */
     public function delete(int $workspaceId, int $templateId): bool
     {
+        $template = $this->templates->find($workspaceId, $templateId);
+
+        throw_if($template->isInUse(), ValidationException::withMessages([
+            'template' => __('Cannot delete a template that has been used.')
+        ]));
+
         return $this->templates->destroy($workspaceId, $templateId);
     }
 }

@@ -65,7 +65,9 @@ class MergeContent
         if (!$campaign) {
             throw new Exception('Unable to resolve campaign step for message id= ' . $message->id);
         }
-
+        if($campaign->content == null) {
+                $campaign->content = "";
+        }
         return $campaign->template
             ? $this->mergeContent($campaign->content, $campaign->template->content)
             : $campaign->content;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Api;
 
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Sendportal\Base\Http\Controllers\Controller;
@@ -27,6 +28,9 @@ class TemplatesController extends Controller
         $this->service = $service;
     }
 
+    /**
+     * @throws Exception
+     */
     public function index(int $workspaceId): AnonymousResourceCollection
     {
         $templates = $this->templates->paginate($workspaceId, 'name');
@@ -34,11 +38,18 @@ class TemplatesController extends Controller
         return TemplateResource::collection($templates);
     }
 
+
+    /**
+     * @throws Exception
+     */
     public function show(int $workspaceId, int $id): TemplateResource
     {
         return new TemplateResource($this->templates->find($workspaceId, $id));
     }
 
+    /**
+     * @throws Exception
+     */
     public function store(TemplateStoreRequest $request, int $workspaceId): TemplateResource
     {
         $template = $this->service->store($workspaceId, $request->validated());
@@ -46,6 +57,9 @@ class TemplatesController extends Controller
         return new TemplateResource($template);
     }
 
+    /**
+     * @throws Exception
+     */
     public function update(TemplateUpdateRequest $request, int $workspaceId, int $id): TemplateResource
     {
         $template = $this->service->update($workspaceId, $id, $request->validated());
@@ -53,8 +67,13 @@ class TemplatesController extends Controller
         return new TemplateResource($template);
     }
 
+    /**
+     * @throws Exception
+     */
     public function destroy(int $workspaceId, int $id): Response
     {
+        // TODO: Add a request object to test the validity of deleting the template.
+        //  In particular, whether it is in use.
         if ( ! $this->service->delete($workspaceId, $id))
         {
             return response(__('Cannot delete a template that has been used.'), 400);
@@ -63,4 +82,3 @@ class TemplatesController extends Controller
         return response(null, 204);
     }
 }
-

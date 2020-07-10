@@ -85,4 +85,34 @@ class CampaignsControllerTest extends TestCase
         $this->assertDatabaseHas('campaigns', $request);
         $response->assertJson(['data' => $request]);
     }
+
+    /** @test */
+    public function a_campaign_can_be_updated()
+    {
+        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+
+        $campaign = $this->createCampaign($workspace, $emailService);
+
+        $route = route('sendportal.api.campaigns.update', [
+            'workspaceId' => $workspace->id,
+            'campaign' => $campaign->id,
+            'api_token' => $workspace->owner->api_token,
+        ]);
+
+        $request = [
+            'name' => $this->faker->word,
+            'subject' => $this->faker->word,
+            'from_name' => $this->faker->word,
+            'from_email' => $this->faker->safeEmail,
+            'email_service_id' => $emailService->id,
+            'content' => $this->faker->sentence,
+        ];
+
+        $response = $this->put($route, $request);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('campaigns', $campaign->toArray());
+        $this->assertDatabaseHas('campaigns', $request);
+        $response->assertJson(['data' => $request]);
+    }
 }

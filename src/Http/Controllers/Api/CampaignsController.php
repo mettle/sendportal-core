@@ -6,7 +6,6 @@ namespace Sendportal\Base\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Http\Resources\Campaign as CampaignResource;
@@ -46,6 +45,16 @@ class CampaignsController extends Controller
     public function show(int $workspaceId, int $id): CampaignResource
     {
         $campaign = $this->campaigns->find($workspaceId, $id);
+
+        return new CampaignResource($campaign);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function update(CampaignStoreRequest $request, int $workspaceId, int $id): CampaignResource
+    {
+        $campaign = $this->campaigns->update($workspaceId, $id, $request->validated());
 
         return new CampaignResource($campaign);
     }

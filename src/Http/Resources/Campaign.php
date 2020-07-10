@@ -18,6 +18,7 @@ class Campaign extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'subject' => $this->subject,
+            'content' => $this->content,
             'status_id' => $this->status_id,
             'template_id' => $this->template_id,
             'email_service_id' => $this->email_service_id,

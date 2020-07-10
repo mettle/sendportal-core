@@ -113,8 +113,7 @@ class TemplatesController extends Controller
     {
         $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
 
-        // TODO(david): I don't think `is_in_use` has been implemented.
-        if ($template->is_in_use) {
+        if ($template->isInUse()) {
             return redirect()
                 ->back()
                 ->withErrors(['template' => __('Cannot delete a template that has been used.')]);

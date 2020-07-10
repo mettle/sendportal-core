@@ -91,7 +91,7 @@ class MergeContent
         return $this->mergeContent($content, $template->content);
     }
 
-    protected function mergeContent(string $customContent, string $templateContent): string
+    protected function mergeContent(?string $customContent, string $templateContent): string
     {
         return str_ireplace(['{{content}}', '{{ content }}'], $customContent, $templateContent);
     }

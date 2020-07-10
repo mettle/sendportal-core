@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Http\Controllers;
 
 use Exception;
@@ -8,6 +10,7 @@ use Illuminate\View\View;
 use Sendportal\Base\Http\Requests\TemplateStoreRequest;
 use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
+use Sendportal\Base\Services\Templates\TemplateService;
 use Sendportal\Base\Traits\NormalizeTags;
 
 class TemplatesController extends Controller
@@ -15,17 +18,18 @@ class TemplatesController extends Controller
     use NormalizeTags;
 
     /** @var TemplateTenantRepository */
-    protected $templates;
+    private $templates;
 
-    public function __construct(TemplateTenantRepository $templates)
+    /** @var TemplateService */
+    private $service;
+
+    public function __construct(TemplateTenantRepository $templates, TemplateService $service)
     {
         $this->templates = $templates;
+        $this->service = $service;
     }
 
     /**
-     * Show a listing of the resource.
-     *
-     * @return View
      * @throws Exception
      */
     public function index(): View
@@ -35,42 +39,25 @@ class TemplatesController extends Controller
         return view('sendportal::templates.index', compact('templates'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return View
-     */
     public function create(): View
     {
         return view('sendportal::templates.create');
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param TemplateStoreRequest $request
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function store(TemplateStoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
-        $data['content'] = $this->normalizeTags($data['content'], 'content');
-
-        $this->templates->store(auth()->user()->currentWorkspace()->id, $data);
+        $this->service->store(auth()->user()->currentWorkspace()->id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return View
      * @throws Exception
      */
     public function edit(int $id): View
@@ -81,32 +68,19 @@ class TemplatesController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param TemplateUpdateRequest $request
-     * @param int $id
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function update(TemplateUpdateRequest $request, int $id): RedirectResponse
     {
         $data = $request->validated();
 
-        $data['content'] = $this->normalizeTags($data['content'], 'content');
-
-        $this->templates->update(auth()->user()->currentWorkspace()->id, $id, $data);
+        $this->service->update(auth()->user()->currentWorkspace()->id, $id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
     public function destroy(int $id): RedirectResponse
@@ -119,7 +93,7 @@ class TemplatesController extends Controller
                 ->withErrors(['template' => __('Cannot delete a template that has been used.')]);
         }
 
-        $this->templates->destroy(auth()->user()->currentWorkspace()->id, $template->id);
+        $this->service->delete(auth()->user()->currentWorkspace()->id, $id);
 
         return redirect()
             ->route('sendportal.templates.index')

@@ -45,6 +45,8 @@ Route::middleware([
         ->name('segments.subscribers.update');
     $apiRouter->delete('segments/{segment}/subscribers', 'SegmentSubscribersController@destroy')
         ->name('segments.subscribers.destroy');
+
+    $apiRouter->apiResource('templates', 'TemplatesController');
 });
 
 Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->group(static function (Router $webhookRouter) {

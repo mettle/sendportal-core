@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CampaignStoreRequest extends FormRequest
 {
@@ -38,14 +39,12 @@ class CampaignStoreRequest extends FormRequest
                 'exists:templates,id',
             ],
             'content' => [
-                'nullable',
+                Rule::requiredIf($this->template_id === null),
             ],
-
             'is_open_tracking' => [
                 'boolean',
                 'nullable'
             ],
-
             'is_click_tracking' => [
                 'boolean',
                 'nullable'

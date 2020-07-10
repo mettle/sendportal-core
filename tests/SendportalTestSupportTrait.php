@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Testing\TestResponse;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\User;
@@ -34,6 +35,13 @@ trait SendportalTestSupportTrait {
     protected function loginUser(User $user): void
     {
         auth()->login($user);
+    }
+
+    protected function createCampaign(User $user): Campaign
+    {
+        return factory(Campaign::class)->create([
+            'workspace_id' => $user->currentWorkspace()->id,
+        ]);
     }
 
     protected function createSegment(User $user): Segment

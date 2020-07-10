@@ -50,7 +50,7 @@ class TemplateService
         $template = $this->templates->find($workspaceId, $templateId);
 
         throw_if($template->isInUse(), ValidationException::withMessages([
-            'template' => 'Cannot delete a template that has been used.'
+            'template' => __('Cannot delete a template that has been used.')
         ]));
 
         return $this->templates->destroy($workspaceId, $templateId);

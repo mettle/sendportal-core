@@ -12,6 +12,7 @@ use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Services\Templates\TemplateService;
 use Sendportal\Base\Traits\NormalizeTags;
+use Throwable;
 
 class TemplatesController extends Controller
 {
@@ -81,13 +82,11 @@ class TemplatesController extends Controller
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function destroy(int $id): RedirectResponse
     {
-        $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
-
-        $this->service->delete(auth()->user()->currentWorkspace()->id, $template->id);
+        $this->service->delete(auth()->user()->currentWorkspace()->id, $id);
 
         return redirect()
             ->route('sendportal.templates.index')

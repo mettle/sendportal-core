@@ -25,11 +25,6 @@ class Template extends BaseModel
         return $this->hasMany(Campaign::class);
     }
 
-    /**
-     * Determine if the Template is in use.
-     *
-     * @return bool
-     */
     public function isInUse(): bool
     {
         return $this->campaigns()->count() > 0;

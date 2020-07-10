@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Traits\NormalizeTags;
 use Tests\TestCase;
@@ -145,5 +146,30 @@ class TemplatesControllerTest extends TestCase
         $response = $this->delete($route);
 
         $response->assertStatus(204);
+    }
+
+    /** @test */
+    function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
+    {
+        $user = $this->createUserWithWorkspace();
+
+        $template = factory(Template::class)->create([
+            'workspace_id' => $user->currentWorkspace()->id
+        ]);
+
+        $campaign = factory(Campaign::class)->create([
+            'template_id' => $template->id
+        ]);
+
+        $route = route('sendportal.api.templates.destroy', [
+            'workspaceId' => $user->currentWorkspace()->id,
+            'template' => $template->id,
+            'api_token' => $user->api_token,
+        ]);
+
+        $response = $this->deleteJson($route);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['template']);
     }
 }

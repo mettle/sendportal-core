@@ -87,13 +87,7 @@ class TemplatesController extends Controller
     {
         $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
 
-        if ($template->isInUse()) {
-            return redirect()
-                ->back()
-                ->withErrors(['template' => __('Cannot delete a template that has been used.')]);
-        }
-
-        $this->service->delete(auth()->user()->currentWorkspace()->id, $id);
+        $this->service->delete(auth()->user()->currentWorkspace()->id, $template->id);
 
         return redirect()
             ->route('sendportal.templates.index')

@@ -1,5 +1,13 @@
 # Sendportal Core
 
+## 1.0.3 - 2020-07-11
+
+- added CHANGELOG.md [#39](https://github.com/mettle/sendportal-core/pull/39))
+- added API for templates [#38](https://github.com/mettle/sendportal-core/pull/38))
+- add validation for deleting templates that are in use ([#37](https://github.com/mettle/sendportal-core/pull/37))
+- added ability to delete segments ([#36](https://github.com/mettle/sendportal-core/pull/36))
+- handle null campaign content ([#34](https://github.com/mettle/sendportal-core/pull/34))
+
 ## 1.0.2 - 2020-06-22
 
 - changed setup command success outputs to use info instead of line [#33](https://github.com/mettle/sendportal-core/pull/33))

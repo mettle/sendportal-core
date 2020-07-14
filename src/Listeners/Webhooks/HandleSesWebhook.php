@@ -61,7 +61,9 @@ class HandleSesWebhook implements ShouldQueue
         if (!$eventType || !$messageId) {
             return;
         }
-
+        
+        $eventType = strtolower($eventType);
+        
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-open
         // Bounce, Complaint, Message, Send Email, Reject Event, Open Event, Click Event
         switch ($eventType) {

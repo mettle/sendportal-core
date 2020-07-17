@@ -77,13 +77,16 @@ class CampaignsControllerTest extends TestCase
             'from_email' => $this->faker->safeEmail,
             'email_service_id' => $emailService->id,
             'content' => $this->faker->sentence,
+            'recipients' => 'send_to_all',
         ];
 
         $response = $this->post($route, array_merge($request, ['api_token' => $workspace->owner->api_token]));
 
+        $data = Arr::except($request, 'recipients');
+
         $response->assertStatus(201);
-        $this->assertDatabaseHas('campaigns', $request);
-        $response->assertJson(['data' => $request]);
+        $this->assertDatabaseHas('campaigns', $data);
+        $response->assertJson(['data' => $data]);
     }
 
     /** @test */
@@ -106,13 +109,16 @@ class CampaignsControllerTest extends TestCase
             'from_email' => $this->faker->safeEmail,
             'email_service_id' => $emailService->id,
             'content' => $this->faker->sentence,
+            'recipients' => 'send_to_all',
         ];
 
         $response = $this->put($route, $request);
 
+        $data = Arr::except($request, 'recipients');
+
         $response->assertStatus(200);
         $this->assertDatabaseMissing('campaigns', $campaign->toArray());
-        $this->assertDatabaseHas('campaigns', $request);
-        $response->assertJson(['data' => $request]);
+        $this->assertDatabaseHas('campaigns', $data);
+        $response->assertJson(['data' => $data]);
     }
 }

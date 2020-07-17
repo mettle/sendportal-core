@@ -6,8 +6,9 @@ namespace Sendportal\Base\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Arr;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\CampaignStoreRequest;
+use Sendportal\Base\Http\Requests\Api\CampaignStoreRequest;
 use Sendportal\Base\Http\Resources\Campaign as CampaignResource;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 
@@ -34,7 +35,14 @@ class CampaignsController extends Controller
      */
     public function store(CampaignStoreRequest $request, int $workspaceId): CampaignResource
     {
-        $campaign = $this->campaigns->store($workspaceId, $request->validated());
+        $data = Arr::except($request->validated(), ['recipients', 'segments']);
+
+        $data['send_to_all'] = $request->get('recipients') === 'send_to_all';
+        $data['save_as_draft'] = $request->get('save_as_draft') ?? 0;
+
+        $campaign = $this->campaigns->store($workspaceId, $data);
+
+        $campaign->segments()->sync($request->get('segments'));
 
         return new CampaignResource($campaign);
     }
@@ -54,7 +62,14 @@ class CampaignsController extends Controller
      */
     public function update(CampaignStoreRequest $request, int $workspaceId, int $id): CampaignResource
     {
-        $campaign = $this->campaigns->update($workspaceId, $id, $request->validated());
+        $data = Arr::except($request->validated(), ['recipients', 'segments']);
+
+        $data['send_to_all'] = $request->get('recipients') === 'send_to_all';
+        $data['save_as_draft'] = $request->get('save_as_draft') ?? 0;
+
+        $campaign = $this->campaigns->update($workspaceId, $id, $data);
+
+        $campaign->segments()->sync($request->get('segments'));
 
         return new CampaignResource($campaign);
     }

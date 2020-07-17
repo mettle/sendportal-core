@@ -23,6 +23,7 @@ class Campaign extends BaseModel
         'is_open_tracking' => 'bool',
         'is_click_tracking' => 'bool',
         'scheduled_at' => 'datetime',
+        'save_as_draft' => 'bool',
     ];
 
     /**

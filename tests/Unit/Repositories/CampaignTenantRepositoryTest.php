@@ -4,6 +4,7 @@ namespace Tests\Unit\Repositories;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Subscriber;
@@ -83,6 +84,18 @@ class CampaignTenantRepositoryTest extends TestCase
         $averageTimeToClick = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToClick($campaign);
 
         static::assertEquals('N/A', $averageTimeToClick);
+    }
+
+    /** @test */
+    function the_cancel_campaign_method_sets_the_campaign_status_to_cancelled()
+    {
+        $campaign = factory(Campaign::class)->state('queued')->create();
+
+        static::assertEquals(CampaignStatus::STATUS_QUEUED, $campaign->status_id);
+        $success = app(CampaignTenantRepositoryInterface::class)->cancelCampaign($campaign);
+
+        static::assertTrue($success);
+        static::assertEquals(CampaignStatus::STATUS_CANCELLED, $campaign->fresh()->status_id);
     }
 
     /**

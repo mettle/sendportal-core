@@ -54,4 +54,14 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
 
         return $counts->flatten()->keyBy('campaign_id')->toArray();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelCampaign(Campaign $campaign): bool
+    {
+        return $campaign->update([
+            'status_id' => CampaignStatus::STATUS_CANCELLED,
+        ]);
+    }
 }

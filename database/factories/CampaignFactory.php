@@ -35,17 +35,27 @@ $factory->state(Campaign::class, 'withTemplate', function () {
     ];
 });
 
-$factory->state(Campaign::class, 'sent', function () {
-    return [
-        'status_id' => CampaignStatus::STATUS_SENT,
-    ];
-});
-
 $factory->state(Campaign::class, 'draft', function () {
     return [
         'status_id' => CampaignStatus::STATUS_DRAFT,
     ];
 });
+
+$factory->state(Campaign::class, 'queued', [
+    'status_id' => CampaignStatus::STATUS_QUEUED,
+]);
+
+$factory->state(Campaign::class, 'sending', [
+    'status_id' => CampaignStatus::STATUS_SENDING,
+]);
+
+$factory->state(Campaign::class, 'sent', [
+    'status_id' => CampaignStatus::STATUS_SENT,
+]);
+
+$factory->state(Campaign::class, 'cancelled', [
+    'status_id' => CampaignStatus::STATUS_CANCELLED,
+]);
 
 $factory->state(Campaign::class, 'withoutOpenTracking', static function () {
     return ['is_open_tracking' => false];

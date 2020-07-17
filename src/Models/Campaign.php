@@ -244,6 +244,14 @@ class Campaign extends BaseModel
     }
 
     /**
+     * Whether the campaign has been cancelled.
+     */
+    public function getCancelledAttribute(): bool
+    {
+        return $this->status_id === CampaignStatus::STATUS_CANCELLED;
+    }
+
+    /**
      * Get the number of unique opens for the campaign.
      */
     public function getUniqueOpenCountAttribute(): int
@@ -273,5 +281,13 @@ class Campaign extends BaseModel
     public function getTotalClickCountAttribute(): int
     {
         return (int)$this->clicks()->sum('click_count');
+    }
+
+    /**
+     * Determine whether the campaign can be cancelled.
+     */
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status_id, [CampaignStatus::STATUS_QUEUED, CampaignStatus::STATUS_SENDING], true);
     }
 }

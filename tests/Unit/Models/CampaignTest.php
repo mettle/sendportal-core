@@ -106,6 +106,32 @@ class CampaignTest extends TestCase
         static::assertEquals(15, $campaign->total_click_count);
     }
 
+    /** @test */
+    function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
+    {
+        $campaign = factory(Campaign::class)->state('cancelled')->create();
+
+        static::assertTrue($campaign->cancelled);
+    }
+
+    /** @test */
+    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
+    {
+        /** @var Campaign $campaign */
+        $campaign = factory(Campaign::class)->state('queued')->create();
+
+        static::assertTrue($campaign->canBeCancelled());
+    }
+
+    /** @test */
+    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
+    {
+        /** @var Campaign $campaign */
+        $campaign = factory(Campaign::class)->state('sending')->create();
+
+        static::assertTrue($campaign->canBeCancelled());
+    }
+
     /**
      * @return array
      */

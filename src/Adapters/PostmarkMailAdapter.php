@@ -14,7 +14,7 @@ class PostmarkMailAdapter extends BaseMailAdapter
     /** @var PostmarkClient */
     protected $client;
 
-    public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
     {
         $result = $this->resolveClient()->sendEmail(
             $fromEmail,

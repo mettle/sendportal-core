@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
+use Illuminate\Database\Query\JoinClause;
+use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Services\Content\MergeContent;
@@ -107,8 +110,19 @@ class DispatchMessage
      */
     protected function isValidMessage(Message $message): bool
     {
-        $message->refresh();
+        $data = $message->newQuery()
+            ->toBase()
+            ->select(['messages.sent_at', 'campaigns.status_id'])
+            ->leftJoin('campaigns', static function (JoinClause $join) {
+                  $join->on('messages.source_id', '=', 'campaigns.id')
+                      ->where('messages.source_type', Campaign::class);
+            })
+            ->first();
 
-        return !(bool)$message->sent_at;
+        if( ! $data) {
+            return false;
+        }
+
+        return !(bool)$data->sent_at && $data->status_id !== CampaignStatus::STATUS_CANCELLED;
     }
 }

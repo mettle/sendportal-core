@@ -267,5 +267,6 @@
     "id": "id",
     "last_name": "last_name",
     "subscribers": "subscribers",
-    "The campaign must have a status of draft to be dispatched": "The campaign must have a status of draft to be dispatched"
+    "The campaign must have a status of draft to be dispatched": "The campaign must have a status of draft to be dispatched",
+    "A campaign cannot be updated if its status is not draft": "A campaign cannot be updated if its status is not draft"
 }

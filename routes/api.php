@@ -30,6 +30,7 @@ Route::middleware([
     config('sendportal.throttle_middleware'),
 ])->name('sendportal.api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(static function (Router $apiRouter) {
     $apiRouter->apiResource('campaigns', 'CampaignsController');
+    $apiRouter->post('campaigns/{id}/send', 'CampaignDispatchController@send');
     $apiRouter->apiResource('subscribers', 'SubscribersController');
     $apiRouter->apiResource('segments', 'SegmentsController');
 

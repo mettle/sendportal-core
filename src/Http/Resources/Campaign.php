@@ -34,7 +34,7 @@ class Campaign extends JsonResource
             'save_as_draft' => $this->save_as_draft,
             'scheduled_at' => $this->scheduled_at ? $this->scheduled_at->toDateTimeString() : null,
             'created_at' => $this->created_at->toDateTimeString(),
-            'update_at' => $this->updated_at->toDateTimeString()
+            'updated_at' => $this->updated_at->toDateTimeString()
         ];
     }
 }

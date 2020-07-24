@@ -24,8 +24,8 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
                 'exists:segments,id'
             ],
             'scheduled_at' => [
-                'nullable',
-                'datetime',
+                'required',
+                'date',
             ],
             'save_as_draft' => [
                 'nullable',

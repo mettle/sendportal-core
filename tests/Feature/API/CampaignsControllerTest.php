@@ -77,7 +77,7 @@ class CampaignsControllerTest extends TestCase
             'from_email' => $this->faker->safeEmail,
             'email_service_id' => $emailService->id,
             'content' => $this->faker->sentence,
-            'recipients' => 'send_to_all',
+            'send_to_all' => 1,
         ];
 
         $response = $this->post($route, array_merge($request, ['api_token' => $workspace->owner->api_token]));
@@ -109,7 +109,7 @@ class CampaignsControllerTest extends TestCase
             'from_email' => $this->faker->safeEmail,
             'email_service_id' => $emailService->id,
             'content' => $this->faker->sentence,
-            'recipients' => 'send_to_all',
+            'send_to_all' => 1,
         ];
 
         $response = $this->put($route, $request);

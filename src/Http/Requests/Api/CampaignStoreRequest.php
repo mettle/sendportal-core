@@ -12,12 +12,12 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
     public function rules(): array
     {
         $rules = [
-            'recipients' => [
+            'send_to_all' => [
                 'required',
-                Rule::in(['send_to_all', 'send_to_segments']),
+                'boolean',
             ],
             'segments' => [
-                'required_unless:recipients,send_to_all',
+                'required_unless:send_to_all,1',
                 'array',
             ],
             'segments.*' => [

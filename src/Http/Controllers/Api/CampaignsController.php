@@ -35,9 +35,8 @@ class CampaignsController extends Controller
      */
     public function store(CampaignStoreRequest $request, int $workspaceId): CampaignResource
     {
-        $data = Arr::except($request->validated(), ['recipients', 'segments']);
+        $data = Arr::except($request->validated(), ['segments']);
 
-        $data['send_to_all'] = $request->get('recipients') === 'send_to_all';
         $data['save_as_draft'] = $request->get('save_as_draft') ?? 0;
 
         $campaign = $this->campaigns->store($workspaceId, $data);
@@ -62,9 +61,8 @@ class CampaignsController extends Controller
      */
     public function update(CampaignStoreRequest $request, int $workspaceId, int $id): CampaignResource
     {
-        $data = Arr::except($request->validated(), ['recipients', 'segments']);
+        $data = Arr::except($request->validated(), ['segments']);
 
-        $data['send_to_all'] = $request->get('recipients') === 'send_to_all';
         $data['save_as_draft'] = $request->get('save_as_draft') ?? 0;
 
         $campaign = $this->campaigns->update($workspaceId, $id, $data);

@@ -13,6 +13,9 @@ class MessageOptions
     private $from;
 
     /** @var string */
+    private $fromName;
+
+    /** @var string */
     private $subject;
 
     /** @var MessageTrackingOptions */
@@ -44,6 +47,18 @@ class MessageOptions
     public function setFrom(string $from): self
     {
         $this->from = $from;
+
+        return $this;
+    }
+
+    public function getFromName(): string
+    {
+        return $this->fromName;
+    }
+
+    public function setFromName(string $fromName): self
+    {
+        $this->fromName = $fromName;
 
         return $this;
     }

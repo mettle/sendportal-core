@@ -88,6 +88,7 @@ class DispatchTestMessage
         $messageOptions = (new MessageOptions)
             ->setTo($message->recipient_email)
             ->setFrom($message->from_email)
+            ->setFromName($message->from_name)
             ->setSubject($message->subject)
             ->setTrackingOptions($trackingOptions);
 

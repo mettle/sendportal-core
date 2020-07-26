@@ -23,10 +23,10 @@ class SendgridMailAdapter extends BaseMailAdapter
     /**
      * @throws TypeException
      */
-    public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
     {
         $email = new Mail();
-        $email->setFrom($fromEmail);
+        $email->setFrom($fromName.' <'.$fromEmail.'>');
         $email->setSubject($subject);
         $email->addTo($toEmail);
         $email->addContent('text/html', $content);

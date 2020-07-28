@@ -3,6 +3,7 @@
     ":userName has invited you to join their workspace on SendPortal!": ":userName has invited you to join their workspace on SendPortal!",
     "A fresh verification link has been sent to your email address.": "A fresh verification link has been sent to your email address.",
     "A test email address is required.": "A test email address is required.",
+    "A test email will be sent to :recipient. Do you want to proceeed?": "A test email will be sent to :recipient. Do you want to proceeed?",
     "API Key": "API Key",
     "API Token": "API Token",
     "AWS Access Key": "AWS Access Key",

@@ -40,6 +40,11 @@
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-light">{{ __('Delete') }}</button>
                             </form>
+                            <form action="{{ route('sendportal.email_services.test', $service->id) }}" method="POST"
+                                style="display: inline" onsubmit="return askConfirm()">
+                                @csrf
+                                <button class="btn btn-sm btn-light">{{ __('Test') }}</button>
+                            </form>
                         </td>
                     </tr>
                 @empty
@@ -54,3 +59,11 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        function askConfirm() {
+            return confirm("{{ __('A test email will be sent to :recipient. Do you want to proceeed?', ['recipient' => auth()->user()->email]) }}");
+        }
+    </script>
+@endpush

@@ -7,9 +7,11 @@ namespace Tests\Feature\EmailServices;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use Mockery;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
+use Sendportal\Base\Services\Messages\DispatchTestMessage;
 use Tests\TestCase;
 
 class EmailServicesControllerTest extends TestCase
@@ -128,6 +130,32 @@ class EmailServicesControllerTest extends TestCase
         $this->assertDatabaseMissing('email_services', [
             'id' => $emailService->id
         ]);
+    }
+
+    /** @test */
+    function an_email_service_can_be_tested_by_an_authenticated_user()
+    {
+        // given
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $emailService = factory(EmailService::class)->create(['workspace_id' => $workspace->id]);
+
+        $this->instance(DispatchTestMessage::class, Mockery::mock(DispatchTestMessage::class, function ($mock) use ($workspace, $emailService, $user) {
+            $mock->shouldReceive('handleService')
+                ->once()
+                ->withArgs(function ($workspaceId, $targetService, $recipient) use ($workspace, $emailService, $user) {
+                    return $workspaceId === $workspace->id
+                        && $targetService->id === $emailService->id
+                        && $recipient === $user->email;
+                })
+                ->andReturn(1);
+        }));
+
+        // when
+        $this->actingAs($user)
+            ->from(route('sendportal.email_services.index'))
+            ->post(route('sendportal.email_services.test', $emailService->id))
+            ->assertRedirect(route('sendportal.email_services.index'))
+            ->assertSessionHas('success');
     }
 
     /** @test */

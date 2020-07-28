@@ -43,6 +43,17 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
+    function tracking_can_be_turned_off_entirely()
+    {
+        // given
+        $trackingOptions = (new MessageTrackingOptions)->snooze();
+
+        // then
+        $this->assertFalse($trackingOptions->isClickTracking());
+        $this->assertFalse($trackingOptions->isOpenTracking());
+    }
+
+    /** @test */
     function open_tracking_can_be_turned_off_from_a_campaign()
     {
         // given

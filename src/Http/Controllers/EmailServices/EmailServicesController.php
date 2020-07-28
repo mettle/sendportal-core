@@ -8,10 +8,12 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Postmark\Models\PostmarkException;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\EmailServiceStoreRequest;
 use Sendportal\Base\Http\Requests\EmailServiceUpdateRequest;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
+use Sendportal\Base\Services\Messages\DispatchTestMessage;
 
 class EmailServicesController extends Controller
 {
@@ -100,6 +102,33 @@ class EmailServicesController extends Controller
         $this->emailServices->destroy(auth()->user()->currentWorkspace()->id, $emailServiceId);
 
         return redirect()->route('sendportal.email_services.index');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function test(int $emailServiceId, DispatchTestMessage $dispatchTestMessage): RedirectResponse
+    {
+        $emailService = $this->emailServices->find(auth()->user()->currentWorkspace()->id, $emailServiceId);
+
+        try {
+            $messageId = $dispatchTestMessage->testService(auth()->user()->currentWorkspace()->id, $emailService, auth()->user()->email);
+
+            if (!$messageId) {
+                return redirect()
+                    ->back()
+                    ->with(['error', __('Failed to dispatch test email.')]);
+            }
+
+            return redirect()
+                ->back()
+                ->with(['success' => __('The test email has been dispatched.')]);
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Response: ' . $e->getMessage());
+        }
+
     }
 
     public function emailServicesTypeAjax($emailServiceTypeId): JsonResponse

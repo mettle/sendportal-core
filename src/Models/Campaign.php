@@ -20,6 +20,10 @@ class Campaign extends BaseModel
 
     /** @var array */
     protected $casts = [
+        'status_id' => 'int',
+        'workspace_id' => 'int',
+        'template_id' => 'int',
+        'email_service_id' => 'int',
         'is_open_tracking' => 'bool',
         'is_click_tracking' => 'bool'
     ];

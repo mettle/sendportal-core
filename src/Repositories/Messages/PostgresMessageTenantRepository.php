@@ -15,12 +15,12 @@ class PostgresMessageTenantRepository extends BaseMessageTenantRepository
     public function countUniqueOpensPerPeriod(int $workspaceId, string $sourceType, int $sourceId, int $intervalInSeconds): Collection
     {
         return DB::table('messages')
-            ->select(DB::raw("COUNT(*) as open_count, MIN(opened_at) as opened_at, round(extract('epoch' from opened_at) / $intervalInSeconds) * $intervalInSeconds as period_start"))
+            ->selectRaw("COUNT(*) as open_count, MIN(opened_at) as opened_at, to_char(to_timestamp(floor(extract('epoch' from opened_at) / $intervalInSeconds) * $intervalInSeconds),'YYYY-MM-DD HH24:MI:SS') as period_start")
             ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
             ->where('source_id', $sourceId)
             ->whereNotNull('opened_at')
-            ->groupBy(DB::raw("round(extract('epoch' from opened_at) / " . $intervalInSeconds . ")"))
+            ->groupByRaw("floor(extract('epoch' from opened_at) / $intervalInSeconds)")
             ->orderBy('opened_at')
             ->get();
     }

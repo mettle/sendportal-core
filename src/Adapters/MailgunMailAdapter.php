@@ -23,7 +23,7 @@ class MailgunMailAdapter extends BaseMailAdapter
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
     {
         $parameters = [
-            'from' => $fromEmail,
+            'from' => "{$fromName} <{$fromEmail}>",
             'to' => $toEmail,
             'subject' => $subject,
             'html' => $content,

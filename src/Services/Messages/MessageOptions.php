@@ -11,7 +11,7 @@ class MessageOptions
 
     /** @var string */
     private $from;
-    
+
     /** @var string */
     private $fromName;
 
@@ -50,7 +50,7 @@ class MessageOptions
 
         return $this;
     }
-    
+
     /**
      * @return string
      */
@@ -59,7 +59,7 @@ class MessageOptions
         return $this->fromName;
     }
 
-    public function setFrom(string $fromName): self
+    public function setFromName(string $fromName): self
     {
         $this->fromName = $fromName;
 

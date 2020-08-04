@@ -47,7 +47,7 @@ class EmailServicesController extends Controller
     {
         $emailServiceType = $this->emailServices->findType($request->type_id);
 
-        $settings = $request->get('settings');
+        $settings = $request->get('settings', []);
 
         $this->emailServices->store(auth()->user()->currentWorkspace()->id, [
             'name' => $request->name,

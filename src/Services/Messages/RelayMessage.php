@@ -27,7 +27,7 @@ class RelayMessage
     {
         return $this->mailAdapter->adapter($emailService)
             ->send(
-                $messageOptions->getFrom(),
+                $messageOptions->getFromEmail(),
                 $messageOptions->getFromName(),
                 $messageOptions->getTo(),
                 $messageOptions->getSubject(),

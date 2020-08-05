@@ -7,8 +7,8 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 use Sendportal\Base\Models\Campaign;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class CampaignsControllerTest extends TestCase
@@ -23,22 +23,17 @@ class CampaignsControllerTest extends TestCase
 
         $campaign = $this->createCampaign($workspace, $emailService);
 
-        $route = route('sendportal.api.campaigns.index', [
-            'workspaceId' => $workspace->id,
-            'api_token' => $workspace->owner->api_token,
-        ]);
-
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => [
-                Arr::only($campaign->toArray(), ['name'])
-            ],
-        ];
-
-        $response->assertJson($expected);
+        $this
+            ->getJson(route('sendportal.api.campaigns.index', [
+                'workspaceId' => $workspace->id,
+                'api_token' => $workspace->owner->api_token,
+            ]))
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    Arr::only($campaign->toArray(), ['name'])
+                ]
+            ]);
     }
 
     /** @test */
@@ -48,29 +43,22 @@ class CampaignsControllerTest extends TestCase
 
         $campaign = $this->createCampaign($workspace, $emailService);
 
-        $route = route('sendportal.api.campaigns.show', [
-            'workspaceId' => $workspace->id,
-            'campaign' => $campaign->id,
-            'api_token' => $workspace->owner->api_token,
-        ]);
-
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => Arr::only($campaign->toArray(), ['name']),
-        ];
-
-        $response->assertJson($expected);
+        $this
+            ->getJson(route('sendportal.api.campaigns.show', [
+                'workspaceId' => $workspace->id,
+                'campaign' => $campaign->id,
+                'api_token' => $workspace->owner->api_token,
+            ]))
+            ->assertOk()
+            ->assertJson([
+                'data' => Arr::only($campaign->toArray(), ['name']),
+            ]);
     }
 
     /** @test */
     public function a_new_campaign_can_be_added()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
-
-        $route = route('sendportal.api.campaigns.store', $workspace->id);
 
         $request = [
             'name' => $this->faker->colorName,
@@ -83,11 +71,15 @@ class CampaignsControllerTest extends TestCase
             'scheduled_at' => now(),
         ];
 
-        $response = $this->post($route, array_merge($request, ['api_token' => $workspace->owner->api_token]));
+        $this
+            ->postJson(
+                route('sendportal.api.campaigns.store', $workspace->id),
+                array_merge($request, ['api_token' => $workspace->owner->api_token])
+            )
+            ->assertStatus(Response::HTTP_CREATED)
+            ->assertJson(['data' => $request]);
 
-        $response->assertStatus(201);
         $this->assertDatabaseHas('campaigns', $request);
-        $response->assertJson(['data' => $request]);
     }
 
     /** @test */
@@ -95,17 +87,9 @@ class CampaignsControllerTest extends TestCase
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
-        $campaign = factory(Campaign::class)->states('draft')->create(
-            [
-                'workspace_id' => $workspace->id,
-                'email_service_id' => $emailService->id,
-            ]
-        );
-
-        $route = route('sendportal.api.campaigns.update', [
-            'workspaceId' => $workspace->id,
-            'campaign' => $campaign->id,
-            'api_token' => $workspace->owner->api_token,
+        $campaign = factory(Campaign::class)->states('draft')->create([
+            'workspace_id' => $workspace->id,
+            'email_service_id' => $emailService->id,
         ]);
 
         $request = [
@@ -119,12 +103,17 @@ class CampaignsControllerTest extends TestCase
             'scheduled_at' => now(),
         ];
 
-        $response = $this->put($route, $request);
+        $this
+            ->putJson(route('sendportal.api.campaigns.update', [
+                'workspaceId' => $workspace->id,
+                'campaign' => $campaign->id,
+                'api_token' => $workspace->owner->api_token,
+            ]), $request)
+            ->assertOk()
+            ->assertJson(['data' => $request]);
 
-        $response->assertStatus(200);
         $this->assertDatabaseMissing('campaigns', $campaign->toArray());
         $this->assertDatabaseHas('campaigns', $request);
-        $response->assertJson(['data' => $request]);
     }
 
     /** @test */
@@ -134,12 +123,6 @@ class CampaignsControllerTest extends TestCase
 
         $campaign = $this->createCampaign($workspace, $emailService);
 
-        $route = route('sendportal.api.campaigns.update', [
-            'workspaceId' => $workspace->id,
-            'campaign' => $campaign->id,
-            'api_token' => $workspace->owner->api_token,
-        ]);
-
         $request = [
             'name' => $this->faker->word,
             'subject' => $this->faker->word,
@@ -151,12 +134,18 @@ class CampaignsControllerTest extends TestCase
             'scheduled_at' => now(),
         ];
 
-        $this->expectException(ValidationException::class);
-
-        $response = $this->put($route, $request);
+        $this
+            ->putJson(route('sendportal.api.campaigns.update', [
+                'workspaceId' => $workspace->id,
+                'campaign' => $campaign->id,
+                'api_token' => $workspace->owner->api_token,
+            ]), $request)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                'status_id' => 'A campaign cannot be updated if its status is not draft'
+            ]);
 
         $this->assertDatabaseMissing('campaigns', $request);
         $this->assertDatabaseHas('campaigns', $campaign->toArray());
-        $response->assertJson(['data' => ['message' => __('A campaign cannot be updated if its status is not draft')]]);
     }
 }

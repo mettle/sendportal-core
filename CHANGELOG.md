@@ -3,6 +3,7 @@
 ## 1.0.6 - 2020-08-07
 
 - Add GH action for php-cs  [#35](https://github.com/mettle/sendportal-core/pull/35))
+- Add Campaign Endpoints to API  [#40](https://github.com/mettle/sendportal-core/pull/40))
 - Uniform mail adapters send method  [#51](https://github.com/mettle/sendportal-core/pull/51))
 - Add Sqlite support and defaults the testsuite to use the sqlite database  [#52](https://github.com/mettle/sendportal-core/pull/52))
 - Fix count unique opens per period in Postgres  [#53](https://github.com/mettle/sendportal-core/pull/53))
@@ -24,6 +25,7 @@
 - added CHANGELOG.md [#39](https://github.com/mettle/sendportal-core/pull/39))
 - added API for templates [#38](https://github.com/mettle/sendportal-core/pull/38))
 - add validation for deleting templates that are in use ([#37](https://github.com/mettle/sendportal-core/pull/37))
+- add Template API endpoints ([#38](https://github.com/mettle/sendportal-core/pull/38))
 - added ability to delete segments ([#36](https://github.com/mettle/sendportal-core/pull/36))
 - handle null campaign content ([#34](https://github.com/mettle/sendportal-core/pull/34))
 

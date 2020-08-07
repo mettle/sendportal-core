@@ -21,7 +21,10 @@ class Campaign extends BaseModel
     /** @var array */
     protected $casts = [
         'is_open_tracking' => 'bool',
-        'is_click_tracking' => 'bool'
+        'is_click_tracking' => 'bool',
+        'scheduled_at' => 'datetime',
+        'save_as_draft' => 'bool',
+        'send_to_all' => 'bool',
     ];
 
     /**

@@ -10,7 +10,10 @@ class MessageOptions
     private $to;
 
     /** @var string */
-    private $from;
+    private $fromEmail;
+
+    /** @var string */
+    private $fromName;
 
     /** @var string */
     private $subject;
@@ -36,14 +39,29 @@ class MessageOptions
     /**
      * @return string
      */
-    public function getFrom(): string
+    public function getFromEmail(): string
     {
-        return $this->from;
+        return $this->fromEmail;
     }
 
-    public function setFrom(string $from): self
+    public function setFromEmail(string $fromEmail): self
     {
-        $this->from = $from;
+        $this->fromEmail = $fromEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromName(): string
+    {
+        return $this->fromName;
+    }
+
+    public function setFromName(string $fromName): self
+    {
+        $this->fromName = $fromName;
 
         return $this;
     }

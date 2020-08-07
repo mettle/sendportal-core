@@ -15,7 +15,7 @@ class SegmentsControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    public function a_list_of_a_workspaces_segments_can_be_retreived()
+    public function a_list_of_a_workspaces_segments_can_be_retrieved()
     {
         $user = $this->createUserWithWorkspace();
 
@@ -40,7 +40,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_single_segment_can_be_retreived()
+    public function a_single_segment_can_be_retrieved()
     {
         $user = $this->createUserWithWorkspace();
 

@@ -48,27 +48,36 @@ class CampaignCancellationController extends Controller
         $campaign = $this->campaignRepository->find($this->currentWorkspace()->id, $campaignId, ['status']);
         $originalStatus = $campaign->status;
 
-        if( ! $campaign->canBeCancelled())
-        {
+        if( ! $campaign->canBeCancelled()) {
             throw ValidationException::withMessages([
                 'campaignStatus' => "{$campaign->status->name} campaigns cannot be cancelled.",
+            ])->redirectTo(route('sendportal.campaigns.index'));
+        }
+
+        if($campaign->save_as_draft && ! $campaign->allDraftsCreated()) {
+            throw ValidationException::withMessages([
+                'messagesPendingDraft' => 'Campaigns that save draft messages cannot be cancelled until all drafts have been created.',
             ])->redirectTo(route('sendportal.campaigns.index'));
         }
 
         $this->campaignRepository->cancelCampaign($campaign);
 
         return redirect()->route('sendportal.campaigns.index')->with([
-            'success' => $this->getSuccessMessage($originalStatus),
+            'success' =>$this->getSuccessMessage($originalStatus, $campaign),
         ]);
     }
 
-    private function getSuccessMessage(CampaignStatus $campaignStatus): string
+    private function getSuccessMessage(CampaignStatus $campaignStatus, Campaign $campaign): string
     {
-        if($campaignStatus->id === CampaignStatus::STATUS_QUEUED)
-        {
+        if($campaignStatus->id === CampaignStatus::STATUS_QUEUED) {
             return "The queued campaign was cancelled successfully.";
         }
 
-        return "The campaign was cancelled whilst being processed.";
+        if($campaign->save_as_draft) {
+            return "The campaign was cancelled and any remaining draft messages were deleted.";
+        }
+
+        $messageCounts = $this->campaignRepository->getCounts(collect($campaign->id), $campaign->workspace_id)[$campaign->id];
+        return "The campaign was cancelled whilst being processed (~{$messageCounts->sent}/{$campaign->active_subscriber_count} dispatched).";
     }
 }

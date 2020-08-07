@@ -26,6 +26,15 @@
             <p>
                 {!! __('Are you sure that you want to cancel the <b>:name</b> campaign?', ['name' => $campaign->name]) !!}
             </p>
+
+            <p>
+                @if($campaign->save_as_draft)
+                    {!! __('All draft messages will be permanently deleted.') !!}
+                @else
+                    {!! __('Any messages that have not yet been dispatched will not be delivered.') !!}
+                @endif
+            </p>
+
             <form action="{{ route('sendportal.campaigns.cancel', $campaign->id) }}" method="post">
                 @csrf
                 <a href="{{ route('sendportal.campaigns.index') }}" class="btn btn-md btn-light">{{ __('Go Back') }}</a>

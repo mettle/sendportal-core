@@ -21,7 +21,7 @@ class SesMailAdapter extends BaseMailAdapter
     /**
      * @throws BindingResolutionException
      */
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
         // TODO(david): It isn't clear whether it is possible to set per-message tracking for SES.
 

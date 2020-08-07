@@ -82,13 +82,17 @@
                 <div class="form-group row form-group-recipients">
                     <div class="col-sm-12">
                         <select id="id-field-recipients" class="form-control" name="recipients">
-                            <option value="send_to_all" {{ old('recipients') == 'send_to_all' ? 'selected' : '' }}>{{ __('All subscribers') }} ({{ $subscriberCount }})</option>
-                            <option value="send_to_segments" {{ old('recipients') == 'send_to_segments' ? 'selected' : '' }}>{{ __('Select Segments') }}</option>
+                            <option value="send_to_all" {{ (old('recipients') == 'send_to_all' || $campaign->send_to_all) ? 'selected' : '' }}>
+                                {{ __('All subscribers') }} ({{ $subscriberCount }})
+                            </option>
+                            <option value="send_to_segments" {{ (old('recipients') == 'send_to_segments' || ! $campaign->send_to_all) ? 'selected' : '' }}>
+                                {{ __('Select Segments') }}
+                            </option>
                         </select>
                     </div>
                 </div>
 
-                <div class="segments-container {{ old('recipients') == 'send_to_segments' ? '' : 'hide' }}">
+                <div class="segments-container {{ (old('recipients') == 'send_to_segments' || ! $campaign->send_to_all) ? '' : 'hide' }}">
                     @forelse($segments as $segment)
                         <div class="checkbox">
                             <label>
@@ -105,8 +109,12 @@
                 <div class="form-group row form-group-schedule">
                     <div class="col-sm-12">
                         <select id="id-field-schedule" class="form-control" name="schedule">
-                            <option value="now">{{ __('Dispatch now') }}</option>
-                            <option value="scheduled">{{ __('Dispatch at a specific time') }}</option>
+                            <option value="now" {{ old('schedule') === 'now' || is_null($campaign->scheduled_at) ? 'selected' : '' }}>
+                                {{ __('Dispatch now') }}
+                            </option>
+                            <option value="scheduled" {{ old('schedule') === 'now' || $campaign->scheduled_at ? 'selected' : '' }}>
+                                {{ __('Dispatch at a specific time') }}
+                            </option>
                         </select>
                     </div>
                 </div>

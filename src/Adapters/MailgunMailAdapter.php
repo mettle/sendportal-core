@@ -20,10 +20,10 @@ class MailgunMailAdapter extends BaseMailAdapter
         'EU' => 'https://api.eu.mailgun.net/v3'
     ];
 
-    public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
         $parameters = [
-            'from' => $fromEmail,
+            'from' => "{$fromName} <{$fromEmail}>",
             'to' => $toEmail,
             'subject' => $subject,
             'html' => $content,

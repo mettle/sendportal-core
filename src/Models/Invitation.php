@@ -14,6 +14,12 @@ class Invitation extends Model
 
     protected $guarded = [];
 
+    /** @var array */
+    protected $casts = [
+        'user_id' => 'int',
+        'workspace_id' => 'int',
+    ];
+
     public function getExpiresAtAttribute(): Carbon
     {
         return $this->created_at->addWeek();

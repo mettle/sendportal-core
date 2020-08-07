@@ -146,6 +146,6 @@ class CampaignsControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseMissing('campaigns', $request);
-        $this->assertDatabaseHas('campaigns', $campaign->toArray());
+        $this->assertEquals($campaign->updated_at, $campaign->fresh()->updated_at);
     }
 }

@@ -15,7 +15,7 @@ class WorkspaceUserControllerTest extends TestCase
      * @test
      * @group workspace_user_test
      */
-    function an_unauthenticated_user_cannot_view_the_workspace_user_index()
+    public function an_unauthenticated_user_cannot_view_the_workspace_user_index()
     {
         $response = $this->get(route('sendportal.users.index'));
 
@@ -27,7 +27,7 @@ class WorkspaceUserControllerTest extends TestCase
      * @test
      * @group workspace_user_test
      */
-    function users_cannot_view_workspace_users_for_a_workspace_they_do_not_own()
+    public function users_cannot_view_workspace_users_for_a_workspace_they_do_not_own()
     {
         $this->createUserAndLogin(['workspace-member']);
 
@@ -40,7 +40,7 @@ class WorkspaceUserControllerTest extends TestCase
      * @test
      * @group workspace_user_test
      */
-    function users_can_view_workspace_users_for_a_workspace_they_do_own()
+    public function users_can_view_workspace_users_for_a_workspace_they_do_own()
     {
         $user = $this->createUserWithWorkspace();
 
@@ -55,7 +55,7 @@ class WorkspaceUserControllerTest extends TestCase
      * @test
      * @group workspace_user_test
      */
-    function workspace_owners_can_remove_users_from_their_workspace()
+    public function workspace_owners_can_remove_users_from_their_workspace()
     {
         $user = $this->createUserWithWorkspace();
         $workspace = $user->currentWorkspace();
@@ -74,7 +74,7 @@ class WorkspaceUserControllerTest extends TestCase
      * @test
      * @group workspace_user_test
      */
-    function workspace_owners_cannot_remove_themselves_from_their_workspace()
+    public function workspace_owners_cannot_remove_themselves_from_their_workspace()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
 
@@ -90,7 +90,7 @@ class WorkspaceUserControllerTest extends TestCase
      * @test
      * @group workspace_user_test
      */
-    function only_workspace_owners_can_remove_users_from_a_workspace()
+    public function only_workspace_owners_can_remove_users_from_a_workspace()
     {
         $user = $this->createUserAndLogin(['workspace-member']);
 
@@ -102,5 +102,4 @@ class WorkspaceUserControllerTest extends TestCase
 
         $response->assertStatus(404);
     }
-
 }

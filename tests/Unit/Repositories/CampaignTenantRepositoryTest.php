@@ -4,8 +4,8 @@ namespace Tests\Unit\Repositories;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
@@ -17,7 +17,7 @@ class CampaignTenantRepositoryTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
+    public function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
         $campaign = $this->createCampaign($workspace, $emailService);
@@ -41,7 +41,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
+    public function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
         $campaign = $this->createCampaign($workspace, $emailService);
@@ -52,7 +52,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
+    public function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
         $campaign = $this->createCampaign($workspace, $emailService);
@@ -75,7 +75,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
+    public function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
         $campaign = $this->createCampaign($workspace, $emailService);

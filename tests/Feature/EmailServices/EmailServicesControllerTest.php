@@ -18,7 +18,7 @@ class EmailServicesControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_is_accessible_by_authenticated_users()
+    public function the_index_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -33,7 +33,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_provider_create_form_is_accessible_to_authenticated_users()
+    public function the_provider_create_form_is_accessible_to_authenticated_users()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -46,7 +46,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function new_email_services_can_be_created_by_authenticated_users()
+    public function new_email_services_can_be_created_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -73,7 +73,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_email_service_edit_view_is_accessible_by_authenticated_users()
+    public function the_email_service_edit_view_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -87,7 +87,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function an_email_service_is_updateable_by_an_authenticated_user()
+    public function an_email_service_is_updateable_by_an_authenticated_user()
     {
         $this->withoutExceptionHandling();
         // given
@@ -114,7 +114,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function an_email_service_can_be_deleted_by_an_authenticated_user()
+    public function an_email_service_can_be_deleted_by_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -131,7 +131,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function email_services_require_the_correct_settings_to_be_saved()
+    public function email_services_require_the_correct_settings_to_be_saved()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -151,7 +151,7 @@ class EmailServicesControllerTest extends TestCase
     }
 
     /** @test */
-    function email_services_cannot_be_deleted_if_they_are_being_used()
+    public function email_services_cannot_be_deleted_if_they_are_being_used()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();

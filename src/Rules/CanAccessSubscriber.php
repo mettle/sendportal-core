@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Rules;
 
-use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Collection;
+use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 
 class CanAccessSubscriber implements Rule
 {

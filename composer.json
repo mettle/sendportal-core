@@ -15,6 +15,7 @@
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.0|^7.0",
         "mailgun/mailgun-php": "^3.0",
+        "mailjet/mailjet-apiv3-php": "^1.4",
         "nyholm/psr7": "^1.2",
         "rap2hpoutre/fast-excel": "^1.7",
         "sendgrid/sendgrid": "^7.3",

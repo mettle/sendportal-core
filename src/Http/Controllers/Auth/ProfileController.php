@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Auth;
 
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;

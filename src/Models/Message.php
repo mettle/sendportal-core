@@ -18,12 +18,16 @@ class Message extends BaseModel
 
     /** @var array */
     public $dates = [
-        'created_at',
-        'updated_at',
+        'queued_at',
         'sent_at',
         'delivered_at',
+        'bounced_at',
+        'unsubscribed_at',
+        'complained_at',
         'opened_at',
         'clicked_at',
+        'created_at',
+        'updated_at',
     ];
 
     // We can't use boolean fields on this model because we have multiple points to update from the controller.

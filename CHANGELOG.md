@@ -1,5 +1,24 @@
 # Sendportal Core
 
+## 1.0.6 - 2020-08-07
+
+- Add GH action for php-cs  [#35](https://github.com/mettle/sendportal-core/pull/35))
+- Uniform mail adapters send method  [#51](https://github.com/mettle/sendportal-core/pull/51))
+- Add Sqlite support and defaults the testsuite to use the sqlite database  [#52](https://github.com/mettle/sendportal-core/pull/52))
+- Fix count unique opens per period in Postgres  [#53](https://github.com/mettle/sendportal-core/pull/53))
+- Bump elliptic from 6.5.2 to 6.5.3  [#55](https://github.com/mettle/sendportal-core/pull/55))
+- add from name to outgoing emails  [#56](https://github.com/mettle/sendportal-core/pull/56))
+- add mailjet support  [#57](https://github.com/mettle/sendportal-core/pull/57))
+
+## 1.0.5 - 2020-08-03
+
+- bump lodash version  [#44](https://github.com/mettle/sendportal-core/pull/44))
+- fix primary key when chunking on segments  [#54](https://github.com/mettle/sendportal-core/pull/54))
+
+## 1.0.4 - 2020-07-21
+
+- fix SES adapter [#42](https://github.com/mettle/sendportal-core/pull/42))
+
 ## 1.0.3 - 2020-07-11
 
 - added CHANGELOG.md [#39](https://github.com/mettle/sendportal-core/pull/39))

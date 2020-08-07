@@ -20,7 +20,7 @@ class MailjetAdapter extends BaseMailAdapter
         'US' => 'api.us.mailjet.com'
     ];
 
-    public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
         $response = $this->resolveClient()->post(Resources::$Email, [
             'body' => [
@@ -28,7 +28,7 @@ class MailjetAdapter extends BaseMailAdapter
                     [
                         'From' => [
                             'Email' => $fromEmail,
-                            // 'Name' => ''
+                            'Name' => $fromName
                         ],
                         'To' => [
                             [

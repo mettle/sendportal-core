@@ -130,7 +130,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function a_subscriber_in_a_segment_can_be_deleted()
+    public function a_subscriber_in_a_segment_can_be_deleted()
     {
         // given
         $user = $this->createUserWithWorkspace();

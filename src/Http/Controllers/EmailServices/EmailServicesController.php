@@ -10,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\EmailServiceRequest;
-use Sendportal\Base\Http\Requests\EmailServiceUpdateRequest;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 
 class EmailServicesController extends Controller

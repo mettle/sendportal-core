@@ -15,7 +15,7 @@ class SubscribersControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_of_subscribers_is_accessible_to_authenticated_users()
+    public function the_index_of_subscribers_is_accessible_to_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -30,7 +30,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_subscriber_create_form_is_accessilbe_to_authenticated_users()
+    public function the_subscriber_create_form_is_accessilbe_to_authenticated_users()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -43,7 +43,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function new_subscribers_can_be_created_by_authenticated_users()
+    public function new_subscribers_can_be_created_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -67,7 +67,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_edit_view_is_accessible_by_authenticated_users()
+    public function the_edit_view_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -81,7 +81,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function a_subscriber_is_updateable_by_an_authenticated_user()
+    public function a_subscriber_is_updateable_by_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -108,7 +108,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_show_view_is_accessible_by_an_authenticated_user()
+    public function the_show_view_is_accessible_by_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();

@@ -14,7 +14,7 @@ class MessagesControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function a_guest_cannot_see_the_index_of_messages()
+    public function a_guest_cannot_see_the_index_of_messages()
     {
         // given
         factory(Message::class, 3)->create(['sent_at' => now()]);
@@ -27,7 +27,7 @@ class MessagesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_index_of_sent_messages_is_accessible_to_an_authenticated_user()
+    public function the_index_of_sent_messages_is_accessible_to_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -43,7 +43,7 @@ class MessagesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_index_of_draft_messages_is_accessible_to_an_authenticated_user()
+    public function the_index_of_draft_messages_is_accessible_to_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -59,7 +59,7 @@ class MessagesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_draft_message_can_be_viewed_by_an_authenticated_user()
+    public function a_draft_message_can_be_viewed_by_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -80,6 +80,4 @@ class MessagesControllerTest extends TestCase
         // then
         $response->assertOk();
     }
-
-
 }

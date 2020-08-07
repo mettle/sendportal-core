@@ -24,7 +24,7 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_get_the_grow_chart_data()
+    public function it_should_get_the_grow_chart_data()
     {
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
 
@@ -38,7 +38,7 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
+    public function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
     {
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
 

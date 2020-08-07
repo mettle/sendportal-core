@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SubscriberTest extends TestCase
@@ -14,7 +14,7 @@ class SubscriberTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function it_has_many_messages()
+    public function it_has_many_messages()
     {
         $subscriber = factory(Subscriber::class)->create();
         [$campaignOne, $messageOne] = $this->createCampaignAndMessage($subscriber);

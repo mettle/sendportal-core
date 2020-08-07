@@ -24,8 +24,7 @@ class CampaignDispatchController extends Controller
     public function __construct(
         CampaignTenantRepositoryInterface $campaigns,
         QuotaServiceInterface $quotaService
-    )
-    {
+    ) {
         $this->campaigns = $campaigns;
         $this->quotaService = $quotaService;
     }

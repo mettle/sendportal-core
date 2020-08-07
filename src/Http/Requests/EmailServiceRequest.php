@@ -28,7 +28,7 @@ class EmailServiceRequest extends FormRequest
             'name' => ['required']
         ];
 
-        if(!$this->route('id')) {
+        if (!$this->route('id')) {
             $rules['type_id'] = ['required', 'integer'];
         }
 

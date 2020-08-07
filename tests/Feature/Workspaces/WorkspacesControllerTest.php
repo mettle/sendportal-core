@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Workspaces;
 
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
-use Sendportal\Base\Services\Workspaces\AddWorkspaceMember;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
+use Sendportal\Base\Services\Workspaces\AddWorkspaceMember;
 use Tests\TestCase;
 
 class WorkspacesControllerTest extends TestCase
@@ -17,7 +17,7 @@ class WorkspacesControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function a_user_can_see_an_index_of_their_workspaces()
+    public function a_user_can_see_an_index_of_their_workspaces()
     {
         // given
         $user = factory(User::class)->create();
@@ -39,7 +39,7 @@ class WorkspacesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_user_can_create_a_new_workspace()
+    public function a_user_can_create_a_new_workspace()
     {
         // given
         $user = $this->createUserWithWorkspace();

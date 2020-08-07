@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
 use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Services\Workspaces\AddWorkspaceMember;
 use Tests\TestCase;
 
@@ -19,7 +19,7 @@ class WorkspaceInvitationsControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function an_invitation_can_be_sent_to_a_new_user()
+    public function an_invitation_can_be_sent_to_a_new_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -45,7 +45,7 @@ class WorkspaceInvitationsControllerTest extends TestCase
     }
 
     /** @test */
-    function an_invitation_can_be_sent_to_an_existing_user()
+    public function an_invitation_can_be_sent_to_an_existing_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -71,7 +71,7 @@ class WorkspaceInvitationsControllerTest extends TestCase
     }
 
     /** @test */
-    function non_owners_cannot_invite_new_members()
+    public function non_owners_cannot_invite_new_members()
     {
         // given
         $user = factory(User::class)->create();
@@ -99,7 +99,7 @@ class WorkspaceInvitationsControllerTest extends TestCase
     }
 
     /** @test */
-    function invitations_can_be_retracted()
+    public function invitations_can_be_retracted()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();

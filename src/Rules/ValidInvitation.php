@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Rules;
 
-use Sendportal\Base\Traits\ChecksInvitations;
 use Illuminate\Contracts\Validation\Rule;
+use Sendportal\Base\Traits\ChecksInvitations;
 
 class ValidInvitation implements Rule
 {

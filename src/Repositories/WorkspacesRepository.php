@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories;
 
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 
 class WorkspacesRepository extends BaseEloquentRepository
 {

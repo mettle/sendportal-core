@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
-use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\EmailService;
-use Sendportal\Base\Services\Content\MergeContent;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
+use Sendportal\Base\Services\Content\MergeContent;
 
 class DispatchMessage
 {

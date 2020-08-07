@@ -2,11 +2,11 @@
 
 namespace Sendportal\Base\Services\Campaigns;
 
+use Illuminate\Pipeline\Pipeline;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Pipelines\Campaigns\CompleteCampaign;
 use Sendportal\Base\Pipelines\Campaigns\CreateMessages;
 use Sendportal\Base\Pipelines\Campaigns\StartCampaign;
-use Illuminate\Pipeline\Pipeline;
 
 class CampaignDispatchService
 {

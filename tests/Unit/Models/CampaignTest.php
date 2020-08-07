@@ -107,36 +107,6 @@ class CampaignTest extends TestCase
     }
 
     /**
-     * @return array
-     */
-    protected function createUserWithWorkspaceAndEmailService(): array
-    {
-        $user = factory(User::class)->create();
-        $workspace = factory(Workspace::class)->create([
-            'owner_id' => $user->id,
-        ]);
-        $emailService = factory(EmailService::class)->create([
-            'workspace_id' => $workspace->id,
-        ]);
-
-        return [$workspace, $emailService];
-    }
-
-    /**
-     * @param Workspace $workspace
-     * @param EmailService $emailService
-     *
-     * @return Campaign
-     */
-    protected function createCampaign(Workspace $workspace, EmailService $emailService): Campaign
-    {
-        return factory(Campaign::class)->states(['withContent', 'sent'])->create([
-            'workspace_id' => $workspace->id,
-            'email_service_id' => $emailService->id,
-        ]);
-    }
-
-    /**
      * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $quantity

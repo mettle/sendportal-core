@@ -10,7 +10,8 @@ use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
 
-trait SendportalTestSupportTrait {
+trait SendportalTestSupportTrait
+{
 
     /**
      * Create a user with attached workspace.

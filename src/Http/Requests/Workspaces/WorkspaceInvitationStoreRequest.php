@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Requests\Workspaces;
 
-use Sendportal\Base\Models\Workspace;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
+use Sendportal\Base\Models\Workspace;
 
 class WorkspaceInvitationStoreRequest extends FormRequest
 {

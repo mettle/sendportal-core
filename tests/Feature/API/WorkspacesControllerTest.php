@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API;
 
-use Illuminate\Support\Arr;
-use Sendportal\Base\Models\Workspace;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
+use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
 
 class WorkspacesControllerTest extends TestCase
@@ -16,7 +16,7 @@ class WorkspacesControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function can_retrieve_paginated_list_of_the_users_workspaces()
+    public function can_retrieve_paginated_list_of_the_users_workspaces()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -37,7 +37,7 @@ class WorkspacesControllerTest extends TestCase
     }
 
     /** @test */
-    function only_the_workspaces_for_the_current_user_are_retrieved()
+    public function only_the_workspaces_for_the_current_user_are_retrieved()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();

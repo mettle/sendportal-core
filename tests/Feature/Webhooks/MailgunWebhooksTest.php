@@ -6,9 +6,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
+use Sendportal\Base\Models\Message;
 use Tests\TestCase;
 
 class MailgunWebhooksTest extends TestCase

@@ -149,7 +149,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
+    public function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
     {
         $user = $this->createUserWithWorkspace();
 

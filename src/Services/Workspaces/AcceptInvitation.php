@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Workspaces;
 
-use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Exception;
 use RuntimeException;
+use Sendportal\Base\Models\Invitation;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 
 class AcceptInvitation
 {

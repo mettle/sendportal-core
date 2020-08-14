@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
+use Exception;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Models\EmailService;
-use Exception;
 
 class RelayMessage
 {

@@ -37,11 +37,11 @@ class SesMailAdapter extends BaseMailAdapter
                     'Subject' => [
                         'Data' => $subject,
                     ],
-                    'Body' => array(
+                    'Body' => [
                         'Html' => [
                             'Data' => $content,
                         ],
-                    ),
+                    ],
                 ],
                 'ConfigurationSetName' => Arr::get($this->config, 'configuration_set_name'),
             ]);

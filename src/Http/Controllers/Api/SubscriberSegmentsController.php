@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Api;
 
+use Exception;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SubscriberSegmentDestroyRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberSegmentStoreRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberSegmentUpdateRequest;
-use Sendportal\Base\Http\Resources\Segment;
 use Sendportal\Base\Http\Resources\Segment as SegmentResource;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Subscribers\Segments\ApiSubscriberSegmentService;
-use Exception;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriberSegmentsController extends Controller
 {

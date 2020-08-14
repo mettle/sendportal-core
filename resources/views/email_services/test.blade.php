@@ -24,7 +24,10 @@
 
             {!! Form::textField('subject', __('Subject'), 'Sendportal Test Email', null, ['required' => 'required']) !!}
 
-            {!! Form::textareaField('body', __('Email Body'), 'This is a test for the email service ' . $emailService->name, ['required' => 'required']) !!}
+            {!! Form::textareaField('body', __('Email Body'), 'This is a test for the email service ' . $emailService->name, [
+                'required' => 'required',
+                'rows' => 5
+            ]) !!}
 
             {!! Form::submitButton(__('Test')) !!}
             {!! Form::close() !!}

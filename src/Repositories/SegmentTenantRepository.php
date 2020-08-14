@@ -21,8 +21,6 @@ class SegmentTenantRepository extends BaseTenantRepository
 
         $this->executeSave($workspaceId, $instance, $data);
 
-        $this->syncSubscribers($instance, Arr::get($data, 'subscribers', []));
-
         return $instance;
     }
 

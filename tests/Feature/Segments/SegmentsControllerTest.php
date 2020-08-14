@@ -7,6 +7,7 @@ namespace Tests\Feature\Segments;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
 class SegmentsControllerTest extends TestCase
@@ -100,6 +101,29 @@ class SegmentsControllerTest extends TestCase
             'name' => $segmentUpdateData['name']
         ]);
     }
+
+    /** @test */
+    function subscribers_are_not_synced_when_the_segment_is_updated()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $subscribers = factory(Subscriber::class, 5)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $segment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id
+        ]);
+        $segment->subscribers()->attach($subscribers);
+
+        $this->assertCount($subscribers->count(), $segment->subscribers);
+
+        $this->actingAs($user)->put(route('sendportal.segments.update', $segment->id), [
+            'name' => 'Very Cool New Name',
+        ]);
+
+        $segment->refresh();
+        $this->assertCount($subscribers->count(), $segment->subscribers);
+    }
+
 
     /* @test */
     public function a_segment_can_be_deleted()

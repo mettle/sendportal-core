@@ -59,4 +59,12 @@ class MessageTrackingOptions
 
         return $this;
     }
+
+    public function disable(): self
+    {
+        $this->isOpenTracking = false;
+        $this->isClickTracking = false;
+
+        return $this;
+    }
 }

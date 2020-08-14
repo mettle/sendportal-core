@@ -18,6 +18,9 @@ class MessageOptions
     /** @var string */
     private $subject;
 
+    /** @var string */
+    private $body;
+
     /** @var MessageTrackingOptions */
     private $trackingOptions;
 
@@ -74,6 +77,18 @@ class MessageOptions
     public function setSubject(string $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getBody(): string
+    {
+        return $this->body;
+    }
+
+    public function setBody(string $body): self
+    {
+        $this->body = $body;
 
         return $this;
     }

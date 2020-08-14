@@ -32,6 +32,9 @@
                         <td>{{ $service->name }}</td>
                         <td>{{ $service->type->name }}</td>
                         <td>
+                            <a href="{{ route('sendportal.email_services.test.create', $service->id) }}" class="btn btn-sm btn-light">
+                                {{ __('Test') }}
+                            </a>
                             <a class="btn btn-sm btn-light"
                                href="{{ route('sendportal.email_services.edit', $service->id) }}">{{ __('Edit') }}</a>
                             <form action="{{ route('sendportal.email_services.delete', $service->id) }}" method="POST"
@@ -54,3 +57,11 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        function askConfirm() {
+            return confirm("{{ __('A test email will be sent to :recipient. Do you want to proceeed?', ['recipient' => auth()->user()->email]) }}");
+        }
+    </script>
+@endpush

@@ -95,7 +95,7 @@
                                 @method('DELETE')
                                 <a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
                                    class="btn btn-xs btn-light">{{ __('Edit') }}</a>
-                                <button type="submit" class="btn btn-xs btn-light">{{ __('Delete') }}</button>
+                                <button type="submit" class="btn btn-xs btn-light delete-subscriber">{{ __('Delete') }}</button>
                             </form>
                         </td>
                     </tr>
@@ -112,5 +112,21 @@
     </div>
 
     @include('sendportal::layouts.partials.pagination', ['records' => $subscribers])
+
+    <script>
+        let subscribers = document.getElementsByClassName('delete-subscriber');
+
+        Array.from(subscribers).forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                let confirmDelete = confirm('Are you sure you want to permanently delete this subscriber and all associated data?');
+
+                if(confirmDelete) {
+                    element.closest('form').submit();
+                }
+            });
+        });
+    </script>
 
 @endsection

@@ -3,7 +3,6 @@
 
 namespace Sendportal\Base\Http\Controllers\EmailServices;
 
-
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Http\Controllers\Controller;
@@ -59,6 +58,5 @@ class TestEmailServiceController extends Controller
                 ->back()
                 ->with('error', 'Response: ' . $e->getMessage());
         }
-
     }
 }

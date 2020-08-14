@@ -28,6 +28,11 @@ class Subscriber extends BaseModel
         static::creating(function ($model) {
             $model->hash = Uuid::uuid4()->toString();
         });
+
+        static::deleting(function (self $subscriber) {
+            $subscriber->segments()->detach();
+            $subscriber->messages()->delete();
+        });
     }
 
     public function workspace(): BelongsTo

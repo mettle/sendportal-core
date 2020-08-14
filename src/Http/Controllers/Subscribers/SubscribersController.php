@@ -131,6 +131,18 @@ class SubscribersController extends Controller
     }
 
     /**
+     * @throws Exception
+     */
+    public function destroy($id)
+    {
+        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
+
+        $subscriber->delete();
+
+        return redirect()->route('sendportal.subscribers.index')->withSuccess('Subscriber deleted');
+    }
+
+    /**
      * @return string|StreamedResponse
      * @throws IOException
      * @throws InvalidArgumentException

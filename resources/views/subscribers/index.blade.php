@@ -89,8 +89,15 @@
                                 <span class="badge badge-success">{{ __('Subscribed') }}</span>
                             @endif
                         </td>
-                        <td><a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
-                               class="btn btn-sm btn-light">{{ __('Edit') }}</a></td>
+                        <td>
+                            <form action="{{ route('sendportal.subscribers.destroy', $subscriber->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
+                                   class="btn btn-xs btn-light">{{ __('Edit') }}</a>
+                                <button type="submit" class="btn btn-xs btn-light">{{ __('Delete') }}</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>

@@ -2,7 +2,6 @@
 
 namespace Sendportal\Base\Repositories;
 
-use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Segment;
 
 class SegmentTenantRepository extends BaseTenantRepository

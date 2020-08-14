@@ -46,7 +46,7 @@ class MessageTrackingOptionsTest extends TestCase
     public function tracking_can_be_turned_off_entirely()
     {
         // given
-        $trackingOptions = (new MessageTrackingOptions)->snooze();
+        $trackingOptions = (new MessageTrackingOptions)->disable();
 
         // then
         $this->assertFalse($trackingOptions->isClickTracking());

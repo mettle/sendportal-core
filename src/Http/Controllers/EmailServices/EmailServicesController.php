@@ -103,33 +103,6 @@ class EmailServicesController extends Controller
         return redirect()->route('sendportal.email_services.index');
     }
 
-    /**
-     * @throws Exception
-     */
-    public function test(int $emailServiceId, DispatchTestMessage $dispatchTestMessage): RedirectResponse
-    {
-        $emailService = $this->emailServices->find(auth()->user()->currentWorkspace()->id, $emailServiceId);
-
-        try {
-            $messageId = $dispatchTestMessage->testService(auth()->user()->currentWorkspace()->id, $emailService, auth()->user()->email);
-
-            if (!$messageId) {
-                return redirect()
-                    ->back()
-                    ->with(['error', __('Failed to dispatch test email.')]);
-            }
-
-            return redirect()
-                ->back()
-                ->with(['success' => __('The test email has been dispatched.')]);
-        } catch (Exception $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Response: ' . $e->getMessage());
-        }
-
-    }
-
     public function emailServicesTypeAjax($emailServiceTypeId): JsonResponse
     {
         $emailServiceType = $this->emailServices->findType($emailServiceTypeId);

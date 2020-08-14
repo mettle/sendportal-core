@@ -60,7 +60,7 @@ class MessageTrackingOptions
         return $this;
     }
 
-    public function snooze(): self
+    public function disable(): self
     {
         $this->isOpenTracking = false;
         $this->isClickTracking = false;

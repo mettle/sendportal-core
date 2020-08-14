@@ -67,22 +67,20 @@ class DispatchTestMessage
     /**
      * @throws Exception
      */
-    public function testService(int $workspaceId, EmailService $emailService, string $recipientEmail): ?string
+    public function testService(int $workspaceId, EmailService $emailService, MessageOptions $options): ?string
     {
         $message = new Message([
             'workspace_id' => $workspaceId,
-            'recipient_email' => $recipientEmail,
-            'subject' => '[Sendportal Test]: ' . $emailService->name,
+            'recipient_email' => $options->getTo(),
+            'subject' => $options->getSubject(),
             'from_name' => 'Sendportal',
-            'from_email' => 'no-reply@sendportal.com',
+            'from_email' => $options->getFromEmail(),
             'hash' => 'abc123',
         ]);
 
-        $content = "<p>Congrats! If you're seeing this, it means that your Email Service is working!</p>";
+        $trackingOptions = (new MessageTrackingOptions())->disable();
 
-        $trackingOptions = (new MessageTrackingOptions())->snooze();
-
-        return $this->dispatch($message, $emailService, $trackingOptions, $content);
+        return $this->dispatch($message, $emailService, $trackingOptions, $options->getBody());
     }
 
     /**

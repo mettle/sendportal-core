@@ -79,7 +79,9 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
             $servicesRouter->get('{id}/edit', 'EmailServicesController@edit')->name('edit');
             $servicesRouter->put('{id}', 'EmailServicesController@update')->name('update');
             $servicesRouter->delete('{id}', 'EmailServicesController@delete')->name('delete');
-            $servicesRouter->post('{id}/test', 'EmailServicesController@test')->name('test');
+
+            $servicesRouter->get('{id}/test', 'TestEmailServiceController@create')->name('test.create');
+            $servicesRouter->post('{id}/test', 'TestEmailServiceController@store')->name('test.store');
         });
 
         // Segments.

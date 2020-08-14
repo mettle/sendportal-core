@@ -32,6 +32,9 @@
                         <td>{{ $service->name }}</td>
                         <td>{{ $service->type->name }}</td>
                         <td>
+                            <a href="{{ route('sendportal.email_services.test.create', $service->id) }}" class="btn btn-sm btn-light">
+                                {{ __('Test') }}
+                            </a>
                             <a class="btn btn-sm btn-light"
                                href="{{ route('sendportal.email_services.edit', $service->id) }}">{{ __('Edit') }}</a>
                             <form action="{{ route('sendportal.email_services.delete', $service->id) }}" method="POST"
@@ -39,11 +42,6 @@
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-light">{{ __('Delete') }}</button>
-                            </form>
-                            <form action="{{ route('sendportal.email_services.test', $service->id) }}" method="POST"
-                                style="display: inline" onsubmit="return askConfirm()">
-                                @csrf
-                                <button class="btn btn-sm btn-light">{{ __('Test') }}</button>
                             </form>
                         </td>
                     </tr>

@@ -2,10 +2,10 @@
 
 namespace Sendportal\Base\Services\Subscribers;
 
+use Exception;
 use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
-use Exception;
 
 class ImportSubscriberService
 {

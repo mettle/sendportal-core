@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Segments;
 
-use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Exception;
 use Illuminate\Support\Collection;
+use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Repositories\SegmentTenantRepository;
 
 class ApiSegmentService
 {

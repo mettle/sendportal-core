@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Api;
 
+use Exception;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SubscriberStoreRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberUpdateRequest;
 use Sendportal\Base\Http\Resources\Subscriber as SubscriberResource;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Subscribers\ApiSubscriberService;
-use Exception;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 
 class SubscribersController extends Controller
 {

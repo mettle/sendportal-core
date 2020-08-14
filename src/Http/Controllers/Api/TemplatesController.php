@@ -74,8 +74,7 @@ class TemplatesController extends Controller
     {
         // TODO: Add a request object to test the validity of deleting the template.
         //  In particular, whether it is in use.
-        if ( ! $this->service->delete($workspaceId, $id))
-        {
+        if (! $this->service->delete($workspaceId, $id)) {
             return response(__('Cannot delete a template that has been used.'), 400);
         }
 

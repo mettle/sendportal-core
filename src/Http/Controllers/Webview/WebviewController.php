@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Webview;
 
+use Exception;
+use Illuminate\Contracts\View\View as ViewContract;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Services\Content\MergeContent;
-use Exception;
-use Illuminate\Contracts\View\View as ViewContract;
 
 class WebviewController extends Controller
 {

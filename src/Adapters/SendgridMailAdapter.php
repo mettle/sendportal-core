@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Sendportal\Base\Adapters;
 
 use DomainException;
-use Exception;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use SendGrid;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\TypeException;
 use SendGrid\Response as SendgridResponse;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
+use Symfony\Component\HttpFoundation\Response;
 
 class SendgridMailAdapter extends BaseMailAdapter
 {
@@ -22,23 +21,24 @@ class SendgridMailAdapter extends BaseMailAdapter
 
     /**
      * @throws TypeException
+     * @throws \Throwable
      */
-    public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
         $email = new Mail();
-        $email->setFrom($fromEmail);
+        $email->setFrom($fromEmail, $fromName);
         $email->setSubject($subject);
         $email->addTo($toEmail);
         $email->addContent('text/html', $content);
         $email->setClickTracking($trackingOptions->isClickTracking());
         $email->setOpenTracking($trackingOptions->isOpenTracking());
 
-        try {
-            $response = $this->resolveClient()->send($email);
-        } catch (Exception $e) {
-            Log::error('Failed to send via SendGrid', ['error' => $e->getMessage()]);
-            return null;
-        }
+        $response = $this->resolveClient()->send($email);
+
+        throw_if(
+            !in_array($response->statusCode(), [Response::HTTP_OK, Response::HTTP_ACCEPTED]),
+            new DomainException($response->body(), $response->statusCode())
+        );
 
         return $this->resolveMessageId($response);
     }

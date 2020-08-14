@@ -15,7 +15,7 @@ class SegmentsControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_of_segments_is_accessible_to_authenticated_users()
+    public function the_index_of_segments_is_accessible_to_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -30,7 +30,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function the_segment_create_form_is_accessible_to_authenticated_users()
+    public function the_segment_create_form_is_accessible_to_authenticated_users()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -43,7 +43,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function new_segments_can_be_created_by_authenticated_users()
+    public function new_segments_can_be_created_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -65,7 +65,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function the_segment_edit_view_is_accessible_by_authenticated_users()
+    public function the_segment_edit_view_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -79,7 +79,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function a_segment_is_updateable_by_an_authenticated_user()
+    public function a_segment_is_updateable_by_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();

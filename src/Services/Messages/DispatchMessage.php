@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
-use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\EmailService;
-use Sendportal\Base\Services\Content\MergeContent;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
+use Sendportal\Base\Services\Content\MergeContent;
 
 class DispatchMessage
 {
@@ -77,7 +77,8 @@ class DispatchMessage
     {
         $messageOptions = (new MessageOptions)
             ->setTo($message->recipient_email)
-            ->setFrom($message->from_email)
+            ->setFromEmail($message->from_email)
+            ->setFromName($message->from_name)
             ->setSubject($message->subject)
             ->setTrackingOptions($trackingOptions);
 

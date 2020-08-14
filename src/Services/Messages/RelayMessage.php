@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
+use Exception;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Models\EmailService;
-use Exception;
 
 class RelayMessage
 {
@@ -27,7 +27,8 @@ class RelayMessage
     {
         return $this->mailAdapter->adapter($emailService)
             ->send(
-                $messageOptions->getFrom(),
+                $messageOptions->getFromEmail(),
+                $messageOptions->getFromName(),
                 $messageOptions->getTo(),
                 $messageOptions->getSubject(),
                 $messageOptions->getTrackingOptions(),

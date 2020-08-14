@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Invitations;
 
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Sendportal\Base\Models\User;
+use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
 
 class ExistingUserInvitationTest extends TestCase
@@ -16,7 +16,7 @@ class ExistingUserInvitationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function a_user_can_see_their_invitations()
+    public function a_user_can_see_their_invitations()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -42,7 +42,7 @@ class ExistingUserInvitationTest extends TestCase
     }
 
     /** @test */
-    function a_user_cannot_see_another_users_invitations()
+    public function a_user_cannot_see_another_users_invitations()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -67,7 +67,7 @@ class ExistingUserInvitationTest extends TestCase
     }
 
     /** @test */
-    function a_user_can_accept_valid_invitations()
+    public function a_user_can_accept_valid_invitations()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -93,7 +93,7 @@ class ExistingUserInvitationTest extends TestCase
     }
 
     /** @test */
-    function a_user_can_reject_invitations()
+    public function a_user_can_reject_invitations()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -123,7 +123,7 @@ class ExistingUserInvitationTest extends TestCase
     }
 
     /** @test */
-    function a_user_cannot_accept_an_expired_invitation()
+    public function a_user_cannot_accept_an_expired_invitation()
     {
         // given
         $user = $this->createUserWithWorkspace();

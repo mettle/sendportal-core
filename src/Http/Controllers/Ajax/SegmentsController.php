@@ -5,11 +5,8 @@ namespace Sendportal\Base\Http\Controllers\Ajax;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SegmentStoreRequest;
 
-use Sendportal\Base\Http\Resources\Segment;
 use Sendportal\Base\Http\Resources\Segment as SegmentResource;
 use Sendportal\Base\Services\Segments\ApiSegmentService;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 
 class SegmentsController extends Controller
 {

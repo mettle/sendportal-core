@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Subscribers;
 
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Events\SubscriberAddedEvent;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
-use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class ApiSubscriberService
 {

@@ -77,7 +77,7 @@ class CreateMessages
 
         $segment->subscribers()->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
             $this->dispatchToSubscriber($campaign, $subscribers);
-        }, 'id');
+        }, 'subscribers.id');
     }
 
     /**

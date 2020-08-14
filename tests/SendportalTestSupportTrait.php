@@ -3,12 +3,15 @@
 namespace Tests;
 
 use Illuminate\Testing\TestResponse;
+use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
 
-trait SendportalTestSupportTrait {
+trait SendportalTestSupportTrait
+{
 
     /**
      * Create a user with attached workspace.
@@ -34,6 +37,27 @@ trait SendportalTestSupportTrait {
     protected function loginUser(User $user): void
     {
         auth()->login($user);
+    }
+
+    protected function createUserWithWorkspaceAndEmailService(): array
+    {
+        $user = factory(User::class)->create();
+        $workspace = factory(Workspace::class)->create([
+            'owner_id' => $user->id,
+        ]);
+        $emailService = factory(EmailService::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+
+        return [$workspace, $emailService];
+    }
+
+    protected function createCampaign(Workspace $workspace, EmailService $emailService): Campaign
+    {
+        return factory(Campaign::class)->states(['withContent', 'sent'])->create([
+            'workspace_id' => $workspace->id,
+            'email_service_id' => $emailService->id,
+        ]);
     }
 
     protected function createSegment(User $user): Segment

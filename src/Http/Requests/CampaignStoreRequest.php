@@ -11,6 +11,14 @@ class CampaignStoreRequest extends FormRequest
 {
     public function rules(): array
     {
+        return $this->getRules();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getRules(): array
+    {
         return [
             'name' => [
                 'required',

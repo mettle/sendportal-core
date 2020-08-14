@@ -18,6 +18,13 @@ class EmailService extends BaseModel
         'settings',
     ];
 
+    /** @var array */
+    protected $casts = [
+        'id' => 'int',
+        'workspace_id' => 'int',
+        'type_id' => 'int'
+    ];
+
     /**
      * The type of this provider.
      */

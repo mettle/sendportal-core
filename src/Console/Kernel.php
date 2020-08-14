@@ -3,8 +3,8 @@
 namespace Sendportal\Base\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 
 class Kernel extends ConsoleKernel
 {

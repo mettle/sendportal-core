@@ -4,8 +4,8 @@ namespace Tests;
 
 use Collective\Html\FormFacade;
 use Laravel\Ui\UiServiceProvider;
-use Sendportal\Base\Models\User;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Sendportal\Base\Models\User;
 use Sendportal\Base\SendportalBaseServiceProvider;
 
 abstract class TestCase extends BaseTestCase

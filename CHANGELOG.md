@@ -1,29 +1,35 @@
 # Sendportal Core
 
+## 1.0.7 - 2020-08-14
+
+- Add ability to test an e-mail service ([#62](https://github.com/mettle/sendportal-core/pull/62))
+- Fix behaviour that removed subscribers on segment update ([#61](https://github.com/mettle/sendportal-core/pull/61))
+- Add ability to delete a subscriber ([#60](https://github.com/mettle/sendportal-core/pull/60))
+
 ## 1.0.6 - 2020-08-07
 
-- Add GH action for php-cs  [#35](https://github.com/mettle/sendportal-core/pull/35))
-- Add Campaign Endpoints to API  [#40](https://github.com/mettle/sendportal-core/pull/40))
-- Uniform mail adapters send method  [#51](https://github.com/mettle/sendportal-core/pull/51))
-- Add Sqlite support and defaults the testsuite to use the sqlite database  [#52](https://github.com/mettle/sendportal-core/pull/52))
-- Fix count unique opens per period in Postgres  [#53](https://github.com/mettle/sendportal-core/pull/53))
-- Bump elliptic from 6.5.2 to 6.5.3  [#55](https://github.com/mettle/sendportal-core/pull/55))
-- add from name to outgoing emails  [#56](https://github.com/mettle/sendportal-core/pull/56))
-- add mailjet support  [#57](https://github.com/mettle/sendportal-core/pull/57))
+- Add GH action for php-cs ([#35](https://github.com/mettle/sendportal-core/pull/35))
+- Add Campaign Endpoints to API ([#40](https://github.com/mettle/sendportal-core/pull/40))
+- Uniform mail adapters send method ([#51](https://github.com/mettle/sendportal-core/pull/51))
+- Add Sqlite support and defaults the test suite to use the sqlite database ([#52](https://github.com/mettle/sendportal-core/pull/52))
+- Fix count unique opens per period in Postgres ([#53](https://github.com/mettle/sendportal-core/pull/53))
+- Bump elliptic from 6.5.2 to 6.5.3 ([#55](https://github.com/mettle/sendportal-core/pull/55))
+- add from name to outgoing emails ([#56](https://github.com/mettle/sendportal-core/pull/56))
+- add mailjet support ([#57](https://github.com/mettle/sendportal-core/pull/57))
 
 ## 1.0.5 - 2020-08-03
 
-- bump lodash version  [#44](https://github.com/mettle/sendportal-core/pull/44))
-- fix primary key when chunking on segments  [#54](https://github.com/mettle/sendportal-core/pull/54))
+- bump lodash version ([#44](https://github.com/mettle/sendportal-core/pull/44))
+- fix primary key when chunking on segments ([#54](https://github.com/mettle/sendportal-core/pull/54))
 
 ## 1.0.4 - 2020-07-21
 
-- fix SES adapter [#42](https://github.com/mettle/sendportal-core/pull/42))
+- fix SES adapter ([#42](https://github.com/mettle/sendportal-core/pull/42))
 
 ## 1.0.3 - 2020-07-11
 
-- added CHANGELOG.md [#39](https://github.com/mettle/sendportal-core/pull/39))
-- added API for templates [#38](https://github.com/mettle/sendportal-core/pull/38))
+- added CHANGELOG.md ([#39](https://github.com/mettle/sendportal-core/pull/39))
+- added API for templates ([#38](https://github.com/mettle/sendportal-core/pull/38))
 - add validation for deleting templates that are in use ([#37](https://github.com/mettle/sendportal-core/pull/37))
 - add Template API endpoints ([#38](https://github.com/mettle/sendportal-core/pull/38))
 - added ability to delete segments ([#36](https://github.com/mettle/sendportal-core/pull/36))

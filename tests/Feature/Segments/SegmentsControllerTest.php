@@ -103,7 +103,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function subscribers_are_not_synced_when_the_segment_is_updated()
+    public function subscribers_are_not_synced_when_the_segment_is_updated()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $subscribers = factory(Subscriber::class, 5)->create([

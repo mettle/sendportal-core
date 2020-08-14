@@ -3,7 +3,6 @@
 
 namespace Sendportal\Base\Http\Requests;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class EmailServiceTestRequest extends FormRequest

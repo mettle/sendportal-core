@@ -40,8 +40,6 @@ class DispatchMessage
     }
 
     /**
-     * Returns the message_id from the email service
-     *
      * @throws Exception
      */
     public function handle(Message $message): ?string
@@ -105,10 +103,6 @@ class DispatchMessage
         return $this->markAsSent->handle($message, $messageId);
     }
 
-    /**
-     * Check that the message has not already been sent by getting
-     * a fresh db record
-     */
     protected function isValidMessage(Message $message): bool
     {
         $data = $message->newQuery()

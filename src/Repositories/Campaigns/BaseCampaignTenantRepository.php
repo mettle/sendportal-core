@@ -70,7 +70,7 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
 
     private function deleteDraftMessages(Campaign $campaign): void
     {
-        if( ! $campaign->save_as_draft) {
+        if (! $campaign->save_as_draft) {
             return;
         }
 

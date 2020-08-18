@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
@@ -32,7 +30,8 @@ class CampaignCancellationController extends Controller
     /**
      * @throws Exception
      */
-    public function confirm(int $campaignId) {
+    public function confirm(int $campaignId)
+    {
         $campaign = $this->campaignRepository->find($this->currentWorkspace()->id, $campaignId, ['status']);
 
         return view('sendportal::campaigns.cancel', [
@@ -43,18 +42,19 @@ class CampaignCancellationController extends Controller
     /**
      * @throws Exception
      */
-    public function cancel(int $campaignId) {
+    public function cancel(int $campaignId)
+    {
         /** @var Campaign $campaign */
         $campaign = $this->campaignRepository->find($this->currentWorkspace()->id, $campaignId, ['status']);
         $originalStatus = $campaign->status;
 
-        if( ! $campaign->canBeCancelled()) {
+        if (! $campaign->canBeCancelled()) {
             throw ValidationException::withMessages([
                 'campaignStatus' => "{$campaign->status->name} campaigns cannot be cancelled.",
             ])->redirectTo(route('sendportal.campaigns.index'));
         }
 
-        if($campaign->save_as_draft && ! $campaign->allDraftsCreated()) {
+        if ($campaign->save_as_draft && ! $campaign->allDraftsCreated()) {
             throw ValidationException::withMessages([
                 'messagesPendingDraft' => 'Campaigns that save draft messages cannot be cancelled until all drafts have been created.',
             ])->redirectTo(route('sendportal.campaigns.index'));
@@ -69,11 +69,11 @@ class CampaignCancellationController extends Controller
 
     private function getSuccessMessage(CampaignStatus $campaignStatus, Campaign $campaign): string
     {
-        if($campaignStatus->id === CampaignStatus::STATUS_QUEUED) {
+        if ($campaignStatus->id === CampaignStatus::STATUS_QUEUED) {
             return "The queued campaign was cancelled successfully.";
         }
 
-        if($campaign->save_as_draft) {
+        if ($campaign->save_as_draft) {
             return "The campaign was cancelled and any remaining draft messages were deleted.";
         }
 

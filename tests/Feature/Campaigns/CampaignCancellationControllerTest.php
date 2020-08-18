@@ -17,7 +17,7 @@ class CampaignCancellationControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function the_confirm_cancel_endpoint_returns_the_confirm_cancel_view()
+    public function the_confirm_cancel_endpoint_returns_the_confirm_cancel_view()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('queued')->create(['workspace_id' => $workspace->id]);
@@ -28,7 +28,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_endpoint_cancels_a_queued_campaign()
+    public function the_cancel_endpoint_cancels_a_queued_campaign()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('queued')->create(['workspace_id' => $workspace->id]);
@@ -41,7 +41,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_endpoint_a_sending_campaign()
+    public function the_cancel_endpoint_a_sending_campaign()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('sending')->create(['workspace_id' => $workspace->id]);
@@ -53,7 +53,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_endpoint_does_not_allow_a_draft_campaign_to_be_cancelled()
+    public function the_cancel_endpoint_does_not_allow_a_draft_campaign_to_be_cancelled()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('draft')->create(['workspace_id' => $workspace->id]);
@@ -66,7 +66,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_endpoint_does_not_allow_a_sent_campaign_to_be_cancelled()
+    public function the_cancel_endpoint_does_not_allow_a_sent_campaign_to_be_cancelled()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('sent')->create(['workspace_id' => $workspace->id]);
@@ -79,7 +79,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_endpoint_does_not_allow_a_cancelled_campaign_to_be_cancelled()
+    public function the_cancel_endpoint_does_not_allow_a_cancelled_campaign_to_be_cancelled()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('cancelled')->create(['workspace_id' => $workspace->id]);
@@ -92,7 +92,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function when_a_sending_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
+    public function when_a_sending_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('sending')->create([
@@ -127,7 +127,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function when_a_sending_not_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
+    public function when_a_sending_not_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
 
@@ -172,7 +172,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_that_save_as_draft_cannot_be_cancelled_until_every_draft_message_has_been_created()
+    public function campaigns_that_save_as_draft_cannot_be_cancelled_until_every_draft_message_has_been_created()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('sending')->create([
@@ -196,12 +196,14 @@ class CampaignCancellationControllerTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('sendportal.campaigns.cancel', ['id' => $campaign->id]));
 
-        $response->assertSessionHasErrors('messagesPendingDraft',
-            'Campaigns that save draft messages cannot be cancelled until all drafts have been created.');
+        $response->assertSessionHasErrors(
+            'messagesPendingDraft',
+            'Campaigns that save draft messages cannot be cancelled until all drafts have been created.'
+        );
     }
 
     /** @test */
-    function campaigns_that_save_as_draft_can_be_cancelled_if_every_draft_message_has_been_created()
+    public function campaigns_that_save_as_draft_can_be_cancelled_if_every_draft_message_has_been_created()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('sending')->create([
@@ -225,7 +227,9 @@ class CampaignCancellationControllerTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('sendportal.campaigns.cancel', ['id' => $campaign->id]));
 
-        $response->assertSessionHas('success',
-            'The campaign was cancelled and any remaining draft messages were deleted.');
+        $response->assertSessionHas(
+            'success',
+            'The campaign was cancelled and any remaining draft messages were deleted.'
+        );
     }
 }

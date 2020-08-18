@@ -104,7 +104,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
+    public function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
     {
         $campaign = factory(Campaign::class)->state('cancelled')->create();
 
@@ -112,7 +112,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
     {
         /** @var Campaign $campaign */
         $campaign = factory(Campaign::class)->state('queued')->create();
@@ -121,7 +121,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
     {
         /** @var Campaign $campaign */
         $campaign = factory(Campaign::class)->state('sending')->create();
@@ -130,7 +130,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sent_and_saves_as_draft_and_not_all_drafts_have_been_sent()
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sent_and_saves_as_draft_and_not_all_drafts_have_been_sent()
     {
         $campaign = factory(Campaign::class)->state('sent')->create([
             'save_as_draft' => 1,
@@ -143,7 +143,7 @@ class CampaignTest extends TestCase
         ]);
 
         // Draft Messages
-        factory(Message::class, 3 )->state('pending')->create([
+        factory(Message::class, 3)->state('pending')->create([
             'workspace_id' => $campaign->workspace_id,
             'source_id' => $campaign->id,
         ]);
@@ -158,7 +158,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_false_if_the_campaign_is_sent_and_saves_as_draft_and_all_drafts_have_been_sent()
+    public function the_can_be_cancelled_method_returns_false_if_the_campaign_is_sent_and_saves_as_draft_and_all_drafts_have_been_sent()
     {
         $campaign = factory(Campaign::class)->state('sent')->create([
             'save_as_draft' => 1,
@@ -180,7 +180,7 @@ class CampaignTest extends TestCase
 
 
     /** @test */
-    function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
+    public function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
     {
         $workspace = factory(Workspace::class)->create();
         $campaign = factory(Campaign::class)->state('sending')->create([
@@ -205,7 +205,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_all_drafts_created_method_returns_false_if_all_drafts_have_not_been_created()
+    public function the_all_drafts_created_method_returns_false_if_all_drafts_have_not_been_created()
     {
         $workspace = factory(Workspace::class)->create();
         $campaign = factory(Campaign::class)->state('sending')->create([
@@ -230,7 +230,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_all_drafts_created_method_returns_true_if_the_campaign_does_not_save_as_draft()
+    public function the_all_drafts_created_method_returns_true_if_the_campaign_does_not_save_as_draft()
     {
         $workspace = factory(Workspace::class)->create();
         $campaign = factory(Campaign::class)->state('sending')->create([

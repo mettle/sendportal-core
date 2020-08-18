@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
-use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
@@ -101,7 +101,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_campaign_method_sets_the_campaign_status_to_cancelled()
+    public function the_cancel_campaign_method_sets_the_campaign_status_to_cancelled()
     {
         $campaign = factory(Campaign::class)->state('queued')->create();
 
@@ -113,7 +113,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_campaign_method_deletes_draft_messages_if_the_campaign_has_any()
+    public function the_cancel_campaign_method_deletes_draft_messages_if_the_campaign_has_any()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -132,7 +132,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_campaign_method_does_not_delete_sent_messages()
+    public function the_cancel_campaign_method_does_not_delete_sent_messages()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -151,7 +151,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_count_method_returns_campaign_message_counts()
+    public function the_get_count_method_returns_campaign_message_counts()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
         $campaign = $this->createCampaign($workspace, $emailService);

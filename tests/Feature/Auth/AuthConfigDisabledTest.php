@@ -6,10 +6,6 @@ namespace Tests\Feature\Providers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
-use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Provider;
-use Sendportal\Base\Models\ProviderType;
 use Tests\TestCase;
 
 class AuthConfigDisabledTest extends TestCase
@@ -26,7 +22,7 @@ class AuthConfigDisabledTest extends TestCase
     }
 
     /** @test */
-    function the_registration_routes_result_in_404()
+    public function the_registration_routes_result_in_404()
     {
         $this->get('/register')->assertNotFound();
         $this->post('/register')->assertNotFound();
@@ -37,7 +33,7 @@ class AuthConfigDisabledTest extends TestCase
     }
 
     /** @test */
-    function the_password_reset_routes_result_in_404()
+    public function the_password_reset_routes_result_in_404()
     {
         $this->get('password/reset')->assertNotFound();
         $this->post('password/email')->assertNotFound();

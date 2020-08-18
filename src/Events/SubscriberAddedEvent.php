@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Events;
 
-use Sendportal\Base\Models\Subscriber;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Sendportal\Base\Models\Subscriber;
 
 class SubscriberAddedEvent
 {

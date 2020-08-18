@@ -67,6 +67,25 @@ class DispatchTestMessage
     /**
      * @throws Exception
      */
+    public function testService(int $workspaceId, EmailService $emailService, MessageOptions $options): ?string
+    {
+        $message = new Message([
+            'workspace_id' => $workspaceId,
+            'recipient_email' => $options->getTo(),
+            'subject' => $options->getSubject(),
+            'from_name' => 'Sendportal',
+            'from_email' => $options->getFromEmail(),
+            'hash' => 'abc123',
+        ]);
+
+        $trackingOptions = (new MessageTrackingOptions())->disable();
+
+        return $this->dispatch($message, $emailService, $trackingOptions, $options->getBody());
+    }
+
+    /**
+     * @throws Exception
+     */
     protected function resolveCampaign(int $workspaceId, int $campaignId): ?Campaign
     {
         return $this->campaignTenant->find($workspaceId, $campaignId);
@@ -87,7 +106,8 @@ class DispatchTestMessage
     {
         $messageOptions = (new MessageOptions)
             ->setTo($message->recipient_email)
-            ->setFrom($message->from_email)
+            ->setFromEmail($message->from_email)
+            ->setFromName($message->from_name)
             ->setSubject($message->subject)
             ->setTrackingOptions($trackingOptions);
 

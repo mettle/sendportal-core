@@ -4,6 +4,7 @@ namespace Sendportal\Base\Traits;
 
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\PostgresConnection;
+use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 
 trait ResolvesDatabaseDriver
@@ -26,5 +27,15 @@ trait ResolvesDatabaseDriver
     public function usingPostgres(): bool
     {
         return DB::connection() instanceof PostgresConnection;
+    }
+
+    /**
+     * Determine whether the application is using the Sqlite database driver.
+     *
+     * @return bool
+     */
+    public function usingSqlite(): bool
+    {
+        return DB::connection() instanceof SQLiteConnection;
     }
 }

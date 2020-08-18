@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Workspaces;
 
-use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Services\Workspaces\AcceptInvitation;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Sendportal\Base\Http\Controllers\Controller;
+use Sendportal\Base\Models\Invitation;
+use Sendportal\Base\Services\Workspaces\AcceptInvitation;
 
 class PendingInvitationController extends Controller
 {

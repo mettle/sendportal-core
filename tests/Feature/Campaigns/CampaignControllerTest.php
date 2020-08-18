@@ -18,7 +18,7 @@ class CampaignControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_of_campaigns_is_accessible_to_authenticated_users()
+    public function the_index_of_campaigns_is_accessible_to_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -35,7 +35,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function the_campaign_creation_form_is_accessible_to_authenticated_users()
+    public function the_campaign_creation_form_is_accessible_to_authenticated_users()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -48,7 +48,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function new_campaigns_can_be_created_by_authenticated_users()
+    public function new_campaigns_can_be_created_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -67,7 +67,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function the_preview_view_is_accessible_by_authenticated_users()
+    public function the_preview_view_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -81,7 +81,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function the_edit_view_is_accessible_by_authenticated_users()
+    public function the_edit_view_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -95,7 +95,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function a_campaign_is_updateable_by_authenticated_users()
+    public function a_campaign_is_updateable_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -125,7 +125,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_not_track_opens()
+    public function campaigns_can_be_set_to_not_track_opens()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -145,7 +145,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_track_opens()
+    public function campaigns_can_be_set_to_track_opens()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -165,7 +165,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_not_track_clicks()
+    public function campaigns_can_be_set_to_not_track_clicks()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -185,7 +185,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_track_clicks()
+    public function campaigns_can_be_set_to_track_clicks()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -205,7 +205,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaign_content_is_required_if_no_template_is_selected()
+    public function campaign_content_is_required_if_no_template_is_selected()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
 
@@ -221,7 +221,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaign_content_is_not_required_if_a_template_is_selected()
+    public function campaign_content_is_not_required_if_a_template_is_selected()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
 

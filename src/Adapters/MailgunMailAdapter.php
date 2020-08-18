@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Adapters;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Mailgun\Mailgun;
 use Mailgun\Model\Message\SendResponse;
@@ -20,10 +19,10 @@ class MailgunMailAdapter extends BaseMailAdapter
         'EU' => 'https://api.eu.mailgun.net/v3'
     ];
 
-    public function send(string $fromEmail, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): ?string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
         $parameters = [
-            'from' => $fromEmail,
+            'from' => "{$fromName} <{$fromEmail}>",
             'to' => $toEmail,
             'subject' => $subject,
             'html' => $content,

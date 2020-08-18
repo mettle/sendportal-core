@@ -2,14 +2,12 @@
 
 namespace Tests\Unit\Models;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CampaignTest extends TestCase
@@ -17,7 +15,7 @@ class CampaignTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function it_has_many_opens()
+    public function it_has_many_opens()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
         $campaign = $this->createCampaign($workspace, $emailService);
@@ -27,8 +25,7 @@ class CampaignTest extends TestCase
 
         $opens = $campaign->opens;
 
-        $opens->each(function ($open) use ($openedMessages)
-        {
+        $opens->each(function ($open) use ($openedMessages) {
             $validMessages = $openedMessages->pluck('id')->toArray();
 
             static::assertTrue(in_array($open->id, $validMessages));
@@ -37,7 +34,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_unique_open_count_attribute_returns_the_number_of_unique_opens_for_a_campaign()
+    public function the_unique_open_count_attribute_returns_the_number_of_unique_opens_for_a_campaign()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -51,7 +48,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_total_open_count_attribute_returns_the_total_number_of_opens_for_a_campaign()
+    public function the_total_open_count_attribute_returns_the_total_number_of_opens_for_a_campaign()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -64,7 +61,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function it_has_many_clicks()
+    public function it_has_many_clicks()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -74,8 +71,7 @@ class CampaignTest extends TestCase
 
         $clicks = $campaign->clicks;
 
-        $clicks->each(function ($click) use ($clickedMessages)
-        {
+        $clicks->each(function ($click) use ($clickedMessages) {
             $validMessages = $clickedMessages->pluck('id')->toArray();
 
             static::assertTrue(in_array($click->id, $validMessages));
@@ -84,7 +80,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_unique_click_count_attribute_returns_the_number_of_unique_clicks_for_a_campaign()
+    public function the_unique_click_count_attribute_returns_the_number_of_unique_clicks_for_a_campaign()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -95,7 +91,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_total_click_count_attribute_returns_the_total_number_of_clicks_for_a_campaign()
+    public function the_total_click_count_attribute_returns_the_total_number_of_clicks_for_a_campaign()
     {
         [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
 
@@ -182,7 +178,7 @@ class CampaignTest extends TestCase
         static::assertFalse($campaign->canBeCancelled());
     }
 
-    
+
     /** @test */
     function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
     {
@@ -248,36 +244,6 @@ class CampaignTest extends TestCase
         ]);
 
         static::assertTrue($campaign->allDraftsCreated());
-    }
-
-    /**
-     * @return array
-     */
-    protected function createUserWithWorkspaceAndEmailService(): array
-    {
-        $user = factory(User::class)->create();
-        $workspace = factory(Workspace::class)->create([
-            'owner_id' => $user->id,
-        ]);
-        $emailService = factory(EmailService::class)->create([
-            'workspace_id' => $workspace->id,
-        ]);
-
-        return [$workspace, $emailService];
-    }
-
-    /**
-     * @param Workspace $workspace
-     * @param EmailService $emailService
-     *
-     * @return Campaign
-     */
-    protected function createCampaign(Workspace $workspace, EmailService $emailService): Campaign
-    {
-        return factory(Campaign::class)->states(['withContent', 'sent'])->create([
-            'workspace_id' => $workspace->id,
-            'email_service_id' => $emailService->id,
-        ]);
     }
 
     /**

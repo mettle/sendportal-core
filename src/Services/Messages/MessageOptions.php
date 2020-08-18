@@ -10,10 +10,16 @@ class MessageOptions
     private $to;
 
     /** @var string */
-    private $from;
+    private $fromEmail;
+
+    /** @var string */
+    private $fromName;
 
     /** @var string */
     private $subject;
+
+    /** @var string */
+    private $body;
 
     /** @var MessageTrackingOptions */
     private $trackingOptions;
@@ -36,14 +42,29 @@ class MessageOptions
     /**
      * @return string
      */
-    public function getFrom(): string
+    public function getFromEmail(): string
     {
-        return $this->from;
+        return $this->fromEmail;
     }
 
-    public function setFrom(string $from): self
+    public function setFromEmail(string $fromEmail): self
     {
-        $this->from = $from;
+        $this->fromEmail = $fromEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromName(): string
+    {
+        return $this->fromName;
+    }
+
+    public function setFromName(string $fromName): self
+    {
+        $this->fromName = $fromName;
 
         return $this;
     }
@@ -56,6 +77,18 @@ class MessageOptions
     public function setSubject(string $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getBody(): string
+    {
+        return $this->body;
+    }
+
+    public function setBody(string $body): self
+    {
+        $this->body = $body;
 
         return $this;
     }

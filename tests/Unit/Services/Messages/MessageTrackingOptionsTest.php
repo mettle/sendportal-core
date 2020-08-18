@@ -12,7 +12,7 @@ use Tests\TestCase;
 class MessageTrackingOptionsTest extends TestCase
 {
     /** @test */
-    function default_tracking_options_are_on()
+    public function default_tracking_options_are_on()
     {
         // given
         $trackingOptions = new MessageTrackingOptions();
@@ -23,7 +23,7 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
-    function open_tracking_can_be_turned_off()
+    public function open_tracking_can_be_turned_off()
     {
         // given
         $trackingOptions = (new MessageTrackingOptions)->setIsOpenTracking(false);
@@ -33,7 +33,7 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
-    function click_tracking_can_be_turned_off()
+    public function click_tracking_can_be_turned_off()
     {
         // given
         $trackingOptions = (new MessageTrackingOptions)->setIsClickTracking(false);
@@ -43,7 +43,18 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
-    function open_tracking_can_be_turned_off_from_a_campaign()
+    public function tracking_can_be_turned_off_entirely()
+    {
+        // given
+        $trackingOptions = (new MessageTrackingOptions)->disable();
+
+        // then
+        $this->assertFalse($trackingOptions->isClickTracking());
+        $this->assertFalse($trackingOptions->isOpenTracking());
+    }
+
+    /** @test */
+    public function open_tracking_can_be_turned_off_from_a_campaign()
     {
         // given
         $campaign = factory(Campaign::class)->state('withoutOpenTracking')->make();
@@ -57,7 +68,7 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
-    function click_tracking_can_be_turned_off_from_a_campaign()
+    public function click_tracking_can_be_turned_off_from_a_campaign()
     {
         // given
         $campaign = factory(Campaign::class)->state('withoutClickTracking')->make();
@@ -71,7 +82,7 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
-    function open_tracking_can_be_turned_off_from_a_message()
+    public function open_tracking_can_be_turned_off_from_a_message()
     {
         // given
         $campaign = factory(Campaign::class)->state('withoutOpenTracking')->make();
@@ -87,7 +98,7 @@ class MessageTrackingOptionsTest extends TestCase
     }
 
     /** @test */
-    function click_tracking_can_be_turned_off_from_a_message()
+    public function click_tracking_can_be_turned_off_from_a_message()
     {
         // given
         $campaign = factory(Campaign::class)->state('withoutClickTracking')->make();

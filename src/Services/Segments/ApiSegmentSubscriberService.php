@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Segments;
 
-use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
+use Sendportal\Base\Repositories\SegmentTenantRepository;
 
 class ApiSegmentSubscriberService
 {

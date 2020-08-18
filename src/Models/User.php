@@ -2,10 +2,10 @@
 
 namespace Sendportal\Base\Models;
 
-use Sendportal\Base\Traits\HasWorkspaces;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Sendportal\Base\Traits\HasWorkspaces;
 
 class User extends Authenticatable implements MustVerifyEmail
 {

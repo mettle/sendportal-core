@@ -21,7 +21,7 @@ class TemplatesControllerTest extends TestCase
     // Index.
 
     /** @test */
-    function a_guest_cannot_see_the_index()
+    public function a_guest_cannot_see_the_index()
     {
         $response = $this->get(route('sendportal.templates.index'));
 
@@ -29,7 +29,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_see_template_index()
+    public function a_logged_in_user_can_see_template_index()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -40,7 +40,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_index_lists_existing_templates()
+    public function the_index_lists_existing_templates()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -58,7 +58,7 @@ class TemplatesControllerTest extends TestCase
     // Create.
 
     /** @test */
-    function a_guest_cannot_see_the_create_form()
+    public function a_guest_cannot_see_the_create_form()
     {
         $response = $this->get(route('sendportal.templates.create'));
 
@@ -66,7 +66,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_see_the_create_form()
+    public function a_logged_in_user_can_see_the_create_form()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -82,7 +82,7 @@ class TemplatesControllerTest extends TestCase
     // Store.
 
     /** @test */
-    function a_guest_cannot_store_a_new_template()
+    public function a_guest_cannot_store_a_new_template()
     {
         $data = [
             'name' => $this->faker->name,
@@ -100,7 +100,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_store_a_new_template()
+    public function a_logged_in_user_can_store_a_new_template()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -122,7 +122,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function storing_is_validated()
+    public function storing_is_validated()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -147,7 +147,7 @@ class TemplatesControllerTest extends TestCase
     // Edit.
 
     /** @test */
-    function a_guest_cannot_see_the_edit_form()
+    public function a_guest_cannot_see_the_edit_form()
     {
         $template = factory(Template::class)->create();
 
@@ -157,7 +157,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_see_the_edit_form()
+    public function a_logged_in_user_can_see_the_edit_form()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -177,7 +177,7 @@ class TemplatesControllerTest extends TestCase
     // Update.
 
     /** @test */
-    function a_guest_cannot_update_a_template()
+    public function a_guest_cannot_update_a_template()
     {
         $template = factory(Template::class)->create();
 
@@ -200,7 +200,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_update_a_template()
+    public function a_logged_in_user_can_update_a_template()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -227,7 +227,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function updates_are_validated()
+    public function updates_are_validated()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -256,7 +256,7 @@ class TemplatesControllerTest extends TestCase
     // Destroy.
 
     /** @test */
-    function a_logged_in_user_can_delete_a_template()
+    public function a_logged_in_user_can_delete_a_template()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
@@ -276,7 +276,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_cannot_delete_a_template_if_it_is_used()
+    public function a_logged_in_user_cannot_delete_a_template_if_it_is_used()
     {
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);

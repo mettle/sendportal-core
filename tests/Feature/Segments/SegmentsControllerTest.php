@@ -7,6 +7,7 @@ namespace Tests\Feature\Segments;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
 class SegmentsControllerTest extends TestCase
@@ -15,7 +16,7 @@ class SegmentsControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_of_segments_is_accessible_to_authenticated_users()
+    public function the_index_of_segments_is_accessible_to_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -30,7 +31,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function the_segment_create_form_is_accessible_to_authenticated_users()
+    public function the_segment_create_form_is_accessible_to_authenticated_users()
     {
         // given
         $user = $this->createUserWithWorkspace();
@@ -43,7 +44,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function new_segments_can_be_created_by_authenticated_users()
+    public function new_segments_can_be_created_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -65,7 +66,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function the_segment_edit_view_is_accessible_by_authenticated_users()
+    public function the_segment_edit_view_is_accessible_by_authenticated_users()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -79,7 +80,7 @@ class SegmentsControllerTest extends TestCase
     }
 
     /** @test */
-    function a_segment_is_updateable_by_an_authenticated_user()
+    public function a_segment_is_updateable_by_an_authenticated_user()
     {
         // given
         [$workspace, $user] = $this->createUserAndWorkspace();
@@ -100,6 +101,29 @@ class SegmentsControllerTest extends TestCase
             'name' => $segmentUpdateData['name']
         ]);
     }
+
+    /** @test */
+    public function subscribers_are_not_synced_when_the_segment_is_updated()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+        $subscribers = factory(Subscriber::class, 5)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $segment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id
+        ]);
+        $segment->subscribers()->attach($subscribers);
+
+        $this->assertCount($subscribers->count(), $segment->subscribers);
+
+        $this->actingAs($user)->put(route('sendportal.segments.update', $segment->id), [
+            'name' => 'Very Cool New Name',
+        ]);
+
+        $segment->refresh();
+        $this->assertCount($subscribers->count(), $segment->subscribers);
+    }
+
 
     /* @test */
     public function a_segment_can_be_deleted()

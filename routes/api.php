@@ -29,6 +29,8 @@ Route::middleware([
     VerifyUserOnWorkspace::class,
     config('sendportal.throttle_middleware'),
 ])->name('sendportal.api.')->namespace('Api')->prefix('workspaces/{workspaceId}')->group(static function (Router $apiRouter) {
+    $apiRouter->apiResource('campaigns', 'CampaignsController');
+    $apiRouter->post('campaigns/{id}/send', 'CampaignDispatchController@send')->name('campaigns.send');
     $apiRouter->apiResource('subscribers', 'SubscribersController');
     $apiRouter->apiResource('segments', 'SegmentsController');
 
@@ -54,6 +56,7 @@ Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->gro
     $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
     $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');
     $webhookRouter->post('sendgrid', 'SendgridWebhooksController@handle')->name('sendgrid');
+    $webhookRouter->post('mailjet', 'MailjetWebhooksController@handle')->name('mailjet');
 });
 
 Route::get('ping', static function () {

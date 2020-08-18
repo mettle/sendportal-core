@@ -2,9 +2,6 @@
 
 namespace Sendportal\Base\Traits;
 
-use Illuminate\Database\MySqlConnection;
-use Illuminate\Database\PostgresConnection;
-use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\Models\Workspace;
 
@@ -18,8 +15,7 @@ trait ResolvesCurrentWorkspace
         /** @var User $user */
         $user = auth()->user();
 
-        if( ! $user)
-        {
+        if (! $user) {
             return null;
         }
 

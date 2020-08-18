@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Messages;
 
+use Exception;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
-use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Message;
 use Sendportal\Base\Services\Content\MergeContent;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class DispatchMessage
 {
@@ -109,12 +109,12 @@ class DispatchMessage
             ->toBase()
             ->select(['messages.sent_at', 'campaigns.status_id'])
             ->leftJoin('campaigns', static function (JoinClause $join) {
-                  $join->on('messages.source_id', '=', 'campaigns.id')
+                $join->on('messages.source_id', '=', 'campaigns.id')
                       ->where('messages.source_type', Campaign::class);
             })
             ->first();
 
-        if( ! $data) {
+        if (! $data) {
             return false;
         }
 

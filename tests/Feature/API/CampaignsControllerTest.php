@@ -152,7 +152,7 @@ class CampaignsControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_cannot_be_saved_with_segments_belonging_to_another_workspace()
+    public function campaigns_cannot_be_saved_with_segments_belonging_to_another_workspace()
     {
         $workspace = factory(Workspace::class)->create();
         $anotherWorkspace = factory(Workspace::class)->create();
@@ -185,7 +185,7 @@ class CampaignsControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_saved_with_segments_belonging_to_the_same_workspace()
+    public function campaigns_can_be_saved_with_segments_belonging_to_the_same_workspace()
     {
         $workspace = factory(Workspace::class)->create();
 
@@ -208,7 +208,7 @@ class CampaignsControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_cannot_be_updated_with_segments_belonging_to_another_workspace()
+    public function campaigns_cannot_be_updated_with_segments_belonging_to_another_workspace()
     {
         $workspace = factory(Workspace::class)->create();
         $anotherWorkspace = factory(Workspace::class)->create();
@@ -242,7 +242,7 @@ class CampaignsControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_updated_with_segments_belonging_to_the_same_workspace()
+    public function campaigns_can_be_updated_with_segments_belonging_to_the_same_workspace()
     {
         $workspace = factory(Workspace::class)->create();
 

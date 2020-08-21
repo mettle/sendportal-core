@@ -13,7 +13,7 @@ class CampaignDispatchControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function campaigns_can_be_dispatched_to_segments_belonging_to_the_users_workspace()
+    public function campaigns_can_be_dispatched_to_segments_belonging_to_the_users_workspace()
     {
         $workspace = factory(Workspace::class)->create();
         $user = $this->createWorkspaceUser($workspace);
@@ -34,7 +34,7 @@ class CampaignDispatchControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_cannot_be_dispatched_to_segments_belonging_to_another_workspace()
+    public function campaigns_cannot_be_dispatched_to_segments_belonging_to_another_workspace()
     {
         $workspace = factory(Workspace::class)->create();
         $anotherWorkspace = factory(Workspace::class)->create();

@@ -6,10 +6,10 @@ use Exception;
 use Livewire\Component;
 use Sendportal\Base\Setup\Admin;
 use Sendportal\Base\Setup\Database;
-use Sendportal\Base\Setup\Url;
 use Sendportal\Base\Setup\Env;
 use Sendportal\Base\Setup\Key;
 use Sendportal\Base\Setup\Migrations;
+use Sendportal\Base\Setup\Url;
 
 class Setup extends Component
 {

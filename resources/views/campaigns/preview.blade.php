@@ -82,10 +82,10 @@
                 <div class="form-group row form-group-recipients">
                     <div class="col-sm-12">
                         <select id="id-field-recipients" class="form-control" name="recipients">
-                            <option value="send_to_all" {{ (old('recipients') == 'send_to_all' || $campaign->send_to_all) ? 'selected' : '' }}>
+                            <option value="send_to_all" {{ (old('recipients') == 'send_to_all' || $campaign->send_to_all || $campaign->segments->isEmpty()) ? 'selected' : '' }}>
                                 {{ __('All subscribers') }} ({{ $subscriberCount }})
                             </option>
-                            <option value="send_to_segments" {{ (old('recipients') == 'send_to_segments' || ! $campaign->send_to_all) ? 'selected' : '' }}>
+                            <option value="send_to_segments" {{ (old('recipients') == 'send_to_segments' || $campaign->segments->isNotEmpty()) ? 'selected' : '' }}>
                                 {{ __('Select Segments') }}
                             </option>
                         </select>

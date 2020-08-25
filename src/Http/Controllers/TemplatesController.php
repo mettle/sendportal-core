@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Requests\TemplateStoreRequest;
 use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
@@ -16,8 +17,6 @@ use Throwable;
 
 class TemplatesController extends Controller
 {
-    use NormalizeTags;
-
     /** @var TemplateTenantRepository */
     private $templates;
 
@@ -52,6 +51,12 @@ class TemplatesController extends Controller
     {
         $data = $request->validated();
 
+        if (Arr::has($data, 'json')) {
+            $data['content'] = $data['html'];
+
+            unset($data['html']);
+        }
+
         $this->service->store(auth()->user()->currentWorkspace()->id, $data);
 
         return redirect()
@@ -74,6 +79,12 @@ class TemplatesController extends Controller
     public function update(TemplateUpdateRequest $request, int $id): RedirectResponse
     {
         $data = $request->validated();
+
+        if (Arr::has($data, 'json')) {
+            $data['content'] = $data['html'];
+
+            unset($data['html']);
+        }
 
         $this->service->update(auth()->user()->currentWorkspace()->id, $id, $data);
 

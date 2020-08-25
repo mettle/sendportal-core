@@ -12,7 +12,6 @@ use Sendportal\Base\Http\Requests\TemplateStoreRequest;
 use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Services\Templates\TemplateService;
-use Sendportal\Base\Traits\NormalizeTags;
 use Throwable;
 
 class TemplatesController extends Controller

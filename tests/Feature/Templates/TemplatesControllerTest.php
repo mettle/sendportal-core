@@ -123,14 +123,14 @@ class TemplatesControllerTest extends TestCase
         $user = $this->createUserWithWorkspace();
         $this->loginUser($user);
 
-        $json = json_encode([
+        $json = [
             'key' => 'value'
-        ]);
+        ];
 
         $data = [
             'name' => $this->faker->name,
             'html' => $this->faker->sentence,
-            'json' => $json
+            'json' => json_encode($json)
         ];
 
         $response = $this->post(route('sendportal.templates.store'), $data);
@@ -140,9 +140,10 @@ class TemplatesControllerTest extends TestCase
         $this->assertDatabaseHas('templates', [
             'name' => $data['name'],
             'content' => $data['html'],
-            'json' => $data['json'],
             'workspace_id' => $user->currentWorkspace()->id
         ]);
+
+        $this->assertEquals($json, json_decode(Template::first()->json, true));
     }
 
     /** @test */

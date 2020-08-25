@@ -123,6 +123,8 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
         // Ajax.
         $appRouter->name('ajax.')->prefix('ajax')->namespace('Ajax')->group(static function (Router $ajaxRouter) {
             $ajaxRouter->post('segments/store', 'SegmentsController@store')->name('segments.store');
+
+            $ajaxRouter->post('templates/file', 'FileController@store')->name('file.store');
         });
 
         // Workspace Management.

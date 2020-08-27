@@ -38,7 +38,7 @@ class HandleSesWebhook implements ShouldQueue
             return;
         }
 
-        $event = json_decode(Arr::get($event->payload, 'Message'), true);
+        $event = $event->payload;
 
         if (!$event) {
             return;

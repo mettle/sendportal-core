@@ -21,11 +21,7 @@ class SesWebhooksController extends Controller
 
         Log::info('SES webhook received', ['payload' => $payload]);
 
-        $payloadType = $payload['Type'] ?? null;
-
-        if (!in_array($payloadType, ['SubscriptionConfirmation', 'Notification'], true)) {
-            return response('OK (not processed).');
-        }
+        $payloadType = $payload['eventType'] ?? null;
 
         event(new SesWebhookReceived($payload, $payloadType));
 

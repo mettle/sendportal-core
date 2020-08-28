@@ -24,33 +24,33 @@ class CampaignStatisticsService
     /**
      * @throws Exception
      */
-    public function getForCampaign(Campaign $campaign, Workspace $workspace): Collection
+    public function getForCampaign(Campaign $campaign, int $workspaceId): Collection
     {
-        return $this->get(collect([$campaign]), $workspace);
+        return $this->get(collect([$campaign]), $workspaceId);
     }
 
     /**
      * @throws Exception
      */
-    public function getForCollection(Collection $campaigns, Workspace $workspace): Collection
+    public function getForCollection(Collection $campaigns, int $workspaceId): Collection
     {
-        return $this->get($campaigns, $workspace);
+        return $this->get($campaigns, $workspaceId);
     }
 
     /**
      * @throws Exception
      */
-    public function getForPaginator(LengthAwarePaginator $paginator, Workspace $workspace): Collection
+    public function getForPaginator(LengthAwarePaginator $paginator, int $workspaceId): Collection
     {
-        return $this->get(collect($paginator->items()), $workspace);
+        return $this->get(collect($paginator->items()), $workspaceId);
     }
 
     /**
      * @throws Exception
      */
-    protected function get(Collection $campaigns, Workspace $workspace): Collection
+    protected function get(Collection $campaigns, int $workspaceId): Collection
     {
-        $countData = $this->campaigns->getCounts($campaigns->pluck('id'), $workspace->id);
+        $countData = $this->campaigns->getCounts($campaigns->pluck('id'), $workspaceId);
 
         return $campaigns->map(function (Campaign $campaign) use ($countData) {
             return [

@@ -15,11 +15,9 @@ class CreateSegmentsTable extends Migration
     {
         Schema::create('segments', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->string('name')->unique();
             $table->timestamps();
-
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
         });
     }
 }

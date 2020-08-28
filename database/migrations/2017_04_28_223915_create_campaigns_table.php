@@ -15,7 +15,7 @@ class CreateCampaignsTable extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->string('name');
             $table->unsignedInteger('status_id')->default(1);
             $table->unsignedInteger('template_id')->nullable();
@@ -34,7 +34,6 @@ class CreateCampaignsTable extends Migration
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('status_id')->references('id')->on('campaign_statuses');
             $table->foreign('template_id')->references('id')->on('templates');
             $table->foreign('email_service_id')->references('id')->on('email_services');

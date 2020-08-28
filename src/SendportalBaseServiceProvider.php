@@ -10,6 +10,7 @@ use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
 use Sendportal\Base\Console\Commands\SetupProduction;
 use Sendportal\Base\Providers\EventServiceProvider;
 use Sendportal\Base\Providers\FormServiceProvider;
+use Sendportal\Base\Providers\ResolverProvider;
 use Sendportal\Base\Providers\RouteServiceProvider;
 use Sendportal\Base\Providers\SendportalAppServiceProvider;
 
@@ -53,6 +54,8 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->loadJsonTranslationsFrom(resource_path('lang/vendor/sendportal'));
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sendportal');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+
     }
 
     /**
@@ -65,6 +68,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
         $this->app->register(HtmlServiceProvider::class);
         $this->app->register(FormServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(ResolverProvider::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'sendportal');
     }

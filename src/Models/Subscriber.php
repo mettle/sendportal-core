@@ -30,11 +30,6 @@ class Subscriber extends BaseModel
         });
     }
 
-    public function workspace(): BelongsTo
-    {
-        return $this->belongsTo(Workspace::class);
-    }
-
     public function segments(): BelongsToMany
     {
         return $this->belongsToMany(Segment::class)->withTimestamps();

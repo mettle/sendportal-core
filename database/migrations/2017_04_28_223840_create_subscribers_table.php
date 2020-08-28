@@ -15,7 +15,7 @@ class CreateSubscribersTable extends Migration
     {
         Schema::create('subscribers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->uuid('hash')->unique();
             $table->string('email')->index();
             $table->string('first_name')->nullable();
@@ -26,7 +26,6 @@ class CreateSubscribersTable extends Migration
             $table->timestamps();
 
             $table->index('created_at');
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->foreign('unsubscribe_event_id')->references('id')->on('unsubscribe_event_types');
         });
     }

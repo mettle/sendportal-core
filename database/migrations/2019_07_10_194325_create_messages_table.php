@@ -16,7 +16,7 @@ class CreateMessagesTable extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('hash')->unique();
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->unsignedInteger('subscriber_id')->index();
             $table->string('source_type')->index();
             $table->unsignedInteger('source_id')->index();
@@ -37,8 +37,6 @@ class CreateMessagesTable extends Migration
             $table->timestamp('opened_at')->nullable()->default(null)->index();
             $table->timestamp('clicked_at')->nullable()->default(null)->index();
             $table->timestamps();
-
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
         });
     }
 }

@@ -12,11 +12,6 @@ class Template extends BaseModel
     /** @var array */
     protected $guarded = [];
 
-    public function workspace(): BelongsTo
-    {
-        return $this->belongsTo(Workspace::class);
-    }
-
     /**
      * Campaigns using this template
      */

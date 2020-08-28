@@ -25,14 +25,6 @@ class Segment extends BaseModel
     }
 
     /**
-     * The workspace this segment belongs to.
-     */
-    public function workspace(): BelongsTo
-    {
-        return $this->belongsTo(Workspace::class);
-    }
-
-    /**
      * Subscribers in this segment.
      */
     public function subscribers(): BelongsToMany

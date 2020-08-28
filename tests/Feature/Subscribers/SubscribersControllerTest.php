@@ -124,7 +124,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_subscribers_index_lists_subscribers()
+    public function the_subscribers_index_lists_subscribers()
     {
         [$workspace, $josh] = $this->createUserAndWorkspace();
         $subscriber = factory(Subscriber::class, 5)->create([
@@ -141,7 +141,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_subscribers_index_can_be_filtered_by_segments()
+    public function the_subscribers_index_can_be_filtered_by_segments()
     {
         [$workspace, $josh] = $this->createUserAndWorkspace();
 

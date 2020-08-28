@@ -6,7 +6,6 @@ use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\View\View;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;

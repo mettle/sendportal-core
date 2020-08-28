@@ -44,7 +44,7 @@ class SubscribersController extends Controller
         $subscribers = $this->subscriberRepo->paginate(
             $workspace->id,
             'email',
-            [],
+            ['segments'],
             50,
             request()->all()
         );

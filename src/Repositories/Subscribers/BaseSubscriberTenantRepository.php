@@ -140,7 +140,8 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
         if ($segmentIds = Arr::get($filters, 'segments')) {
             $instance->select('subscribers.*')
                 ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
-                ->whereIn('segment_subscriber.segment_id', $segmentIds);
+                ->whereIn('segment_subscriber.segment_id', $segmentIds)
+                ->distinct();
         }
     }
 }

@@ -25,8 +25,12 @@
                     </select>
                 </div>
 
-                <div class="mr-2">
-                    {!! Form::selectMultipleField('segments[]', null, $segments, request()->get('segments')) !!}
+                <div id="segmentFilterSelector" class="mr-2">
+                    <select multiple="" class="form-control selectpicker" name="segments[]">
+                        @foreach($segments as $segmentId => $segmentName)
+                            <option value="{{ $segmentId }}" @if(in_array($segmentId, request()->get('segments') ?? [])) selected @endif>{{ $segmentName }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-light btn-md">{{ __('Search') }}</button>
@@ -69,6 +73,7 @@
                 <tr>
                     <th>{{ __('Email') }}</th>
                     <th>{{ __('Name') }}</th>
+                    <th>{{ __('Segments') }}</th>
                     <th>{{ __('Created') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
@@ -83,6 +88,12 @@
                             </a>
                         </td>
                         <td>{{ $subscriber->full_name }}</td>
+                        <td>
+                            @forelse($subscriber->segments as $segment)
+                                <span class="badge badge-light">{{ $segment->name }}</span>
+                            @empty
+                                -
+                            @endforelse
                         <td><span
                                 title="{{ $subscriber->created_at }}">{{ $subscriber->created_at->diffForHumans() }}</span>
                         </td>
@@ -99,7 +110,8 @@
                                 @method('DELETE')
                                 <a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
                                    class="btn btn-xs btn-light">{{ __('Edit') }}</a>
-                                <button type="submit" class="btn btn-xs btn-light delete-subscriber">{{ __('Delete') }}</button>
+                                <button type="submit"
+                                        class="btn btn-xs btn-light delete-subscriber">{{ __('Delete') }}</button>
                             </form>
                         </td>
                     </tr>
@@ -126,7 +138,7 @@
 
                 let confirmDelete = confirm('Are you sure you want to permanently delete this subscriber and all associated data?');
 
-                if(confirmDelete) {
+                if (confirmDelete) {
                     element.closest('form').submit();
                 }
             });

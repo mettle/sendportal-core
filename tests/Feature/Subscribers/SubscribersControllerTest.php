@@ -181,6 +181,4 @@ class SubscribersControllerTest extends TestCase
         $response->assertDontSee($thirdSegmentSubscriber->email);
         $response->assertDontSee("{$thirdSegmentSubscriber->first_name} {$thirdSegmentSubscriber->last_name}");
     }
-
-
 }

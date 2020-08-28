@@ -6,6 +6,7 @@ namespace Tests\Feature\Subscribers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -121,4 +122,65 @@ class SubscribersControllerTest extends TestCase
         // then
         $response->assertOk();
     }
+
+    /** @test */
+    function the_subscribers_index_lists_subscribers()
+    {
+        [$workspace, $josh] = $this->createUserAndWorkspace();
+        $subscriber = factory(Subscriber::class, 5)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+
+        $response = $this->actingAs($josh)
+            ->get(route('sendportal.subscribers.index'));
+
+        $subscriber->each(static function (Subscriber $subscriber) use ($response) {
+            $response->assertSee($subscriber->email);
+            $response->assertSee("{$subscriber->first_name} {$subscriber->last_name}");
+        });
+    }
+
+    /** @test */
+    function the_subscribers_index_can_be_filtered_by_segments()
+    {
+        [$workspace, $josh] = $this->createUserAndWorkspace();
+
+        $firstSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $secondSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $thirdSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+
+        $firstSegmentSubscriber = factory(Subscriber::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $secondSegmentSubscriber = factory(Subscriber::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $thirdSegmentSubscriber = factory(Subscriber::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+
+        $firstSegment->subscribers()->attach($firstSegmentSubscriber->id);
+        $secondSegment->subscribers()->attach($secondSegmentSubscriber->id);
+        $thirdSegment->subscribers()->attach($thirdSegmentSubscriber->id);
+
+        $response = $this->actingAs($josh)
+            ->get(route('sendportal.subscribers.index', [
+                'segments' => [$firstSegment->id, $secondSegment->id]
+            ]));
+
+        $response->assertSee($firstSegmentSubscriber->email);
+        $response->assertSee("{$firstSegmentSubscriber->first_name} {$firstSegmentSubscriber->last_name}");
+        $response->assertSee($secondSegmentSubscriber->email);
+        $response->assertSee("{$secondSegmentSubscriber->first_name} {$secondSegmentSubscriber->last_name}");
+        $response->assertDontSee($thirdSegmentSubscriber->email);
+        $response->assertDontSee("{$thirdSegmentSubscriber->first_name} {$thirdSegmentSubscriber->last_name}");
+    }
+
+
 }

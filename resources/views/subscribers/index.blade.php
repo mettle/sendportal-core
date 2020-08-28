@@ -25,6 +25,10 @@
                     </select>
                 </div>
 
+                <div class="mr-2">
+                    {!! Form::selectMultipleField('segments[]', null, $segments, request()->get('segments')) !!}
+                </div>
+
                 <button type="submit" class="btn btn-light btn-md">{{ __('Search') }}</button>
 
                 @if(request()->anyFilled(['name', 'status']))
@@ -130,3 +134,11 @@
     </script>
 
 @endsection
+
+@push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css">
+@endpush
+
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/bootstrap-select.min.js"></script>
+@endpush

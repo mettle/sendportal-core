@@ -388,8 +388,6 @@ ul.pagination {
  */
 
 
-
-
 .alert ul {
     margin-bottom: 0;
 }
@@ -475,4 +473,12 @@ ul.pagination {
 /*---- Summernote ----*/
 .note-editor.note-frame {
     border: 1px solid $gray-200;
+}
+
+.filter-option-inner-inner {
+    font-size: .85rem;
+}
+
+.form-group-segments button {
+    padding: .25rem .5rem !important;
 }

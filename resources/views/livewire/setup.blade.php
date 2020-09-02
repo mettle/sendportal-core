@@ -18,19 +18,12 @@
     <div class="accordion">
         @foreach ($steps as $index => $step)
             <div class="card">
-                <div class="card-header {{ $step['completed'] ? 'bg-success text-white' : ($index === $this->activeKey ? 'bg-light' : null) }}">
-                    <h6 class="mb-0">
-                        {{ $step['completed'] ? '✔' : ($index === $this->activeKey ? '➡️' : null) }} {{ $step['name'] }}
-                        <span class="text-small float-right"><em>{{ $loop->iteration }}/{{ count($steps) }}</em></span>
-                    </h6>
-                </div>
-                <div class="collapse {{ $index === $this->activeKey ? 'show' : null }}">
-                    <div class="card-body">
-                        @include($step['view'], [
-                            'completed' => $step['completed']
-                        ])
-                    </div>
-                </div>
+                @include($step['view'], [
+                    'step' => $step,
+                    'active' => $index === $this->activeKey,
+                    'iteration' => $loop->iteration,
+                    'total' => count($steps)
+                ])
             </div>
         @endforeach
         </div>

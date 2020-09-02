@@ -12,7 +12,7 @@ class Url implements StepInterface
 
     public function check(): bool
     {
-        if (config('app.url') !== 'http://localhost') {
+        if (config('app.url') and config('app.url') !== 'http://localhost') {
             return true;
         }
 

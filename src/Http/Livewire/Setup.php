@@ -94,7 +94,7 @@ class Setup extends Component
     {
         $this->resetValidation();
 
-        $step = $this->steps[$this->activeKey];
+        $step = $this->steps[$this->getActiveKeyProperty()];
 
         $handler = app()->make($step['handler']);
 
@@ -105,9 +105,13 @@ class Setup extends Component
         }
 
         try {
-            $return = $handler->run($data);
+            $completed = $handler->run($data);
 
-            $this->steps[$this->activeKey]['completed'] = $return;
+            $this->steps[$this->getActiveKeyProperty()]['completed'] = $completed;
+
+            if ($completed and $this->active < count($this->steps) - 1) {
+                $this->next();
+            }
         } catch (Exception $exception) {
             session()->flash('error', $exception->getMessage());
         }

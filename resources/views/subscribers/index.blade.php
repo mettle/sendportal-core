@@ -25,13 +25,15 @@
                     </select>
                 </div>
 
-                <div id="segmentFilterSelector" class="mr-2">
-                    <select multiple="" class="form-control selectpicker" name="segments[]">
-                        @foreach($segments as $segmentId => $segmentName)
-                            <option value="{{ $segmentId }}" @if(in_array($segmentId, request()->get('segments') ?? [])) selected @endif>{{ $segmentName }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                @if(count($segments))
+                    <div id="segmentFilterSelector" class="mr-2">
+                        <select multiple="" class="form-control selectpicker" name="segments[]">
+                            @foreach($segments as $segmentId => $segmentName)
+                                <option value="{{ $segmentId }}" @if(in_array($segmentId, request()->get('segments') ?? [])) selected @endif>{{ $segmentName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
 
                 <button type="submit" class="btn btn-light btn-md">{{ __('Search') }}</button>
 

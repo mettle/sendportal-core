@@ -16,7 +16,7 @@ class Setup extends Component
     public $active = 0;
 
     public $steps = [
-        'env' => ['name' => 'Check Environment', 'completed' => false, 'handler' => Env::class, 'view' => Env::VIEW],
+        'env' => ['name' => 'Environment File', 'completed' => false, 'handler' => Env::class, 'view' => Env::VIEW],
         'key' => ['name' => 'Application Key', 'completed' => false, 'handler' => Key::class, 'view' => Key::VIEW],
         'url' => ['name' => 'Application Url', 'completed' => false, 'handler' => Url::class, 'view' => Url::VIEW],
         'db' => ['name' => 'Database Connection', 'completed' => false, 'handler' => Database::class, 'view' => Database::VIEW],
@@ -86,7 +86,7 @@ class Setup extends Component
         $outcome = $this->check();
 
         if (!$outcome) {
-            session()->flash('error', 'Not working. Please check your configuration and try again!');
+            session()->flash('error', 'A database connection could not be established. Please update your configuration and try again.');
         }
     }
 

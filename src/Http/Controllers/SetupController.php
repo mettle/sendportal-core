@@ -14,9 +14,9 @@ class SetupController extends Controller
     public function index()
     {
         try {
-            if (User::exists()) {
-                return redirect()->route('login');
-            }
+            //if (User::exists()) {
+            //    return redirect()->route('login');
+            //}
         } catch (Exception $e) {
             //
         }

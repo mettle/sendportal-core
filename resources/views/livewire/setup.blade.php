@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <div class="progress mb-2" style="height: 4px">
+    <div class="progress mb-2" style="height: 8px">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ $this->progress }}%"></div>
     </div>
     <div class="accordion">
@@ -28,4 +28,8 @@
         @endforeach
         </div>
     </div>
+    @if ($this->progress == 100)
+        <a href="{{ route('login') }}" class="btn btn-primary btn-md">Login</a>
+    @endif
+
 </div>

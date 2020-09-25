@@ -145,6 +145,10 @@ class MessagesController extends Controller
      */
     public function sendSelected(): RedirectResponse
     {
+        if (! request()->has('messages')) {
+            return redirect()->back()->withErrors(__('No messages selected'));
+        }
+
         if (!$messages = $this->messageRepo->getWhereIn(
             auth()->user()->currentWorkspace()->id,
             request('messages'),

@@ -223,6 +223,7 @@
     "The Mailgun Email Service requires you to enter a zone": "The Mailgun Email Service requires you to enter a zone",
     "The Mailjet Email Service requires you to enter a key": "The Mailjet Email Service requires you to enter a key",
     "The message was sent successfully": "The message was sent successfully",
+    "No messages selected": "No messages selected",
     "The messages were sent successfully": "The messages were sent successfully",
     "The message was deleted": "The message was deleted",
     "The number of subscribers for this campaign exceeds your SES quota": "The number of subscribers for this campaign exceeds your SES quota",

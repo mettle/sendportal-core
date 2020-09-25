@@ -10,6 +10,21 @@
 
 @section('content')
 
+    @if (isset($errors) and count($errors->getBags()))
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->getBags() as $key => $bag)
+                            @foreach($bag->all() as $error)
+                                <li>{{ $key }} - {{ $error }}</li>
+                            @endforeach
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @component('sendportal::layouts.partials.card')
         @slot('cardHeader', __('Import via CSV file'))
@@ -50,7 +65,14 @@
                 </div>
             </div>
 
-            {!! Form::submitButton(__('Upload')) !!}
+            {!! Form::checkboxField('validate', __('Do not import any row if the file contains errors'))!!}
+
+            <div class="form-group row">
+                <div class="offset-sm-3 col-sm-9">
+                    <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-light">{{ __('Back') }}</a>
+                    <button type="submit" class="btn btn-primary">{{ __('Upload') }}</button>
+                </div>
+            </div>
 
             {!! Form::close() !!}
 

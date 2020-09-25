@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
@@ -125,6 +126,12 @@ class MessagesController extends Controller
             request('id')
         )) {
             return redirect()->back()->withErrors(__('Unable to locate that message'));
+        }
+
+        $response = Gate::inspect('delete', $message);
+
+        if (! $response->allowed()) {
+            return redirect()->back()->withErrors($response->message());
         }
 
         $this->messageRepo->destroy(

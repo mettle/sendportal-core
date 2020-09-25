@@ -287,7 +287,11 @@ class SetupProduction extends BaseCommand
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ];
 
-        $value = $this->ask(ucfirst($param));
+        if ($param === 'password') {
+            $value = $this->secret(ucfirst($param));
+        } else {
+            $value = $this->ask(ucfirst($param));
+        }
 
         $validator = Validator::make([$param => $value], [
             $param => $validationRules[$param],

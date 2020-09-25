@@ -27,7 +27,7 @@ class CampaignDuplicateController extends Controller
      */
     public function duplicate(int $campaignId): RedirectResponse
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $campaignId);
+        $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $campaignId);
 
         return redirect()->route('sendportal.campaigns.create')->withInput([
             'name' => $campaign->name . ' - Duplicate',

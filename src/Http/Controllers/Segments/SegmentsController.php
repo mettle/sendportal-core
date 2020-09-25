@@ -27,7 +27,7 @@ class SegmentsController extends Controller
      */
     public function index(): View
     {
-        $segments = $this->segmentRepository->paginate(auth()->user()->currentWorkspace()->id, 'name');
+        $segments = $this->segmentRepository->paginate(Sendportal::currentWorkspaceId(), 'name');
 
         return view('sendportal::segments.index', compact('segments'));
     }
@@ -42,7 +42,7 @@ class SegmentsController extends Controller
      */
     public function store(SegmentRequest $request): RedirectResponse
     {
-        $this->segmentRepository->store(auth()->user()->currentWorkspace()->id, $request->all());
+        $this->segmentRepository->store(Sendportal::currentWorkspaceId(), $request->all());
 
         return redirect()->route('sendportal.segments.index');
     }
@@ -52,7 +52,7 @@ class SegmentsController extends Controller
      */
     public function edit(int $id, SubscriberTenantRepositoryInterface $subscriberRepository): View
     {
-        $segment = $this->segmentRepository->find(auth()->user()->currentWorkspace()->id, $id, ['subscribers']);
+        $segment = $this->segmentRepository->find(Sendportal::currentWorkspaceId(), $id, ['subscribers']);
 
         return view('sendportal::segments.edit', compact('segment'));
     }
@@ -62,7 +62,7 @@ class SegmentsController extends Controller
      */
     public function update(int $id, SegmentRequest $request): RedirectResponse
     {
-        $this->segmentRepository->update(auth()->user()->currentWorkspace()->id, $id, $request->all());
+        $this->segmentRepository->update(Sendportal::currentWorkspaceId(), $id, $request->all());
 
         return redirect()->route('sendportal.segments.index');
     }
@@ -72,7 +72,7 @@ class SegmentsController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $this->segmentRepository->destroy(auth()->user()->currentWorkspace()->id, $id);
+        $this->segmentRepository->destroy(Sendportal::currentWorkspaceId(), $id);
 
         return redirect()->route('sendportal.segments.index');
     }

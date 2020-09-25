@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Sendportal\Base\Events\SubscriberAddedEvent;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriberRequest;
 use Sendportal\Base\Models\UnsubscribeEventType;
@@ -40,7 +41,7 @@ class SubscribersController extends Controller
     public function index(): View
     {
         $subscribers = $this->subscriberRepo->paginate(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             'email',
             [],
             50,
@@ -55,7 +56,7 @@ class SubscribersController extends Controller
      */
     public function create(): View
     {
-        $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
+        $segments = $this->segmentRepo->pluck(Sendportal::currentWorkspaceId());
         $selectedSegments = [];
 
         return view('sendportal::subscribers.create', compact('segments', 'selectedSegments'));
@@ -70,7 +71,7 @@ class SubscribersController extends Controller
         $data['unsubscribed_at'] = $request->has('subscribed') ? null : now();
         $data['unsubscribe_event_id'] = $request->has('subscribed') ? null : UnsubscribeEventType::MANUAL_BY_ADMIN;
 
-        $subscriber = $this->subscriberRepo->store(auth()->user()->currentWorkspace()->id, $data);
+        $subscriber = $this->subscriberRepo->store(Sendportal::currentWorkspaceId(), $data);
 
         event(new SubscriberAddedEvent($subscriber));
 
@@ -83,7 +84,7 @@ class SubscribersController extends Controller
     public function show(int $id): View
     {
         $subscriber = $this->subscriberRepo->find(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             $id,
             ['segments', 'messages.source']
         );
@@ -96,8 +97,8 @@ class SubscribersController extends Controller
      */
     public function edit(int $id): View
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
-        $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
+        $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
+        $segments = $this->segmentRepo->pluck(Sendportal::currentWorkspaceId());
         $selectedSegments = $subscriber->segments->pluck('id', 'name');
 
         return view('sendportal::subscribers.edit', compact('subscriber', 'segments', 'selectedSegments'));
@@ -108,7 +109,7 @@ class SubscribersController extends Controller
      */
     public function update(SubscriberRequest $request, int $id): RedirectResponse
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
         $data = $request->validated();
 
         // updating subscriber from subscribed -> unsubscribed
@@ -125,7 +126,7 @@ class SubscribersController extends Controller
             $data['segments'] = [];
         }
 
-        $this->subscriberRepo->update(auth()->user()->currentWorkspace()->id, $id, $data);
+        $this->subscriberRepo->update(Sendportal::currentWorkspaceId(), $id, $data);
 
         return redirect()->route('sendportal.subscribers.index');
     }
@@ -140,7 +141,7 @@ class SubscribersController extends Controller
      */
     public function export()
     {
-        $subscribers = $this->subscriberRepo->all(auth()->user()->currentWorkspace()->id, 'id');
+        $subscribers = $this->subscriberRepo->all(Sendportal::currentWorkspaceId(), 'id');
 
         if (!$subscribers->count()) {
             return redirect()->route('sendportal.subscribers.index')->withErrors(__('There are no subscribers to export'));

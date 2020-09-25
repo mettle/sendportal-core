@@ -33,7 +33,7 @@ class SubscribersImportController extends Controller
      */
     public function show(SegmentTenantRepository $segmentRepo): ViewContract
     {
-        $segments = $segmentRepo->pluck(auth()->user()->currentWorkspace()->id, 'name', 'id');
+        $segments = $segmentRepo->pluck(Sendportal::currentWorkspaceId(), 'name', 'id');
 
         return view('sendportal::subscribers.import', compact('segments'));
     }
@@ -57,7 +57,7 @@ class SubscribersImportController extends Controller
 
                     $data['segments'] = $request->get('segments') ?? [];
 
-                    return $this->subscriberService->import(auth()->user()->currentWorkspace()->id, $data);
+                    return $this->subscriberService->import(Sendportal::currentWorkspaceId(), $data);
                 } catch (Exception $e) {
                     Log::warning($e->getMessage());
                 }

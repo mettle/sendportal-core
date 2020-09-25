@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignTestRequest;
 use Sendportal\Base\Services\Messages\DispatchTestMessage;
@@ -25,7 +26,7 @@ class CampaignTestController extends Controller
      */
     public function handle(CampaignTestRequest $request, int $campaignId): RedirectResponse
     {
-        $messageId = $this->dispatchTestMessage->handle(auth()->user()->currentWorkspace()->id, $campaignId, $request->get('recipient_email'));
+        $messageId = $this->dispatchTestMessage->handle(Sendportal::currentWorkspaceId(), $campaignId, $request->get('recipient_email'));
 
         if (!$messageId) {
             return redirect()->route('sendportal.campaigns.preview', $campaignId)

@@ -29,7 +29,7 @@ class CampaignDeleteController extends Controller
      */
     public function confirm(int $id)
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $id);
 
         if (!$campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
@@ -46,14 +46,14 @@ class CampaignDeleteController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $request->get('id'));
+        $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $request->get('id'));
 
         if (!$campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
 
-        $this->campaigns->destroy(auth()->user()->currentWorkspace()->id, $request->get('id'));
+        $this->campaigns->destroy(Sendportal::currentWorkspaceId(), $request->get('id'));
 
         return redirect()->route('sendportal.campaigns.index')
             ->with('success', __('The Campaign has been successfully deleted'));

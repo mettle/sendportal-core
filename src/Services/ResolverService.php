@@ -2,6 +2,8 @@
 
 namespace Sendportal\Base\Services;
 
+use Illuminate\Support\Arr;
+
 class ResolverService
 {
 
@@ -23,9 +25,11 @@ class ResolverService
      */
     public function resolveHeaderHtmlContent():?string
     {
-        $resolver = $this->getResolver('header');
+        if ($resolver = $this->getResolver('header')) {
+            return $resolver();
+        }
 
-        return $resolver();
+        return null;
     }
 
     /**
@@ -41,9 +45,11 @@ class ResolverService
      */
     public function resolveSiderbarHtmlContent():?string
     {
-        $resolver = $this->getResolver('sidebar');
+        if ($resolver = $this->getResolver('sidebar')) {
+            return $resolver();
+        }
 
-        return $resolver();
+        return null;
     }
 
     /**
@@ -68,9 +74,9 @@ class ResolverService
      * @param $resolverName
      * @return mixed
      */
-    private function getResolver(string $resolverName): callable
+    private function getResolver(string $resolverName): ?callable
     {
-        return $this->resolvers[$resolverName];
+        return Arr::get($this->resolvers, $resolverName);
     }
 
     /**

@@ -72,7 +72,7 @@ class CampaignReportsController extends Controller
      */
     public function recipients(int $id)
     {
-        $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaignRepo->find(Sendportal::currentWorkspaceId(), $id);
 
         if ($campaign->draft) {
             return redirect()->route('sendportal.campaigns.edit', $id);
@@ -82,7 +82,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->recipients(auth()->user()->currentWorkspace()->id, Campaign::class, $id);
+        $messages = $this->messageRepo->recipients(Sendportal::currentWorkspaceId(), Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.recipients', compact('campaign', 'messages'));
     }
@@ -95,7 +95,7 @@ class CampaignReportsController extends Controller
      */
     public function opens(int $id)
     {
-        $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaignRepo->find(Sendportal::currentWorkspaceId(), $id);
         $averageTimeToOpen = $this->campaignRepo->getAverageTimeToOpen($campaign);
 
         if ($campaign->draft) {
@@ -106,7 +106,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->opens(auth()->user()->currentWorkspace()->id, Campaign::class, $id);
+        $messages = $this->messageRepo->opens(Sendportal::currentWorkspaceId(), Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.opens', compact('campaign', 'messages', 'averageTimeToOpen'));
     }
@@ -119,7 +119,7 @@ class CampaignReportsController extends Controller
      */
     public function clicks(int $id)
     {
-        $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaignRepo->find(Sendportal::currentWorkspaceId(), $id);
         $averageTimeToClick = $this->campaignRepo->getAverageTimeToClick($campaign);
 
         if ($campaign->draft) {
@@ -130,7 +130,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->clicks(auth()->user()->currentWorkspace()->id, Campaign::class, $id);
+        $messages = $this->messageRepo->clicks(Sendportal::currentWorkspaceId(), Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.clicks', compact('campaign', 'messages', 'averageTimeToClick'));
     }
@@ -143,7 +143,7 @@ class CampaignReportsController extends Controller
      */
     public function bounces(int $id)
     {
-        $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaignRepo->find(Sendportal::currentWorkspaceId(), $id);
 
         if ($campaign->draft) {
             return redirect()->route('sendportal.campaigns.edit', $id);
@@ -153,7 +153,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->bounces(auth()->user()->currentWorkspace()->id, Campaign::class, $id);
+        $messages = $this->messageRepo->bounces(Sendportal::currentWorkspaceId(), Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.bounces', compact('campaign', 'messages'));
     }
@@ -166,7 +166,7 @@ class CampaignReportsController extends Controller
      */
     public function unsubscribes(int $id)
     {
-        $campaign = $this->campaignRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaignRepo->find(Sendportal::currentWorkspaceId(), $id);
 
         if ($campaign->draft) {
             return redirect()->route('sendportal.campaigns.edit', $id);
@@ -176,7 +176,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $messages = $this->messageRepo->unsubscribes(auth()->user()->currentWorkspace()->id, Campaign::class, $id);
+        $messages = $this->messageRepo->unsubscribes(Sendportal::currentWorkspaceId(), Campaign::class, $id);
 
         return view('sendportal::campaigns.reports.unsubscribes', compact('campaign', 'messages'));
     }

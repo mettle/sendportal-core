@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Requests\TemplateStoreRequest;
 use Sendportal\Base\Http\Requests\TemplateUpdateRequest;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
@@ -35,7 +36,7 @@ class TemplatesController extends Controller
      */
     public function index(): View
     {
-        $templates = $this->templates->paginate(auth()->user()->currentWorkspace()->id, 'name');
+        $templates = $this->templates->paginate(Sendportal::currentWorkspaceId(), 'name');
 
         return view('sendportal::templates.index', compact('templates'));
     }
@@ -52,7 +53,7 @@ class TemplatesController extends Controller
     {
         $data = $request->validated();
 
-        $this->service->store(auth()->user()->currentWorkspace()->id, $data);
+        $this->service->store(Sendportal::currentWorkspaceId(), $data);
 
         return redirect()
             ->route('sendportal.templates.index');
@@ -63,7 +64,7 @@ class TemplatesController extends Controller
      */
     public function edit(int $id): View
     {
-        $template = $this->templates->find(auth()->user()->currentWorkspace()->id, $id);
+        $template = $this->templates->find(Sendportal::currentWorkspaceId(), $id);
 
         return view('sendportal::templates.edit', compact('template'));
     }
@@ -75,7 +76,7 @@ class TemplatesController extends Controller
     {
         $data = $request->validated();
 
-        $this->service->update(auth()->user()->currentWorkspace()->id, $id, $data);
+        $this->service->update(Sendportal::currentWorkspaceId(), $id, $data);
 
         return redirect()
             ->route('sendportal.templates.index');
@@ -86,7 +87,7 @@ class TemplatesController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $this->service->delete(auth()->user()->currentWorkspace()->id, $id);
+        $this->service->delete(Sendportal::currentWorkspaceId(), $id);
 
         return redirect()
             ->route('sendportal.templates.index')

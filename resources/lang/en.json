@@ -224,6 +224,7 @@
     "The Mailjet Email Service requires you to enter a key": "The Mailjet Email Service requires you to enter a key",
     "The message was sent successfully": "The message was sent successfully",
     "The messages were sent successfully": "The messages were sent successfully",
+    "The message was deleted": "The message was deleted",
     "The number of subscribers for this campaign exceeds your SES quota": "The number of subscribers for this campaign exceeds your SES quota",
     "The Postmark Email Service requires you to enter a key": "The Postmark Email Service requires you to enter a key",
     "The selected message has already been sent": "The selected message has already been sent",

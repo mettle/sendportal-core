@@ -114,6 +114,31 @@ class MessagesController extends Controller
     }
 
     /**
+     * Send a message.
+     *
+     * @throws Exception
+     */
+    public function delete(): RedirectResponse
+    {
+        if (!$message = $this->messageRepo->find(
+            auth()->user()->currentWorkspace()->id,
+            request('id')
+        )) {
+            return redirect()->back()->withErrors(__('Unable to locate that message'));
+        }
+
+        $this->messageRepo->destroy(
+            auth()->user()->currentWorkspace()->id,
+            $message->id
+        );
+
+        return redirect()->route('sendportal.messages.draft')->with(
+            'success',
+            __('The message was deleted')
+        );
+    }
+
+    /**
      * Send multiple messages.
      *
      * @throws Exception

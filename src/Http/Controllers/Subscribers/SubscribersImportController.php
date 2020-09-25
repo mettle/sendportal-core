@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;

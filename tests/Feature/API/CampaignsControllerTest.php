@@ -160,7 +160,7 @@ class CampaignsControllerTest extends TestCase
         $campaign = factory(Campaign::class)->make([
             'workspace_id' => $workspace->id,
             'content' => 'foo',
-            'send_to_all' => 'send_to_segments',
+            'send_to_all' => false,
             'scheduled_at' => now()->addDay(),
         ]);
         $validSegment = factory(Segment::class)->create([
@@ -192,7 +192,7 @@ class CampaignsControllerTest extends TestCase
         $campaign = factory(Campaign::class)->make([
             'workspace_id' => $workspace->id,
             'content' => 'foo',
-            'send_to_all' => 'send_to_segments',
+            'send_to_all' => false,
             'scheduled_at' => now()->addDay(),
         ]);
         $validSegment = factory(Segment::class)->create([
@@ -216,7 +216,7 @@ class CampaignsControllerTest extends TestCase
         $campaign = factory(Campaign::class)->create([
             'workspace_id' => $workspace->id,
             'content' => 'foo',
-            'send_to_all' => 'send_to_segments',
+            'send_to_all' => false,
             'scheduled_at' => now()->addDay(),
         ]);
         $validSegment = factory(Segment::class)->create([
@@ -249,7 +249,7 @@ class CampaignsControllerTest extends TestCase
         $campaign = factory(Campaign::class)->create([
             'workspace_id' => $workspace->id,
             'content' => 'foo',
-            'send_to_all' => 'send_to_segments',
+            'send_to_all' => false,
             'scheduled_at' => now()->addDay(),
         ]);
         $validSegment = factory(Segment::class)->create([

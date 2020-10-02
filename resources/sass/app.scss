@@ -476,6 +476,11 @@ ul.pagination {
     color: #0A558C;
 }
 
+/*---- Progress Bar ----*/
+.progress-bar {
+    background-color: $purple-500;
+}
+
 /*---- Summernote ----*/
 .note-editor.note-frame {
     border: 1px solid $gray-200;

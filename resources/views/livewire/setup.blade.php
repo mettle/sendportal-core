@@ -1,5 +1,12 @@
 <div>
-    <h2 class="text-center">Application Setup</h2>
+    @if($this->progress == 100)
+        <div class="text-center">
+            <h2 class="text-primary">Application Setup Complete</h2>
+            <a href="{{ route('login') }}" class="btn btn-primary btn-md">Login</a>
+        </div>
+    @else
+        <h2 class="text-center">Application Setup</h2>
+    @endif
     <div class="text-center m-2 invisible" wire:loading.class.remove="invisible">
         <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
@@ -13,7 +20,7 @@
     @endif
 
     <div class="progress mb-2" style="height: 8px">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ $this->progress }}%"></div>
+        <div class="progress-bar" role="progressbar" style="width: {{ $this->progress }}%"></div>
     </div>
     <div class="accordion">
         @foreach ($steps as $index => $step)
@@ -28,8 +35,4 @@
         @endforeach
         </div>
     </div>
-    @if ($this->progress == 100)
-        <a href="{{ route('login') }}" class="btn btn-primary btn-md">Login</a>
-    @endif
-
 </div>

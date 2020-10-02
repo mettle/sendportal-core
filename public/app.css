@@ -51,6 +51,10 @@ pre {
   text-align: justify;
 }
 
+.text-primary {
+  color: #5D63FF !important;
+}
+
 span.required {
   color: red;
 }
@@ -1214,6 +1218,12 @@ ul.pagination .page-link {
 .badge-info {
   background-color: #E6F6FF;
   color: #0A558C;
+}
+
+/*---- Progress Bar ----*/
+
+.progress-bar {
+  background-color: #5D63FF;
 }
 
 /*---- Summernote ----*/

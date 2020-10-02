@@ -4,7 +4,6 @@ namespace Tests;
 
 use Collective\Html\FormFacade;
 use Laravel\Ui\UiServiceProvider;
-use Sendportal\Base\Models\User;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Sendportal\Base\SendportalBaseServiceProvider;
 
@@ -37,17 +36,6 @@ abstract class TestCase extends BaseTestCase
         $this->withFactories(__DIR__ . '/../database/factories');
 
         $this->artisan('migrate')->run();
-    }
-
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('auth.providers.users.model', User::class);
     }
 
     /**

@@ -12,7 +12,6 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Services\QuotaService;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;

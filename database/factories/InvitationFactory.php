@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Sendportal\Base\Models\Invitation;
-use Sendportal\Base\Models\Workspace;
 
 $factory->define(Invitation::class, static function (Faker $faker) {
     return [

@@ -8,8 +8,6 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\User;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Tests\TestCase;
 

@@ -6,10 +6,7 @@ namespace Sendportal\Base\Rules;
 
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Workspace;
-use Sendportal\Base\Models\User;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Collection;
 
 class CanAccessSegment implements Rule
 {

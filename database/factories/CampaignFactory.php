@@ -8,7 +8,6 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Template;
-use Sendportal\Base\Models\Workspace;
 
 $factory->define(Campaign::class, function (Faker $faker) {
     return [

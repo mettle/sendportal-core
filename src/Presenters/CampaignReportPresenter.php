@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Support\Collection;
 use RuntimeException;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\MessageUrlRepository;

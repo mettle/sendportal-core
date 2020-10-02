@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 
 class CampaignStatisticsService

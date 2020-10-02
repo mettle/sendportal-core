@@ -10,7 +10,6 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Template;
-use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
 
 class CampaignControllerTest extends TestCase

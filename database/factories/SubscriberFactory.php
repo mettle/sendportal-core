@@ -6,7 +6,6 @@ use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Workspace;
 
 $factory->define(Subscriber::class, static function (Faker $faker) {
     return [

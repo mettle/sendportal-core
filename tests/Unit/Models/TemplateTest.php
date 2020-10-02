@@ -6,8 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Email;
 use Sendportal\Base\Models\Template;
-use Sendportal\Base\Models\User;
-use Sendportal\Base\Models\Workspace;
 use Tests\TestCase;
 
 class TemplateTest extends TestCase

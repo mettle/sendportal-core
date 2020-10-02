@@ -131,7 +131,7 @@ class CampaignsController extends Controller
      */
     public function preview(int $id)
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id);
+        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id, ['segments']);
         $subscriberCount = $this->subscribers->countActive(auth()->user()->currentWorkspace()->id);
 
         if (!$campaign->draft) {

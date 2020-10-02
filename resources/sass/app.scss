@@ -475,6 +475,10 @@ ul.pagination {
     border: 1px solid $gray-200;
 }
 
+.bootstrap-select > .dropdown-toggle {
+    background-color: $white;
+}
+
 .filter-option-inner-inner {
     font-size: .85rem;
 }

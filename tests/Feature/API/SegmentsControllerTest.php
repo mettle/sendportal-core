@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Models\Segment;
 use Tests\TestCase;
 
 class SegmentsControllerTest extends TestCase
@@ -122,5 +123,25 @@ class SegmentsControllerTest extends TestCase
         $response = $this->delete($route);
 
         $response->assertStatus(204);
+    }
+
+    /** @test */
+    public function a_segment_name_must_be_unique_for_a_workspace()
+    {
+        $user = $this->createUserWithWorkspace();
+
+        $segment = $this->createSegment($user);
+
+        $route = route('sendportal.api.segments.store', [
+            'workspaceId' => $user->currentWorkspace()->id,
+            'api_token' => $user->api_token,
+            'name' => $segment->name,
+        ]);
+
+        $response = $this->post($route);
+
+        $response->assertRedirect()
+            ->assertSessionHasErrors('name');
+        $this->assertEquals(1, Segment::where('name', $segment->name)->count());
     }
 }

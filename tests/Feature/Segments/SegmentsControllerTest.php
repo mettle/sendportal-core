@@ -140,4 +140,23 @@ class SegmentsControllerTest extends TestCase
             'id' => $segment->id,
         ]);
     }
+
+    /** @test */
+    public function a_segment_name_must_be_unique_for_a_workspace()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $segment = factory(Segment::class)->create(['workspace_id' => $workspace->id]);
+
+        $request = [
+            'name' => $segment->name,
+        ];
+
+        $response = $this->actingAs($user)
+            ->post(route('sendportal.segments.store'), $request);
+
+        $response->assertRedirect()
+            ->assertSessionHasErrors('name');
+        $this->assertEquals(1, Segment::where('name', $segment->name)->count());
+    }
 }

@@ -172,4 +172,26 @@ class TemplatesControllerTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['template']);
     }
+
+    /** @test */
+    public function a_template_name_must_be_unique_for_a_workspace()
+    {
+        $user = $this->createUserWithWorkspace();
+
+        $template = factory(Template::class)->create([
+            'workspace_id' => $user->currentWorkspace()->id
+        ]);
+
+        $route = route('sendportal.api.templates.store', [
+            'workspaceId' => $user->currentWorkspace()->id,
+            'api_token' => $user->api_token,
+            'name' => $template->name,
+        ]);
+
+        $response = $this->post($route);
+
+        $response->assertRedirect()
+            ->assertSessionHasErrors('name');
+        $this->assertEquals(1, Template::where('name', $template->name)->count());
+    }
 }

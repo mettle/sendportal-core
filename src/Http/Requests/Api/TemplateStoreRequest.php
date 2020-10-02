@@ -11,8 +11,23 @@ class TemplateStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string'],
-            'content' => ['string']
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:templates',
+            ],
+            'content' => [
+                'required',
+                'string',
+            ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.unique' => __('The template name must be unique.'),
         ];
     }
 }

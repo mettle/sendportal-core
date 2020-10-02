@@ -154,8 +154,8 @@ class CampaignsController extends Controller
      */
     public function status(int $id)
     {
-        $workspace = auth()->user()->currentWorkspace();
-        $campaign = $this->campaigns->find($workspace->id, $id, ['status']);
+        $workspaceId = Sendportal::currentWorkspaceId();
+        $campaign = $this->campaigns->find($workspaceId, $id, ['status']);
 
         if ($campaign->sent) {
             return redirect()->route('sendportal.campaigns.reports.index', $id);
@@ -163,7 +163,7 @@ class CampaignsController extends Controller
 
         return view('sendportal::campaigns.status', [
             'campaign' => $campaign,
-            'campaignStats' => $this->campaignStatisticsService->getForCampaign($campaign, $workspace),
+            'campaignStats' => $this->campaignStatisticsService->getForCampaign($campaign, $workspaceId),
         ]);
     }
 

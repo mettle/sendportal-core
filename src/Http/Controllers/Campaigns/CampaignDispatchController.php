@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;

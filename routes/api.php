@@ -59,6 +59,4 @@ Route::name('api.webhooks.')->prefix('webhooks')->namespace('Api\Webhooks')->gro
     $webhookRouter->post('mailjet', 'MailjetWebhooksController@handle')->name('mailjet');
 });
 
-Route::get('ping', static function () {
-    return 'ok';
-});
+Route::get('ping', 'Api\PingController@index');

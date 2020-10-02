@@ -34,9 +34,9 @@ class CampaignDispatchController extends Controller
      */
     public function send(CampaignDispatchRequest $request, $workspaceId, $campaignId)
     {
-        $campaign = $request->getCampaign();
+        $campaign = $request->getCampaign(['email_service', 'messages']);
 
-        if ($this->quotaService->exceedsQuota($campaign)) {
+        if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return response([
                 'message' => __('The number of subscribers for this campaign exceeds your SES quota')
             ], 422);

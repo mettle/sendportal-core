@@ -8,7 +8,8 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\SegmentRequest;
+use Sendportal\Base\Http\Requests\SegmentStoreRequest;
+use Sendportal\Base\Http\Requests\SegmentUpdateRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 
@@ -40,7 +41,7 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SegmentRequest $request): RedirectResponse
+    public function store(SegmentStoreRequest $request): RedirectResponse
     {
         $this->segmentRepository->store(auth()->user()->currentWorkspace()->id, $request->all());
 
@@ -60,7 +61,7 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function update(int $id, SegmentRequest $request): RedirectResponse
+    public function update(int $id, SegmentUpdateRequest $request): RedirectResponse
     {
         $this->segmentRepository->update(auth()->user()->currentWorkspace()->id, $id, $request->all());
 

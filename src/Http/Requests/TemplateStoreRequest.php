@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TemplateStoreRequest extends FormRequest
 {
@@ -17,7 +18,8 @@ class TemplateStoreRequest extends FormRequest
             'name' => [
                 'required',
                 'max:255',
-                'unique:templates',
+                Rule::unique('templates')
+                    ->where('workspace_id', auth()->user()->currentWorkspace()->id),
             ],
             'content' => 'required',
         ];

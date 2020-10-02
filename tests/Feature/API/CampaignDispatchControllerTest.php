@@ -6,6 +6,7 @@ namespace Tests\Feature\API;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
@@ -25,18 +26,17 @@ class CampaignDispatchControllerTest extends TestCase
     {
         $this->ignoreQuota();
 
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
         $campaign = factory(Campaign::class)->states('draft')->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => $workspace->id,
-                'id' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
+                'id' => $campaign->id
             ]))
             ->assertOk()
             ->assertJson([
@@ -51,15 +51,14 @@ class CampaignDispatchControllerTest extends TestCase
     {
         $this->ignoreQuota();
 
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $campaign = $this->createCampaign($emailService);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => $workspace->id,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'id' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
@@ -74,23 +73,20 @@ class CampaignDispatchControllerTest extends TestCase
             $mock->shouldReceive('exceedsQuota')->andReturn(true);
         }));
 
-        $workspace = factory(Workspace::class)->create();
-
         $emailService = factory(EmailService::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'type_id' => EmailServiceType::SES
         ]);
 
         $campaign = factory(Campaign::class)->states('draft')->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => $workspace->id,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'id' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([

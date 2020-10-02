@@ -16,7 +16,7 @@ class SendgridWebhooksTest extends TestCase
     /**
      * @var string
      */
-    protected $route = 'api.webhooks.sendgrid';
+    protected $route = 'sendportal.api.webhooks.sendgrid';
 
     /**
      * @return void

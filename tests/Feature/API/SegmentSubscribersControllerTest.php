@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Facades\Sendportal;
 use Tests\TestCase;
 
 class SegmentSubscribersControllerTest extends TestCase
@@ -17,17 +18,14 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_index_gets_segment_subscribers()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $segment = $this->createSegment($user);
-        $subscriber = $this->createSubscriber($user);
+        $segment = $this->createSegment();
+        $subscriber = $this->createSubscriber();
 
         $segment->subscribers()->save($subscriber);
 
         $route = route('sendportal.api.segments.subscribers.index', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
-            'api_token' => $user->api_token,
         ]);
 
         $response = $this->get($route);
@@ -46,13 +44,11 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_added_to_a_segment()
     {
-        $user = $this->createuserwithworkspace();
-
-        $segment = $this->createsegment($user);
-        $subscriber = $this->createsubscriber($user);
+        $segment = $this->createsegment();
+        $subscriber = $this->createsubscriber();
 
         $route = route('sendportal.api.segments.subscribers.store', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -60,7 +56,7 @@ class SegmentSubscribersControllerTest extends TestCase
             'subscribers' => [$subscriber->id]
         ];
 
-        $response = $this->post($route, array_merge($request, ['api_token' => $user->api_token]));
+        $response = $this->post($route, $request);
 
         $response->assertStatus(200);
 
@@ -81,17 +77,15 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_store_endpoint_is_idempotent()
     {
-        $user = $this->createuserwithworkspace();
-
-        $segment = $this->createsegment($user);
-        $existingSubscriber = $this->createsubscriber($user);
+        $segment = $this->createSegment();
+        $existingSubscriber = $this->createSubscriber();
 
         $segment->subscribers()->attach($existingSubscriber);
 
-        $newSubscriber = $this->createSubscriber($user);
+        $newSubscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.segments.subscribers.store', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -99,7 +93,7 @@ class SegmentSubscribersControllerTest extends TestCase
             'subscribers' => [$existingSubscriber->id, $newSubscriber->id]
         ];
 
-        $this->post($route, array_merge($data, ['api_token' => $user->api_token]));
+        $this->post($route, $data);
 
         $this->assertCount(2, $segment->refresh()->subscribers);
     }
@@ -107,18 +101,15 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_segments_subscribers_can_be_synced()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $segment = $this->createSegment($user);
-        $oldSubscriber = $this->createSubscriber($user);
-        $newSubscriber = $this->createSubscriber($user);
+        $segment = $this->createSegment();
+        $oldSubscriber = $this->createSubscriber();
+        $newSubscriber = $this->createSubscriber();
 
         $segment->subscribers()->save($oldSubscriber);
 
         $route = route('sendportal.api.segments.subscribers.update', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
-            'api_token' => $user->api_token,
         ]);
 
         $request = [
@@ -151,17 +142,14 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_segment_can_be_deleted()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $segment = $this->createSegment($user);
-        $subscriber = $this->createSubscriber($user);
+        $segment = $this->createSegment();
+        $subscriber = $this->createSubscriber();
 
         $segment->subscribers()->save($subscriber);
 
         $route = route('sendportal.api.segments.subscribers.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
-            'api_token' => $user->api_token,
         ]);
 
         $request = [

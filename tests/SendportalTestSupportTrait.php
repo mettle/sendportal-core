@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Testing\TestResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Segment;
@@ -45,31 +46,38 @@ trait SendportalTestSupportTrait {
             'owner_id' => $user->id,
         ]);
         $emailService = factory(EmailService::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
         return [$workspace, $emailService];
     }
 
-    protected function createCampaign(Workspace $workspace, EmailService $emailService): Campaign
+    protected function createEmailService(): EmailService
+    {
+        return factory(EmailService::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+    }
+
+    protected function createCampaign(EmailService $emailService): Campaign
     {
         return factory(Campaign::class)->states(['withContent', 'sent'])->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
     }
 
-    protected function createSegment(User $user): Segment
+    protected function createSegment(): Segment
     {
         return factory(Segment::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
     }
 
-    protected function createSubscriber(User $user): Subscriber
+    protected function createSubscriber(): Subscriber
     {
         return factory(Subscriber::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
     }
 
@@ -82,7 +90,7 @@ trait SendportalTestSupportTrait {
     public function createUserAndLogin(array $states = [], array $overrides = []): User
     {
         $user = factory(User::class)->states($states)->create($overrides);
-        $this->actingAs($user);
+        $this;
 
         return $user;
     }

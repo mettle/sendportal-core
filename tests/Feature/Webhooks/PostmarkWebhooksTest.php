@@ -16,7 +16,7 @@ class PostmarkWebhooksTest extends TestCase
     /**
      * @var string
      */
-    protected $route = 'api.webhooks.postmark';
+    protected $route = 'sendportal.api.webhooks.postmark';
 
     /**
      * @return void

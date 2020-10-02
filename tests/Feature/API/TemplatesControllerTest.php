@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Traits\NormalizeTags;
@@ -21,15 +22,12 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function the_template_index_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
         $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.index', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'api_token' => $user->api_token,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
         ]);
 
         $response = $this->get($route);
@@ -48,16 +46,13 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_single_template_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
         $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.show', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
-            'api_token' => $user->api_token,
         ]);
 
         $response = $this->get($route);
@@ -74,16 +69,14 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_can_be_created_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $route = route('sendportal.api.templates.store', $user->currentWorkspace()->id);
+        $route = route('sendportal.api.templates.store', Sendportal::currentWorkspaceId());
 
         $request = [
             'name' => $this->faker->name,
             'content' => 'Hello {{ content }}',
         ];
 
-        $response = $this->post($route, array_merge($request, ['api_token' => $user->api_token]));
+        $response = $this->post($route, $request);
 
         $normalisedRequest = [
             'name' => $request['name'],
@@ -98,16 +91,13 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_can_be_updated_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
         $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.update', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
-            'api_token' => $user->api_token,
         ]);
 
         $request = [
@@ -131,16 +121,13 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_can_be_deleted_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
         $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
-            'api_token' => $user->api_token,
         ]);
 
         $response = $this->delete($route);
@@ -151,20 +138,17 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
     {
-        $user = $this->createUserWithWorkspace();
-
         $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $campaign = factory(Campaign::class)->create([
+        factory(Campaign::class)->create([
             'template_id' => $template->id
         ]);
 
         $route = route('sendportal.api.templates.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
-            'api_token' => $user->api_token,
         ]);
 
         $response = $this->deleteJson($route);

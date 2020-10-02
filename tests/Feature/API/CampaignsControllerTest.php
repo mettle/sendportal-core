@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -19,14 +20,13 @@ class CampaignsControllerTest extends TestCase
     /** @test */
     public function a_list_of_a_workspaces_campaigns_can_be_retrieved()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $campaign = $this->createCampaign($emailService);
 
         $this
             ->getJson(route('sendportal.api.campaigns.index', [
-                'workspaceId' => $workspace->id,
-                'api_token' => $workspace->owner->api_token,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
             ]))
             ->assertOk()
             ->assertJson([
@@ -39,15 +39,14 @@ class CampaignsControllerTest extends TestCase
     /** @test */
     public function a_single_campaign_can_be_retrieved()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $campaign = $this->createCampaign($emailService);
 
         $this
             ->getJson(route('sendportal.api.campaigns.show', [
-                'workspaceId' => $workspace->id,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'campaign' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]))
             ->assertOk()
             ->assertJson([
@@ -58,7 +57,7 @@ class CampaignsControllerTest extends TestCase
     /** @test */
     public function a_new_campaign_can_be_added()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
         $request = [
             'name' => $this->faker->colorName,
@@ -73,8 +72,8 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->postJson(
-                route('sendportal.api.campaigns.store', $workspace->id),
-                array_merge($request, ['api_token' => $workspace->owner->api_token])
+                route('sendportal.api.campaigns.store', Sendportal::currentWorkspaceId()),
+                $request
             )
             ->assertStatus(Response::HTTP_CREATED)
             ->assertJson(['data' => $request]);
@@ -85,10 +84,10 @@ class CampaignsControllerTest extends TestCase
     /** @test */
     public function a_campaign_can_be_updated()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
         $campaign = factory(Campaign::class)->states('draft')->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
 
@@ -105,9 +104,8 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->putJson(route('sendportal.api.campaigns.update', [
-                'workspaceId' => $workspace->id,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'campaign' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]), $request)
             ->assertOk()
             ->assertJson(['data' => $request]);
@@ -119,9 +117,9 @@ class CampaignsControllerTest extends TestCase
     /** @test */
     public function a_sent_campaign_cannot_be_updated()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $campaign = $this->createCampaign($emailService);
 
         $request = [
             'name' => $this->faker->word,
@@ -136,9 +134,8 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->putJson(route('sendportal.api.campaigns.update', [
-                'workspaceId' => $workspace->id,
+                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'campaign' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]), $request)
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([

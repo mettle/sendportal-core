@@ -13,7 +13,7 @@ use Sendportal\Base\Models\Workspace;
 $factory->define(Campaign::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
-        'workspace_id' => factory(Workspace::class),
+        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
         'subject' => $faker->title,
         'from_name' => $faker->name,
         'from_email' => $faker->email,

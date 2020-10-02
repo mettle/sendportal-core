@@ -10,7 +10,7 @@ use Sendportal\Base\Models\Workspace;
 
 $factory->define(Segment::class, static function (Faker $faker) {
     return [
-        'workspace_id' => factory(Workspace::class),
+        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
         'name' => ucwords($faker->unique()->word)
     ];
 });

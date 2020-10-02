@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
@@ -18,11 +19,11 @@ class CampaignTest extends TestCase
     /** @test */
     function it_has_many_opens()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $emailService = $this->createEmailService();
+        $campaign = $this->createCampaign($emailService);
 
-        $openedMessages = $this->createOpenedMessage($workspace, $campaign, 3);
-        $this->createUnopenedMessage($workspace, $campaign, 2);
+        $openedMessages = $this->createOpenedMessage($campaign, 3);
+        $this->createUnopenedMessage($campaign, 2);
 
         $opens = $campaign->opens;
 
@@ -38,13 +39,13 @@ class CampaignTest extends TestCase
     /** @test */
     function the_unique_open_count_attribute_returns_the_number_of_unique_opens_for_a_campaign()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
         $campaign = factory(Campaign::class)->states(['withContent', 'sent'])->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
-        $this->createOpenedMessage($workspace, $campaign, 3);
+        $this->createOpenedMessage($campaign, 3);
 
         static::assertEquals(3, $campaign->unique_open_count);
     }
@@ -52,10 +53,10 @@ class CampaignTest extends TestCase
     /** @test */
     function the_total_open_count_attribute_returns_the_total_number_of_opens_for_a_campaign()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
-        $this->createOpenedMessage($workspace, $campaign, 3, [
+        $campaign = $this->createCampaign($emailService);
+        $this->createOpenedMessage($campaign, 3, [
             'open_count' => 5
         ]);
 
@@ -65,11 +66,11 @@ class CampaignTest extends TestCase
     /** @test */
     function it_has_many_clicks()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
-        $clickedMessages = $this->createClickedMessage($workspace, $campaign, 3);
-        $this->createUnclickedMessage($workspace, $campaign, 2);
+        $campaign = $this->createCampaign($emailService);
+        $clickedMessages = $this->createClickedMessage($campaign, 3);
+        $this->createUnclickedMessage($campaign, 2);
 
         $clicks = $campaign->clicks;
 
@@ -85,10 +86,10 @@ class CampaignTest extends TestCase
     /** @test */
     function the_unique_click_count_attribute_returns_the_number_of_unique_clicks_for_a_campaign()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
-        $this->createClickedMessage($workspace, $campaign, 3);
+        $campaign = $this->createCampaign($emailService);
+        $this->createClickedMessage($campaign, 3);
 
         static::assertEquals(3, $campaign->unique_click_count);
     }
@@ -96,10 +97,10 @@ class CampaignTest extends TestCase
     /** @test */
     function the_total_click_count_attribute_returns_the_total_number_of_clicks_for_a_campaign()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
-        $this->createClickedMessage($workspace, $campaign, 3, [
+        $campaign = $this->createCampaign($emailService);
+        $this->createClickedMessage($campaign, 3, [
             'click_count' => 5,
         ]);
 
@@ -113,12 +114,12 @@ class CampaignTest extends TestCase
      * @param array $overrides
      * @return mixed
      */
-    protected function createOpenedMessage(Workspace $workspace, Campaign $campaign, int $quantity = 1, array $overrides = [])
+    protected function createOpenedMessage(Campaign $campaign, int $quantity = 1, array $overrides = [])
     {
         $data = array_merge([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -138,12 +139,12 @@ class CampaignTest extends TestCase
      *
      * @return mixed
      */
-    protected function createUnopenedMessage(Workspace $workspace, Campaign $campaign, int $count)
+    protected function createUnopenedMessage(Campaign $campaign, int $count)
     {
         return factory(Message::class, $count)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -160,12 +161,12 @@ class CampaignTest extends TestCase
      * @param array $overrides
      * @return mixed
      */
-    protected function createClickedMessage(Workspace $workspace, Campaign $campaign, int $quantity = 1, array $overrides = [])
+    protected function createClickedMessage(Campaign $campaign, int $quantity = 1, array $overrides = [])
     {
         $data = array_merge([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -185,12 +186,12 @@ class CampaignTest extends TestCase
      *
      * @return mixed
      */
-    protected function createUnclickedMessage(Workspace $workspace, Campaign $campaign, int $count)
+    protected function createUnclickedMessage(Campaign $campaign, int $count)
     {
         return factory(Message::class, $count)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,

@@ -19,7 +19,7 @@ class MailgunWebhooksTest extends TestCase
     /**
      * @var string
      */
-    protected $route = 'api.webhooks.mailgun';
+    protected $route = 'sendportal.api.webhooks.mailgun';
 
     /**
      * @var string

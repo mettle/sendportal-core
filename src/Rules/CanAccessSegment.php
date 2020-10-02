@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Rules;
 
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Models\User;
@@ -12,13 +13,6 @@ use Illuminate\Support\Collection;
 
 class CanAccessSegment implements Rule
 {
-    /** @var User */
-    private $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
 
     public function passes($attribute, $value): bool
     {
@@ -28,13 +22,7 @@ class CanAccessSegment implements Rule
             return false;
         }
 
-        /** @var Collection $userWorkspaces */
-        $userWorkspaces = $this->user->workspaces;
-
-        /** @var Workspace $segmentWorkspace */
-        $segmentWorkspace = $segment->workspace;
-
-        return $userWorkspaces->contains($segmentWorkspace);
+        return $segment->workspace_id === Sendportal::currentWorkspaceId();
     }
 
     /**

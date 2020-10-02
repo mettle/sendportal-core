@@ -10,7 +10,7 @@ use Sendportal\Base\Models\Workspace;
 
 $factory->define(Subscriber::class, static function (Faker $faker) {
     return [
-        'workspace_id' => factory(Workspace::class),
+        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
         'hash' => $faker->uuid,
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,

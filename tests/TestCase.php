@@ -20,7 +20,8 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             UiServiceProvider::class,
-            SendportalBaseServiceProvider::class
+            SendportalBaseServiceProvider::class,
+            SendportalTestServiceProvider::class,
         ];
     }
 
@@ -56,7 +57,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Form' => FormFacade::class
+            'Form' => FormFacade::class,
         ];
     }
 }

@@ -310,7 +310,7 @@ class SetupProduction extends BaseCommand
             'owner_id' => $user->id,
         ]);
 
-        $user->workspaces()->attach($workspace->id, [
+        $user->workspaces()->attach(Sendportal::currentWorkspaceId(), [
             'role' => Workspace::ROLE_OWNER,
         ]);
 

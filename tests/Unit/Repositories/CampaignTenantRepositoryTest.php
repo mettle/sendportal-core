@@ -3,6 +3,7 @@
 namespace Tests\Unit\Repositories;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\EmailService;
@@ -19,17 +20,17 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $emailService = $this->createEmailService();
+        $campaign = $this->createCampaign($emailService);
 
         // 30 seconds
-        $this->createOpenedMessage($workspace, $campaign, 1, [
+        $this->createOpenedMessage($campaign, 1, [
             'delivered_at' => now(),
             'opened_at' => now()->addSeconds(30),
         ]);
 
         // 60 seconds
-        $this->createOpenedMessage($workspace, $campaign, 1, [
+        $this->createOpenedMessage($campaign, 1, [
             'delivered_at' => now(),
             'opened_at' => now()->addSeconds(60),
         ]);
@@ -43,8 +44,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $emailService = $this->createEmailService();
+        $campaign = $this->createCampaign($emailService);
 
         $averageTimeToOpen = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToOpen($campaign);
 
@@ -54,17 +55,17 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $emailService = $this->createEmailService();
+        $campaign = $this->createCampaign($emailService);
 
         // 30 seconds
-        $this->createClickedMessage($workspace, $campaign, 1, [
+        $this->createClickedMessage($campaign, 1, [
             'delivered_at' => now(),
             'clicked_at' => now()->addSeconds(30),
         ]);
 
         // 30 seconds
-        $this->createClickedMessage($workspace, $campaign, 1, [
+        $this->createClickedMessage($campaign, 1, [
             'delivered_at' => now(),
             'clicked_at' => now()->addSeconds(60),
         ]);
@@ -77,8 +78,8 @@ class CampaignTenantRepositoryTest extends TestCase
     /** @test */
     function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $emailService = $this->createEmailService();
+        $campaign = $this->createCampaign($emailService);
 
         $averageTimeToClick = app()->make(CampaignTenantRepositoryInterface::class)->getAverageTimeToClick($campaign);
 
@@ -86,48 +87,31 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @return array
-     */
-    protected function createUserWithWorkspaceAndEmailService(): array
-    {
-        $user = factory(User::class)->create();
-        $workspace = factory(Workspace::class)->create([
-            'owner_id' => $user->id,
-        ]);
-        $emailService = factory(EmailService::class)->create([
-            'workspace_id' => $workspace->id,
-        ]);
-
-        return [$workspace, $emailService];
-    }
-
-    /**
-     * @param Workspace $workspace
      * @param EmailService $emailService
-     *
      * @return Campaign
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createCampaign(Workspace $workspace, EmailService $emailService): Campaign
+    protected function createCampaign(EmailService $emailService): Campaign
     {
         return factory(Campaign::class)->states(['withContent', 'sent'])->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
     }
 
     /**
-     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $quantity
      * @param array $overrides
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createOpenedMessage(Workspace $workspace, Campaign $campaign, int $quantity = 1, array $overrides = [])
+    protected function createOpenedMessage(Campaign $campaign, int $quantity = 1, array $overrides = [])
     {
         $data = array_merge([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -141,18 +125,17 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $count
-     *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createUnopenedMessage(Workspace $workspace, Campaign $campaign, int $count)
+    protected function createUnopenedMessage(Campaign $campaign, int $count)
     {
         return factory(Message::class, $count)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -163,18 +146,18 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $quantity
      * @param array $overrides
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createClickedMessage(Workspace $workspace, Campaign $campaign, int $quantity = 1, array $overrides = [])
+    protected function createClickedMessage(Campaign $campaign, int $quantity = 1, array $overrides = [])
     {
         $data = array_merge([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
@@ -188,18 +171,17 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /**
-     * @param Workspace $workspace
      * @param Campaign $campaign
      * @param int $count
-     *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createUnclickedMessage(Workspace $workspace, Campaign $campaign, int $count)
+    protected function createUnclickedMessage(Campaign $campaign, int $count)
     {
         return factory(Message::class, $count)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => factory(Subscriber::class)->create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => Sendportal::currentWorkspaceId(),
             ]),
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,

@@ -20,7 +20,7 @@ class Sendportal extends Facade
      */
     public static function apiRoutes()
     {
-        static::$app->make('router')->sendportalPublicApiRoutes();
+        static::$app->make('router')->sendportalApiRoutes();
     }
 
     /**

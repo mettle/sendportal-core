@@ -10,7 +10,7 @@ use Sendportal\Base\Models\Workspace;
 $factory->define(Template::class, static function (Faker $faker) {
     return [
         'name' => $faker->word,
-        'workspace_id' => factory(Workspace::class),
+        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
         'content' => '{{content}}'
     ];
 });

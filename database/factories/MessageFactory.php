@@ -12,7 +12,7 @@ use Sendportal\Base\Models\Workspace;
 $factory->define(Message::class, function (Faker $faker) {
     return [
         'hash' => $faker->uuid,
-        'workspace_id' => factory(Workspace::class),
+        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
         'subscriber_id' => factory(Subscriber::class),
         'source_type' => Campaign::class,
         'source_id' => factory(Campaign::class),

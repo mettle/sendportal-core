@@ -16,7 +16,7 @@ class AwsWebhooksTest extends TestCase
     /**
      * @var string
      */
-    protected $route = 'api.webhooks.aws';
+    protected $route = 'sendportal.api.webhooks.aws';
 
     /**
      * @return void

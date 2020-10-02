@@ -21,8 +21,8 @@ class CampaignReportPresenter
     /** @var Campaign */
     private $campaign;
 
-    /** @var Workspace */
-    private $currentWorkspace;
+    /** @var int */
+    private $currentWorkspaceId;
 
     /** @var MessageTenantRepositoryInterface */
     private $messageRepo;
@@ -39,14 +39,14 @@ class CampaignReportPresenter
     private const ONE_DAY_IN_SECONDS = 86400;
     private const THIRTY_DAYS_IN_SECONDS = self::ONE_DAY_IN_SECONDS * 30;
 
-    public function __construct(Campaign $campaign, Workspace $currentWorkspace, int $interval)
+    public function __construct(Campaign $campaign, int $currentWorkspaceId, int $interval)
     {
         $this->messageRepo = app(MessageTenantRepositoryInterface::class);
         $this->messageUrlRepo = app(MessageUrlRepository::class);
         $this->campaignRepo = app(CampaignTenantRepositoryInterface::class);
 
         $this->campaign = $campaign;
-        $this->currentWorkspace = $currentWorkspace;
+        $this->currentWorkspaceId = $currentWorkspaceId;
         $this->interval = $interval;
     }
 
@@ -77,7 +77,7 @@ class CampaignReportPresenter
     {
         // Get the first event from the database.
         $first = $this->messageRepo->getFirstOpenedAt(
-            $this->currentWorkspace->id,
+            $this->currentWorkspaceId,
             Campaign::class,
             $this->campaign->id
         );
@@ -103,7 +103,7 @@ class CampaignReportPresenter
 
         // Calculate the opens per period from the database.
         $opensPerPeriod = $this->messageRepo->countUniqueOpensPerPeriod(
-            $this->currentWorkspace->id,
+            $this->currentWorkspaceId,
             Campaign::class,
             $this->campaign->id,
             $secondsPerInterval
@@ -286,7 +286,7 @@ class CampaignReportPresenter
      */
     private function getCampaignStats(): array
     {
-        $countData = $this->campaignRepo->getCounts(collect($this->campaign->id), $this->currentWorkspace->id);
+        $countData = $this->campaignRepo->getCounts(collect($this->campaign->id), $this->currentWorkspaceId);
 
         return [
             'counts' => [

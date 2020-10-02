@@ -6,6 +6,7 @@ namespace Tests\Feature\Segments;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Segment;
 use Tests\TestCase;
 
@@ -17,13 +18,10 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     function the_index_of_segments_is_accessible_to_authenticated_users()
     {
-        // given
-        [$workspace, $user] = $this->createUserAndWorkspace();
-
-        factory(Segment::class, 3)->create(['workspace_id' => $workspace->id]);
+        factory(Segment::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.segments.index'));
+        $response = $this->get(route('sendportal.segments.index'));
 
         // then
         $response->assertOk();
@@ -32,11 +30,8 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     function the_segment_create_form_is_accessible_to_authenticated_users()
     {
-        // given
-        $user = $this->createUserWithWorkspace();
-
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.segments.create'));
+        $response = $this->get(route('sendportal.segments.create'));
 
         // then
         $response->assertOk();
@@ -45,21 +40,18 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     function new_segments_can_be_created_by_authenticated_users()
     {
-        // given
-        [$workspace, $user] = $this->createUserAndWorkspace();
-
         $segmentStoreData = [
             'name' => $this->faker->word
         ];
 
         // when
-        $response = $this->actingAs($user)
+        $response = $this
             ->post(route('sendportal.segments.store'), $segmentStoreData);
 
         // then
         $response->assertRedirect();
         $this->assertDatabaseHas('segments', [
-            'workspace_id' => $workspace->id,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'name' => $segmentStoreData['name']
         ]);
     }
@@ -67,12 +59,10 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     function the_segment_edit_view_is_accessible_by_authenticated_users()
     {
-        // given
-        [$workspace, $user] = $this->createUserAndWorkspace();
-        $segment = factory(Segment::class)->create(['workspace_id' => $workspace->id]);
+        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.segments.edit', $segment->id));
+        $response = $this->get(route('sendportal.segments.edit', $segment->id));
 
         // then
         $response->assertOk();
@@ -81,16 +71,14 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     function a_segment_is_updateable_by_an_authenticated_user()
     {
-        // given
-        [$workspace, $user] = $this->createUserAndWorkspace();
-        $segment = factory(Segment::class)->create(['workspace_id' => $workspace->id]);
+        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $segmentUpdateData = [
             'name' => $this->faker->word
         ];
 
         // when
-        $response = $this->actingAs($user)
+        $response = $this
             ->put(route('sendportal.segments.update', $segment->id), $segmentUpdateData);
 
         // then
@@ -104,11 +92,9 @@ class SegmentsControllerTest extends TestCase
     /* @test */
     public function a_segment_can_be_deleted()
     {
-        [$workspace, $user] = $this->createUserAndWorkspace();
+        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        $segment = factory(Segment::class)->create(['workspace_id' => $workspace->id]);
-
-        $response = $this->actingAs($user)
+        $response = $this
             ->delete(route('sendportal.segments.destroy', $segment->id));
 
         $response->assertRedirect();

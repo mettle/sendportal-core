@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Segment;
 use Tests\TestCase;
 
@@ -18,13 +19,10 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function the_subscribers_index_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $subscriber = $this->createSubscriber($user);
+        $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.index', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'api_token' => $user->api_token,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
         ]);
 
         $response = $this->get($route);
@@ -43,14 +41,11 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_single_subscriber_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $subscriber = $this->createSubscriber($user);
+        $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.show', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
-            'api_token' => $user->api_token,
         ]);
 
         $response = $this->get($route);
@@ -67,9 +62,7 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_created_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $route = route('sendportal.api.subscribers.store', $user->currentWorkspace()->id);
+        $route = route('sendportal.api.subscribers.store', Sendportal::currentWorkspaceId());
 
         $request = [
             'first_name' => $this->faker->firstName,
@@ -77,7 +70,7 @@ class SubscribersControllerTest extends TestCase
             'email' => $this->faker->email,
         ];
 
-        $response = $this->post($route, array_merge($request, ['api_token' => $user->api_token]));
+        $response = $this->post($route, $request);
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('subscribers', $request);
@@ -87,14 +80,11 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_updated_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $subscriber = $this->createSubscriber($user);
+        $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.update', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
-            'api_token' => $user->api_token,
         ]);
 
         $request = [
@@ -114,14 +104,11 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_deleted_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $subscriber = $this->createSubscriber($user);
+        $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
-            'api_token' => $user->api_token,
         ]);
 
         $response = $this->delete($route);
@@ -132,19 +119,15 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     function a_subscriber_in_a_segment_can_be_deleted()
     {
-        // given
-        $user = $this->createUserWithWorkspace();
-
-        $subscriber = $this->createSubscriber($user);
-        $segment = factory(Segment::class)->create(['workspace_id' => $user->currentWorkspace()->id]);
+        $subscriber = $this->createSubscriber();
+        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
         $subscriber->segments()->attach($segment->id);
 
         // when
         $this->withoutExceptionHandling();
         $response = $this->delete(route('sendportal.api.subscribers.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
+            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
-            'api_token' => $user->api_token,
         ]));
 
         // then

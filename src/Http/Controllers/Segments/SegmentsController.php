@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Segments;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SegmentRequest;
 use Sendportal\Base\Repositories\SegmentTenantRepository;

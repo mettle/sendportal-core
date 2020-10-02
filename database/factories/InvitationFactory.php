@@ -13,7 +13,7 @@ $factory->define(Invitation::class, static function (Faker $faker) {
     return [
         'id' => Uuid::uuid4(),
         'user_id' => null,
-        'workspace_id' => factory(Workspace::class),
+        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
         'role' => Workspace::ROLE_MEMBER,
         'email' => $faker->safeEmail,
         'token' => Str::random(40)

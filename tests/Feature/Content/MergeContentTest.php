@@ -6,6 +6,7 @@ namespace Tests\Feature\Content;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Template;
@@ -52,26 +53,23 @@ class MergeContentTest extends TestCase
 
     private function generateCampaignMessage(?string $campaignContent, ?string $templateContent = null): Message
     {
-        /** @var Workspace $workspace */
-        $workspace = factory(Workspace::class)->create();
-
         /** @var Template $template */
         $template = factory(Template::class)->create([
             'content' => $templateContent ?? '<p>{{content}}</p>',
-            'workspace_id' => $workspace->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         /** @var Campaign $campaign */
         $campaign = factory(Campaign::class)->create([
             'template_id' => $template->id,
             'content' => $campaignContent,
-            'workspace_id' => $workspace->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         return factory(Message::class)->create([
             'source_type' => Campaign::class,
             'source_id' => $campaign->id,
-            'workspace_id' => $workspace->id
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
     }
 

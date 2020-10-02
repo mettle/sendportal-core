@@ -8,7 +8,7 @@ use Illuminate\Routing\Router;
 
 class ApiRoutes
 {
-    public function sendportalPublicApiRoutes(): callable
+    public function sendportalApiRoutes(): callable
     {
         return function() {
             $this->name('sendportal.api.')->prefix('api/v1/workspaces/{workspaceId}')->namespace('\Sendportal\Base\Http\Controllers\Api')->group(static function (Router $apiRouter) {
@@ -36,7 +36,7 @@ class ApiRoutes
         };
     }
 
-    public function sendportalApiRoutes(): callable
+    public function sendportalPublicApiRoutes(): callable
     {
         return function() {
             $this->name('sendportal.api.webhooks.')->prefix('api/v1/webhooks')->namespace('\Sendportal\Base\Http\Controllers\Api\Webhooks')->group(static function (Router $webhookRouter) {

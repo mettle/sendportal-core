@@ -27,7 +27,7 @@
 
                 @if(count($segments))
                     <div id="segmentFilterSelector" class="mr-2">
-                        <select multiple="" class="form-control selectpicker" name="segments[]">
+                        <select multiple="" class="selectpicker form-control form-control-sm" name="segments[]" data-width="auto">
                             @foreach($segments as $segmentId => $segmentName)
                                 <option value="{{ $segmentId }}" @if(in_array($segmentId, request()->get('segments') ?? [])) selected @endif>{{ $segmentName }}</option>
                             @endforeach

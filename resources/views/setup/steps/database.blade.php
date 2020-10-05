@@ -11,14 +11,48 @@
             <button class="btn btn-primary btn-md" wire:click="next">Next</button>
         @else
             <p>✖️ A database connection could not be established. Please update your configuration and try again.</p>
-            @if(config('database.default'))
-                <p>Default Connection: <code>{{ config('database.default') }}</code></p>
 
-                <button class="btn btn-primary btn-md" wire:click="checkAgain" wire:loading.attr="disabled">
+            <form wire:submit.prevent="run(Object.fromEntries(new FormData($event.target)))">
+                <div class="form-group">
+                    <label for="connection">Database Connection</label>
+                    <select name="connection" class="form-control" required>
+                        <option value="">Please select the connection...</option>
+                        @foreach(config('database.connections') as $key => $connection)
+                            <option value="{{ $key }}" {{ config('database.default') === $key ? 'selected' : '' }}>{{ $key }}</option>
+                        @endforeach
+                    </select>
+                    @error('connection') <span class="form-text text-danger">{{ $message }}</span>@enderror
+                </div>
+                <div class="form-group">
+                    <label for="host">Database Host</label>
+                    <input type="text" class="form-control" id="host" name="host" value="{{ env('DB_HOST') }}" required>
+                    @error('host') <span class="form-text text-danger">{{ $message }}</span>@enderror
+                </div>
+                <div class="form-group">
+                    <label for="port">Database Port</label>
+                    <input type="text" class="form-control" id="port" name="port" value="{{ env('DB_PORT') }}" required>
+                    @error('port') <span class="form-text text-danger">{{ $message }}</span>@enderror
+                </div>
+                <div class="form-group">
+                    <label for="database">Database Name</label>
+                    <input type="text" class="form-control" id="database" name="database" value="{{ env('DB_DATABASE') }}" required>
+                    @error('database') <span class="form-text text-danger">{{ $message }}</span>@enderror
+                </div>
+                <div class="form-group">
+                    <label for="username">Database Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ env('DB_USERNAME') }}" required>
+                    @error('username') <span class="form-text text-danger">{{ $message }}</span>@enderror
+                </div>
+                <div class="form-group">
+                    <label for="password">Database Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    @error('password') <span class="form-text text-danger">{{ $message }}</span>@enderror
+                </div>
+                <button class="btn btn-primary btn-md" type="submit" wire:loading.attr="disabled">
                     <span wire:loading class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Test Database Connection
+                    Update Configuration
                 </button>
-            @endif
+            </form>
         @endif
     </div>
 </div>

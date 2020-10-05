@@ -16,7 +16,7 @@
                 <div class="form-group">
                     <label for="connection">Database Connection</label>
                     <select name="connection" class="form-control" required>
-                        <option value="">Please select the connection...</option>
+                        <option value="">Please select ...</option>
                         @foreach(config('database.connections') as $key => $connection)
                             <option value="{{ $key }}" {{ config('database.default') === $key ? 'selected' : '' }}>{{ $key }}</option>
                         @endforeach
@@ -25,12 +25,12 @@
                 </div>
                 <div class="form-group">
                     <label for="host">Database Host</label>
-                    <input type="text" class="form-control" id="host" name="host" value="{{ env('DB_HOST') }}" required>
+                    <input type="text" class="form-control" id="host" name="host" value="{{ env('DB_HOST') ?: '127.0.0.1' }}" required>
                     @error('host') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="port">Database Port</label>
-                    <input type="text" class="form-control" id="port" name="port" value="{{ env('DB_PORT') }}" required>
+                    <input type="text" class="form-control" id="port" name="port" value="{{ env('DB_PORT') ?: 3306 }}" required>
                     @error('port') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">

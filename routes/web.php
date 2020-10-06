@@ -16,6 +16,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
 });
 
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('sendportal.')->group(static function (Router $router) {
+    $router->get('setup', 'SetupController@index')->name('setup');
 
     // Auth.
     $router->middleware('auth')->namespace('Auth')->group(static function (Router $authRouter) {

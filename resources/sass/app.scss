@@ -435,6 +435,10 @@ ul.pagination {
     letter-spacing: 0.1em;
 }
 
+.bg-success {
+    background-color: #d7f5ea !important;
+    color: #306955 !important;
+}
 
 /*---- Badges ----*/
 .badge {
@@ -467,6 +471,11 @@ ul.pagination {
 .badge-info {
     background-color: #E6F6FF;
     color: #0A558C;
+}
+
+/*---- Progress Bar ----*/
+.progress-bar {
+    background-color: $purple-500;
 }
 
 /*---- Summernote ----*/

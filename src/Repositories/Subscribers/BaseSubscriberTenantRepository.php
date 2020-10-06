@@ -137,10 +137,11 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
      */
     protected function applySegmentFilter(Builder $instance, array $filters = []): void
     {
-        if ($segmentId = Arr::get($filters, 'segment_id')) {
+        if ($segmentIds = Arr::get($filters, 'segments')) {
             $instance->select('subscribers.*')
                 ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
-                ->whereIn('segment_subscriber.segment_id', $segmentId);
+                ->whereIn('segment_subscriber.segment_id', $segmentIds)
+                ->distinct();
         }
     }
 }

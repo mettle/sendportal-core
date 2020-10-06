@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
@@ -114,12 +115,47 @@ class MessagesController extends Controller
     }
 
     /**
+     * Send a message.
+     *
+     * @throws Exception
+     */
+    public function delete(): RedirectResponse
+    {
+        if (!$message = $this->messageRepo->find(
+            auth()->user()->currentWorkspace()->id,
+            request('id')
+        )) {
+            return redirect()->back()->withErrors(__('Unable to locate that message'));
+        }
+
+        $response = Gate::inspect('delete', $message);
+
+        if (! $response->allowed()) {
+            return redirect()->back()->withErrors($response->message());
+        }
+
+        $this->messageRepo->destroy(
+            auth()->user()->currentWorkspace()->id,
+            $message->id
+        );
+
+        return redirect()->route('sendportal.messages.draft')->with(
+            'success',
+            __('The message was deleted')
+        );
+    }
+
+    /**
      * Send multiple messages.
      *
      * @throws Exception
      */
     public function sendSelected(): RedirectResponse
     {
+        if (! request()->has('messages')) {
+            return redirect()->back()->withErrors(__('No messages selected'));
+        }
+
         if (!$messages = $this->messageRepo->getWhereIn(
             auth()->user()->currentWorkspace()->id,
             request('messages'),

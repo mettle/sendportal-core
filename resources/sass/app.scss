@@ -174,7 +174,6 @@ a.color-purple-500 {
     border: 1px solid rgba(43, 49, 55, 0.07);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.02), 0 10px 18px rgba(43, 49, 55, 0.25);
     border-radius: $radius;
-    width: 12.5rem;
 }
 
 .nav-pills {
@@ -388,8 +387,6 @@ ul.pagination {
  */
 
 
-
-
 .alert ul {
     margin-bottom: 0;
 }
@@ -484,4 +481,16 @@ ul.pagination {
 /*---- Summernote ----*/
 .note-editor.note-frame {
     border: 1px solid $gray-200;
+}
+
+.bootstrap-select > .dropdown-toggle {
+    background-color: $white;
+}
+
+.filter-option-inner-inner {
+    font-size: .85rem;
+}
+
+#segmentFilterSelector button {
+    padding: .25rem .5rem !important;
 }

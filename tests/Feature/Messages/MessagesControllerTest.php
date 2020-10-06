@@ -80,4 +80,49 @@ class MessagesControllerTest extends TestCase
         // then
         $response->assertOk();
     }
+
+    /** @test */
+    public function a_draft_message_can_be_deleted()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => $workspace->id]);
+
+        /** @var Message $message */
+        $message = factory(Message::class)->create([
+            'workspace_id' => $workspace->id,
+            'source_id' => $campaign->id,
+            'sent_at' => null
+        ]);
+
+        $this->actingAs($user)
+            ->delete(route('sendportal.messages.delete', $message->id))
+            ->assertRedirect(route('sendportal.messages.draft'));
+
+        $this->assertDatabaseMissing('messages', ['id' => $message->id]);
+    }
+
+    /** @test */
+    public function a_sent_message_cannot_be_deleted()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => $workspace->id]);
+
+        /** @var Message $message */
+        $message = factory(Message::class)->create([
+            'workspace_id' => $workspace->id,
+            'source_id' => $campaign->id,
+            'sent_at' => now()
+        ]);
+
+        $this
+            ->from(route('sendportal.messages.draft'))
+            ->actingAs($user)
+            ->delete(route('sendportal.messages.delete', $message->id))
+            ->assertRedirect(route('sendportal.messages.draft'))
+            ->assertSessionHasErrorsIn('default');
+
+        $this->assertDatabaseHas('messages', ['id' => $message->id]);
+    }
 }

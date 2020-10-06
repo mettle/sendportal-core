@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Workspace;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -147,5 +149,118 @@ class CampaignsControllerTest extends TestCase
 
         $this->assertDatabaseMissing('campaigns', $request);
         $this->assertEquals($campaign->updated_at, $campaign->fresh()->updated_at);
+    }
+
+    /** @test */
+    public function campaigns_cannot_be_saved_with_segments_belonging_to_another_workspace()
+    {
+        $workspace = factory(Workspace::class)->create();
+        $anotherWorkspace = factory(Workspace::class)->create();
+
+        $campaign = factory(Campaign::class)->make([
+            'workspace_id' => $workspace->id,
+            'content' => 'foo',
+            'send_to_all' => 0,
+            'scheduled_at' => now()->addDay(),
+        ]);
+        $validSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $invalidSegment = factory(Segment::class)->create([
+            'workspace_id' => $anotherWorkspace->id,
+        ]);
+
+        $this
+            ->postJson(route('sendportal.api.campaigns.store', [
+                'workspaceId' => $workspace->id,
+                'api_token' => $workspace->owner->api_token,
+            ]), array_merge($campaign->toArray(), ['segments' => [$validSegment->id, $invalidSegment->id]]))
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'segments' => ['One or more of the segments is invalid.'],
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function campaigns_can_be_saved_with_segments_belonging_to_the_same_workspace()
+    {
+        $workspace = factory(Workspace::class)->create();
+
+        $campaign = factory(Campaign::class)->make([
+            'workspace_id' => $workspace->id,
+            'content' => 'foo',
+            'send_to_all' => 0,
+            'scheduled_at' => now()->addDay(),
+        ]);
+        $validSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+
+        $this
+            ->postJson(route('sendportal.api.campaigns.store', [
+                'workspaceId' => $workspace->id,
+                'api_token' => $workspace->owner->api_token,
+            ]), array_merge($campaign->toArray(), ['segments' => [$validSegment->id]]))
+            ->assertStatus(Response::HTTP_CREATED);
+    }
+
+    /** @test */
+    public function campaigns_cannot_be_updated_with_segments_belonging_to_another_workspace()
+    {
+        $workspace = factory(Workspace::class)->create();
+        $anotherWorkspace = factory(Workspace::class)->create();
+
+        $campaign = factory(Campaign::class)->create([
+            'workspace_id' => $workspace->id,
+            'content' => 'foo',
+            'send_to_all' => 0,
+            'scheduled_at' => now()->addDay(),
+        ]);
+        $validSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $invalidSegment = factory(Segment::class)->create([
+            'workspace_id' => $anotherWorkspace->id,
+        ]);
+
+        $this
+            ->patchJson(route('sendportal.api.campaigns.update', [
+                'workspaceId' => $workspace->id,
+                'campaign' => $campaign->id,
+                'api_token' => $workspace->owner->api_token,
+            ]), array_merge($campaign->toArray(), ['segments' => [$validSegment->id, $invalidSegment->id]]))
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'segments' => ['One or more of the segments is invalid.'],
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function campaigns_can_be_updated_with_segments_belonging_to_the_same_workspace()
+    {
+        $workspace = factory(Workspace::class)->create();
+
+        $campaign = factory(Campaign::class)->create([
+            'workspace_id' => $workspace->id,
+            'content' => 'foo',
+            'send_to_all' => 0,
+            'scheduled_at' => now()->addDay(),
+        ]);
+        $validSegment = factory(Segment::class)->create([
+            'workspace_id' => $workspace->id,
+        ]);
+        $this
+            ->patchJson(route('sendportal.api.campaigns.update', [
+                'workspaceId' => $workspace->id,
+                'campaign' => $campaign->id,
+                'api_token' => $workspace->owner->api_token,
+            ]), array_merge($campaign->toArray(), ['segments' => [$validSegment->id]]))
+            ->assertStatus(Response::HTTP_OK);
     }
 }

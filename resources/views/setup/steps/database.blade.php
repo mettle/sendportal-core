@@ -11,7 +11,7 @@
             <button class="btn btn-primary btn-md" wire:click="next">Next</button>
         @else
             @php
-                $default = config('database.default');
+                $default = config('database.default', 'mysql');
             @endphp
             <p>✖️ A database connection could not be established. Please update your configuration and try again.</p>
 

@@ -10,6 +10,9 @@
             <p>✔️ Database connection successful.</p>
             <button class="btn btn-primary btn-md" wire:click="next">Next</button>
         @else
+            @php
+                $default = config('database.default');
+            @endphp
             <p>✖️ A database connection could not be established. Please update your configuration and try again.</p>
 
             <form wire:submit.prevent="run(Object.fromEntries(new FormData($event.target)))">
@@ -18,29 +21,29 @@
                     <select name="connection" class="form-control" required>
                         <option value="">Please select ...</option>
                         @foreach(config('database.connections') as $key => $connection)
-                            <option value="{{ $key }}" {{ config('database.default') === $key ? 'selected' : '' }}>{{ $key }}</option>
+                            <option value="{{ $key }}" {{ $default === $key ? 'selected' : '' }}>{{ $key }}</option>
                         @endforeach
                     </select>
                     @error('connection') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="host">Database Host</label>
-                    <input type="text" class="form-control" id="host" name="host" value="{{ env('DB_HOST') ?: '127.0.0.1' }}" required>
+                    <input type="text" class="form-control" id="host" name="host" value="{{ config("database.connections.{$default}.host", '127.0.0.1') }}" required>
                     @error('host') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="port">Database Port</label>
-                    <input type="text" class="form-control" id="port" name="port" value="{{ env('DB_PORT') ?: 3306 }}" required>
+                    <input type="text" class="form-control" id="port" name="port" value="{{ config("database.connections.{$default}.port", 3306) }}" required>
                     @error('port') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="database">Database Name</label>
-                    <input type="text" class="form-control" id="database" name="database" value="{{ env('DB_DATABASE') }}" required>
+                    <input type="text" class="form-control" id="database" name="database" value="{{ config("database.connections.{$default}.database") }}" required>
                     @error('database') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="username">Database Username</label>
-                    <input type="text" class="form-control" id="username" name="username" value="{{ env('DB_USERNAME') }}" required>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ config("database.connections.{$default}.username") }}" required>
                     @error('username') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">

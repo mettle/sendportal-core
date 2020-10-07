@@ -25,7 +25,9 @@ class TemplateUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'content' => 'required',
+            'content' => 'required_without:html,json',
+            'html' => 'required_without:content',
+            'json' => 'required_without:content',
         ];
     }
 }

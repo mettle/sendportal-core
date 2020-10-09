@@ -58,7 +58,7 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
 
         $instance = $this->find($workspaceId, $id);
 
-        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments']));
+        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments', 'id']));
 
         // only sync segments if its actually present. This means that users's must
         // pass through an empty segments array if they want to delete all segments

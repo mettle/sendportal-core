@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Sendportal\Base\Http\Requests\Api;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest as BaseCampaignStoreRequest;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
+use Sendportal\Base\Repositories\SegmentTenantRepository;
 
 class CampaignStoreRequest extends BaseCampaignStoreRequest
 {
@@ -40,6 +42,11 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
 
     public function rules(): array
     {
+        $segments = app(SegmentTenantRepository::class)->pluck(
+            $this->workspaceId,
+            'id'
+        );
+
         $rules = [
             'send_to_all' => [
                 'required',
@@ -48,10 +55,10 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'segments' => [
                 'required_unless:send_to_all,1',
                 'array',
+                Rule::in($segments),
             ],
             'segments.*' => [
                 'integer',
-                'exists:segments,id'
             ],
             'scheduled_at' => [
                 'required',
@@ -71,6 +78,7 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
     {
         return [
             'valid_status' => __('A campaign cannot be updated if its status is not draft'),
+            'segments.in' => 'One or more of the segments is invalid.',
         ];
     }
 }

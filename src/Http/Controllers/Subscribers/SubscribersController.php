@@ -39,15 +39,18 @@ class SubscribersController extends Controller
      */
     public function index(): View
     {
+        $workspace = auth()->user()->currentWorkspace();
+
         $subscribers = $this->subscriberRepo->paginate(
-            auth()->user()->currentWorkspace()->id,
+            $workspace->id,
             'email',
-            [],
+            ['segments'],
             50,
             request()->all()
         );
+        $segments = $this->segmentRepo->pluck($workspace->id, 'name', 'id');
 
-        return view('sendportal::subscribers.index', compact('subscribers'));
+        return view('sendportal::subscribers.index', compact('subscribers', 'segments'));
     }
 
     /**

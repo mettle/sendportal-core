@@ -30,4 +30,9 @@ interface CampaignTenantRepositoryInterface extends BaseTenantInterface
      * Get open counts and ratios for a campaign.
      */
     public function getCounts(Collection $campaignIds, int $workspaceId): array;
+
+    /**
+     * Cancel a campaign.
+     */
+    public function cancelCampaign(Campaign $campaign): bool;
 }

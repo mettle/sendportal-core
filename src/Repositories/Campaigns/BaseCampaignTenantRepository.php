@@ -48,10 +48,32 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
             ->selectRaw('count(case when messages.clicked_at IS NOT NULL then 1 end) as clicked')
             ->selectRaw('count(case when messages.sent_at IS NOT NULL then 1 end) as sent')
             ->selectRaw('count(case when messages.bounced_at IS NOT NULL then 1 end) as bounced')
+            ->selectRaw('count(case when messages.sent_at IS NULL then 1 end) as pending')
             ->groupBy('campaigns.id')
             ->orderBy('campaigns.id')
             ->get();
 
         return $counts->flatten()->keyBy('campaign_id')->toArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelCampaign(Campaign $campaign): bool
+    {
+        $this->deleteDraftMessages($campaign);
+
+        return $campaign->update([
+            'status_id' => CampaignStatus::STATUS_CANCELLED,
+        ]);
+    }
+
+    private function deleteDraftMessages(Campaign $campaign): void
+    {
+        if (! $campaign->save_as_draft) {
+            return;
+        }
+
+        $campaign->messages()->whereNull('sent_at')->delete();
     }
 }

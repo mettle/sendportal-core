@@ -251,6 +251,14 @@ class Campaign extends BaseModel
     }
 
     /**
+     * Whether the campaign has been cancelled.
+     */
+    public function getCancelledAttribute(): bool
+    {
+        return $this->status_id === CampaignStatus::STATUS_CANCELLED;
+    }
+
+    /**
      * Get the number of unique opens for the campaign.
      */
     public function getUniqueOpenCountAttribute(): int
@@ -280,5 +288,32 @@ class Campaign extends BaseModel
     public function getTotalClickCountAttribute(): int
     {
         return (int)$this->clicks()->sum('click_count');
+    }
+
+    /**
+     * Determine whether the campaign can be cancelled.
+     */
+    public function canBeCancelled(): bool
+    {
+        // we can cancel campaigns that still have draft messages, because they haven't been entirely dispatched
+        // a campaign that doesn't have any more draft messages (i.e. they have all been sent) cannot be cancelled, because the campaign is completed
+
+        if ($this->status_id === CampaignStatus::STATUS_SENT && $this->save_as_draft && $this->sent_count !== $this->messages()->count()) {
+            return true;
+        }
+
+        return in_array($this->status_id, [CampaignStatus::STATUS_QUEUED, CampaignStatus::STATUS_SENDING], true);
+    }
+
+    /**
+     * Determine whether all drafts have been created for a campaign.
+     */
+    public function allDraftsCreated(): bool
+    {
+        if (!$this->save_as_draft) {
+            return true;
+        }
+
+        return $this->active_subscriber_count === $this->messages()->count();
     }
 }

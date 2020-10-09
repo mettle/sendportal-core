@@ -18,7 +18,7 @@ class CampaignControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_of_campaigns_is_accessible_to_authenticated_users()
+    public function the_index_of_campaigns_is_accessible_to_authenticated_users()
     {
         factory(Campaign::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -32,7 +32,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function the_campaign_creation_form_is_accessible_to_authenticated_users()
+    public function the_campaign_creation_form_is_accessible_to_authenticated_users()
     {
         // when
         $response = $this->get(route('sendportal.campaigns.create'));
@@ -42,7 +42,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function new_campaigns_can_be_created_by_authenticated_users()
+    public function new_campaigns_can_be_created_by_authenticated_users()
     {
         $campaignStoreData = $this->generateCampaignStoreData();
 
@@ -57,7 +57,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function the_preview_view_is_accessible_by_authenticated_users()
+    public function the_preview_view_is_accessible_by_authenticated_users()
     {
         $campaign = factory(Campaign::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -69,7 +69,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function the_edit_view_is_accessible_by_authenticated_users()
+    public function the_edit_view_is_accessible_by_authenticated_users()
     {
         $campaign = factory(Campaign::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -81,7 +81,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function a_campaign_is_updateable_by_authenticated_users()
+    public function a_campaign_is_updateable_by_authenticated_users()
     {
         $campaign = factory(Campaign::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -108,7 +108,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_not_track_opens()
+    public function campaigns_can_be_set_to_not_track_opens()
     {
         $campaignStoreData = $this->generateCampaignStoreData();
 
@@ -124,7 +124,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_track_opens()
+    public function campaigns_can_be_set_to_track_opens()
     {
         $campaignStoreData = $this->generateCampaignStoreData() + ['is_open_tracking' => true];
 
@@ -140,7 +140,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_not_track_clicks()
+    public function campaigns_can_be_set_to_not_track_clicks()
     {
         $campaignStoreData = $this->generateCampaignStoreData();
 
@@ -156,7 +156,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaigns_can_be_set_to_track_clicks()
+    public function campaigns_can_be_set_to_track_clicks()
     {
         $campaignStoreData = $this->generateCampaignStoreData() + ['is_click_tracking' => true];
 
@@ -172,7 +172,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaign_content_is_required_if_no_template_is_selected()
+    public function campaign_content_is_required_if_no_template_is_selected()
     {
         $campaignStoreData = $this->generateCampaignStoreData([
             'template_id' => null,
@@ -185,7 +185,7 @@ class CampaignControllerTest extends TestCase
     }
 
     /** @test */
-    function campaign_content_is_not_required_if_a_template_is_selected()
+    public function campaign_content_is_not_required_if_a_template_is_selected()
     {
         $campaignStoreData = $this->generateCampaignStoreData([
             'content' => null,

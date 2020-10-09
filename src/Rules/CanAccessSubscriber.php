@@ -7,7 +7,6 @@ namespace Sendportal\Base\Rules;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Subscriber;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Collection;
 
 class CanAccessSubscriber implements Rule
 {
@@ -20,7 +19,7 @@ class CanAccessSubscriber implements Rule
             return false;
         }
 
-        return $subscriber->workspace_id === Sendportal::currentWorkspaceId();
+        return $subscriber->workspace_id == Sendportal::currentWorkspaceId();
     }
 
     /**

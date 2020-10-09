@@ -43,12 +43,13 @@ class SubscribersController extends Controller
         $subscribers = $this->subscriberRepo->paginate(
             Sendportal::currentWorkspaceId(),
             'email',
-            [],
+            ['segments'],
             50,
             request()->all()
         );
+        $segments = $this->segmentRepo->pluck(Sendportal::currentWorkspaceId(), 'name', 'id');
 
-        return view('sendportal::subscribers.index', compact('subscribers'));
+        return view('sendportal::subscribers.index', compact('subscribers', 'segments'));
     }
 
     /**
@@ -129,6 +130,18 @@ class SubscribersController extends Controller
         $this->subscriberRepo->update(Sendportal::currentWorkspaceId(), $id, $data);
 
         return redirect()->route('sendportal.subscribers.index');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function destroy($id)
+    {
+        $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
+
+        $subscriber->delete();
+
+        return redirect()->route('sendportal.subscribers.index')->withSuccess('Subscriber deleted');
     }
 
     /**

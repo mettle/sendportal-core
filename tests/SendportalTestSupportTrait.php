@@ -9,7 +9,8 @@ use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 
-trait SendportalTestSupportTrait {
+trait SendportalTestSupportTrait
+{
 
     protected function createEmailService(): EmailService
     {

@@ -132,8 +132,10 @@ class SetupProduction extends BaseCommand
 
     protected function createDatabaseCredentials(): bool
     {
-        $storeCredentials = $this->confirm('Unable to connect to your database. Would you like to enter your credentials now?',
-            true);
+        $storeCredentials = $this->confirm(
+            'Unable to connect to your database. Would you like to enter your credentials now?',
+            true
+        );
 
         if (!$storeCredentials) {
             return false;
@@ -201,8 +203,10 @@ class SetupProduction extends BaseCommand
      */
     protected function runMigrations(): bool
     {
-        $runMigrations = $this->confirm('There are pending database migrations. Would you like to run migrations now?',
-            true);
+        $runMigrations = $this->confirm(
+            'There are pending database migrations. Would you like to run migrations now?',
+            true
+        );
 
         if (!$runMigrations) {
             return false;
@@ -283,7 +287,11 @@ class SetupProduction extends BaseCommand
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ];
 
-        $value = $this->ask(ucfirst($param));
+        if ($param === 'password') {
+            $value = $this->secret(ucfirst($param));
+        } else {
+            $value = $this->ask(ucfirst($param));
+        }
 
         $validator = Validator::make([$param => $value], [
             $param => $validationRules[$param],

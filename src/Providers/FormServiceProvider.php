@@ -3,9 +3,9 @@
 namespace Sendportal\Base\Providers;
 
 use Form;
-use Session;
-
 use Illuminate\Support\ServiceProvider;
+
+use Session;
 
 class FormServiceProvider extends ServiceProvider
 {
@@ -16,44 +16,44 @@ class FormServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Form::macro('textField', function ($name, $label = null, $value = null, $attributes = array()) {
+        Form::macro('textField', function ($name, $label = null, $value = null, $attributes = []) {
             $element = Form::text($name, $value, Form::fieldAttributes($name, $attributes));
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('passwordField', function ($name, $label = null, $attributes = array()) {
+        Form::macro('passwordField', function ($name, $label = null, $attributes = []) {
             $element = Form::password($name, Form::fieldAttributes($name, $attributes));
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('textareaField', function ($name, $label = null, $value = null, $attributes = array()) {
+        Form::macro('textareaField', function ($name, $label = null, $value = null, $attributes = []) {
             $element = Form::textarea($name, $value, Form::fieldAttributes($name, $attributes));
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('fileField', function ($name, $label = null, $attributes = array()) {
+        Form::macro('fileField', function ($name, $label = null, $attributes = []) {
             $element = Form::file($name, Form::fieldAttributes($name, $attributes));
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('selectField', function ($name, $label = null, $options, $value = null, $attributes = array()) {
+        Form::macro('selectField', function ($name, $label = null, $options, $value = null, $attributes = []) {
             $element = Form::select($name, $options, $value, Form::fieldAttributes($name, $attributes));
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('selectMultipleField', function ($name, $label = null, $options, $value = null, $attributes = array()) {
+        Form::macro('selectMultipleField', function ($name, $label = null, $options, $value = null, $attributes = []) {
             $attributes = array_merge($attributes, ['multiple' => true, 'class' => 'selectpicker']);
             $element = Form::select($name, $options, $value, Form::fieldAttributes($name, $attributes));
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('selectRangeField', function ($name, $label = null, $begin, $end, $value = null, $attributes = array()) {
+        Form::macro('selectRangeField', function ($name, $label = null, $begin, $end, $value = null, $attributes = []) {
             $range = array_combine($range = range($begin, $end), $range);
 
             $element = Form::select($name, $range, $value, Form::fieldAttributes($name, $attributes));
@@ -61,8 +61,8 @@ class FormServiceProvider extends ServiceProvider
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('selectMonthField', function ($name, $label = null, $value = null, $attributes = array()) {
-            $months = array();
+        Form::macro('selectMonthField', function ($name, $label = null, $value = null, $attributes = []) {
+            $months = [];
 
             foreach (range(1, 12) as $month) {
                 $months[$month] = strftime('%B', mktime(0, 0, 0, $month, 1));
@@ -73,14 +73,14 @@ class FormServiceProvider extends ServiceProvider
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('checkboxField', function ($name, $label = null, $value = 1, $checked = null, $attributes = array()) {
+        Form::macro('checkboxField', function ($name, $label = null, $value = 1, $checked = null, $attributes = []) {
             $attributes = array_merge(['id' => 'id-field-' . $name], $attributes);
             $element = Form::checkbox($name, $value, $checked, $attributes);
 
             return Form::fieldWrapper($name, $label, $element);
         });
 
-        Form::macro('switchField', function ($name, $label = null, $value = 1, $checked = null, $attributes = array()) {
+        Form::macro('switchField', function ($name, $label = null, $value = 1, $checked = null, $attributes = []) {
             $attributes = array_merge(['id' => 'id-field-' . $name], $attributes);
             $element = Form::checkbox($name, $value, $checked, $attributes);
 
@@ -153,7 +153,7 @@ class FormServiceProvider extends ServiceProvider
             return $out;
         });
 
-        Form::macro('fieldAttributes', function ($name, $attributes = array()) {
+        Form::macro('fieldAttributes', function ($name, $attributes = []) {
             $name = str_replace('[]', '', $name);
 
             $class = 'form-control';

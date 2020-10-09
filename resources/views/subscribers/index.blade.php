@@ -25,6 +25,16 @@
                     </select>
                 </div>
 
+                @if(count($segments))
+                    <div id="segmentFilterSelector" class="mr-2">
+                        <select multiple="" class="selectpicker form-control form-control-sm" name="segments[]" data-width="auto">
+                            @foreach($segments as $segmentId => $segmentName)
+                                <option value="{{ $segmentId }}" @if(in_array($segmentId, request()->get('segments') ?? [])) selected @endif>{{ $segmentName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+
                 <button type="submit" class="btn btn-light btn-md">{{ __('Search') }}</button>
 
                 @if(request()->anyFilled(['name', 'status']))
@@ -65,6 +75,7 @@
                 <tr>
                     <th>{{ __('Email') }}</th>
                     <th>{{ __('Name') }}</th>
+                    <th>{{ __('Segments') }}</th>
                     <th>{{ __('Created') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
@@ -79,6 +90,12 @@
                             </a>
                         </td>
                         <td>{{ $subscriber->full_name }}</td>
+                        <td>
+                            @forelse($subscriber->segments as $segment)
+                                <span class="badge badge-light">{{ $segment->name }}</span>
+                            @empty
+                                -
+                            @endforelse
                         <td><span
                                 title="{{ $subscriber->created_at }}">{{ $subscriber->created_at->diffForHumans() }}</span>
                         </td>
@@ -89,8 +106,16 @@
                                 <span class="badge badge-success">{{ __('Subscribed') }}</span>
                             @endif
                         </td>
-                        <td><a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
-                               class="btn btn-sm btn-light">{{ __('Edit') }}</a></td>
+                        <td>
+                            <form action="{{ route('sendportal.subscribers.destroy', $subscriber->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
+                                   class="btn btn-xs btn-light">{{ __('Edit') }}</a>
+                                <button type="submit"
+                                        class="btn btn-xs btn-light delete-subscriber">{{ __('Delete') }}</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -106,4 +131,28 @@
 
     @include('sendportal::layouts.partials.pagination', ['records' => $subscribers])
 
+    <script>
+        let subscribers = document.getElementsByClassName('delete-subscriber');
+
+        Array.from(subscribers).forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                let confirmDelete = confirm('Are you sure you want to permanently delete this subscriber and all associated data?');
+
+                if (confirmDelete) {
+                    element.closest('form').submit();
+                }
+            });
+        });
+    </script>
+
 @endsection
+
+@push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css">
+@endpush
+
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/bootstrap-select.min.js"></script>
+@endpush

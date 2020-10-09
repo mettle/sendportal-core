@@ -15,7 +15,7 @@ class MessagesControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function the_index_of_sent_messages_is_accessible_to_an_authenticated_user()
+    public function the_index_of_sent_messages_is_accessible_to_an_authenticated_user()
     {
         factory(Message::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId(), 'sent_at' => now()]);
 
@@ -28,7 +28,7 @@ class MessagesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_index_of_draft_messages_is_accessible_to_an_authenticated_user()
+    public function the_index_of_draft_messages_is_accessible_to_an_authenticated_user()
     {
         factory(Message::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId(), 'sent_at' => null]);
 
@@ -41,7 +41,7 @@ class MessagesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_draft_message_can_be_viewed_by_an_authenticated_user()
+    public function a_draft_message_can_be_viewed_by_an_authenticated_user()
     {
         $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -60,5 +60,41 @@ class MessagesControllerTest extends TestCase
         $response->assertOk();
     }
 
+    /** @test */
+    public function a_draft_message_can_be_deleted()
+    {
+        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
+        /** @var Message $message */
+        $message = factory(Message::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'source_id' => $campaign->id,
+            'sent_at' => null
+        ]);
+
+        $this->delete(route('sendportal.messages.delete', $message->id))
+            ->assertRedirect(route('sendportal.messages.draft'));
+
+        $this->assertDatabaseMissing('messages', ['id' => $message->id]);
+    }
+
+    /** @test */
+    public function a_sent_message_cannot_be_deleted()
+    {
+        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+
+        /** @var Message $message */
+        $message = factory(Message::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'source_id' => $campaign->id,
+            'sent_at' => now()
+        ]);
+
+        $this
+            ->from(route('sendportal.messages.draft'))
+            ->delete(route('sendportal.messages.delete', $message->id))
+            ->assertRedirect(route('sendportal.messages.draft'));
+
+        $this->assertDatabaseHas('messages', ['id' => $message->id]);
+    }
 }

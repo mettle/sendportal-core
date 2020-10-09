@@ -4,6 +4,7 @@ namespace Tests;
 
 use Collective\Html\FormFacade;
 use Laravel\Ui\UiServiceProvider;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Sendportal\Base\SendportalBaseServiceProvider;
 
@@ -19,6 +20,7 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             UiServiceProvider::class,
+            LivewireServiceProvider::class,
             SendportalBaseServiceProvider::class,
             SendportalTestServiceProvider::class,
         ];

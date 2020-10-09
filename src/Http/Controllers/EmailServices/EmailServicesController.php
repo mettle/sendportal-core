@@ -10,8 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\EmailServiceStoreRequest;
-use Sendportal\Base\Http\Requests\EmailServiceUpdateRequest;
+use Sendportal\Base\Http\Requests\EmailServiceRequest;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 
 class EmailServicesController extends Controller
@@ -44,11 +43,11 @@ class EmailServicesController extends Controller
     /**
      * @throws Exception
      */
-    public function store(EmailServiceStoreRequest $request): RedirectResponse
+    public function store(EmailServiceRequest $request): RedirectResponse
     {
         $emailServiceType = $this->emailServices->findType($request->type_id);
 
-        $settings = $request->get('settings');
+        $settings = $request->get('settings', []);
 
         $this->emailServices->store(Sendportal::currentWorkspaceId(), [
             'name' => $request->name,
@@ -74,7 +73,7 @@ class EmailServicesController extends Controller
     /**
      * @throws Exception
      */
-    public function update(EmailServiceUpdateRequest $request, int $emailServiceId): RedirectResponse
+    public function update(EmailServiceRequest $request, int $emailServiceId): RedirectResponse
     {
         $emailService = $this->emailServices->find(Sendportal::currentWorkspaceId(), $emailServiceId, ['type']);
 

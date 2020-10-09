@@ -117,7 +117,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function a_subscriber_in_a_segment_can_be_deleted()
+    public function a_subscriber_in_a_segment_can_be_deleted()
     {
         $subscriber = $this->createSubscriber();
         $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);

@@ -15,6 +15,8 @@ class WebRoutes
                 Router $appRouter
             ) {
 
+                $appRouter->get('setup', 'SetupController@index')->name('setup');
+
                 // Subscriptions
                 $appRouter->name('subscriptions.')->namespace('Subscriptions')->prefix('subscriptions')->group(static function (
                     Router $subscriptionController
@@ -81,6 +83,7 @@ class WebRoutes
                     $messageRouter->get('draft', 'MessagesController@draft')->name('draft');
                     $messageRouter->get('{id}/show', 'MessagesController@show')->name('show');
                     $messageRouter->post('send', 'MessagesController@send')->name('send');
+                    $messageRouter->delete('{id}/delete', 'MessagesController@delete')->name('delete');
                     $messageRouter->post('send-selected', 'MessagesController@sendSelected')->name('send-selected');
                 });
 
@@ -95,6 +98,9 @@ class WebRoutes
                     $servicesRouter->get('{id}/edit', 'EmailServicesController@edit')->name('edit');
                     $servicesRouter->put('{id}', 'EmailServicesController@update')->name('update');
                     $servicesRouter->delete('{id}', 'EmailServicesController@delete')->name('delete');
+
+                    $servicesRouter->get('{id}/test', 'TestEmailServiceController@create')->name('test.create');
+                    $servicesRouter->post('{id}/test', 'TestEmailServiceController@store')->name('test.store');
                 });
 
                 // Segments.

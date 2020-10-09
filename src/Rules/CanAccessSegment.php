@@ -19,7 +19,7 @@ class CanAccessSegment implements Rule
             return false;
         }
 
-        return $segment->workspace_id === Sendportal::currentWorkspaceId();
+        return $segment->workspace_id == Sendportal::currentWorkspaceId();
     }
 
     /**

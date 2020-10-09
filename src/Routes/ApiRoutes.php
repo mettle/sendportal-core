@@ -44,6 +44,7 @@ class ApiRoutes
                 $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
                 $webhookRouter->post('postmark', 'PostmarkWebhooksController@handle')->name('postmark');
                 $webhookRouter->post('sendgrid', 'SendgridWebhooksController@handle')->name('sendgrid');
+                $webhookRouter->post('mailjet', 'MailjetWebhooksController@handle')->name('mailjet');
             });
 
             $this->get('api/v1/ping', static function () {

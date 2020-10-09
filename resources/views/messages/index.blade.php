@@ -94,11 +94,16 @@
                             </td>
                             @if(request()->route()->named('sendportal.messages.draft') &&  ! $message->sent_at)
                                 <td>
-                                    <form action="{{ route('sendportal.messages.send') }}" method="post">
+                                    <form action="{{ route('sendportal.messages.send') }}" method="post" class="d-inline-block">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $message->id }}">
                                         <a href="{{ route('sendportal.messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
                                         <button type="submit" class="btn btn-xs btn-light">{{ __('Send Now') }}</button>
+                                    </form>
+                                    <form action="{{ route('sendportal.messages.delete', $message->id) }}" method="post" class="d-inline-block delete-message">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Delete') }}</button>
                                     </form>
                                 </td>
                                 <td>
@@ -125,6 +130,16 @@
             $(function () {
                 $('#select-all').click(function () {
                     $('.message-select').prop('checked', true);
+                });
+
+                $('.delete-message').submit(function (event) {
+                    event.preventDefault();
+
+                    let confirmDelete = confirm('Are you sure you want to delete this message?');
+
+                    if(confirmDelete) {
+                        this.submit();
+                    }
                 });
             })
         </script>

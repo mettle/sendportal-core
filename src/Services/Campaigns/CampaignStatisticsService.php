@@ -58,7 +58,7 @@ class CampaignStatisticsService
                     'total' => $countData[$campaign->id]->total,
                     'open' => $countData[$campaign->id]->opened,
                     'click' => $countData[$campaign->id]->clicked,
-                    'sent' => $campaign->formatCount($countData[$campaign->id]->sent),
+                    'sent' => $countData[$campaign->id]->sent,
                 ],
                 'ratios' => [
                     'open' => $campaign->getActionRatio($countData[$campaign->id]->opened, $countData[$campaign->id]->sent),

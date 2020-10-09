@@ -2,8 +2,8 @@
 
 namespace Sendportal\Base\Http\Requests;
 
-use Sendportal\Base\Models\EmailServiceType;
 use Illuminate\Foundation\Http\FormRequest;
+use Sendportal\Base\Models\EmailServiceType;
 
 class EmailServiceStoreRequest extends FormRequest
 {

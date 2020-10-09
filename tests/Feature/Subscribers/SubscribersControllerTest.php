@@ -7,6 +7,7 @@ namespace Tests\Feature\Subscribers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Facades\Sendportal;
+use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -16,29 +17,7 @@ class SubscribersControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    function the_index_of_subscribers_is_accessible_to_authenticated_users()
-    {
-        factory(Subscriber::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
-
-        // when
-        $response = $this->get(route('sendportal.subscribers.index'));
-
-        // then
-        $response->assertOk();
-    }
-
-    /** @test */
-    function the_subscriber_create_form_is_accessilbe_to_authenticated_users()
-    {
-        // when
-        $response = $this->get(route('sendportal.subscribers.create'));
-
-        // then
-        $response->assertOk();
-    }
-
-    /** @test */
-    function new_subscribers_can_be_created_by_authenticated_users()
+    public function new_subscribers_can_be_created_by_authenticated_users()
     {
         $subscriberStoreData = [
             'email' => $this->faker->email,
@@ -59,7 +38,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_edit_view_is_accessible_by_authenticated_users()
+    public function the_edit_view_is_accessible_by_authenticated_users()
     {
         $subscriber = factory(Subscriber::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -71,7 +50,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function a_subscriber_is_updateable_by_an_authenticated_user()
+    public function a_subscriber_is_updateable_by_an_authenticated_user()
     {
         $subscriber = factory(Subscriber::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -96,7 +75,7 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    function the_show_view_is_accessible_by_an_authenticated_user()
+    public function the_show_view_is_accessible_by_an_authenticated_user()
     {
         $subscriber = factory(Subscriber::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
@@ -106,5 +85,59 @@ class SubscribersControllerTest extends TestCase
 
         // then
         $response->assertOk();
+    }
+
+    /** @test */
+    public function the_subscribers_index_lists_subscribers()
+    {
+        $subscriber = factory(Subscriber::class, 5)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+
+        $response = $this->get(route('sendportal.subscribers.index'));
+
+        $subscriber->each(static function (Subscriber $subscriber) use ($response) {
+            $response->assertSee($subscriber->email);
+            $response->assertSee("{$subscriber->first_name} {$subscriber->last_name}");
+        });
+    }
+
+    /** @test */
+    public function the_subscribers_index_can_be_filtered_by_segments()
+    {
+        $firstSegment = factory(Segment::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $secondSegment = factory(Segment::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $thirdSegment = factory(Segment::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+
+        $firstSegmentSubscriber = factory(Subscriber::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $secondSegmentSubscriber = factory(Subscriber::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $thirdSegmentSubscriber = factory(Subscriber::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+
+        $firstSegment->subscribers()->attach($firstSegmentSubscriber->id);
+        $secondSegment->subscribers()->attach($secondSegmentSubscriber->id);
+        $thirdSegment->subscribers()->attach($thirdSegmentSubscriber->id);
+
+        $response = $this->get(route('sendportal.subscribers.index', [
+                'segments' => [$firstSegment->id, $secondSegment->id]
+            ]));
+
+        $response->assertSee($firstSegmentSubscriber->email);
+        $response->assertSee("{$firstSegmentSubscriber->first_name} {$firstSegmentSubscriber->last_name}");
+        $response->assertSee($secondSegmentSubscriber->email);
+        $response->assertSee("{$secondSegmentSubscriber->first_name} {$secondSegmentSubscriber->last_name}");
+        $response->assertDontSee($thirdSegmentSubscriber->email);
+        $response->assertDontSee("{$thirdSegmentSubscriber->first_name} {$thirdSegmentSubscriber->last_name}");
     }
 }

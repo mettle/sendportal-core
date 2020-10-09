@@ -19,7 +19,7 @@ class MergeContentTest extends TestCase
         WithFaker;
 
     /** @test */
-    function campaign_content_can_be_merged()
+    public function campaign_content_can_be_merged()
     {
         // given
         $content = $this->faker->sentence;
@@ -37,7 +37,7 @@ class MergeContentTest extends TestCase
     }
 
     /** @test */
-    function it_can_handle_a_null_value_for_campaign_content()
+    public function it_can_handle_a_null_value_for_campaign_content()
     {
         $content = null;
         $message = $this->generateCampaignMessage(null, '<p>Hello this is some {{content}}</p>');
@@ -81,7 +81,7 @@ class MergeContentTest extends TestCase
     }
 
     /** @test */
-    function the_unsubscribe_url_tag_is_replaced_with_a_valid_unsubscribe_link()
+    public function the_unsubscribe_url_tag_is_replaced_with_a_valid_unsubscribe_link()
     {
         // given
         $message = $this->generateCampaignMessage('<a href="{{ unsubscribe_url }}">Unsubscribe Here</a>');
@@ -100,7 +100,7 @@ class MergeContentTest extends TestCase
     }
 
     /** @test */
-    function the_email_tag_is_replaced_with_the_subscriber_email()
+    public function the_email_tag_is_replaced_with_the_subscriber_email()
     {
         // given
         $message = $this->generateCampaignMessage('Hi, {{ email }}');
@@ -117,7 +117,7 @@ class MergeContentTest extends TestCase
     }
 
     /** @test */
-    function the_first_name_tag_is_replaced_with_the_subscriber_first_name()
+    public function the_first_name_tag_is_replaced_with_the_subscriber_first_name()
     {
         // given
         $message = $this->generateCampaignMessage('Hi, {{ first_name }}');
@@ -134,7 +134,7 @@ class MergeContentTest extends TestCase
     }
 
     /** @test */
-    function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
+    public function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
     {
         // given
         /** @var Workspace $workspace */

@@ -1,7 +1,13 @@
+@import 'variables.scss';
+
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
   text-align: justify;
+}
+
+.text-primary {
+    color: $purple-500 !important;
 }
 
 span.required {

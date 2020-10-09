@@ -20,7 +20,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_see_template_index()
+    public function a_logged_in_user_can_see_template_index()
     {
         $response = $this->get(route('sendportal.templates.index'));
 
@@ -28,7 +28,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function the_index_lists_existing_templates()
+    public function the_index_lists_existing_templates()
     {
         $template = factory(Template::class)->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
@@ -41,7 +41,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_see_the_create_form()
+    public function a_logged_in_user_can_see_the_create_form()
     {
         $response = $this->get(route('sendportal.templates.create'));
 
@@ -52,7 +52,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_store_a_new_template()
+    public function a_logged_in_user_can_store_a_new_template()
     {
         $data = [
             'name' => $this->faker->name,
@@ -71,7 +71,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function storing_is_validated()
+    public function storing_is_validated()
     {
         $data = [
             'name' => $this->faker->name,
@@ -91,7 +91,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_see_the_edit_form()
+    public function a_logged_in_user_can_see_the_edit_form()
     {
         $template = factory(Template::class)->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
@@ -106,7 +106,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_can_update_a_template()
+    public function a_logged_in_user_can_update_a_template()
     {
         $template = factory(Template::class)->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
@@ -130,7 +130,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function updates_are_validated()
+    public function updates_are_validated()
     {
         $template = factory(Template::class)->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
@@ -156,7 +156,7 @@ class TemplatesControllerTest extends TestCase
     // Destroy.
 
     /** @test */
-    function a_logged_in_user_can_delete_a_template()
+    public function a_logged_in_user_can_delete_a_template()
     {
         $template = factory(Template::class)->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
@@ -173,7 +173,7 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    function a_logged_in_user_cannot_delete_a_template_if_it_is_used()
+    public function a_logged_in_user_cannot_delete_a_template_if_it_is_used()
     {
         $template = factory(Template::class)->create([
             'workspace_id' => Sendportal::currentWorkspaceId()

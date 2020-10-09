@@ -115,12 +115,45 @@ class MessagesController extends Controller
     }
 
     /**
+     * Send a message.
+     *
+     * @throws Exception
+     */
+    public function delete(): RedirectResponse
+    {
+        if (!$message = $this->messageRepo->find(
+            Sendportal::currentWorkspaceId(),
+            request('id')
+        )) {
+            return redirect()->back()->withErrors(__('Unable to locate that message'));
+        }
+
+        if ($message->sent_at) {
+            return redirect()->back()->withErrors(__('A sent message cannot be deleted'));
+        }
+
+        $this->messageRepo->destroy(
+            Sendportal::currentWorkspaceId(),
+            $message->id
+        );
+
+        return redirect()->route('sendportal.messages.draft')->with(
+            'success',
+            __('The message was deleted')
+        );
+    }
+
+    /**
      * Send multiple messages.
      *
      * @throws Exception
      */
     public function sendSelected(): RedirectResponse
     {
+        if (! request()->has('messages')) {
+            return redirect()->back()->withErrors(__('No messages selected'));
+        }
+
         if (!$messages = $this->messageRepo->getWhereIn(
             Sendportal::currentWorkspaceId(),
             request('messages'),

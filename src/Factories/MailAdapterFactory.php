@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Factories;
 
+use InvalidArgumentException;
 use Sendportal\Base\Adapters\MailgunMailAdapter;
+use Sendportal\Base\Adapters\MailjetAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Interfaces\MailAdapterInterface;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
-use InvalidArgumentException;
 
 class MailAdapterFactory
 {
@@ -20,7 +21,8 @@ class MailAdapterFactory
         EmailServiceType::SES => SesMailAdapter::class,
         EmailServiceType::SENDGRID => SendgridMailAdapter::class,
         EmailServiceType::MAILGUN => MailgunMailAdapter::class,
-        EmailServiceType::POSTMARK => PostmarkMailAdapter::class
+        EmailServiceType::POSTMARK => PostmarkMailAdapter::class,
+        EmailServiceType::MAILJET => MailjetAdapter::class
     ];
 
     /**

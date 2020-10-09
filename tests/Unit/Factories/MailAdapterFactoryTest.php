@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Factories;
 
+use InvalidArgumentException;
 use Sendportal\Base\Adapters\MailgunMailAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
@@ -11,13 +12,12 @@ use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
-use InvalidArgumentException;
 use Tests\TestCase;
 
 class MailAdapterFactoryTest extends TestCase
 {
     /** @test */
-    function can_build_a_mailgun_adapter()
+    public function can_build_a_mailgun_adapter()
     {
         // given
         $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::MAILGUN]);
@@ -31,7 +31,7 @@ class MailAdapterFactoryTest extends TestCase
     }
 
     /** @test */
-    function can_build_a_sendgrid_adapter()
+    public function can_build_a_sendgrid_adapter()
     {
         // given
         $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::SENDGRID]);
@@ -45,7 +45,7 @@ class MailAdapterFactoryTest extends TestCase
     }
 
     /** @test */
-    function can_build_a_postmark_adapter()
+    public function can_build_a_postmark_adapter()
     {
         // given
         $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::POSTMARK]);
@@ -59,7 +59,7 @@ class MailAdapterFactoryTest extends TestCase
     }
 
     /** @test */
-    function can_build_an_ses_adapter()
+    public function can_build_an_ses_adapter()
     {
         // given
         $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::SES]);
@@ -73,7 +73,7 @@ class MailAdapterFactoryTest extends TestCase
     }
 
     /** @test */
-    function an_exception_is_thrown_when_building_an_unknown_adapater()
+    public function an_exception_is_thrown_when_building_an_unknown_adapater()
     {
         // given
         $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => 100]);

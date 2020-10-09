@@ -14,7 +14,7 @@ class CampaignReportsControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function a_sent_campaign_report_is_accessible_by_authenticated_users()
+    public function a_sent_campaign_report_is_accessible_by_authenticated_users()
     {
         // given
         $campaign = $this->getCampaign();
@@ -29,7 +29,7 @@ class CampaignReportsControllerTest extends TestCase
     }
 
     /** @test */
-    function sent_campaign_recipients_are_accessible_by_authenticated_users()
+    public function sent_campaign_recipients_are_accessible_by_authenticated_users()
     {
         // given
         $campaign = $this->getCampaign();
@@ -42,7 +42,7 @@ class CampaignReportsControllerTest extends TestCase
     }
 
     /** @test */
-    function sent_campaign_opens_are_accessible_by_authenticated_users()
+    public function sent_campaign_opens_are_accessible_by_authenticated_users()
     {
         // given
         $campaign = $this->getCampaign();
@@ -55,7 +55,7 @@ class CampaignReportsControllerTest extends TestCase
     }
 
     /** @test */
-    function sent_campaign_clicks_are_accessible_by_authenticated_users()
+    public function sent_campaign_clicks_are_accessible_by_authenticated_users()
     {
         // given
         $campaign = $this->getCampaign();
@@ -68,7 +68,7 @@ class CampaignReportsControllerTest extends TestCase
     }
 
     /** @test */
-    function sent_campaign_bounces_are_accessible_by_authenticated_users()
+    public function sent_campaign_bounces_are_accessible_by_authenticated_users()
     {
         // given
         $campaign = $this->getCampaign();
@@ -81,7 +81,7 @@ class CampaignReportsControllerTest extends TestCase
     }
 
     /** @test */
-    function sent_campaign_unsubscribes_are_accessible_by_authenticated_users()
+    public function sent_campaign_unsubscribes_are_accessible_by_authenticated_users()
     {
         // given
         $campaign = $this->getCampaign();

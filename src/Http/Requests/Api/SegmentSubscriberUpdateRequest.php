@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Requests\Api;
 
-use Sendportal\Base\Rules\CanAccessSubscriber;
 use Illuminate\Foundation\Http\FormRequest;
+use Sendportal\Base\Rules\CanAccessSubscriber;
 
 class SegmentSubscriberUpdateRequest extends FormRequest
 {
@@ -13,7 +13,7 @@ class SegmentSubscriberUpdateRequest extends FormRequest
     {
         return [
             'subscribers' => ['array', 'required'],
-            'subscribers.*' => ['integer', new CanAccessSubscriber($this->user())]
+            'subscribers.*' => ['integer', new CanAccessSubscriber()]
         ];
     }
 }

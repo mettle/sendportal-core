@@ -289,15 +289,15 @@ class CampaignReportPresenter
 
         return [
             'counts' => [
-                'open' => $countData[$this->campaign->id]->opened,
-                'click' => $countData[$this->campaign->id]->clicked,
-                'sent' => $this->campaign->formatCount($countData[$this->campaign->id]->sent),
-                'bounce' => $countData[$this->campaign->id]->bounced,
+                'open' => (int) $countData[$this->campaign->id]->opened,
+                'click' => (int) $countData[$this->campaign->id]->clicked,
+                'sent' => $this->campaign->formatCount((int) $countData[$this->campaign->id]->sent),
+                'bounce' => (int) $countData[$this->campaign->id]->bounced,
             ],
             'ratios' => [
-                'open' => $this->campaign->getActionRatio($countData[$this->campaign->id]->opened, $countData[$this->campaign->id]->sent),
-                'click' => $this->campaign->getActionRatio($countData[$this->campaign->id]->clicked, $countData[$this->campaign->id]->sent),
-                'bounce' => $this->campaign->getActionRatio($countData[$this->campaign->id]->bounced, $countData[$this->campaign->id]->sent),
+                'open' => $this->campaign->getActionRatio((int) $countData[$this->campaign->id]->opened, (int) $countData[$this->campaign->id]->sent),
+                'click' => $this->campaign->getActionRatio((int) $countData[$this->campaign->id]->clicked, (int) $countData[$this->campaign->id]->sent),
+                'bounce' => $this->campaign->getActionRatio((int) $countData[$this->campaign->id]->bounced, (int) $countData[$this->campaign->id]->sent),
             ],
         ];
     }

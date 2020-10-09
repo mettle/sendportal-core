@@ -15,7 +15,7 @@ class WebviewControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function a_message_can_be_seen_in_the_webview()
+    public function a_message_can_be_seen_in_the_webview()
     {
         $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
         $message = factory(Message::class)->create(['source_id' => $campaign->id, 'workspace_id' => Sendportal::currentWorkspaceId()]);

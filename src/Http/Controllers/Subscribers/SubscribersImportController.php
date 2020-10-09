@@ -52,17 +52,15 @@ class SubscribersImportController extends Controller
 
             $path = $request->file('file')->storeAs('imports', $filename, 'local');
 
-            if ($request->has('validate')) {
-                $errors = $this->validateCsvContents(Storage::disk('local')->path($path));
+            $errors = $this->validateCsvContents(Storage::disk('local')->path($path));
 
-                if (count($errors->getBags())) {
-                    Storage::disk('local')->delete($path);
+            if (count($errors->getBags())) {
+                Storage::disk('local')->delete($path);
 
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', __('The provided file contains errors'))
-                        ->with('errors', $errors);
-                }
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', __('The provided file contains errors'))
+                    ->with('errors', $errors);
             }
 
             $errors = new ViewErrorBag();

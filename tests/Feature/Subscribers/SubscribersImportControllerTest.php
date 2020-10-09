@@ -78,7 +78,7 @@ class SubscribersImportControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_should_not_import_subscribers_if_the_upload_has_to_be_validated_before_storing_subscribers()
+    public function it_should_not_import_subscribers_as_the_upload_has_to_be_validated_before_storing_subscribers()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
 
@@ -91,35 +91,12 @@ class SubscribersImportControllerTest extends TestCase
             ->actingAs($user)
             ->from(route('sendportal.subscribers.import'))
             ->post(route('sendportal.subscribers.import.store'), [
-                'file' => $file,
-                'validate' => 1
-            ])
-            ->assertRedirect(route('sendportal.subscribers.import'))
-            ->assertSessionHas('errors');
-
-        $this->assertDatabaseCount('subscribers', 0);
-    }
-
-    /** @test */
-    public function it_should_import_valid_subscribers_if_the_upload_has_not_to_be_validated_before_storing_subscribers()
-    {
-        [$workspace, $user] = $this->createUserAndWorkspace();
-
-        $file = $this->createFakeCsvFile([
-            ['', 'wrong_email', 'Foo', 'Bar'],
-            ['', 'test@email.com', 'Test Name', 'Test Surname']
-        ]);
-
-        $this
-            ->actingAs($user)
-            ->from(route('sendportal.subscribers.import'))
-            ->post(route('sendportal.subscribers.import.store'), [
                 'file' => $file
             ])
             ->assertRedirect(route('sendportal.subscribers.import'))
             ->assertSessionHas('errors');
 
-        $this->assertDatabaseCount('subscribers', 1);
+        $this->assertDatabaseCount('subscribers', 0);
     }
 
     /** @test */

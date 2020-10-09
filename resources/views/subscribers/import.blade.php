@@ -65,8 +65,6 @@
                 </div>
             </div>
 
-            {!! Form::checkboxField('validate', __('Do not import any row if the file contains errors'))!!}
-
             <div class="form-group row">
                 <div class="offset-sm-3 col-sm-9">
                     <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-light">{{ __('Back') }}</a>

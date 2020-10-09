@@ -2,6 +2,7 @@
 
 ## 1.0.8 - 2020-10-09
 
+- Set Subscriber unsubscribed_at via API ([#83](https://github.com/mettle/sendportal-core/pull/83))
 - Adjust quota service ([#82](https://github.com/mettle/sendportal-core/pull/82))
 - Ensure template names are unique ([#81](https://github.com/mettle/sendportal-core/pull/81))
 - Gitignore php_cs.cache ([#80](https://github.com/mettle/sendportal-core/pull/80))

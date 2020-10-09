@@ -102,7 +102,6 @@ class SegmentsControllerTest extends TestCase
 
         $this->assertDatabaseMissing('segments', $segment->toArray());
         $this->assertDatabaseHas('segments', $request);
-
     }
 
     /** @test */

@@ -15,6 +15,7 @@ class SubscriberUpdateRequest extends FormRequest
             'last_name' => ['nullable'],
             'email' => ['required', 'email'],
             'segments' => ['nullable', 'array'],
+            'unsubscribed_at' => ['nullable', 'date'],
         ];
     }
 }

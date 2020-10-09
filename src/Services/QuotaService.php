@@ -7,17 +7,16 @@ use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Adapters\BaseMailAdapter;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
-use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
 
 class QuotaService implements QuotaServiceInterface
 {
-    public function exceedsQuota(Campaign $campaign): bool
+    public function exceedsQuota(EmailService $emailService, int $messageCount): bool
     {
-        switch ($campaign->email_service->type_id) {
+        switch ($emailService->type_id) {
             case EmailServiceType::SES:
-                return $this->exceedsSesQuota($campaign);
+                return $this->exceedsSesQuota($emailService, $messageCount);
 
             case EmailServiceType::SENDGRID:
             case EmailServiceType::MAILGUN:
@@ -34,9 +33,9 @@ class QuotaService implements QuotaServiceInterface
         return app(MailAdapterFactory::class)->adapter($emailService);
     }
 
-    protected function exceedsSesQuota(Campaign $campaign): bool
+    protected function exceedsSesQuota(EmailService $emailService, int $messageCount): bool
     {
-        $mailAdapter = $this->resolveMailAdapter($campaign->email_service);
+        $mailAdapter = $this->resolveMailAdapter($emailService);
 
         $quota = $mailAdapter->getSendQuota();
 
@@ -44,8 +43,7 @@ class QuotaService implements QuotaServiceInterface
             Log::error(
                 'Failed to fetch quota from SES',
                 [
-                    'campaign_id' => $campaign->id,
-                    'email_service_id' => $campaign->email_service->id,
+                    'email_service_id' => $emailService->id,
                 ]
             );
 
@@ -56,13 +54,13 @@ class QuotaService implements QuotaServiceInterface
 
         // -1 signifies an unlimited quota
         if ($limit === -1) {
-            return true;
+            return false;
         }
 
         $sent = Arr::get($quota, 'SentLast24Hours');
 
         $remaining = (int)floor($limit - $sent);
 
-        return $campaign->unsent_count > $remaining;
+        return $messageCount > $remaining;
     }
 }

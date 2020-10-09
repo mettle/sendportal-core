@@ -38,7 +38,7 @@ class CampaignDispatchController extends Controller
      */
     public function send(CampaignDispatchRequest $request, int $id): RedirectResponse
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id, ['email_service']);
+        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id, ['email_service', 'messages']);
 
         if ($campaign->status_id !== CampaignStatus::STATUS_DRAFT) {
             return redirect()->route('sendportal.campaigns.status', $id);
@@ -55,7 +55,7 @@ class CampaignDispatchController extends Controller
 
         $campaign->segments()->sync($request->get('segments'));
 
-        if ($this->quotaService->exceedsQuota($campaign)) {
+        if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('The number of subscribers for this campaign exceeds your SES quota'));
         }

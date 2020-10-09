@@ -2,9 +2,9 @@
 
 namespace Sendportal\Base\Interfaces;
 
-use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\EmailService;
 
 interface QuotaServiceInterface
 {
-    public function exceedsQuota(Campaign $campaign): bool;
+    public function exceedsQuota(EmailService $emailService, int $messageCount): bool;
 }

@@ -207,6 +207,30 @@ class SubscribersImportControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_should_notify_the_user_of_how_many_subscribers_have_been_imported_and_how_many_have_been_updated()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $subscriber = factory(Subscriber::class)->create([
+            'workspace_id' => $workspace->id
+        ]);
+
+        $file = $this->createFakeCsvFile([
+            ['', 'test@email.com', 'Test Name', 'Test Surname'], // create
+            ['', $subscriber->email, $subscriber->name, 'Update Surname'], // update
+            ['', 'test2@email.com', 'Test Name', 'Test Surname'] // create
+        ]);
+
+        $this
+            ->actingAs($user)
+            ->post(route('sendportal.subscribers.import.store'), [
+                'file' => $file
+            ])
+            ->assertRedirect(route('sendportal.subscribers.index'))
+            ->assertSessionHas('success', 'Imported 2 subscriber(s) and updated 1 subscriber(s) out of 3');
+    }
+
+    /** @test */
     public function it_should_not_remove_existing_segments_from_a_subscriber_when_importing_subscribers_with_a_new_segment()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();

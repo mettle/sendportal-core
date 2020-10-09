@@ -63,42 +63,32 @@ class SubscribersImportController extends Controller
                     ->with('errors', $errors);
             }
 
-            $errors = new ViewErrorBag();
+            $counter = [
+                'created' => 0,
+                'updated' => 0
+            ];
 
-            $row = 1;
+            (new FastExcel)->import(Storage::disk('local')->path($path), function (array $line) use ($request, &$counter) {
+                $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
-            $subscribers = (new FastExcel)->import(Storage::disk('local')->path($path), function (array $line) use ($request, $errors, &$row) {
-                try {
-                    $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
+                $data['segments'] = $request->get('segments') ?? [];
 
-                    $this->validateData($data);
+                $subscriber = $this->subscriberService->import(auth()->user()->currentWorkspace()->id, $data);
 
-                    $data['segments'] = $request->get('segments') ?? [];
-
-                    $row++;
-
-                    return $this->subscriberService->import(auth()->user()->currentWorkspace()->id, $data);
-                } catch (ValidationException $e) {
-                    $errors->put('Row ' . $row, $e->validator->errors());
-
-                    $row++;
+                if ($subscriber->wasRecentlyCreated) {
+                    $counter['created']++;
+                } else {
+                    $counter['updated']++;
                 }
-
-                return null;
             });
 
             Storage::disk('local')->delete($path);
 
-            if (empty($errors->getBags())) {
-                return redirect()->route('sendportal.subscribers.index')
-                    ->with('success', __('Imported :count subscriber(s)', ['count' => $subscribers->count()]));
-            }
-
-            return redirect()->back()
-                ->with('errors', $errors)
-                ->with('warning', __('Imported :count subscriber(s) out of :total', [
-                    'count' => $subscribers->count(),
-                    'total' => $row
+            return redirect()->route('sendportal.subscribers.index')
+                ->with('success', __('Imported :created subscriber(s) and updated :updated subscriber(s) out of :total', [
+                    'created' => $counter['created'],
+                    'updated' => $counter['updated'],
+                    'total' => $counter['created'] + $counter['updated']
                 ]));
         }
 

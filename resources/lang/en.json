@@ -279,5 +279,6 @@
     "Your profile was updated successfully": "Your profile was updated successfully",
     "Zone": "Zone",
     "The campaign was cancelled whilst being processed (~:sent/:total dispatched).": "The campaign was cancelled whilst being processed (~:sent/:total dispatched).",
-    "Campaigns that save draft messages cannot be cancelled until all drafts have been created.": "Campaigns that save draft messages cannot be cancelled until all drafts have been created."
+    "Campaigns that save draft messages cannot be cancelled until all drafts have been created.": "Campaigns that save draft messages cannot be cancelled until all drafts have been created.",
+    "Messages already dispatched will not be deleted. Unsent messages will not be dispatched.": "Messages already dispatched will not be deleted. Unsent messages will not be dispatched."
 }

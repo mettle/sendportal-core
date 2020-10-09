@@ -31,7 +31,7 @@
                 @if($campaign->save_as_draft)
                     {!! __('All draft messages will be permanently deleted.') !!}
                 @else
-                    {!! __('Any messages that have not yet been dispatched will not be delivered.') !!}
+                    {!! __('Messages already dispatched will not be deleted. Unsent messages will not be dispatched.') !!}
                 @endif
             </p>
 

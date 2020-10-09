@@ -77,10 +77,12 @@ class CampaignCancellationController extends Controller
 
         $messageCounts = $this->campaignRepository->getCounts(collect($campaign->id), $campaign->workspace_id)[$campaign->id];
 
-        return __("The campaign was cancelled whilst being processed (~:sent/:total dispatched).",
+        return __(
+            "The campaign was cancelled whilst being processed (~:sent/:total dispatched).",
             [
                 'sent' => $messageCounts->sent,
                 'total' => $campaign->active_subscriber_count
-            ]);
+            ]
+        );
     }
 }

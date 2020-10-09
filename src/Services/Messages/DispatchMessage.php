@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Messages;
 
 use Exception;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Services\Content\MergeContent;

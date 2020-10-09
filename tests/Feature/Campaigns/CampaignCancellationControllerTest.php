@@ -41,7 +41,7 @@ class CampaignCancellationControllerTest extends TestCase
     }
 
     /** @test */
-    public function the_cancel_endpoint_a_sending_campaign()
+    public function the_cancel_endpoint_cancels_a_sending_campaign()
     {
         [$workspace, $user] = $this->createUserAndWorkspace();
         $campaign = factory(Campaign::class)->state('sending')->create(['workspace_id' => $workspace->id]);

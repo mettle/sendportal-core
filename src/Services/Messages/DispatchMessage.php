@@ -105,19 +105,17 @@ class DispatchMessage
 
     protected function isValidMessage(Message $message): bool
     {
-        $data = $message->newQuery()
-            ->toBase()
-            ->select(['messages.sent_at', 'campaigns.status_id'])
-            ->leftJoin('campaigns', static function (JoinClause $join) {
-                $join->on('messages.source_id', '=', 'campaigns.id')
-                      ->where('messages.source_type', Campaign::class);
-            })
-            ->first();
+        $message->refresh();
+        $message->load('campaign');
 
-        if (! $data) {
+        if ($message->campaign->cancelled) {
             return false;
         }
 
-        return !(bool)$data->sent_at && $data->status_id !== CampaignStatus::STATUS_CANCELLED;
+        if ((bool)$message->sent_at) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -3,29 +3,33 @@
 namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TemplateUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'max:255'],
+            'name' => [
+                'required',
+                'max:255',
+                Rule::unique('templates')
+                    ->where('workspace_id', auth()->user()->currentWorkspace()->id)
+                    ->ignore($this->template),
+            ],
             'content' => 'required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.unique' => __('The template name must be unique.'),
         ];
     }
 }

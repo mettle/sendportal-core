@@ -300,4 +300,23 @@ class TemplatesControllerTest extends TestCase
             'name' => $template->name
         ]);
     }
+
+    /** @test */
+    public function a_template_name_must_be_unique_for_a_workspace()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $template = factory(Template::class)->create(['workspace_id' => $workspace->id]);
+
+        $request = [
+            'name' => $template->name,
+        ];
+
+        $response = $this->actingAs($user)
+            ->post(route('sendportal.templates.store'), $request);
+
+        $response->assertRedirect()
+            ->assertSessionHasErrors('name');
+        $this->assertEquals(1, Template::where('name', $template->name)->count());
+    }
 }

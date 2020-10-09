@@ -233,6 +233,8 @@
     "The provided file contains errors": "The provided file contains errors",
     "The selected message has already been sent": "The selected message has already been sent",
     "The Sendgrid Email Service requires you to enter a key": "The Sendgrid Email Service requires you to enter a key",
+    "The segment name must be unique.": "The segment name must be unique.",
+    "The template name must be unique.": "The template name must be unique.",
     "The test email has been dispatched": "The test email has been dispatched",
     "The uploaded file is not valid": "The uploaded file is not valid",
     "There are no messages": "There are no messages",

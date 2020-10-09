@@ -23,21 +23,18 @@ class SegmentsControllerTest extends TestCase
         $segment = $this->createSegment($user);
 
         $route = route('sendportal.api.segments.index', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'api_token' => $user->api_token,
+            'workspaceId' => $user->currentWorkspace()->id
         ]);
 
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => [
-                Arr::only($segment->toArray(), ['name'])
-            ],
-        ];
-
-        $response->assertJson($expected);
+        $this
+            ->actingAs($user, 'api')
+            ->getJson($route)
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    Arr::only($segment->toArray(), ['name'])
+                ],
+            ]);
     }
 
     /** @test */
@@ -49,19 +46,16 @@ class SegmentsControllerTest extends TestCase
 
         $route = route('sendportal.api.segments.show', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'segment' => $segment->id,
-            'api_token' => $user->api_token,
+            'segment' => $segment->id
         ]);
 
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => Arr::only($segment->toArray(), ['name']),
-        ];
-
-        $response->assertJson($expected);
+        $this
+            ->actingAs($user, 'api')
+            ->getJson($route)
+            ->assertOk()
+            ->assertJson([
+                'data' => Arr::only($segment->toArray(), ['name']),
+            ]);
     }
 
     /** @test */
@@ -75,15 +69,17 @@ class SegmentsControllerTest extends TestCase
             'name' => $this->faker->colorName,
         ];
 
-        $response = $this->post($route, array_merge($request, ['api_token' => $user->api_token]));
+        $this
+            ->actingAs($user, 'api')
+            ->postJson($route, $request)
+            ->assertStatus(201)
+            ->assertJson(['data' => $request]);
 
-        $response->assertStatus(201);
         $this->assertDatabaseHas('segments', $request);
-        $response->assertJson(['data' => $request]);
     }
 
     /** @test */
-    public function a_segment_can_be_created()
+    public function a_segment_can_be_updated()
     {
         $user = $this->createUserWithWorkspace();
 
@@ -91,20 +87,22 @@ class SegmentsControllerTest extends TestCase
 
         $route = route('sendportal.api.segments.update', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'segment' => $segment->id,
-            'api_token' => $user->api_token,
+            'segment' => $segment->id
         ]);
 
         $request = [
             'name' => 'newName',
         ];
 
-        $response = $this->put($route, $request);
+        $this
+            ->actingAs($user, 'api')
+            ->putJson($route, $request)
+            ->assertOk()
+            ->assertJson(['data' => $request]);
 
-        $response->assertStatus(200);
         $this->assertDatabaseMissing('segments', $segment->toArray());
         $this->assertDatabaseHas('segments', $request);
-        $response->assertJson(['data' => $request]);
+
     }
 
     /** @test */
@@ -116,13 +114,15 @@ class SegmentsControllerTest extends TestCase
 
         $route = route('sendportal.api.segments.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'segment' => $segment->id,
-            'api_token' => $user->api_token,
+            'segment' => $segment->id
         ]);
 
-        $response = $this->delete($route);
+        $this
+            ->actingAs($user, 'api')
+            ->deleteJson($route)
+            ->assertStatus(204);
 
-        $response->assertStatus(204);
+        $this->assertDatabaseCount('segments', 0);
     }
 
     /** @test */
@@ -133,15 +133,43 @@ class SegmentsControllerTest extends TestCase
         $segment = $this->createSegment($user);
 
         $route = route('sendportal.api.segments.store', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'api_token' => $user->api_token,
-            'name' => $segment->name,
+            'workspaceId' => $user->currentWorkspace()->id
         ]);
 
-        $response = $this->post($route);
+        $request = [
+            'name' => $segment->name,
+        ];
 
-        $response->assertRedirect()
-            ->assertSessionHasErrors('name');
+        $this
+            ->actingAs($user, 'api')
+            ->postJson($route, $request)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('name');
+
         $this->assertEquals(1, Segment::where('name', $segment->name)->count());
+    }
+
+    /** @test */
+    public function two_workspaces_can_have_the_same_name_for_a_segment()
+    {
+        $userA = $this->createUserWithWorkspace();
+        $userB = $this->createUserWithWorkspace();
+
+        $segment = $this->createSegment($userA);
+
+        $route = route('sendportal.api.segments.store', [
+            'workspaceId' => $userB->currentWorkspace()->id
+        ]);
+
+        $request = [
+            'name' => $segment->name,
+        ];
+
+        $this
+            ->actingAs($userB, 'api')
+            ->postJson($route, $request)
+            ->assertStatus(201);
+
+        $this->assertEquals(2, Segment::where('name', $segment->name)->count());
     }
 }

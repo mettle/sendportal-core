@@ -28,21 +28,18 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $route = route('sendportal.api.templates.index', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'api_token' => $user->api_token,
+            'workspaceId' => $user->currentWorkspace()->id
         ]);
 
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => [
-                Arr::only($template->toArray(), ['id', 'name', 'content'])
-            ],
-        ];
-
-        $response->assertJson($expected);
+        $this
+            ->actingAs($user, 'api')
+            ->getJson($route)
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    Arr::only($template->toArray(), ['id', 'name', 'content'])
+                ],
+            ]);
     }
 
     /** @test */
@@ -56,19 +53,16 @@ class TemplatesControllerTest extends TestCase
 
         $route = route('sendportal.api.templates.show', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id,
-            'api_token' => $user->api_token,
+            'template' => $template->id
         ]);
 
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => Arr::only($template->toArray(), ['id', 'name', 'content']),
-        ];
-
-        $response->assertJson($expected);
+        $this
+            ->actingAs($user, 'api')
+            ->getJson($route)
+            ->assertOk()
+            ->assertJson([
+                'data' => Arr::only($template->toArray(), ['id', 'name', 'content']),
+            ]);
     }
 
     /** @test */
@@ -83,16 +77,18 @@ class TemplatesControllerTest extends TestCase
             'content' => 'Hello {{ content }}',
         ];
 
-        $response = $this->post($route, array_merge($request, ['api_token' => $user->api_token]));
-
         $normalisedRequest = [
             'name' => $request['name'],
             'content' => $this->normalizeTags($request['content'], 'content')
         ];
 
-        $response->assertStatus(201);
+        $this
+            ->actingAs($user, 'api')
+            ->postJson($route, $request)
+            ->assertStatus(201)
+            ->assertJson(['data' => $normalisedRequest]);
+
         $this->assertDatabaseHas('templates', $normalisedRequest);
-        $response->assertJson(['data' => $normalisedRequest]);
     }
 
     /** @test */
@@ -106,8 +102,7 @@ class TemplatesControllerTest extends TestCase
 
         $route = route('sendportal.api.templates.update', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id,
-            'api_token' => $user->api_token,
+            'template' => $template->id
         ]);
 
         $request = [
@@ -115,17 +110,19 @@ class TemplatesControllerTest extends TestCase
             'content' => 'newContent {{ content }}',
         ];
 
-        $response = $this->put($route, $request);
-
         $normalisedRequest = [
             'name' => $request['name'],
             'content' => $this->normalizeTags($request['content'], 'content')
         ];
 
-        $response->assertStatus(200);
+        $this
+            ->actingAs($user, 'api')
+            ->putJson($route, $request)
+            ->assertOk()
+            ->assertJson(['data' => $normalisedRequest]);
+
         $this->assertDatabaseMissing('templates', $template->toArray());
         $this->assertDatabaseHas('templates', $normalisedRequest);
-        $response->assertJson(['data' => $normalisedRequest]);
     }
 
     /** @test */
@@ -139,13 +136,17 @@ class TemplatesControllerTest extends TestCase
 
         $route = route('sendportal.api.templates.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id,
-            'api_token' => $user->api_token,
+            'template' => $template->id
         ]);
 
-        $response = $this->delete($route);
+        $this
+            ->actingAs($user, 'api')
+            ->deleteJson($route)
+            ->assertStatus(204);
 
-        $response->assertStatus(204);
+        $this->assertDatabaseMissing('templates', [
+            'id' => $template->id
+        ]);
     }
 
     /** @test */
@@ -163,13 +164,13 @@ class TemplatesControllerTest extends TestCase
 
         $route = route('sendportal.api.templates.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id,
-            'api_token' => $user->api_token,
+            'template' => $template->id
         ]);
 
-        $response = $this->deleteJson($route);
-
-        $response->assertStatus(422)
+        $this
+            ->actingAs($user, 'api')
+            ->deleteJson($route)
+            ->assertStatus(422)
             ->assertJsonValidationErrors(['template']);
     }
 
@@ -184,14 +185,45 @@ class TemplatesControllerTest extends TestCase
 
         $route = route('sendportal.api.templates.store', [
             'workspaceId' => $user->currentWorkspace()->id,
-            'api_token' => $user->api_token,
-            'name' => $template->name,
         ]);
 
-        $response = $this->post($route);
+        $request = [
+            'name' => $template->name,
+        ];
 
-        $response->assertRedirect()
-            ->assertSessionHasErrors('name');
+        $this
+            ->actingAs($user, 'api')
+            ->postJson($route, $request)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('name');
+
         $this->assertEquals(1, Template::where('name', $template->name)->count());
+    }
+
+    /** @test */
+    public function two_workspaces_can_have_the_same_name_for_a_template()
+    {
+        $userA = $this->createUserWithWorkspace();
+        $userB = $this->createUserWithWorkspace();
+
+        $template = factory(Template::class)->create([
+            'workspace_id' => $userA->currentWorkspace()->id
+        ]);
+
+        $route = route('sendportal.api.templates.store', [
+            'workspaceId' => $userB->currentWorkspace()->id,
+        ]);
+
+        $request = [
+            'name' => $template->name,
+            'content' => 'newContent {{ content }}',
+        ];
+
+        $this
+            ->actingAs($userB, 'api')
+            ->postJson($route, $request)
+            ->assertStatus(201);
+
+        $this->assertEquals(2, Template::where('name', $template->name)->count());
     }
 }

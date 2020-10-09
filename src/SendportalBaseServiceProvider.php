@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
 use Sendportal\Base\Console\Commands\SetupProduction;
+use Sendportal\Base\Providers\AuthServiceProvider;
 use Sendportal\Base\Providers\EventServiceProvider;
 use Sendportal\Base\Providers\FormServiceProvider;
 use Sendportal\Base\Providers\RouteServiceProvider;
@@ -61,6 +62,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(SendportalAppServiceProvider::class);
+        $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(HtmlServiceProvider::class);
         $this->app->register(FormServiceProvider::class);

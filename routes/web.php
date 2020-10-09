@@ -16,6 +16,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->group(
 });
 
 Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('sendportal.')->group(static function (Router $router) {
+    $router->get('setup', 'SetupController@index')->name('setup');
 
     // Auth.
     $router->middleware('auth')->namespace('Auth')->group(static function (Router $authRouter) {
@@ -70,6 +71,7 @@ Route::middleware('web')->namespace('\Sendportal\Base\Http\Controllers')->name('
             $messageRouter->get('draft', 'MessagesController@draft')->name('draft');
             $messageRouter->get('{id}/show', 'MessagesController@show')->name('show');
             $messageRouter->post('send', 'MessagesController@send')->name('send');
+            $messageRouter->delete('{id}/delete', 'MessagesController@delete')->name('delete');
             $messageRouter->post('send-selected', 'MessagesController@sendSelected')->name('send-selected');
         });
 

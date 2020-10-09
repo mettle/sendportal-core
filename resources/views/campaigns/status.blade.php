@@ -23,7 +23,7 @@
             Your campaign was cancelled.
         @else
             <i class="fas fa-cog fa-spin"></i>
-            {{ $campaign->formatCount($campaignStats[$campaign->id]['counts']['sent']) }} out of {{ $campaignStats[$campaign->id]['counts']['total'] }} messages sent.
+            {{ $campaignStats[$campaign->id]['counts']['sent'] }} out of {{ $campaignStats[$campaign->id]['counts']['total'] }} messages sent.
         @endif
     </div>
 </div>

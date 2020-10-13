@@ -14,7 +14,6 @@ class WebRoutes
             $this->name('sendportal.')->namespace('\Sendportal\Base\Http\Controllers')->group(static function (
                 Router $appRouter
             ) {
-
                 $appRouter->get('setup', 'SetupController@index')->name('setup');
 
                 // Subscriptions
@@ -23,10 +22,14 @@ class WebRoutes
                 ) {
                     $subscriptionController->get('unsubscribe/{messageHash}', 'SubscriptionsController@unsubscribe')
                         ->name('unsubscribe');
-                    $subscriptionController->get('subscribe/{messageHash}',
-                        'SubscriptionsController@subscribe')->name('subscribe');
-                    $subscriptionController->put('subscriptions/{messageHash}',
-                        'SubscriptionsController@update')->name('update');
+                    $subscriptionController->get(
+                        'subscribe/{messageHash}',
+                        'SubscriptionsController@subscribe'
+                    )->name('subscribe');
+                    $subscriptionController->put(
+                        'subscriptions/{messageHash}',
+                        'SubscriptionsController@update'
+                    )->name('update');
                 });
 
                 // Webview.
@@ -59,8 +62,10 @@ class WebRoutes
                     $campaignRouter->get('{id}/status', 'CampaignsController@status')->name('status');
                     $campaignRouter->post('{id}/test', 'CampaignTestController@handle')->name('test');
 
-                    $campaignRouter->get('{id}/confirm-delete',
-                        'CampaignDeleteController@confirm')->name('destroy.confirm');
+                    $campaignRouter->get(
+                        '{id}/confirm-delete',
+                        'CampaignDeleteController@confirm'
+                    )->name('destroy.confirm');
                     $campaignRouter->delete('', 'CampaignDeleteController@destroy')->name('destroy');
 
                     $campaignRouter->get('{id}/duplicate', 'CampaignDuplicateController@duplicate')->name('duplicate');
@@ -72,12 +77,16 @@ class WebRoutes
                     $campaignRouter->get('{id}/report/recipients', 'CampaignReportsController@recipients')
                         ->name('reports.recipients');
                     $campaignRouter->get('{id}/report/opens', 'CampaignReportsController@opens')->name('reports.opens');
-                    $campaignRouter->get('{id}/report/clicks',
-                        'CampaignReportsController@clicks')->name('reports.clicks');
+                    $campaignRouter->get(
+                        '{id}/report/clicks',
+                        'CampaignReportsController@clicks'
+                    )->name('reports.clicks');
                     $campaignRouter->get('{id}/report/unsubscribes', 'CampaignReportsController@unsubscribes')
                         ->name('reports.unsubscribes');
-                    $campaignRouter->get('{id}/report/bounces',
-                        'CampaignReportsController@bounces')->name('reports.bounces');
+                    $campaignRouter->get(
+                        '{id}/report/bounces',
+                        'CampaignReportsController@bounces'
+                    )->name('reports.bounces');
                 });
 
                 // Messages.
@@ -124,7 +133,8 @@ class WebRoutes
                 $appRouter->resource('templates', 'TemplatesController')->except(['show']);
 
                 // Ajax.
-                $appRouter->name('ajax.')->prefix('ajax')->namespace('Ajax')->group(static function (Router $ajaxRouter
+                $appRouter->name('ajax.')->prefix('ajax')->namespace('Ajax')->group(static function (
+                    Router $ajaxRouter
                 ) {
                     $ajaxRouter->post('segments/store', 'SegmentsController@store')->name('segments.store');
                 });

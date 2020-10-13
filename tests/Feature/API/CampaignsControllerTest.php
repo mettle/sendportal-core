@@ -9,8 +9,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
-use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Workspace;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 

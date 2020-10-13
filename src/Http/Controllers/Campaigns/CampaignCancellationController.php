@@ -12,7 +12,6 @@ use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
-use Sendportal\Base\Traits\ResolvesCurrentWorkspace;
 
 class CampaignCancellationController extends Controller
 {

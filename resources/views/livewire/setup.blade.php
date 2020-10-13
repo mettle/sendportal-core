@@ -27,7 +27,7 @@
             <div class="card">
                 @include($step['view'], [
                     'step' => $step,
-                    'active' => $index === $this->activeKey,
+                    'active' => $index === $this->active,
                     'iteration' => $loop->iteration,
                     'total' => count($steps)
                 ])

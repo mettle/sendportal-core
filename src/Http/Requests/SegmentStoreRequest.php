@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Http\Requests\Api;
+namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Sendportal\Base\Facades\Sendportal;
 
 class SegmentStoreRequest extends FormRequest
 {
@@ -14,12 +15,9 @@ class SegmentStoreRequest extends FormRequest
         return [
             'name' => [
                 'required',
+                'max:255',
                 Rule::unique('segments')
-                    ->where('workspace_id', $this->route('workspaceId')),
-            ],
-            'subscribers' => [
-                'array',
-                'nullable',
+                    ->where('workspace_id', Sendportal::currentWorkspaceId()),
             ],
         ];
     }

@@ -36,6 +36,7 @@
         @endif
 
         @include('sendportal::layouts.partials.success')
+        @include('sendportal::layouts.partials.warning')
         @include('sendportal::layouts.partials.error')
 
         @yield('content')

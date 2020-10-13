@@ -65,6 +65,9 @@ class WebRoutes
 
                     $campaignRouter->get('{id}/duplicate', 'CampaignDuplicateController@duplicate')->name('duplicate');
 
+                    $campaignRouter->get('{id}/confirm-cancel', 'CampaignCancellationController@confirm')->name('confirm-cancel');
+                    $campaignRouter->post('{id}/cancel', 'CampaignCancellationController@cancel')->name('cancel');
+
                     $campaignRouter->get('{id}/report', 'CampaignReportsController@index')->name('reports.index');
                     $campaignRouter->get('{id}/report/recipients', 'CampaignReportsController@recipients')
                         ->name('reports.recipients');

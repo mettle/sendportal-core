@@ -33,3 +33,11 @@ $factory->define(Message::class, function (Faker $faker) {
         'clicked_at' => null,
     ];
 });
+
+$factory->state(Message::class, 'dispatched', [
+    'sent_at' => now(),
+]);
+
+$factory->state(Message::class, 'pending', [
+    'sent_at' => null,
+]);

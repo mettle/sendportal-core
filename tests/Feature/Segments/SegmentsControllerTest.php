@@ -125,4 +125,20 @@ class SegmentsControllerTest extends TestCase
             'id' => $segment->id,
         ]);
     }
+
+    /** @test */
+    public function a_segment_name_must_be_unique_for_a_workspace()
+    {
+        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+
+        $request = [
+            'name' => $segment->name,
+        ];
+
+        $response = $this->post(route('sendportal.segments.store'), $request);
+
+        $response->assertRedirect()
+            ->assertSessionHasErrors('name');
+        $this->assertEquals(1, Segment::where('name', $segment->name)->count());
+    }
 }

@@ -6,6 +6,7 @@ use Sendportal\Base\Facades\Sendportal;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -100,6 +101,146 @@ class CampaignTest extends TestCase
         ]);
 
         static::assertEquals(15, $campaign->total_click_count);
+    }
+
+    /** @test */
+    public function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
+    {
+        $campaign = factory(Campaign::class)->state('cancelled')->create();
+
+        static::assertTrue($campaign->cancelled);
+    }
+
+    /** @test */
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
+    {
+        /** @var Campaign $campaign */
+        $campaign = factory(Campaign::class)->state('queued')->create();
+
+        static::assertTrue($campaign->canBeCancelled());
+    }
+
+    /** @test */
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
+    {
+        /** @var Campaign $campaign */
+        $campaign = factory(Campaign::class)->state('sending')->create();
+
+        static::assertTrue($campaign->canBeCancelled());
+    }
+
+    /** @test */
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sent_and_saves_as_draft_and_not_all_drafts_have_been_sent()
+    {
+        $campaign = factory(Campaign::class)->state('sent')->create([
+            'save_as_draft' => 1,
+            'send_to_all' => 1,
+        ]);
+
+        // Subscribers
+        factory(Subscriber::class, 5)->create([
+            'workspace_id' => $campaign->workspace_id,
+        ]);
+
+        // Draft Messages
+        factory(Message::class, 3)->state('pending')->create([
+            'workspace_id' => $campaign->workspace_id,
+            'source_id' => $campaign->id,
+        ]);
+
+        // Sent Messages
+        factory(Message::class, 2)->state('dispatched')->create([
+            'workspace_id' => $campaign->workspace_id,
+            'source_id' => $campaign->id,
+        ]);
+
+        static::assertTrue($campaign->canBeCancelled());
+    }
+
+    /** @test */
+    public function the_can_be_cancelled_method_returns_false_if_the_campaign_is_sent_and_saves_as_draft_and_all_drafts_have_been_sent()
+    {
+        $campaign = factory(Campaign::class)->state('sent')->create([
+            'save_as_draft' => 1,
+            'send_to_all' => 1,
+        ]);
+
+        $subscribers = factory(Subscriber::class, 5)->create([
+            'workspace_id' => $campaign->workspace_id,
+        ]);
+
+        // Sent Messages
+        factory(Message::class, $subscribers->count())->state('dispatched')->create([
+            'workspace_id' => $campaign->workspace_id,
+            'source_id' => $campaign->id,
+        ]);
+
+        static::assertFalse($campaign->canBeCancelled());
+    }
+
+
+    /** @test */
+    public function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
+    {
+        $campaign = factory(Campaign::class)->state('sending')->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'save_as_draft' => 1,
+        ]);
+        $segment = factory(Segment::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $campaign->segments()->attach($segment->id);
+        $subscribers = factory(Subscriber::class, 5)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $segment->subscribers()->attach($subscribers->pluck('id'));
+
+        // Message Drafts
+        factory(Message::class, $subscribers->count())->state('pending')->create([
+            'source_id' => $campaign->id,
+        ]);
+
+        static::assertTrue($campaign->allDraftsCreated());
+    }
+
+    /** @test */
+    public function the_all_drafts_created_method_returns_false_if_all_drafts_have_not_been_created()
+    {
+        $campaign = factory(Campaign::class)->state('sending')->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'save_as_draft' => 1,
+        ]);
+        $segment = factory(Segment::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $campaign->segments()->attach($segment->id);
+        $subscribers = factory(Subscriber::class, 5)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+        $segment->subscribers()->attach($subscribers->pluck('id'));
+
+        // Message Drafts
+        factory(Message::class, 3)->state('pending')->create([
+            'source_id' => $campaign->id,
+        ]);
+
+        static::assertFalse($campaign->allDraftsCreated());
+    }
+
+    /** @test */
+    public function the_all_drafts_created_method_returns_true_if_the_campaign_does_not_save_as_draft()
+    {
+        $campaign = factory(Campaign::class)->state('sending')->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'save_as_draft' => 0,
+            'send_to_all' => 1,
+        ]);
+
+        factory(Subscriber::class, 5)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+        ]);
+
+        static::assertTrue($campaign->allDraftsCreated());
     }
 
     /**

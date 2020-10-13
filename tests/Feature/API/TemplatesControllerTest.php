@@ -30,17 +30,13 @@ class TemplatesControllerTest extends TestCase
             'workspaceId' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => [
-                Arr::only($template->toArray(), ['id', 'name', 'content'])
-            ],
-        ];
-
-        $response->assertJson($expected);
+        $this->getJson($route)
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    Arr::only($template->toArray(), ['id', 'name', 'content'])
+                ],
+            ]);
     }
 
     /** @test */
@@ -55,19 +51,15 @@ class TemplatesControllerTest extends TestCase
             'template' => $template->id,
         ]);
 
-        $response = $this->get($route);
-
-        $response->assertStatus(200);
-
-        $expected = [
-            'data' => Arr::only($template->toArray(), ['id', 'name', 'content']),
-        ];
-
-        $response->assertJson($expected);
+        $this->getJson($route)
+            ->assertOk()
+            ->assertJson([
+                'data' => Arr::only($template->toArray(), ['id', 'name', 'content']),
+            ]);
     }
 
     /** @test */
-    public function a_template_can_be_created_by_authorised_users()
+    public function a_template_can_be_created()
     {
         $route = route('sendportal.api.templates.store', Sendportal::currentWorkspaceId());
 
@@ -76,16 +68,17 @@ class TemplatesControllerTest extends TestCase
             'content' => 'Hello {{ content }}',
         ];
 
-        $response = $this->post($route, $request);
-
         $normalisedRequest = [
             'name' => $request['name'],
             'content' => $this->normalizeTags($request['content'], 'content')
         ];
 
-        $response->assertStatus(201);
+        $this
+            ->postJson($route, $request)
+            ->assertStatus(201)
+            ->assertJson(['data' => $normalisedRequest]);
+
         $this->assertDatabaseHas('templates', $normalisedRequest);
-        $response->assertJson(['data' => $normalisedRequest]);
     }
 
     /** @test */
@@ -105,17 +98,17 @@ class TemplatesControllerTest extends TestCase
             'content' => 'newContent {{ content }}',
         ];
 
-        $response = $this->put($route, $request);
-
         $normalisedRequest = [
             'name' => $request['name'],
             'content' => $this->normalizeTags($request['content'], 'content')
         ];
 
-        $response->assertStatus(200);
+        $this->putJson($route, $request)
+            ->assertOk()
+            ->assertJson(['data' => $normalisedRequest]);
+
         $this->assertDatabaseMissing('templates', $template->toArray());
         $this->assertDatabaseHas('templates', $normalisedRequest);
-        $response->assertJson(['data' => $normalisedRequest]);
     }
 
     /** @test */
@@ -130,9 +123,12 @@ class TemplatesControllerTest extends TestCase
             'template' => $template->id,
         ]);
 
-        $response = $this->delete($route);
+        $this->deleteJson($route)
+            ->assertStatus(204);
 
-        $response->assertStatus(204);
+        $this->assertDatabaseMissing('templates', [
+            'id' => $template->id
+        ]);
     }
 
     /** @test */
@@ -151,9 +147,52 @@ class TemplatesControllerTest extends TestCase
             'template' => $template->id,
         ]);
 
-        $response = $this->deleteJson($route);
-
-        $response->assertStatus(422)
+        $this->deleteJson($route)
+            ->assertStatus(422)
             ->assertJsonValidationErrors(['template']);
+    }
+
+    /** @test */
+    public function a_template_name_must_be_unique_for_a_workspace()
+    {
+        $template = factory(Template::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
+        ]);
+
+        $route = route('sendportal.api.templates.store', [
+            'workspaceId' => Sendportal::currentWorkspaceId(),
+        ]);
+
+        $request = [
+            'name' => $template->name,
+        ];
+
+        $this->postJson($route, $request)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('name');
+
+        $this->assertEquals(1, Template::where('name', $template->name)->count());
+    }
+
+    /** @test */
+    public function two_workspaces_can_have_the_same_name_for_a_template()
+    {
+        $template = factory(Template::class)->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
+        ]);
+
+        $route = route('sendportal.api.templates.store', [
+            'workspaceId' => Sendportal::currentWorkspaceId() + 1,
+        ]);
+
+        $request = [
+            'name' => $template->name,
+            'content' => 'newContent {{ content }}',
+        ];
+
+        $this->postJson($route, $request)
+            ->assertStatus(201);
+
+        $this->assertEquals(2, Template::where('name', $template->name)->count());
     }
 }

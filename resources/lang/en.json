@@ -115,7 +115,7 @@
     "If you do not already have an account, you may click the following link to get started": "If you do not already have an account, you may click the following link to get started",
     "Import Subscribers": "Import Subscribers",
     "Import via CSV file": "Import via CSV file",
-    "Imported :count subscriber(s": "Imported :count subscriber(s",
+    "Imported :created subscriber(s) and updated :updated subscriber(s) out of :total": "Imported :created subscriber(s) and updated :updated subscriber(s) out of :total",
     "Invitations": "Invitations",
     "Invite User": "Invite User",
     "Invited": "Invited",
@@ -230,8 +230,11 @@
     "The message was deleted": "The message was deleted",
     "The number of subscribers for this campaign exceeds your SES quota": "The number of subscribers for this campaign exceeds your SES quota",
     "The Postmark Email Service requires you to enter a key": "The Postmark Email Service requires you to enter a key",
+    "The provided file contains errors": "The provided file contains errors",
     "The selected message has already been sent": "The selected message has already been sent",
     "The Sendgrid Email Service requires you to enter a key": "The Sendgrid Email Service requires you to enter a key",
+    "The segment name must be unique.": "The segment name must be unique.",
+    "The template name must be unique.": "The template name must be unique.",
     "The test email has been dispatched": "The test email has been dispatched",
     "The uploaded file is not valid": "The uploaded file is not valid",
     "There are no messages": "There are no messages",
@@ -261,6 +264,7 @@
     "URL": "URL",
     "Verify Your Email Address": "Verify Your Email Address",
     "View Report": "View Report",
+    "Warning": "Warning",
     "Workspace": "Workspace",
     "Workspace Members": "Workspace Members",
     "Workspace Name": "Workspace Name",
@@ -277,5 +281,8 @@
     "You haven't added any email service": "You haven't added any email service",
     "Your campaign is currently": "Your campaign is currently",
     "Your profile was updated successfully": "Your profile was updated successfully",
-    "Zone": "Zone"
+    "Zone": "Zone",
+    "The campaign was cancelled whilst being processed (~:sent/:total dispatched).": "The campaign was cancelled whilst being processed (~:sent/:total dispatched).",
+    "Campaigns that save draft messages cannot be cancelled until all drafts have been created.": "Campaigns that save draft messages cannot be cancelled until all drafts have been created.",
+    "Messages already dispatched will not be deleted. Unsent messages will not be dispatched.": "Messages already dispatched will not be deleted. Unsent messages will not be dispatched."
 }

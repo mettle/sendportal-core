@@ -73,6 +73,13 @@
                                         {{ __('Duplicate') }}
                                     </a>
 
+                                    @if($campaign->canBeCancelled())
+                                        <div class="dropdown-divider"></div>
+                                        <a href="{{ route('sendportal.campaigns.confirm-cancel', $campaign->id) }}"
+                                           class="dropdown-item">
+                                            {{ __('Cancel') }}
+                                        </a>
+                                    @endif
 
                                     @if ($campaign->draft)
                                         <div class="dropdown-divider"></div>

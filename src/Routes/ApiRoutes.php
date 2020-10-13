@@ -47,9 +47,7 @@ class ApiRoutes
                 $webhookRouter->post('mailjet', 'MailjetWebhooksController@handle')->name('mailjet');
             });
 
-            $this->get('api/v1/ping', static function () {
-                return 'ok';
-            });
+            $this->get('api/v1/ping',  '\Sendportal\Base\Http\Controllers\Api\PingController@index');
         };
     }
 }

@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;

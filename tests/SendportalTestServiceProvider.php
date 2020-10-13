@@ -10,11 +10,11 @@ class SendportalTestServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        Sendportal::currentWorkspaceIdResolver(function() {
+        Sendportal::currentWorkspaceIdResolver(function () {
             return 1;
         });
 
-        Route::group(['prefix' => 'sendportal'], function() {
+        Route::group(['prefix' => 'sendportal'], function () {
             Sendportal::webRoutes();
             Sendportal::publicWebRoutes();
             Sendportal::apiRoutes();

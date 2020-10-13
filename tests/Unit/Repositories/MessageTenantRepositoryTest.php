@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MySqlMessageTenantRepository;
 use Sendportal\Base\Repositories\Messages\PostgresMessageTenantRepository;

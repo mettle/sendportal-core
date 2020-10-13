@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Models;
 
-use Sendportal\Base\Facades\Sendportal;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Segment;

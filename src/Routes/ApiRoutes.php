@@ -10,7 +10,7 @@ class ApiRoutes
 {
     public function sendportalApiRoutes(): callable
     {
-        return function() {
+        return function () {
             $this->name('sendportal.api.')->prefix('api/v1/workspaces/{workspaceId}')->namespace('\Sendportal\Base\Http\Controllers\Api')->group(static function (Router $apiRouter) {
                 $apiRouter->apiResource('campaigns', 'CampaignsController');
                 $apiRouter->post('campaigns/{id}/send', 'CampaignDispatchController@send')->name('campaigns.send');
@@ -38,7 +38,7 @@ class ApiRoutes
 
     public function sendportalPublicApiRoutes(): callable
     {
-        return function() {
+        return function () {
             $this->name('sendportal.api.webhooks.')->prefix('api/v1/webhooks')->namespace('\Sendportal\Base\Http\Controllers\Api\Webhooks')->group(static function (Router $webhookRouter) {
                 $webhookRouter->post('aws', 'SesWebhooksController@handle')->name('aws');
                 $webhookRouter->post('mailgun', 'MailgunWebhooksController@handle')->name('mailgun');
@@ -47,7 +47,7 @@ class ApiRoutes
                 $webhookRouter->post('mailjet', 'MailjetWebhooksController@handle')->name('mailjet');
             });
 
-            $this->get('api/v1/ping',  '\Sendportal\Base\Http\Controllers\Api\PingController@index');
+            $this->get('api/v1/ping', '\Sendportal\Base\Http\Controllers\Api\PingController@index');
         };
     }
 }

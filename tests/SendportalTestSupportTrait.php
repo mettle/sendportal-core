@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Testing\TestResponse;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
@@ -11,7 +10,6 @@ use Sendportal\Base\Models\Subscriber;
 
 trait SendportalTestSupportTrait
 {
-
     protected function createEmailService(): EmailService
     {
         return factory(EmailService::class)->create([

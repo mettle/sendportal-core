@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Http\Livewire;
 
 use Exception;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Sendportal\Base\Setup\Admin;
 use Sendportal\Base\Setup\Database;
@@ -82,9 +83,13 @@ class Setup extends Component
         $handler = $this->getConcreteHandler();
 
         if (method_exists($handler, 'validate')) {
-            $data = $handler->validate($data);
+            try {
+                $data = $handler->validate($data);
+            } catch (ValidationException $e) {
+                session()->flashInput($data);
 
-            $this->resetErrorBag();
+                throw $e;
+            }
         }
 
         try {

@@ -6,7 +6,6 @@ namespace Sendportal\Base\Services\Messages;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Sendportal\Base\Interfaces\RelayMessageServiceInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
@@ -18,7 +17,7 @@ class DispatchMessage
     /** @var ResolveEmailService */
     protected $resolveEmailService;
 
-    /** @var RelayMessageServiceInterface */
+    /** @var RelayMessage */
     protected $relayMessage;
 
     /** @var MergeContent */
@@ -30,7 +29,7 @@ class DispatchMessage
     public function __construct(
         MergeContent $mergeContent,
         ResolveEmailService $resolveEmailService,
-        RelayMessageServiceInterface $relayMessage,
+        RelayMessage $relayMessage,
         MarkAsSent $markAsSent
     ) {
         $this->resolveEmailService = $resolveEmailService;

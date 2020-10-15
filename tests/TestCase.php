@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 use Laravel\Ui\UiServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Sendportal\Base\Interfaces\RelayMessageServiceInterface;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\SendportalBaseServiceProvider;
+use Sendportal\Base\Services\Messages\RelayMessage;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -70,10 +70,12 @@ abstract class TestCase extends BaseTestCase
      */
     protected function mockRelayMessageService()
     {
-        $service = $this->getMockBuilder(RelayMessageServiceInterface::class)->getMock();
+        $service = $this->getMockBuilder(RelayMessage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $service->method('handle')->willReturn(Str::random());
 
-        app()->instance(RelayMessageServiceInterface::class, $service);
+        app()->instance(RelayMessage::class, $service);
     }
 }

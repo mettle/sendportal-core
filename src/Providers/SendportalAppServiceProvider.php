@@ -9,7 +9,6 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Sendportal\Base\Http\Livewire\Setup;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
-use Sendportal\Base\Interfaces\RelayMessageServiceInterface;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
 use Sendportal\Base\Repositories\Campaigns\PostgresCampaignTenantRepository;
@@ -23,7 +22,6 @@ use Sendportal\Base\Repositories\Subscribers\PostgresSubscriberTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SqliteSubscriberTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Helper;
-use Sendportal\Base\Services\Messages\RelayMessage;
 use Sendportal\Base\Services\QuotaService;
 use Sendportal\Base\Traits\ResolvesDatabaseDriver;
 
@@ -78,7 +76,6 @@ class SendportalAppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(QuotaServiceInterface::class, QuotaService::class);
-        $this->app->bind(RelayMessageServiceInterface::class, RelayMessage::class);
 
         $this->app->singleton('sendportal.helper', function () {
             return new Helper();

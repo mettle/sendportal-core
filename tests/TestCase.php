@@ -3,11 +3,13 @@
 namespace Tests;
 
 use Collective\Html\FormFacade;
+use Illuminate\Support\Str;
 use Laravel\Ui\UiServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Sendportal\Base\Models\User;
 use Sendportal\Base\SendportalBaseServiceProvider;
+use Sendportal\Base\Services\Messages\RelayMessage;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -36,6 +38,7 @@ abstract class TestCase extends BaseTestCase
         $this->withoutMix();
         $this->withExceptionHandling();
         $this->withFactories(__DIR__ . '/../database/factories');
+        $this->mockRelayMessageService();
 
         $this->artisan('migrate')->run();
     }
@@ -60,5 +63,19 @@ abstract class TestCase extends BaseTestCase
         return [
             'Form' => FormFacade::class
         ];
+    }
+
+    /**
+     * @return void
+     */
+    protected function mockRelayMessageService()
+    {
+        $service = $this->getMockBuilder(RelayMessage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $service->method('handle')->willReturn(Str::random());
+
+        app()->instance(RelayMessage::class, $service);
     }
 }

@@ -108,6 +108,7 @@ class DispatchMessage
         $data = $message->newQuery()
             ->toBase()
             ->select(['messages.sent_at', 'campaigns.status_id'])
+            ->where('messages.id', $message->id)
             ->leftJoin('campaigns', static function (JoinClause $join) {
                 $join->on('messages.source_id', '=', 'campaigns.id')
                     ->where('messages.source_type', Campaign::class);

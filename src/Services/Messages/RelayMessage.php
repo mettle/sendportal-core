@@ -6,9 +6,10 @@ namespace Sendportal\Base\Services\Messages;
 
 use Exception;
 use Sendportal\Base\Factories\MailAdapterFactory;
+use Sendportal\Base\Interfaces\RelayMessageServiceInterface;
 use Sendportal\Base\Models\EmailService;
 
-class RelayMessage
+class RelayMessage implements RelayMessageServiceInterface
 {
     /** @var MailAdapterFactory */
     protected $mailAdapter;

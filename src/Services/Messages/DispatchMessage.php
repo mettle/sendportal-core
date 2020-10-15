@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Sendportal\Base\Services\Messages;
 
 use Exception;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Interfaces\RelayMessageServiceInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
@@ -18,7 +18,7 @@ class DispatchMessage
     /** @var ResolveEmailService */
     protected $resolveEmailService;
 
-    /** @var RelayMessage */
+    /** @var RelayMessageServiceInterface */
     protected $relayMessage;
 
     /** @var MergeContent */
@@ -30,7 +30,7 @@ class DispatchMessage
     public function __construct(
         MergeContent $mergeContent,
         ResolveEmailService $resolveEmailService,
-        RelayMessage $relayMessage,
+        RelayMessageServiceInterface $relayMessage,
         MarkAsSent $markAsSent
     ) {
         $this->resolveEmailService = $resolveEmailService;
@@ -105,20 +105,20 @@ class DispatchMessage
 
     protected function isValidMessage(Message $message): bool
     {
-        $data = $message->newQuery()
-            ->toBase()
-            ->select(['messages.sent_at', 'campaigns.status_id'])
-            ->where('messages.id', $message->id)
-            ->leftJoin('campaigns', static function (JoinClause $join) {
-                $join->on('messages.source_id', '=', 'campaigns.id')
-                    ->where('messages.source_type', Campaign::class);
-            })
-            ->first();
-
-        if (! $data) {
+        if ($message->sent_at) {
             return false;
         }
 
-        return !(bool)$data->sent_at && $data->status_id !== CampaignStatus::STATUS_CANCELLED;
+        if (! $message->isCampaign()) {
+            return true;
+        }
+
+        $campaign = Campaign::find($message->source_id);
+
+        if (! $campaign) {
+            return false;
+        }
+
+        return $campaign->status_id !== CampaignStatus::STATUS_CANCELLED;
     }
 }

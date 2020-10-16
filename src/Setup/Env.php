@@ -6,19 +6,19 @@ class Env implements StepInterface
 {
     const VIEW = 'sendportal::setup.steps.env';
 
+    /**
+     * {@inheritDoc}
+     */
     public function check(): bool
     {
-        if (file_exists(base_path('.env'))) {
-            return true;
-        }
-
-        return false;
+        return file_exists(base_path('.env'));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function run(?array $input): bool
     {
-        copy(base_path('.env.example'), base_path('.env'));
-
-        return true;
+        return copy(base_path('.env.example'), base_path('.env'));
     }
 }

@@ -12,11 +12,17 @@ class Admin implements StepInterface
 {
     const VIEW = 'sendportal::setup.steps.admin';
 
+    /**
+     * {@inheritDoc}
+     */
     public function check(): bool
     {
         return User::count() > 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function run(?array $input): bool
     {
         $user = User::create([
@@ -39,7 +45,7 @@ class Admin implements StepInterface
         return true;
     }
 
-    public function validate(array $input)
+    public function validate(array $input): array
     {
         $validationRules = [
             'name' => ['required', 'string', 'max:255'],

@@ -97,4 +97,38 @@ class MessagesControllerTest extends TestCase
 
         $this->assertDatabaseHas('sendportal_messages', ['id' => $message->id]);
     }
+
+    /**
+     * @test
+     * https://github.com/mettle/sendportal/issues/90
+     */
+    public function a_message_can_be_sent_when_other_messages_have_been_sent()
+    {
+        [$workspace, $user] = $this->createUserAndWorkspace();
+
+        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => $workspace->id]);
+
+        // Message already sent
+        factory(Message::class)->create([
+            'workspace_id' => $workspace->id,
+            'source_id' => $campaign->id,
+            'sent_at' => now()
+        ]);
+
+        /** @var Message $message */
+        $draftMessage = factory(Message::class)->create([
+            'workspace_id' => $workspace->id,
+            'source_id' => $campaign->id,
+            'queued_at' => now(),
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('sendportal.messages.send'), ['id' => $draftMessage->id])
+            ->assertRedirect(route('sendportal.messages.draft'))
+            ->assertSessionHas('success');
+
+        $draftMessage->refresh();
+
+        $this->assertNotNull($draftMessage->sent_at);
+    }
 }

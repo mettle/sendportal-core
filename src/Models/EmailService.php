@@ -11,6 +11,8 @@ use Sendportal\Pro\Models\Automation;
 
 class EmailService extends BaseModel
 {
+    protected $table = 'sendportal_email_services';
+
     /** @var array */
     protected $fillable = [
         'name',

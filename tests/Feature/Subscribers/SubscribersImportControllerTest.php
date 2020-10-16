@@ -60,7 +60,7 @@ class SubscribersImportControllerTest extends TestCase
             ->assertRedirect(route('sendportal.subscribers.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('subscribers', [
+        $this->assertDatabaseHas('sendportal_subscribers', [
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'email' => 'test@email.com',
             'first_name' => 'Test Name',
@@ -84,7 +84,7 @@ class SubscribersImportControllerTest extends TestCase
             ->assertRedirect(route('sendportal.subscribers.import'))
             ->assertSessionHas('errors');
 
-        $this->assertDatabaseCount('subscribers', 0);
+        $this->assertDatabaseCount('sendportal_subscribers', 0);
     }
 
     /** @test */
@@ -106,8 +106,8 @@ class SubscribersImportControllerTest extends TestCase
             ->assertRedirect(route('sendportal.subscribers.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseCount('subscribers', 1);
-        $this->assertDatabaseCount('segment_subscriber', 1);
+        $this->assertDatabaseCount('sendportal_subscribers', 1);
+        $this->assertDatabaseCount('sendportal_segment_subscriber', 1);
     }
 
     /** @test */
@@ -129,8 +129,8 @@ class SubscribersImportControllerTest extends TestCase
             ->assertRedirect(route('sendportal.subscribers.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseCount('subscribers', 1);
-        $this->assertDatabaseCount('segment_subscriber', 2);
+        $this->assertDatabaseCount('sendportal_subscribers', 1);
+        $this->assertDatabaseCount('sendportal_segment_subscriber', 2);
     }
 
     /** @test */
@@ -234,7 +234,7 @@ class SubscribersImportControllerTest extends TestCase
 
         $subscriber->refresh();
 
-        $this->assertDatabaseCount('segment_subscriber', 2);
+        $this->assertDatabaseCount('sendportal_segment_subscriber', 2);
     }
 
     protected function createFakeCsvFile(array $rows)

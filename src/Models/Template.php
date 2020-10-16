@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Template extends BaseModel
 {
+    protected $table = 'sendportal_templates';
+
     /** @var array */
     protected $guarded = [];
 

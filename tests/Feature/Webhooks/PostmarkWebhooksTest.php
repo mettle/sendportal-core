@@ -120,7 +120,7 @@ class PostmarkWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Temporary',
@@ -147,7 +147,7 @@ class PostmarkWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Permanent',

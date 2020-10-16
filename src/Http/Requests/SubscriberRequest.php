@@ -19,7 +19,7 @@ class SubscriberRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('subscribers', 'email')
+                Rule::unique('sendportal_subscribers', 'email')
                     ->ignore($this->subscriber, 'id')
                     ->where(static function (Builder $query) {
                         $query->where('workspace_id', Sendportal::currentWorkspaceId());

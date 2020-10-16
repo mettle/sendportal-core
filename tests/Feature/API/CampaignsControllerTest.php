@@ -78,7 +78,7 @@ class CampaignsControllerTest extends TestCase
             ->assertStatus(Response::HTTP_CREATED)
             ->assertJson(['data' => $request]);
 
-        $this->assertDatabaseHas('campaigns', $request);
+        $this->assertDatabaseHas('sendportal_campaigns', $request);
     }
 
     /** @test */
@@ -110,8 +110,8 @@ class CampaignsControllerTest extends TestCase
             ->assertOk()
             ->assertJson(['data' => $request]);
 
-        $this->assertDatabaseMissing('campaigns', $campaign->toArray());
-        $this->assertDatabaseHas('campaigns', $request);
+        $this->assertDatabaseMissing('sendportal_campaigns', $campaign->toArray());
+        $this->assertDatabaseHas('sendportal_campaigns', $request);
     }
 
     /** @test */
@@ -142,7 +142,7 @@ class CampaignsControllerTest extends TestCase
                 'status_id' => 'A campaign cannot be updated if its status is not draft'
             ]);
 
-        $this->assertDatabaseMissing('campaigns', $request);
+        $this->assertDatabaseMissing('sendportal_campaigns', $request);
         $this->assertEquals($campaign->updated_at, $campaign->fresh()->updated_at);
     }
 }

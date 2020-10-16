@@ -6,6 +6,8 @@ use Ramsey\Uuid\Uuid;
 
 class Subscriber extends BaseModel
 {
+    protected $table = 'sendportal_subscribers';
+
     protected $fillable = [
         'hash',
         'email',
@@ -36,7 +38,7 @@ class Subscriber extends BaseModel
 
     public function segments(): BelongsToMany
     {
-        return $this->belongsToMany(Segment::class)->withTimestamps();
+        return $this->belongsToMany(Segment::class, 'sendportal_segment_subscriber')->withTimestamps();
     }
 
     public function messages(): HasMany

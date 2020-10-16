@@ -4,6 +4,8 @@ namespace Sendportal\Base\Models;
 
 class UnsubscribeEventType extends BaseModel
 {
+    protected $table = 'sendportal_unsubscribe_event_types';
+
     const BOUNCE = 1;
     const COMPLAINT = 2;
     const MANUAL_BY_ADMIN = 3;

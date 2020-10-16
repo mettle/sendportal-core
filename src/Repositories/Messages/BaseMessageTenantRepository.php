@@ -129,7 +129,7 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
      */
     public function getFirstOpenedAt(int $workspaceId, string $sourceType, int $sourceId)
     {
-        return DB::table('messages')
+        return DB::table('sendportal_messages')
             ->select(DB::raw('MIN(opened_at) as first'))
             ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)
@@ -169,8 +169,8 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
             $searchString = '%' . $search . '%';
 
             $instance->where(static function (Builder $instance) use ($searchString) {
-                $instance->where('messages.recipient_email', 'like', $searchString)
-                    ->orWhere('messages.subject', 'like', $searchString);
+                $instance->where('sendportal_messages.recipient_email', 'like', $searchString)
+                    ->orWhere('sendportal_messages.subject', 'like', $searchString);
             });
         }
     }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\EmailServiceType;
 
 class AddMailjetEmailService extends Migration
@@ -12,11 +13,12 @@ class AddMailjetEmailService extends Migration
      */
     public function up()
     {
-        EmailServiceType::unguard();
-
-        EmailServiceType::create([
-            'id' => EmailServiceType::MAILJET,
-            'name' => 'Mailjet'
-        ]);
+        DB::table('email_service_types')
+            ->insert(
+                [
+                    'id' => EmailServiceType::MAILJET,
+                    'name' => 'Mailjet'
+                ]
+            );
     }
 }

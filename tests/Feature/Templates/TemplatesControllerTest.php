@@ -63,7 +63,7 @@ class TemplatesControllerTest extends TestCase
 
         $response->assertRedirect(route('sendportal.templates.index'));
 
-        $this->assertDatabaseHas('templates', [
+        $this->assertDatabaseHas('sendportal_templates', [
             'name' => $data['name'],
             'content' => $data['content'],
             'workspace_id' => Sendportal::currentWorkspaceId()
@@ -121,12 +121,12 @@ class TemplatesControllerTest extends TestCase
 
         $response->assertRedirect(route('sendportal.templates.index'));
 
-        $this->assertDatabaseMissing('templates', [
+        $this->assertDatabaseMissing('sendportal_templates', [
             'id' => $template->id,
             'name' => $template->name,
             'content' => $template->content
         ]);
-        $this->assertDatabaseHas('templates', $data + ['id' => $template->id, 'workspace_id' => Sendportal::currentWorkspaceId()]);
+        $this->assertDatabaseHas('sendportal_templates', $data + ['id' => $template->id, 'workspace_id' => Sendportal::currentWorkspaceId()]);
     }
 
     /** @test */
@@ -166,7 +166,7 @@ class TemplatesControllerTest extends TestCase
 
         $response->assertRedirect(route('sendportal.templates.index'));
 
-        $this->assertDatabaseMissing('templates', [
+        $this->assertDatabaseMissing('sendportal_templates', [
             'id' => $template->id,
             'name' => $template->name
         ]);
@@ -189,7 +189,7 @@ class TemplatesControllerTest extends TestCase
         $response->assertRedirect(route('sendportal.templates.index'))
             ->assertSessionHasErrors(['template']);
 
-        $this->assertDatabaseHas('templates', [
+        $this->assertDatabaseHas('sendportal_templates', [
             'id' => $template->id,
             'name' => $template->name
         ]);

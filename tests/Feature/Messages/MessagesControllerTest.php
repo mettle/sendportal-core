@@ -75,7 +75,7 @@ class MessagesControllerTest extends TestCase
         $this->delete(route('sendportal.messages.delete', $message->id))
             ->assertRedirect(route('sendportal.messages.draft'));
 
-        $this->assertDatabaseMissing('messages', ['id' => $message->id]);
+        $this->assertDatabaseMissing('sendportal_messages', ['id' => $message->id]);
     }
 
     /** @test */
@@ -95,6 +95,6 @@ class MessagesControllerTest extends TestCase
             ->delete(route('sendportal.messages.delete', $message->id))
             ->assertRedirect(route('sendportal.messages.draft'));
 
-        $this->assertDatabaseHas('messages', ['id' => $message->id]);
+        $this->assertDatabaseHas('sendportal_messages', ['id' => $message->id]);
     }
 }

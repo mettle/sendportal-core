@@ -43,6 +43,6 @@ class GenerateTestSubscribers extends Command
             $times++;
         }
 
-        DB::table('subscribers')->insert($inserts);
+        DB::table('sendportal_subscribers')->insert($inserts);
     }
 }

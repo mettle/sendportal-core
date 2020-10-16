@@ -13,7 +13,7 @@ class MySqlSubscriberTenantRepository extends BaseSubscriberTenantRepository
      */
     public function getGrowthChartData(CarbonPeriod $period, int $workspaceId): array
     {
-        $startingValue = DB::table('subscribers')
+        $startingValue = DB::table('sendportal_subscribers')
             ->where('workspace_id', $workspaceId)
             ->where(function (Builder $q) use ($period) {
                 $q->where('unsubscribed_at', '>=', $period->getStartDate())
@@ -22,7 +22,7 @@ class MySqlSubscriberTenantRepository extends BaseSubscriberTenantRepository
             ->where('created_at', '<', $period->getStartDate())
             ->count();
 
-        $runningTotal = DB::table('subscribers')
+        $runningTotal = DB::table('sendportal_subscribers')
             ->selectRaw("date_format(created_at, '%d-%m-%Y') AS date, count(*) as total")
             ->where('workspace_id', $workspaceId)
             ->where('created_at', '>=', $period->getStartDate())
@@ -30,7 +30,7 @@ class MySqlSubscriberTenantRepository extends BaseSubscriberTenantRepository
             ->groupBy('date')
             ->get();
 
-        $unsubscribers = DB::table('subscribers')
+        $unsubscribers = DB::table('sendportal_subscribers')
             ->selectRaw("date_format(unsubscribed_at, '%d-%m-%Y') AS date, count(*) as total")
             ->where('workspace_id', $workspaceId)
             ->where('unsubscribed_at', '>=', $period->getStartDate())

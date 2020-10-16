@@ -16,7 +16,7 @@ class SegmentUpdateRequest extends FormRequest
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('segments')
+                Rule::unique('sendportal_segments')
                     ->where('workspace_id', Sendportal::currentWorkspaceId())
                     ->ignore($this->segment),
             ],

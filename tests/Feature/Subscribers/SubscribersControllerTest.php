@@ -31,7 +31,7 @@ class SubscribersControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('subscribers', [
+        $this->assertDatabaseHas('sendportal_subscribers', [
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'email' => $subscriberStoreData['email']
         ]);
@@ -66,7 +66,7 @@ class SubscribersControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('subscribers', [
+        $this->assertDatabaseHas('sendportal_subscribers', [
             'id' => $subscriber->id,
             'email' => $subscriberUpdateData['email'],
             'first_name' => $subscriberUpdateData['first_name'],

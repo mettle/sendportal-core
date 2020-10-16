@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\EmailServiceType;
 
 class CreateEmailServiceTables extends Migration
@@ -35,26 +36,36 @@ class CreateEmailServiceTables extends Migration
 
     protected function seedEmailServiceTypes()
     {
-        EmailServiceType::unguard();
+        DB::table('email_service_types')
+            ->insert(
+                [
+                    'id' => EmailServiceType::SES,
+                    'name' => 'SES'
+                ]
+            );
 
-        EmailServiceType::create([
-            'id' => EmailServiceType::SES,
-            'name' => 'SES'
-        ]);
+        DB::table('email_service_types')
+            ->insert(
+                [
+                    'id' => EmailServiceType::SENDGRID,
+                    'name' => 'SendGrid'
+                ]
+            );
 
-        EmailServiceType::create([
-            'id' => EmailServiceType::SENDGRID,
-            'name' => 'SendGrid'
-        ]);
+        DB::table('email_service_types')
+            ->insert(
+                [
+                    'id' => EmailServiceType::MAILGUN,
+                    'name' => 'Mailgun'
+                ]
+            );
 
-        EmailServiceType::create([
-            'id' => EmailServiceType::MAILGUN,
-            'name' => 'Mailgun'
-        ]);
-
-        EmailServiceType::create([
-            'id' => EmailServiceType::POSTMARK,
-            'name' => 'Postmark'
-        ]);
+        DB::table('email_service_types')
+            ->insert(
+                [
+                    'id' => EmailServiceType::POSTMARK,
+                    'name' => 'Postmark'
+                ]
+            );
     }
 }

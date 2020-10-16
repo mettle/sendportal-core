@@ -51,7 +51,7 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('campaigns', [
+        $this->assertDatabaseHas('sendportal_campaigns', [
             'name' => $campaignStoreData['name'],
         ]);
     }
@@ -100,7 +100,7 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('campaigns', [
+        $this->assertDatabaseHas('sendportal_campaigns', [
             'id' => $campaign->id,
             'name' => $campaignUpdateData['name'],
             'subject' => $campaignUpdateData['subject']
@@ -117,7 +117,7 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('campaigns', [
+        $this->assertDatabaseHas('sendportal_campaigns', [
             'name' => $campaignStoreData['name'],
             'is_open_tracking' => 0
         ]);
@@ -133,7 +133,7 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('campaigns', [
+        $this->assertDatabaseHas('sendportal_campaigns', [
             'name' => $campaignStoreData['name'],
             'is_open_tracking' => 1
         ]);
@@ -149,7 +149,7 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('campaigns', [
+        $this->assertDatabaseHas('sendportal_campaigns', [
             'name' => $campaignStoreData['name'],
             'is_click_tracking' => 0
         ]);
@@ -165,7 +165,7 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('campaigns', [
+        $this->assertDatabaseHas('sendportal_campaigns', [
             'name' => $campaignStoreData['name'],
             'is_click_tracking' => 1
         ]);

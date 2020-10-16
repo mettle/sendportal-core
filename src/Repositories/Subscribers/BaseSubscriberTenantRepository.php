@@ -111,9 +111,9 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
             $filterString = '%' . $name . '%';
 
             $instance->where(static function (Builder $instance) use ($filterString) {
-                $instance->where('subscribers.first_name', 'like', $filterString)
-                    ->orWhere('subscribers.last_name', 'like', $filterString)
-                    ->orWhere('subscribers.email', 'like', $filterString);
+                $instance->where('sendportal_subscribers.first_name', 'like', $filterString)
+                    ->orWhere('sendportal_subscribers.last_name', 'like', $filterString)
+                    ->orWhere('sendportal_subscribers.email', 'like', $filterString);
             });
         }
     }
@@ -138,9 +138,9 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
     protected function applySegmentFilter(Builder $instance, array $filters = []): void
     {
         if ($segmentIds = Arr::get($filters, 'segments')) {
-            $instance->select('subscribers.*')
-                ->leftJoin('segment_subscriber', 'subscribers.id', '=', 'segment_subscriber.subscriber_id')
-                ->whereIn('segment_subscriber.segment_id', $segmentIds)
+            $instance->select('sendportal_subscribers.*')
+                ->leftJoin('sendportal_segment_subscriber', 'sendportal_subscribers.id', '=', 'sendportal_segment_subscriber.subscriber_id')
+                ->whereIn('sendportal_segment_subscriber.segment_id', $segmentIds)
                 ->distinct();
         }
     }

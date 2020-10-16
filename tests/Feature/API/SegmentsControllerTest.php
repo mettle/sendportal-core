@@ -64,7 +64,7 @@ class SegmentsControllerTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['data' => $request]);
 
-        $this->assertDatabaseHas('segments', $request);
+        $this->assertDatabaseHas('sendportal_segments', $request);
     }
 
     /** @test */
@@ -85,8 +85,8 @@ class SegmentsControllerTest extends TestCase
             ->assertOk()
             ->assertJson(['data' => $request]);
 
-        $this->assertDatabaseMissing('segments', $segment->toArray());
-        $this->assertDatabaseHas('segments', $request);
+        $this->assertDatabaseMissing('sendportal_segments', $segment->toArray());
+        $this->assertDatabaseHas('sendportal_segments', $request);
     }
 
     /** @test */
@@ -102,7 +102,7 @@ class SegmentsControllerTest extends TestCase
         $this->deleteJson($route)
             ->assertStatus(204);
 
-        $this->assertDatabaseCount('segments', 0);
+        $this->assertDatabaseCount('sendportal_segments', 0);
     }
 
     /** @test */

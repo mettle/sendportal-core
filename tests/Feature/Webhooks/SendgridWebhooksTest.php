@@ -103,7 +103,7 @@ class SendgridWebhooksTest extends TestCase
         $this->assertNotNull($message->refresh()->bounced_at);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Permanent',
@@ -123,7 +123,7 @@ class SendgridWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Temporary',
@@ -147,7 +147,7 @@ class SendgridWebhooksTest extends TestCase
         $this->assertNotNull($message->refresh()->bounced_at);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Permanent',
@@ -167,7 +167,7 @@ class SendgridWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Temporary',

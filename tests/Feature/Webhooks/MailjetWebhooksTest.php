@@ -149,7 +149,7 @@ class MailjetWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Temporary',
@@ -182,7 +182,7 @@ class MailjetWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Permanent',
@@ -212,7 +212,7 @@ class MailjetWebhooksTest extends TestCase
         $this->json('POST', route($this->route), $webhook);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'Temporary',

@@ -107,10 +107,10 @@ class DispatchMessage
     {
         $data = $message->newQuery()
             ->toBase()
-            ->select(['messages.sent_at', 'campaigns.status_id'])
-            ->leftJoin('campaigns', static function (JoinClause $join) {
-                $join->on('messages.source_id', '=', 'campaigns.id')
-                    ->where('messages.source_type', Campaign::class);
+            ->select(['sendportal_messages.sent_at', 'sendportal_campaigns.status_id'])
+            ->leftJoin('sendportal_campaigns', static function (JoinClause $join) {
+                $join->on('sendportal_messages.source_id', '=', 'sendportal_campaigns.id')
+                    ->where('sendportal_messages.source_type', Campaign::class);
             })
             ->first();
 

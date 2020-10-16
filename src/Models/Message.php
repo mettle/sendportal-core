@@ -13,6 +13,8 @@ use Sendportal\Pro\Models\AutomationSchedule;
 
 class Message extends BaseModel
 {
+    protected $table = 'sendportal_messages';
+
     /** @var array */
     protected $guarded = [];
 

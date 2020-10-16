@@ -14,7 +14,7 @@ class SegmentUpdateRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('segments')
+                Rule::unique('sendportal_segments')
                     ->where('workspace_id', $this->route('workspaceId'))
                     ->ignore($this->route('segment')),
             ],

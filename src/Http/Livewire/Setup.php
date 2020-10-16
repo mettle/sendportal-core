@@ -5,7 +5,6 @@ namespace Sendportal\Base\Http\Livewire;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
-use Sendportal\Base\Setup\Admin;
 use Sendportal\Base\Setup\Database;
 use Sendportal\Base\Setup\Env;
 use Sendportal\Base\Setup\Key;
@@ -22,8 +21,7 @@ class Setup extends Component
         ['name' => 'Application Key', 'completed' => false, 'handler' => Key::class, 'view' => Key::VIEW],
         ['name' => 'Application Url', 'completed' => false, 'handler' => Url::class, 'view' => Url::VIEW],
         ['name' => 'Database Connection', 'completed' => false, 'handler' => Database::class, 'view' => Database::VIEW],
-        ['name' => 'Database Migrations', 'completed' => false, 'handler' => Migrations::class, 'view' => Migrations::VIEW],
-        ['name' => 'Admin User Account', 'completed' => false, 'handler' => Admin::class, 'view' => Admin::VIEW],
+        ['name' => 'Database Migrations', 'completed' => false, 'handler' => Migrations::class, 'view' => Migrations::VIEW]
     ];
 
     protected $listeners = [

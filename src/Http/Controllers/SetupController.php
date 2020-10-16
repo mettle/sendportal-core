@@ -2,10 +2,9 @@
 
 namespace Sendportal\Base\Http\Controllers;
 
-use Exception;
+use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Sendportal\Base\Models\User;
 
 class SetupController extends Controller
 {
@@ -14,14 +13,33 @@ class SetupController extends Controller
      */
     public function index()
     {
-        try {
-            if (User::exists()) {
-                return redirect()->route('login');
-            }
-        } catch (Exception $e) {
-            //
+        $migrator = app('migrator');
+        $files = $migrator->getMigrationFiles($migrator->paths());
+
+        $pendingMigrations = (bool)collect(array_diff(
+            array_keys($files),
+            $this->getPastMigrations($migrator)
+        ))->count();
+
+        if (! $pendingMigrations) {
+            return redirect()->to('/');
         }
 
         return view('sendportal::setup.index');
+    }
+
+    /**
+     * Get all migrations that have previously been run
+     *
+     * @param Migrator $migrator
+     * @return array
+     */
+    protected function getPastMigrations(Migrator $migrator): array
+    {
+        if (!$migrator->repositoryExists()) {
+            return [];
+        }
+
+        return $migrator->getRepository()->getRan();
     }
 }

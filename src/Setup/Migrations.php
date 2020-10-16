@@ -25,7 +25,7 @@ class Migrations implements StepInterface
      */
     public function run(?array $input): bool
     {
-        return (bool) Artisan::call('migrate');
+        return ! (bool) Artisan::call('migrate');
     }
 
     protected function getPastMigrations($migrator): array

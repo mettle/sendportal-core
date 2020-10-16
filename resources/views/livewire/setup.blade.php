@@ -2,7 +2,7 @@
     @if($this->progress == 100)
         <div class="text-center">
             <h2 class="text-primary">Application Setup Complete</h2>
-            <a href="{{ route('login') }}" class="btn btn-primary btn-md">Login</a>
+            <a href="{{ url('/') }}" class="btn btn-primary btn-md">Continue</a>
         </div>
     @else
         <h2 class="text-center">Application Setup</h2>

@@ -4,17 +4,14 @@
         <span class="text-small float-right"><em>{{ $iteration }}/{{ $total }}</em></span>
     </h6>
 </div>
+@if (!$step['completed'])
 <div class="collapse {{ $active ? 'show' : null }}">
     <div class="card-body">
-        @if ($step['completed'])
-            <p>✔️ Database migrations are up to date</p>
-            <button class="btn btn-primary btn-md" wire:click="next">Next</button>
-        @else
-            <p>There are pending database migrations. Would you like to run migrations now?</p>
-            <button class="btn btn-primary btn-md" wire:click="run" wire:loading.attr="disabled">
-                <span wire:loading class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Run Migrations
-            </button>
-        @endif
+        <p>There are pending database migrations. Would you like to run migrations now?</p>
+        <button class="btn btn-primary btn-md" wire:click="run" wire:loading.attr="disabled">
+            <span wire:loading class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Run Migrations
+        </button>
     </div>
 </div>
+@endif

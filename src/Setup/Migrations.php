@@ -8,6 +8,9 @@ class Migrations implements StepInterface
 {
     const VIEW = 'sendportal::setup.steps.migrations';
 
+    /**
+     * {@inheritDoc}
+     */
     public function check(): bool
     {
         $migrator = app('migrator');
@@ -17,6 +20,14 @@ class Migrations implements StepInterface
         return count(array_diff(array_keys($files), $this->getPastMigrations($migrator))) === 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function run(?array $input): bool
+    {
+        return (bool) Artisan::call('migrate');
+    }
+
     protected function getPastMigrations($migrator): array
     {
         if (!$migrator->repositoryExists()) {
@@ -24,12 +35,5 @@ class Migrations implements StepInterface
         }
 
         return $migrator->getRepository()->getRan();
-    }
-
-    public function run(?array $input): bool
-    {
-        Artisan::call('migrate');
-
-        return true;
     }
 }

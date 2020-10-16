@@ -28,22 +28,22 @@
                 </div>
                 <div class="form-group">
                     <label for="host">Database Host</label>
-                    <input type="text" class="form-control" id="host" name="host" value="{{ config("database.connections.{$default}.host", '127.0.0.1') }}" required>
+                    <input type="text" class="form-control" id="host" name="host" value="{{ old('host') ?? config("database.connections.{$default}.host", '127.0.0.1') }}" required>
                     @error('host') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="port">Database Port</label>
-                    <input type="text" class="form-control" id="port" name="port" value="{{ config("database.connections.{$default}.port", 3306) }}" required>
+                    <input type="text" class="form-control" id="port" name="port" value="{{ old('port') ?? config("database.connections.{$default}.port", 3306) }}" required>
                     @error('port') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="database">Database Name</label>
-                    <input type="text" class="form-control" id="database" name="database" value="{{ config("database.connections.{$default}.database") }}" required>
+                    <input type="text" class="form-control" id="database" name="database" value="{{ old('database') ?? config("database.connections.{$default}.database") }}" required>
                     @error('database') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">
                     <label for="username">Database Username</label>
-                    <input type="text" class="form-control" id="username" name="username" value="{{ config("database.connections.{$default}.username") }}" required>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ old('username') ?? config("database.connections.{$default}.username") }}" required>
                     @error('username') <span class="form-text text-danger">{{ $message }}</span>@enderror
                 </div>
                 <div class="form-group">

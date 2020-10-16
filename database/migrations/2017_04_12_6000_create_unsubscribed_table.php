@@ -15,7 +15,7 @@ class CreateUnsubscribedTable extends Migration
      */
     public function up()
     {
-        Schema::create('sendportal_unsubscribe_event_types', function (Blueprint $table) {
+        Schema::create('unsubscribe_event_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -28,7 +28,7 @@ class CreateUnsubscribedTable extends Migration
         ];
 
         foreach ($types as $id => $name) {
-            DB::table('sendportal_unsubscribe_event_types')->insert([
+            DB::table('unsubscribe_event_types')->insert([
                 'id' => $id,
                 'name' => $name
             ]);

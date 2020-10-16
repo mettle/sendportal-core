@@ -10,6 +10,9 @@ class Url implements StepInterface
 
     const VIEW = 'sendportal::setup.steps.url';
 
+    /**
+     * {@inheritDoc}
+     */
     public function check(): bool
     {
         if (config('app.url') and config('app.url') !== 'http://localhost') {
@@ -19,6 +22,9 @@ class Url implements StepInterface
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function run(?array $input): bool
     {
         $this->writeToEnvironmentFile('APP_URL', $input['url']);

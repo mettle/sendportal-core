@@ -13,6 +13,9 @@ class Database implements StepInterface
 
     const VIEW = 'sendportal::setup.steps.database';
 
+    /**
+     * {@inheritDoc}
+     */
     public function check(): bool
     {
         try {
@@ -24,6 +27,9 @@ class Database implements StepInterface
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function run(?array $input): bool
     {
         $connection = $input['connection'];
@@ -56,7 +62,7 @@ class Database implements StepInterface
         }
     }
 
-    public function validate(array $input)
+    public function validate(array $input): array
     {
         $validationRules = [
             'connection' => ['required', Rule::in(array_keys(config('database.connections')))],

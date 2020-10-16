@@ -8,6 +8,9 @@ class Key implements StepInterface
 {
     const VIEW = 'sendportal::setup.steps.key';
 
+    /**
+     * {@inheritDoc}
+     */
     public function check(): bool
     {
         if (config('app.key')) {
@@ -17,6 +20,9 @@ class Key implements StepInterface
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function run(?array $input): bool
     {
         return (bool) Artisan::call('key:generate');

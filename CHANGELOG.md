@@ -1,6 +1,10 @@
 # Sendportal Core
 
-## 1.0.8 - 2020-10-09
+## 1.0.10 - 2020-10-15
+
+- Resolve invalid message issue ([#87](https://github.com/mettle/sendportal-core/pull/83))
+
+## 1.0.9 - 2020-10-09
 
 - Set Subscriber unsubscribed_at via API ([#83](https://github.com/mettle/sendportal-core/pull/83))
 - Adjust quota service ([#82](https://github.com/mettle/sendportal-core/pull/82))

@@ -13,7 +13,7 @@ class AdjustTemplateContent extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function (Blueprint $table) {
+        Schema::table('sendportal_templates', function (Blueprint $table) {
             $table->longText('content')->change();
         });
     }

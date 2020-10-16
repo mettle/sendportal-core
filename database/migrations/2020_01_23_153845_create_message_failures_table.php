@@ -13,7 +13,7 @@ class CreateMessageFailuresTable extends Migration
      */
     public function up()
     {
-        Schema::create('message_failures', function (Blueprint $table) {
+        Schema::create('sendportal_message_failures', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('message_id');
             $table->string('severity')->nullable()->default(null);
@@ -21,7 +21,7 @@ class CreateMessageFailuresTable extends Migration
             $table->timestamp('failed_at')->nullable()->default(null);
             $table->timestamps();
 
-            $table->foreign('message_id')->references('id')->on('messages');
+            $table->foreign('message_id')->references('id')->on('sendportal_messages');
         });
     }
 }

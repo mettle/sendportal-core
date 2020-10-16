@@ -13,7 +13,7 @@ class CreateCampaignsTable extends Migration
      */
     public function up()
     {
-        Schema::create('campaigns', function (Blueprint $table) {
+        Schema::create('sendportal_campaigns', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name');
@@ -34,9 +34,9 @@ class CreateCampaignsTable extends Migration
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('status_id')->references('id')->on('campaign_statuses');
-            $table->foreign('template_id')->references('id')->on('templates');
-            $table->foreign('email_service_id')->references('id')->on('email_services');
+            $table->foreign('status_id')->references('id')->on('sendportal_campaign_statuses');
+            $table->foreign('template_id')->references('id')->on('sendportal_templates');
+            $table->foreign('email_service_id')->references('id')->on('sendportal_email_services');
         });
     }
 }

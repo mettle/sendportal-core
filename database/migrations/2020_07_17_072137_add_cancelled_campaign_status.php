@@ -7,7 +7,7 @@ class AddCancelledCampaignStatus extends Migration
 {
     public function up()
     {
-        DB::table('campaign_statuses')
+        DB::table('sendportal_campaign_statuses')
             ->insert([
                 'id' => 5,
                 'name' => 'Cancelled',

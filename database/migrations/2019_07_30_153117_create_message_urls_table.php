@@ -13,7 +13,7 @@ class CreateMessageUrlsTable extends Migration
      */
     public function up()
     {
-        Schema::create('message_urls', function (Blueprint $table) {
+        Schema::create('sendportal_message_urls', function (Blueprint $table) {
             $table->increments('id');
             $table->string('source_type')->index();
             $table->unsignedInteger('source_id')->index();

@@ -13,8 +13,8 @@ class DropSegmentNameUnique extends Migration
      */
     public function up()
     {
-        Schema::table('segments', function (Blueprint $table) {
-            $table->dropUnique('segments_name_unique');
+        Schema::table('sendportal_segments', function (Blueprint $table) {
+            $table->dropUnique('sendportal_segments_name_unique');
         });
     }
 }

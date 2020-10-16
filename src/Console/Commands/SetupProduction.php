@@ -8,12 +8,8 @@ use Exception;
 use Illuminate\Database\Console\Migrations\BaseCommand;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use RuntimeException;
-use Sendportal\Base\Models\User;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\SendportalBaseServiceProvider;
 
 class SetupProduction extends BaseCommand
@@ -46,7 +42,6 @@ class SetupProduction extends BaseCommand
         $this->checkAppUrl();
         $this->checkDatabaseConnection();
         $this->checkMigrations();
-        $this->checkAdminUserAccount();
         $this->checkVendorAssets();
 
         $this->info('✅ Your application is ready!');
@@ -216,113 +211,6 @@ class SetupProduction extends BaseCommand
         $this->info('✅ Database migrations successful');
 
         return true;
-    }
-
-    /**
-     * Check to see if the first admin user account has been created
-     */
-    protected function checkAdminUserAccount(): void
-    {
-        if (User::count()) {
-            $this->info('✅ Admin user account exists');
-
-            return;
-        }
-
-        $companyName = $this->getCompanyName();
-        $this->createAdminUserAccount($companyName);
-
-        $this->line('✅ Admin user account has been created');
-    }
-
-    /**
-     * Prompt the user for their company/workspace name
-     */
-    protected function getCompanyName(): string
-    {
-        $this->line('');
-        $this->line('Creating first admin user account and company/workspace');
-        $companyName = $this->ask('Company/Workspace name');
-
-        if (!$companyName) {
-            return $this->getCompanyName();
-        }
-
-        return $companyName;
-    }
-
-    /**
-     * Create the first admin user account and associate it with the company/workspace
-     */
-    protected function createAdminUserAccount(string $companyName): User
-    {
-        $this->line('');
-        $this->line('Create the administrator user account');
-
-        $name = $this->getUserParam('name');
-        $email = $this->getUserParam('email');
-        $password = $this->getUserParam('password');
-
-        $user = User::create([
-            'name' => $name,
-            'email' => $email,
-            'email_verified_at' => now(),
-            'password' => Hash::make($password),
-            'api_token' => Str::random(80),
-        ]);
-
-        $this->storeWorkspace($user, $companyName);
-
-        return $user;
-    }
-
-    /**
-     * Validate user input
-     */
-    protected function getUserParam(string $param): string
-    {
-        $validationRules = [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'max:255'],
-        ];
-
-        if ($param === 'password') {
-            $value = $this->secret(ucfirst($param));
-        } else {
-            $value = $this->ask(ucfirst($param));
-        }
-
-        $validator = Validator::make([$param => $value], [
-            $param => $validationRules[$param],
-        ]);
-
-        if ($validator->fails()) {
-            foreach ($validator->errors()->getMessages() as $error) {
-                $this->line("{$error[0]}");
-            }
-
-            return $this->getUserParam($param);
-        }
-
-        return $value;
-    }
-
-    /**
-     * Store the workspace
-     */
-    protected function storeWorkspace(User $user, string $companyName): Workspace
-    {
-        $workspace = Workspace::create([
-            'name' => $companyName,
-            'owner_id' => $user->id,
-        ]);
-
-        $user->workspaces()->attach(Sendportal::currentWorkspaceId(), [
-            'role' => Workspace::ROLE_OWNER,
-        ]);
-
-        return $workspace;
     }
 
     /**

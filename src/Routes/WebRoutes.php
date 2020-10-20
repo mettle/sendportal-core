@@ -14,8 +14,6 @@ class WebRoutes
             $this->name('sendportal.')->namespace('\Sendportal\Base\Http\Controllers')->group(static function (
                 Router $appRouter
             ) {
-                $appRouter->get('setup', 'SetupController@index')->name('setup');
-
                 // Subscriptions
                 $appRouter->name('subscriptions.')->namespace('Subscriptions')->prefix('subscriptions')->group(static function (
                     Router $subscriptionController

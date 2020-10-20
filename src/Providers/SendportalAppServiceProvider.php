@@ -6,8 +6,6 @@ namespace Sendportal\Base\Providers;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use Livewire\Livewire;
-use Sendportal\Base\Http\Livewire\Setup;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
@@ -89,6 +87,6 @@ class SendportalAppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Livewire::component('setup', Setup::class);
+
     }
 }

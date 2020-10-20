@@ -14,7 +14,6 @@
         "kriswallsmith/buzz": "^1.1",
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.0|^7.0",
-        "livewire/livewire": "^2.0",
         "mailgun/mailgun-php": "^3.0",
         "mailjet/mailjet-apiv3-php": "^1.4",
         "nyholm/psr7": "^1.2",

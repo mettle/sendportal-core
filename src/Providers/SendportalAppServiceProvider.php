@@ -87,6 +87,5 @@ class SendportalAppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
     }
 }

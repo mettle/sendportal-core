@@ -13,7 +13,7 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('sendportal_messages', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('hash')->unique();
             $table->unsignedInteger('workspace_id')->index();

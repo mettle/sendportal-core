@@ -13,6 +13,14 @@ class PrefixTables extends Migration
     public function up()
     {
         foreach ($this->getTables() as $table) {
+            if (Schema::hasTable("sendportal_{$table}")) {
+                continue;
+            }
+
+            if (!Schema::hasTable("{$table}")) {
+                continue;
+            }
+
             Schema::rename($table, "sendportal_{$table}");
         }
     }

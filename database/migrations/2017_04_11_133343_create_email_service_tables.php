@@ -14,7 +14,7 @@ class CreateEmailServiceTables extends Migration
      */
     public function up()
     {
-        \Schema::create('email_service_types', function (Blueprint $table) {
+        \Schema::create('sendportal_email_service_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
@@ -22,7 +22,7 @@ class CreateEmailServiceTables extends Migration
 
         $this->seedEmailServiceTypes();
 
-        \Schema::create('email_services', function (Blueprint $table) {
+        \Schema::create('sendportal_email_services', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name')->nullable();
@@ -30,13 +30,13 @@ class CreateEmailServiceTables extends Migration
             $table->mediumText('settings');
             $table->timestamps();
 
-            $table->foreign('type_id')->references('id')->on('email_service_types');
+            $table->foreign('type_id')->references('id')->on('sendportal_email_service_types');
         });
     }
 
     protected function seedEmailServiceTypes()
     {
-        DB::table('email_service_types')
+        DB::table('sendportal_email_service_types')
             ->insert(
                 [
                     'id' => EmailServiceType::SES,
@@ -44,7 +44,7 @@ class CreateEmailServiceTables extends Migration
                 ]
             );
 
-        DB::table('email_service_types')
+        DB::table('sendportal_email_service_types')
             ->insert(
                 [
                     'id' => EmailServiceType::SENDGRID,
@@ -52,7 +52,7 @@ class CreateEmailServiceTables extends Migration
                 ]
             );
 
-        DB::table('email_service_types')
+        DB::table('sendportal_email_service_types')
             ->insert(
                 [
                     'id' => EmailServiceType::MAILGUN,
@@ -60,7 +60,7 @@ class CreateEmailServiceTables extends Migration
                 ]
             );
 
-        DB::table('email_service_types')
+        DB::table('sendportal_email_service_types')
             ->insert(
                 [
                     'id' => EmailServiceType::POSTMARK,

@@ -13,7 +13,7 @@ class AdjustCampaignContent extends Migration
      */
     public function up()
     {
-        Schema::table('campaigns', function (Blueprint $table) {
+        Schema::table('sendportal_campaigns', function (Blueprint $table) {
             $table->longText('content')->change();
         });
     }

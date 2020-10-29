@@ -13,7 +13,7 @@ class AddMailjetEmailService extends Migration
      */
     public function up()
     {
-        DB::table('email_service_types')
+        DB::table('sendportal_email_service_types')
             ->insert(
                 [
                     'id' => EmailServiceType::MAILJET,

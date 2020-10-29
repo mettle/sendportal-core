@@ -29,7 +29,7 @@ class ApiSegmentSubscriberService
         $segment = $this->segments->find($workspaceId, $segmentId);
 
         /** @var Collection $existingSubscribers */
-        $existingSubscribers = $segment->subscribers()->pluck('subscribers.id')->toBase();
+        $existingSubscribers = $segment->subscribers()->pluck('sendportal_subscribers.id')->toBase();
 
         $subscribersToStore = $subscriberIds->diff($existingSubscribers);
 

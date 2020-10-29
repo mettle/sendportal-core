@@ -13,14 +13,14 @@ class CreateCampaignSegmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('campaign_segment', function (Blueprint $table) {
+        Schema::create('sendportal_campaign_segment', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('segment_id');
             $table->unsignedInteger('campaign_id');
             $table->timestamps();
 
-            $table->foreign('segment_id')->references('id')->on('segments');
-            $table->foreign('campaign_id')->references('id')->on('campaigns');
+            $table->foreign('segment_id')->references('id')->on('sendportal_segments');
+            $table->foreign('campaign_id')->references('id')->on('sendportal_campaigns');
         });
     }
 }

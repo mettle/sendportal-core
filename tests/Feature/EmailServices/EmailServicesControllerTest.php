@@ -45,7 +45,7 @@ class EmailServicesControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('email_services', [
+        $this->assertDatabaseHas('sendportal_email_services', [
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'name' => $emailServiceStoreData['name'],
             'type_id' => $emailServiceStoreData['type_id']
@@ -83,7 +83,7 @@ class EmailServicesControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('email_services', [
+        $this->assertDatabaseHas('sendportal_email_services', [
             'id' => $emailService->id,
             'name' => $emailServiceUpdateData['name']
         ]);
@@ -99,7 +99,7 @@ class EmailServicesControllerTest extends TestCase
             ->delete(route('sendportal.email_services.delete', $emailService->id));
 
         // then
-        $this->assertDatabaseMissing('email_services', [
+        $this->assertDatabaseMissing('sendportal_email_services', [
             'id' => $emailService->id
         ]);
     }
@@ -139,7 +139,7 @@ class EmailServicesControllerTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHasErrors();
 
-        $this->assertDatabaseHas('email_services', [
+        $this->assertDatabaseHas('sendportal_email_services', [
             'id' => $emailService->id
         ]);
     }

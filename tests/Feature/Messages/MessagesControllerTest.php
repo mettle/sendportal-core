@@ -75,7 +75,7 @@ class MessagesControllerTest extends TestCase
         $this->delete(route('sendportal.messages.delete', $message->id))
             ->assertRedirect(route('sendportal.messages.draft'));
 
-        $this->assertDatabaseMissing('messages', ['id' => $message->id]);
+        $this->assertDatabaseMissing('sendportal_messages', ['id' => $message->id]);
     }
 
     /** @test */
@@ -95,7 +95,7 @@ class MessagesControllerTest extends TestCase
             ->delete(route('sendportal.messages.delete', $message->id))
             ->assertRedirect(route('sendportal.messages.draft'));
 
-        $this->assertDatabaseHas('messages', ['id' => $message->id]);
+        $this->assertDatabaseHas('sendportal_messages', ['id' => $message->id]);
     }
 
     /**
@@ -104,26 +104,25 @@ class MessagesControllerTest extends TestCase
      */
     public function a_message_can_be_sent_when_other_messages_have_been_sent()
     {
-        [$workspace, $user] = $this->createUserAndWorkspace();
+        $workspaceId = Sendportal::currentWorkspaceId();
 
-        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => $workspace->id]);
+        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => $workspaceId]);
 
         // Message already sent
         factory(Message::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => $workspaceId,
             'source_id' => $campaign->id,
             'sent_at' => now()
         ]);
 
         /** @var Message $message */
         $draftMessage = factory(Message::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => $workspaceId,
             'source_id' => $campaign->id,
             'queued_at' => now(),
         ]);
 
-        $this->actingAs($user)
-            ->post(route('sendportal.messages.send'), ['id' => $draftMessage->id])
+        $this->post(route('sendportal.messages.send'), ['id' => $draftMessage->id])
             ->assertRedirect(route('sendportal.messages.draft'))
             ->assertSessionHas('success');
 

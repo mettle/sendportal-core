@@ -13,12 +13,12 @@ class CreateCampaignStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('campaign_statuses', function (Blueprint $table) {
+        Schema::create('sendportal_campaign_statuses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
 
-        DB::table('campaign_statuses')
+        DB::table('sendportal_campaign_statuses')
             ->insert([
                ['name' => 'Draft'],
                ['name' => 'Queued'],

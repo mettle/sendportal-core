@@ -14,7 +14,7 @@ class SegmentStoreRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('segments')
+                Rule::unique('sendportal_segments')
                     ->where('workspace_id', $this->route('workspaceId')),
             ],
             'subscribers' => [

@@ -13,7 +13,7 @@ class CreateTemplatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('templates', function (Blueprint $table) {
+        Schema::create('sendportal_templates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name');

@@ -12,7 +12,7 @@ class MySqlMessageTenantRepository extends BaseMessageTenantRepository
      */
     public function countUniqueOpensPerPeriod(int $workspaceId, string $sourceType, int $sourceId, int $intervalInSeconds): Collection
     {
-        return DB::table('messages')
+        return DB::table('sendportal_messages')
             ->selectRaw('COUNT(*) as open_count, MIN(opened_at) as opened_at, FROM_UNIXTIME(MIN(UNIX_TIMESTAMP(opened_at) DIV ' . $intervalInSeconds . ') * ' . $intervalInSeconds . ') as period_start')
             ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)

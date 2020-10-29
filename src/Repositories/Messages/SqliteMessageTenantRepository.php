@@ -12,7 +12,7 @@ class SqliteMessageTenantRepository extends BaseMessageTenantRepository
      */
     public function countUniqueOpensPerPeriod(int $workspaceId, string $sourceType, int $sourceId, int $intervalInSeconds): Collection
     {
-        $data = DB::table('messages')
+        $data = DB::table('sendportal_messages')
             ->selectRaw('COUNT(*) as open_count, MIN(opened_at) as opened_at, datetime(MIN(strftime("%s", opened_at) / ' . $intervalInSeconds . ') * ' . $intervalInSeconds . ', "unixepoch") as period_start')
             ->where('workspace_id', $workspaceId)
             ->where('source_type', $sourceType)

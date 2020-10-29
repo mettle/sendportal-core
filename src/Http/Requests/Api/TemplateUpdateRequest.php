@@ -16,7 +16,7 @@ class TemplateUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('templates')
+                Rule::unique('sendportal_templates')
                     ->where('workspace_id', $this->route('workspaceId'))
                     ->ignore($this->route('template')),
             ],

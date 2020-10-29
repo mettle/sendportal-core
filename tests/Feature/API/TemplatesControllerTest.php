@@ -78,7 +78,7 @@ class TemplatesControllerTest extends TestCase
             ->assertStatus(201)
             ->assertJson(['data' => $normalisedRequest]);
 
-        $this->assertDatabaseHas('templates', $normalisedRequest);
+        $this->assertDatabaseHas('sendportal_templates', $normalisedRequest);
     }
 
     /** @test */
@@ -107,8 +107,8 @@ class TemplatesControllerTest extends TestCase
             ->assertOk()
             ->assertJson(['data' => $normalisedRequest]);
 
-        $this->assertDatabaseMissing('templates', $template->toArray());
-        $this->assertDatabaseHas('templates', $normalisedRequest);
+        $this->assertDatabaseMissing('sendportal_templates', $template->toArray());
+        $this->assertDatabaseHas('sendportal_templates', $normalisedRequest);
     }
 
     /** @test */
@@ -126,7 +126,7 @@ class TemplatesControllerTest extends TestCase
         $this->deleteJson($route)
             ->assertStatus(204);
 
-        $this->assertDatabaseMissing('templates', [
+        $this->assertDatabaseMissing('sendportal_templates', [
             'id' => $template->id
         ]);
     }

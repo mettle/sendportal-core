@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Segment extends BaseModel
 {
+    protected $table = 'sendportal_segments';
+
     /** @var array */
     protected $fillable = [
         'name',
@@ -20,7 +22,7 @@ class Segment extends BaseModel
 
     public function campaigns(): BelongsToMany
     {
-        return $this->belongsToMany(Campaign::class);
+        return $this->belongsToMany(Campaign::class, 'sendportal_campaign_segment');
     }
 
     /**
@@ -28,7 +30,7 @@ class Segment extends BaseModel
      */
     public function subscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Subscriber::class)->withTimestamps();
+        return $this->belongsToMany(Subscriber::class, 'sendportal_segment_subscriber')->withTimestamps();
     }
 
     /**

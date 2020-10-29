@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Campaign extends BaseModel
 {
+    protected $table = 'sendportal_campaigns';
+
     /** @var array */
     protected $guarded = [];
 
@@ -36,7 +38,7 @@ class Campaign extends BaseModel
      */
     public function segments(): BelongsToMany
     {
-        return $this->belongsToMany(Segment::class)->withTimestamps();
+        return $this->belongsToMany(Segment::class, 'sendportal_campaign_segment')->withTimestamps();
     }
 
     public function getActiveSubscriberCountAttribute(): int
@@ -45,7 +47,7 @@ class Campaign extends BaseModel
             ->whereNull('unsubscribed_at')
             ->when(!$this->send_to_all, function (Builder $query) {
                 $query->whereHas('segments', function (Builder $subQuery) {
-                    $subQuery->whereIn('segments.id', $this->segments->pluck('id'));
+                    $subQuery->whereIn('sendportal_segments.id', $this->segments->pluck('id'));
                 });
             })
             ->count();

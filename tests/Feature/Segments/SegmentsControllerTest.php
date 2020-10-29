@@ -51,7 +51,7 @@ class SegmentsControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('segments', [
+        $this->assertDatabaseHas('sendportal_segments', [
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'name' => $segmentStoreData['name']
         ]);
@@ -84,7 +84,7 @@ class SegmentsControllerTest extends TestCase
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('segments', [
+        $this->assertDatabaseHas('sendportal_segments', [
             'id' => $segment->id,
             'name' => $segmentUpdateData['name']
         ]);
@@ -121,7 +121,7 @@ class SegmentsControllerTest extends TestCase
             ->delete(route('sendportal.segments.destroy', $segment->id));
 
         $response->assertRedirect();
-        $this->assertDatabaseMissing('segments', [
+        $this->assertDatabaseMissing('sendportal_segments', [
             'id' => $segment->id,
         ]);
     }

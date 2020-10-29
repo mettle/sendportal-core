@@ -13,7 +13,7 @@ class CreateSubscribersTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscribers', function (Blueprint $table) {
+        Schema::create('sendportal_subscribers', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->uuid('hash')->unique();
@@ -26,7 +26,7 @@ class CreateSubscribersTable extends Migration
             $table->timestamps();
 
             $table->index('created_at');
-            $table->foreign('unsubscribe_event_id')->references('id')->on('unsubscribe_event_types');
+            $table->foreign('unsubscribe_event_id')->references('id')->on('sendportal_unsubscribe_event_types');
         });
     }
 }

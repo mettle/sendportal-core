@@ -60,7 +60,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('segment_subscriber', [
+        $this->assertDatabaseHas('sendportal_segment_subscriber', [
             'segment_id' => $segment->id,
             'subscriber_id' => $subscriber->id,
         ]);
@@ -120,12 +120,12 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('segment_subscriber', [
+        $this->assertDatabaseMissing('sendportal_segment_subscriber', [
             'segment_id' => $segment->id,
             'subscriber_id' => $oldSubscriber->id,
         ]);
 
-        $this->assertDatabaseHas('segment_subscriber', [
+        $this->assertDatabaseHas('sendportal_segment_subscriber', [
             'segment_id' => $segment->id,
             'subscriber_id' => $newSubscriber->id,
         ]);
@@ -160,7 +160,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('segment_subscriber', [
+        $this->assertDatabaseMissing('sendportal_segment_subscriber', [
             'segment_id' => $segment->id,
             'subscriber_id' => $subscriber->id,
         ]);

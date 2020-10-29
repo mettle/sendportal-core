@@ -129,7 +129,7 @@ class MailgunWebhooksTest extends TestCase
         $this->assertNotNull($message->refresh()->bounced_at);
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'permanent',
@@ -152,7 +152,7 @@ class MailgunWebhooksTest extends TestCase
             ->assertOk();
 
         $this->assertDatabaseHas(
-            'message_failures',
+            'sendportal_message_failures',
             [
                 'message_id' => $message->id,
                 'severity' => 'temporary',

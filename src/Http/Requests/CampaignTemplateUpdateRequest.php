@@ -24,7 +24,7 @@ class CampaignTemplateUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'template_id' => ['required', 'exists:templates,id'],
+            'template_id' => ['required', 'exists:sendportal_templates,id'],
         ];
     }
 }

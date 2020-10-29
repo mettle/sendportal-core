@@ -73,7 +73,7 @@ class SubscribersControllerTest extends TestCase
         $response = $this->post($route, $request);
 
         $response->assertStatus(201);
-        $this->assertDatabaseHas('subscribers', $request);
+        $this->assertDatabaseHas('sendportal_subscribers', $request);
         $response->assertJson(['data' => $request]);
     }
 
@@ -96,8 +96,8 @@ class SubscribersControllerTest extends TestCase
         $response = $this->put($route, $request);
 
         $response->assertStatus(200);
-        $this->assertDatabaseMissing('subscribers', $subscriber->toArray());
-        $this->assertDatabaseHas('subscribers', $request);
+        $this->assertDatabaseMissing('sendportal_subscribers', $subscriber->toArray());
+        $this->assertDatabaseHas('sendportal_subscribers', $request);
         $response->assertJson(['data' => $request]);
     }
 
@@ -132,8 +132,8 @@ class SubscribersControllerTest extends TestCase
 
         // then
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('subscribers', ['id' => $subscriber->id]);
-        $this->assertDatabaseMissing('segment_subscriber', [
+        $this->assertDatabaseMissing('sendportal_subscribers', ['id' => $subscriber->id]);
+        $this->assertDatabaseMissing('sendportal_segment_subscriber', [
             'subscriber_id' => $subscriber->id
         ]);
     }

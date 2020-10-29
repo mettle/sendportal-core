@@ -6,6 +6,8 @@ namespace Sendportal\Base\Models;
 
 class CampaignStatus extends BaseModel
 {
+    protected $table = 'sendportal_campaign_statuses';
+
     /** @var bool */
     public $timestamps = false;
 

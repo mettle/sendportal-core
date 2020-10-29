@@ -7,7 +7,6 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
 use Sendportal\Base\Console\Commands\GenerateTestSubscribers;
-use Sendportal\Base\Console\Commands\SetupProduction;
 use Sendportal\Base\Providers\EventServiceProvider;
 use Sendportal\Base\Providers\FormServiceProvider;
 use Sendportal\Base\Providers\ResolverProvider;
@@ -40,8 +39,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
 
             $this->commands([
                 CampaignDispatchCommand::class,
-                GenerateTestSubscribers::class,
-                SetupProduction::class,
+                GenerateTestSubscribers::class
             ]);
 
             $this->app->booted(function () {

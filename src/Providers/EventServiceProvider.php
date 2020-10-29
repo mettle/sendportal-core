@@ -2,8 +2,6 @@
 
 namespace Sendportal\Base\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Events\SubscriberAddedEvent;
@@ -27,9 +25,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
         MailgunWebhookReceived::class => [
             HandleMailgunWebhook::class,
         ],

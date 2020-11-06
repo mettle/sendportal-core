@@ -36,36 +36,33 @@ class CreateEmailServiceTables extends Migration
 
     protected function seedEmailServiceTypes()
     {
-        DB::table('sendportal_email_service_types')
-            ->insert(
-                [
-                    'id' => EmailServiceType::SES,
-                    'name' => 'SES'
-                ]
-            );
+        $serviceTypes = [
+            [
+                'id' => EmailServiceType::SES,
+                'name' => 'SES'
+            ],
+            [
+                'id' => EmailServiceType::SENDGRID,
+                'name' => 'SendGrid'
+            ],
+            [
+                'id' => EmailServiceType::MAILGUN,
+                'name' => 'Mailgun'
+            ],
+            [
+                'id' => EmailServiceType::POSTMARK,
+                'name' => 'Postmark'
+            ]
+        ];
 
-        DB::table('sendportal_email_service_types')
-            ->insert(
-                [
-                    'id' => EmailServiceType::SENDGRID,
-                    'name' => 'SendGrid'
-                ]
-            );
-
-        DB::table('sendportal_email_service_types')
-            ->insert(
-                [
-                    'id' => EmailServiceType::MAILGUN,
-                    'name' => 'Mailgun'
-                ]
-            );
-
-        DB::table('sendportal_email_service_types')
-            ->insert(
-                [
-                    'id' => EmailServiceType::POSTMARK,
-                    'name' => 'Postmark'
-                ]
-            );
+        foreach ($serviceTypes as $type) {
+            DB::table('sendportal_email_service_types')
+                ->insert(
+                    $type + [
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+        }
     }
 }

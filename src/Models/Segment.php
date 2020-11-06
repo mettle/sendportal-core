@@ -38,7 +38,7 @@ class Segment extends BaseModel
      */
     public function activeSubscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Subscriber::class)
+        return $this->subscribers()
             ->whereNull('unsubscribed_at')
             ->withTimestamps();
     }

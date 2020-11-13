@@ -10,15 +10,15 @@
         @slot('cardHeader', __('Create Email Service'))
 
         @slot('cardBody')
-            {!! Form::open(['method' => 'post', 'route' => 'sendportal.email_services.store', 'class' => 'form-horizontal']) !!}
+            <form action="{{ route('sendportal.email_services.store') }}" method="POST" class="form-horizontal">
+                @csrf
+                <x-sendportal.text-field name="name" :label="__('Name')" />
+                <x-sendportal.select-field name="type_id" :label="__('Email Service')" :options="$emailServiceTypes" />
 
-            {!! Form::textField('name', __('Name')) !!}
-            {!! Form::selectField('type_id', __('Email Service'), $emailServiceTypes) !!}
+                <div id="services-fields"></div>
 
-            <div id="services-fields"></div>
-
-            {!! Form::submitButton(__('Save')) !!}
-            {!! Form::close() !!}
+                <x-sendportal.submit-button :label="__('Save')" />
+            </form>
         @endSlot
     @endcomponent
 

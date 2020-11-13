@@ -12,13 +12,13 @@
         @slot('cardHeader', __('Create Segment'))
 
         @slot('cardBody')
-            {!! Form::open(['route' => ['sendportal.segments.store'], 'class' => 'form-horizontal']) !!}
+            <form action="{{ route('sendportal.segments.store') }}" method="POST" class="form-horizontal">
+                @csrf
 
-            @include('sendportal::segments.partials.form')
+                @include('sendportal::segments.partials.form')
 
-            {!! Form::submitButton(__('Save')) !!}
-
-            {!! Form::close() !!}
+                <x-sendportal.submit-button :label="__('Save')" />
+            </form>
         @endSlot
     @endcomponent
 

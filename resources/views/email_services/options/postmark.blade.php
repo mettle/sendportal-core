@@ -1,1 +1,1 @@
-{!! Form::textField('settings[key]', __('API Key'), \Arr::get($settings ?? [], 'key'), ['autocomplete' => 'off']) !!}
+<x-sendportal.text-field name="settings[key]" :label="__('API Key')" :value="Arr::get($settings ?? [], 'key')" autocomplete="off" />

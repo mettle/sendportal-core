@@ -100,7 +100,7 @@ class SubscribersController extends Controller
     {
         $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
         $segments = $this->segmentRepo->pluck(Sendportal::currentWorkspaceId());
-        $selectedSegments = $subscriber->segments->pluck('id', 'name');
+        $selectedSegments = $subscriber->segments->pluck('name', 'id');
 
         return view('sendportal::subscribers.edit', compact('subscriber', 'segments', 'selectedSegments'));
     }

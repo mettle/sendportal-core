@@ -79,11 +79,15 @@
                 {{ __('Unique Opens') }}
 
                 <div class="float-right">
-                    {!! Form::select('interval', [
-                        12 => __("12 Hours"),
-                        24 => __("24 Hours"),
-                        48 => __("48 Hours")
-                    ], request()->get('interval', 24), ['class' => 'form-control']) !!}
+                    <select name="interval" id="interval" class="form-control">
+                        @foreach([
+                            12 => __("12 Hours"),
+                            24 => __("24 Hours"),
+                            48 => __("48 Hours")
+                        ] as $key => $label)
+                            <option value="{{ $key }}" {{ request()->get('interval', 24) == $key ? 'selected' : null }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>

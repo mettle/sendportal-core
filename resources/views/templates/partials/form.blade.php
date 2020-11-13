@@ -13,6 +13,3 @@
         <button class="btn btn-primary btn-md" type="submit">{{ __('Save Template') }}</button>
     </div>
 </div>
-
-
-{!! Form::close() !!}

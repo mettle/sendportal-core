@@ -59,7 +59,6 @@ class SendportalBaseServiceProvider extends ServiceProvider
     {
         $this->app->register(SendportalAppServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
-        $this->app->register(HtmlServiceProvider::class);
         $this->app->register(FormServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(ResolverProvider::class);

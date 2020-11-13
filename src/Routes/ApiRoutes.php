@@ -11,7 +11,7 @@ class ApiRoutes
     public function sendportalApiRoutes(): callable
     {
         return function () {
-            $this->name('sendportal.api.')->prefix('api/v1/workspaces/{workspaceId}')->namespace('\Sendportal\Base\Http\Controllers\Api')->group(static function (Router $apiRouter) {
+            $this->name('sendportal.api.')->prefix('api/v1')->namespace('\Sendportal\Base\Http\Controllers\Api')->group(static function (Router $apiRouter) {
                 $apiRouter->apiResource('campaigns', 'CampaignsController');
                 $apiRouter->post('campaigns/{id}/send', 'CampaignDispatchController@send')->name('campaigns.send');
                 $apiRouter->apiResource('subscribers', 'SubscribersController');

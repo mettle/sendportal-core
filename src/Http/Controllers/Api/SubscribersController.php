@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SubscriberStoreRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberUpdateRequest;
@@ -33,8 +34,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $subscribers = $this->subscribers->paginate($workspaceId, 'last_name');
 
         return SubscriberResource::collection($subscribers);
@@ -43,8 +45,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SubscriberStoreRequest $request, int $workspaceId): SubscriberResource
+    public function store(SubscriberStoreRequest $request): SubscriberResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $subscriber = $this->apiService->store($workspaceId, collect($request->validated()));
 
         $subscriber->load('segments');

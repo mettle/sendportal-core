@@ -17,7 +17,9 @@ class AddMailjetEmailService extends Migration
             ->insert(
                 [
                     'id' => EmailServiceType::MAILJET,
-                    'name' => 'Mailjet'
+                    'name' => 'Mailjet',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]
             );
     }

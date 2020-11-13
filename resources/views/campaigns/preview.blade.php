@@ -82,17 +82,17 @@
                 <div class="form-group row form-group-recipients">
                     <div class="col-sm-12">
                         <select id="id-field-recipients" class="form-control" name="recipients">
-                            <option value="send_to_all" {{ (old('recipients') == 'send_to_all' || $campaign->send_to_all || $campaign->segments->isEmpty()) ? 'selected' : '' }}>
+                            <option value="send_to_all" {{ (old('recipients') ? old('recipients') == 'send_to_all' : $campaign->send_to_all) ? 'selected' : '' }}>
                                 {{ __('All subscribers') }} ({{ $subscriberCount }})
                             </option>
-                            <option value="send_to_segments" {{ (old('recipients') == 'send_to_segments' || $campaign->segments->isNotEmpty()) ? 'selected' : '' }}>
+                            <option value="send_to_segments" {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? 'selected' : '' }}>
                                 {{ __('Select Segments') }}
                             </option>
                         </select>
                     </div>
                 </div>
 
-                <div class="segments-container {{ (old('recipients') == 'send_to_segments' || ! $campaign->send_to_all) ? '' : 'hide' }}">
+                <div class="segments-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
                     @forelse($segments as $segment)
                         <div class="checkbox">
                             <label>

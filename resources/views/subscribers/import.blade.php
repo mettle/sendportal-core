@@ -1,7 +1,7 @@
 @extends('sendportal::layouts.app')
 
 @push('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css">
 @endpush
 
 @section('heading')
@@ -54,25 +54,20 @@
             </div>
 
 
-            {!! Form::open(['route' => ['sendportal.subscribers.import.store'], 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data']) !!}
+            <form action="{{ route('sendportal.subscribers.import.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                @csrf
 
-            {!! Form::fileField('file', 'File', ['required' => 'required']) !!}
+                <x-sendportal.file-field name="file" :label="__('File')" required="required" />
 
-            <div class="form-group row form-group-subscribers">
-                <label for="id-field-subscribers" class="control-label col-sm-3">{{ __('Segments') }}</label>
-                <div class="col-sm-9">
-                    {!! Form::select('segments[]', $segments, null, ['multiple' => true]) !!}
+                <x-sendportal.select-field name="segments[]" :label="__('Segments')" :options="$segments" multiple />
+
+                <div class="form-group row">
+                    <div class="offset-sm-3 col-sm-9">
+                        <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-light">{{ __('Back') }}</a>
+                        <button type="submit" class="btn btn-primary">{{ __('Upload') }}</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="offset-sm-3 col-sm-9">
-                    <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-light">{{ __('Back') }}</a>
-                    <button type="submit" class="btn btn-primary">{{ __('Upload') }}</button>
-                </div>
-            </div>
-
-            {!! Form::close() !!}
+            </form>
 
         @endSlot
     @endcomponent
@@ -80,11 +75,5 @@
 @stop
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
-
-    <script>
-        $('select[name="segments[]"]').selectize({
-            plugins: ['remove_button']
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/bootstrap-select.min.js"></script>
 @endpush

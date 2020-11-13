@@ -12,13 +12,14 @@
         @slot('cardHeader', __('Edit Segment'))
 
         @slot('cardBody')
-            {!! Form::model($segment, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['sendportal.segments.update', $segment->id]]) !!}
+            <form action="{{ route('sendportal.segments.update', $segment->id) }}" method="POST" class="form-horizontal">
+                @csrf
+                @method('PUT')
 
-            @include('sendportal::segments.partials.form')
+                @include('sendportal::segments.partials.form')
 
-            {!! Form::submitButton(__('Save')) !!}
-
-            {!! Form::close() !!}
+                <x-sendportal.submit-button :label="__('Save')" />
+            </form>
         @endSlot
     @endcomponent
 

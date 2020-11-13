@@ -1,8 +1,8 @@
-{!! Form::textField('email', __('Email')) !!}
-{!! Form::textField('first_name', __('First Name')) !!}
-{!! Form::textField('last_name', __('Last Name')) !!}
-{!! Form::selectMultipleField('segments[]', __('Segments'), $segments, $selectedSegments) !!}
-{!! Form::checkboxField('subscribed', __('Subscribed'), 1, empty($subscriber->unsubscribed_at)) !!}
+<x-sendportal.text-field name="email" :label="__('Email')" type="email" :value="$subscriber->email ?? null" />
+<x-sendportal.text-field name="first_name" :label="__('First Name')" :value="$subscriber->first_name ?? null" />
+<x-sendportal.text-field name="last_name" :label="__('Last Name')" :value="$subscriber->last_name ?? null" />
+<x-sendportal.select-field name="segments[]" :label="__('Segments')" :options="$segments" :value="$selectedSegments" multiple />
+<x-sendportal.checkbox-field name="subscribed" :label="__('Subscribed')" :checked="empty($subscriber->unsubscribed_at)" />
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css">

@@ -22,8 +22,6 @@ class CampaignControllerTest extends TestCase
     {
         factory(Campaign::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        $this->withoutExceptionHandling();
-
         // when
         $response = $this->get(route('sendportal.campaigns.index'));
 

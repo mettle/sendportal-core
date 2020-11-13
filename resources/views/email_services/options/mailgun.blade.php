@@ -1,3 +1,3 @@
-{!! Form::textField('settings[key]', __('API Key'), \Arr::get($settings ?? [], 'key'), ['autocomplete' => 'off']) !!}
-{!! Form::textField('settings[domain]', __('Domain'), \Arr::get($settings ?? [], 'domain')) !!}
-{!! Form::selectField('settings[zone]', __('Zone'), ['EU' => 'EU', 'US' => 'US'], \Arr::get($settings ?? [], 'zone')) !!}
+<x-sendportal.text-field name="settings[key]" :label="__('API Key')" :value="Arr::get($settings ?? [], 'key')" autocomplete="off" />
+<x-sendportal.text-field name="settings[domain]" :label="__('Domain')" :value="Arr::get($settings ?? [], 'domain')" />
+<x-sendportal.select-field name="settings[zone]" :label="__('Zone')" :options="['EU' => 'EU', 'US' => 'US']" :value="Arr::get($settings ?? [], 'zone')" />

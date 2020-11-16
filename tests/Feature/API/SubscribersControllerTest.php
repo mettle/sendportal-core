@@ -21,9 +21,7 @@ class SubscribersControllerTest extends TestCase
     {
         $subscriber = $this->createSubscriber();
 
-        $route = route('sendportal.api.subscribers.index', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
-        ]);
+        $route = route('sendportal.api.subscribers.index');
 
         $response = $this->get($route);
 
@@ -44,7 +42,6 @@ class SubscribersControllerTest extends TestCase
         $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.show', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
         ]);
 
@@ -62,7 +59,7 @@ class SubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_created_by_authorised_users()
     {
-        $route = route('sendportal.api.subscribers.store', Sendportal::currentWorkspaceId());
+        $route = route('sendportal.api.subscribers.store');
 
         $request = [
             'first_name' => $this->faker->firstName,
@@ -83,7 +80,6 @@ class SubscribersControllerTest extends TestCase
         $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.update', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
         ]);
 
@@ -107,7 +103,6 @@ class SubscribersControllerTest extends TestCase
         $subscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.subscribers.destroy', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
         ]);
 
@@ -126,7 +121,6 @@ class SubscribersControllerTest extends TestCase
         // when
         $this->withoutExceptionHandling();
         $response = $this->delete(route('sendportal.api.subscribers.destroy', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'subscriber' => $subscriber->id,
         ]));
 

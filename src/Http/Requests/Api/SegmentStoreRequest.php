@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Sendportal\Base\Facades\Sendportal;
 
 class SegmentStoreRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class SegmentStoreRequest extends FormRequest
             'name' => [
                 'required',
                 Rule::unique('sendportal_segments')
-                    ->where('workspace_id', $this->route('workspaceId')),
+                    ->where('workspace_id', Sendportal::currentWorkspaceId()),
             ],
             'subscribers' => [
                 'array',

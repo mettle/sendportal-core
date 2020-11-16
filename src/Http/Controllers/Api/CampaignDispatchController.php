@@ -2,6 +2,7 @@
 
 namespace Sendportal\Base\Http\Controllers\Api;
 
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\CampaignDispatchRequest;
 use Sendportal\Base\Http\Resources\Campaign as CampaignResource;
@@ -32,9 +33,10 @@ class CampaignDispatchController extends Controller
     /**
      * @throws \Exception
      */
-    public function send(CampaignDispatchRequest $request, $workspaceId, $campaignId)
+    public function send(CampaignDispatchRequest $request, $campaignId)
     {
         $campaign = $request->getCampaign(['email_service', 'messages']);
+        $workspaceId = Sendportal::currentWorkspaceId();
 
         if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return response([

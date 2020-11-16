@@ -34,7 +34,6 @@ class CampaignDispatchControllerTest extends TestCase
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'id' => $campaign->id
             ]))
             ->assertOk()
@@ -56,7 +55,6 @@ class CampaignDispatchControllerTest extends TestCase
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'id' => $campaign->id,
             ]))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -84,7 +82,6 @@ class CampaignDispatchControllerTest extends TestCase
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'id' => $campaign->id,
             ]))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)

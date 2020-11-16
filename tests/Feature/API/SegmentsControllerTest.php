@@ -21,9 +21,7 @@ class SegmentsControllerTest extends TestCase
     {
         $segment = $this->createSegment();
 
-        $route = route('sendportal.api.segments.index', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
-        ]);
+        $route = route('sendportal.api.segments.index');
 
         $this->getJson($route)
             ->assertOk()
@@ -40,7 +38,6 @@ class SegmentsControllerTest extends TestCase
         $segment = $this->createSegment();
 
         $route = route('sendportal.api.segments.show', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -54,7 +51,7 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_new_segment_can_be_added()
     {
-        $route = route('sendportal.api.segments.store', Sendportal::currentWorkspaceId());
+        $route = route('sendportal.api.segments.store');
 
         $request = [
             'name' => $this->faker->colorName,
@@ -73,7 +70,6 @@ class SegmentsControllerTest extends TestCase
         $segment = $this->createSegment();
 
         $route = route('sendportal.api.segments.update', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -95,7 +91,6 @@ class SegmentsControllerTest extends TestCase
         $segment = $this->createSegment();
 
         $route = route('sendportal.api.segments.destroy', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -110,9 +105,7 @@ class SegmentsControllerTest extends TestCase
     {
         $segment = $this->createSegment();
 
-        $route = route('sendportal.api.segments.store', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
-        ]);
+        $route = route('sendportal.api.segments.store');
 
         $request = [
             'name' => $segment->name,
@@ -130,9 +123,13 @@ class SegmentsControllerTest extends TestCase
     {
         $segment = $this->createSegment();
 
-        $route = route('sendportal.api.segments.store', [
-            'workspaceId' => Sendportal::currentWorkspaceId() + 1,
-        ]);
+        $currentWorkspaceId = Sendportal::currentWorkspaceId();
+
+        Sendportal::currentWorkspaceIdResolver(function() use($currentWorkspaceId) {
+            return $currentWorkspaceId + 1;
+        });
+
+        $route = route('sendportal.api.segments.store');
 
         $request = [
             'name' => $segment->name,

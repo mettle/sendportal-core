@@ -26,9 +26,7 @@ class TemplatesControllerTest extends TestCase
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $route = route('sendportal.api.templates.index', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
-        ]);
+        $route = route('sendportal.api.templates.index');
 
         $this->getJson($route)
             ->assertOk()
@@ -47,7 +45,6 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $route = route('sendportal.api.templates.show', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
         ]);
 
@@ -61,7 +58,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_can_be_created()
     {
-        $route = route('sendportal.api.templates.store', Sendportal::currentWorkspaceId());
+        $route = route('sendportal.api.templates.store');
 
         $request = [
             'name' => $this->faker->name,
@@ -89,7 +86,6 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $route = route('sendportal.api.templates.update', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
         ]);
 
@@ -119,7 +115,6 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $route = route('sendportal.api.templates.destroy', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
         ]);
 
@@ -143,7 +138,6 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $route = route('sendportal.api.templates.destroy', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'template' => $template->id,
         ]);
 
@@ -159,12 +153,11 @@ class TemplatesControllerTest extends TestCase
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $route = route('sendportal.api.templates.store', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
-        ]);
+        $route = route('sendportal.api.templates.store');
 
         $request = [
             'name' => $template->name,
+            'content' => 'test'
         ];
 
         $this->postJson($route, $request)
@@ -181,9 +174,13 @@ class TemplatesControllerTest extends TestCase
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $route = route('sendportal.api.templates.store', [
-            'workspaceId' => Sendportal::currentWorkspaceId() + 1,
-        ]);
+        $currentWorkspaceId = Sendportal::currentWorkspaceId();
+
+        Sendportal::currentWorkspaceIdResolver(function() use($currentWorkspaceId) {
+            return $currentWorkspaceId + 1;
+        });
+
+        $route = route('sendportal.api.templates.store');
 
         $request = [
             'name' => $template->name,

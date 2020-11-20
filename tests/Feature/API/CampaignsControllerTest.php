@@ -25,9 +25,7 @@ class CampaignsControllerTest extends TestCase
         $campaign = $this->createCampaign($emailService);
 
         $this
-            ->getJson(route('sendportal.api.campaigns.index', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
-            ]))
+            ->getJson(route('sendportal.api.campaigns.index'))
             ->assertOk()
             ->assertJson([
                 'data' => [
@@ -45,7 +43,6 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->getJson(route('sendportal.api.campaigns.show', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'campaign' => $campaign->id,
             ]))
             ->assertOk()
@@ -72,7 +69,7 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->postJson(
-                route('sendportal.api.campaigns.store', Sendportal::currentWorkspaceId()),
+                route('sendportal.api.campaigns.store'),
                 $request
             )
             ->assertStatus(Response::HTTP_CREATED)
@@ -104,7 +101,6 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->putJson(route('sendportal.api.campaigns.update', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'campaign' => $campaign->id,
             ]), $request)
             ->assertOk()
@@ -134,7 +130,6 @@ class CampaignsControllerTest extends TestCase
 
         $this
             ->putJson(route('sendportal.api.campaigns.update', [
-                'workspaceId' => Sendportal::currentWorkspaceId(),
                 'campaign' => $campaign->id,
             ]), $request)
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)

@@ -26,16 +26,19 @@ class CampaignsController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
+
         return CampaignResource::collection($this->campaigns->paginate($workspaceId, 'id', ['segments']));
     }
 
     /**
      * @throws Exception
      */
-    public function store(CampaignStoreRequest $request, int $workspaceId): CampaignResource
+    public function store(CampaignStoreRequest $request): CampaignResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $data = Arr::except($request->validated(), ['segments']);
 
         $data['save_as_draft'] = $request->get('save_as_draft') ?? 0;

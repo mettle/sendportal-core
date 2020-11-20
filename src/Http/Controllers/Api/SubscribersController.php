@@ -58,16 +58,19 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function show(int $workspaceId, int $id): SubscriberResource
+    public function show(int $id): SubscriberResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
+
         return new SubscriberResource($this->subscribers->find($workspaceId, $id, ['segments']));
     }
 
     /**
      * @throws Exception
      */
-    public function update(SubscriberUpdateRequest $request, int $workspaceId, int $id): SubscriberResource
+    public function update(SubscriberUpdateRequest $request, int $id): SubscriberResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $subscriber = $this->subscribers->update($workspaceId, $id, $request->validated());
 
         return new SubscriberResource($subscriber);
@@ -76,8 +79,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(int $workspaceId, int $id): Response
+    public function destroy(int $id): Response
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $this->apiService->delete($workspaceId, $this->subscribers->find($workspaceId, $id));
 
         return response(null, 204);

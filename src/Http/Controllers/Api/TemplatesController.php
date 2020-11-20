@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\TemplateStoreRequest;
 use Sendportal\Base\Http\Requests\Api\TemplateUpdateRequest;
@@ -31,8 +32,9 @@ class TemplatesController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $templates = $this->templates->paginate($workspaceId, 'name');
 
         return TemplateResource::collection($templates);
@@ -42,16 +44,19 @@ class TemplatesController extends Controller
     /**
      * @throws Exception
      */
-    public function show(int $workspaceId, int $id): TemplateResource
+    public function show(int $id): TemplateResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
+
         return new TemplateResource($this->templates->find($workspaceId, $id));
     }
 
     /**
      * @throws Exception
      */
-    public function store(TemplateStoreRequest $request, int $workspaceId): TemplateResource
+    public function store(TemplateStoreRequest $request): TemplateResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $template = $this->service->store($workspaceId, $request->validated());
 
         return new TemplateResource($template);
@@ -60,18 +65,20 @@ class TemplatesController extends Controller
     /**
      * @throws Exception
      */
-    public function update(TemplateUpdateRequest $request, int $workspaceId, int $id): TemplateResource
+    public function update(TemplateUpdateRequest $request, int $id): TemplateResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $template = $this->service->update($workspaceId, $id, $request->validated());
 
         return new TemplateResource($template);
     }
 
     /**
-     * @throws Exception
+     * @throws \Throwable
      */
-    public function destroy(int $workspaceId, int $id): Response
+    public function destroy(int $id): Response
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $this->service->delete($workspaceId, $id);
 
         return response(null, 204);

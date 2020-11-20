@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SubscriberSegmentDestroyRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberSegmentStoreRequest;
@@ -33,8 +34,9 @@ class SubscriberSegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId, int $subscriberId): AnonymousResourceCollection
+    public function index(int $subscriberId): AnonymousResourceCollection
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $subscriber = $this->subscribers->find($workspaceId, $subscriberId, ['segments']);
 
         return SegmentResource::collection($subscriber->segments);
@@ -43,10 +45,10 @@ class SubscriberSegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SubscriberSegmentStoreRequest $request, int $workspaceId, int $subscriberId): AnonymousResourceCollection
+    public function store(SubscriberSegmentStoreRequest $request, int $subscriberId): AnonymousResourceCollection
     {
         $input = $request->validated();
-
+        $workspaceId = Sendportal::currentWorkspaceId();
         $segments = $this->apiService->store($workspaceId, $subscriberId, collect($input['segments']));
 
         return SegmentResource::collection($segments);
@@ -55,10 +57,10 @@ class SubscriberSegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function update(SubscriberSegmentUpdateRequest $request, int $workspaceId, int $subscriberId): AnonymousResourceCollection
+    public function update(SubscriberSegmentUpdateRequest $request, int $subscriberId): AnonymousResourceCollection
     {
         $input = $request->validated();
-
+        $workspaceId = Sendportal::currentWorkspaceId();
         $segments = $this->apiService->update($workspaceId, $subscriberId, collect($input['segments']));
 
         return SegmentResource::collection($segments);
@@ -67,10 +69,10 @@ class SubscriberSegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(SubscriberSegmentDestroyRequest $request, int $workspaceId, int $subscriberId): AnonymousResourceCollection
+    public function destroy(SubscriberSegmentDestroyRequest $request, int $subscriberId): AnonymousResourceCollection
     {
         $input = $request->validated();
-
+        $workspaceId = Sendportal::currentWorkspaceId();
         $segments = $this->apiService->destroy($workspaceId, $subscriberId, collect($input['segments']));
 
         return SegmentResource::collection($segments);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Services\Subscribers;
 
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Events\SubscriberAddedEvent;
@@ -21,21 +22,24 @@ class ApiSubscriberService
     }
 
     /**
-     * @param int                            $workspaceId
-     * @param \Illuminate\Support\Collection $data
+     * The API provides the ability for the "store" endpoint to both create a new subscriber or update an existing
+     * subscriber, using their email as the key. This method allows us to handle both scenarios.
      *
-     * @return \Sendportal\Base\Models\Subscriber
-     * @throws \Exception
+     * @throws Exception
      */
-    public function store(int $workspaceId, Collection $data): Subscriber
+    public function storeOrUpdate(int $workspaceId, Collection $data): Subscriber
     {
-        $subscriber = $this->subscribers->store($workspaceId, $data->except(['segments'])->toArray());
+        $existingSubscriber = $this->subscribers->findBy($workspaceId, 'email', $data['email']);
 
-        event(new SubscriberAddedEvent($subscriber));
+        if (!$existingSubscriber) {
+            $subscriber = $this->subscribers->store($workspaceId, $data->toArray());
 
-        $this->handleSegments($data, $subscriber);
+            event(new SubscriberAddedEvent($subscriber));
 
-        return $subscriber;
+            return $subscriber;
+        }
+
+        return $this->subscribers->update($workspaceId, $existingSubscriber->id, $data->toArray());
     }
 
     public function delete(int $workspaceId, Subscriber $subscriber): bool
@@ -44,14 +48,5 @@ class ApiSubscriberService
             $subscriber->segments()->detach();
             return $this->subscribers->destroy($workspaceId, $subscriber->id);
         });
-    }
-
-    protected function handleSegments(Collection $data, Subscriber $subscriber): Subscriber
-    {
-        if (!empty($data['segments'])) {
-            $subscriber->segments()->sync($data['segments']);
-        }
-
-        return $subscriber;
     }
 }

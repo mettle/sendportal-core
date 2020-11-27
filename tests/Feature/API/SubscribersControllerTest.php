@@ -146,7 +146,6 @@ class SubscribersControllerTest extends TestCase
         $subscriber->segments()->attach($segment->id);
 
         // when
-        $this->withoutExceptionHandling();
         $response = $this->delete(route('sendportal.api.subscribers.destroy', [
             'workspaceId' => $user->currentWorkspace()->id,
             'subscriber' => $subscriber->id,

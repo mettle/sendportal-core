@@ -45,7 +45,7 @@ class SubscribersController extends Controller
      */
     public function store(SubscriberStoreRequest $request, int $workspaceId): SubscriberResource
     {
-        $subscriber = $this->apiService->store($workspaceId, collect($request->validated()));
+        $subscriber = $this->apiService->storeOrUpdate($workspaceId, collect($request->validated()));
 
         $subscriber->load('segments');
 

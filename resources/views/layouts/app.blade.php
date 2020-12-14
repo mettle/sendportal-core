@@ -18,7 +18,6 @@
     <link href="{{ asset(mix('app.css', 'vendor/sendportal')) }}" rel="stylesheet">
 
     @stack('css')
-
 </head>
 <body>
 

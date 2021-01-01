@@ -12,7 +12,7 @@
         @slot('cardHeader', __('Create Subscriber'))
 
         @slot('cardBody')
-            <form action="{{ route('sendportal.subscribers.store') }}" class="form-horizontal">
+            <form action="{{ route('sendportal.subscribers.store') }}" class="form-horizontal" method="POST">
                 @csrf
                 @include('sendportal::subscribers.partials.form')
 

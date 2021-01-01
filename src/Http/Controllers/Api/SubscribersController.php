@@ -48,7 +48,7 @@ class SubscribersController extends Controller
     public function store(SubscriberStoreRequest $request): SubscriberResource
     {
         $workspaceId = Sendportal::currentWorkspaceId();
-        $subscriber = $this->apiService->store($workspaceId, collect($request->validated()));
+        $subscriber = $this->apiService->storeOrUpdate($workspaceId, collect($request->validated()));
 
         $subscriber->load('segments');
 

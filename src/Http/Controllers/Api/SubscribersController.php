@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SubscriberStoreRequest;
 use Sendportal\Base\Http\Requests\Api\SubscriberUpdateRequest;
@@ -33,8 +34,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $subscribers = $this->subscribers->paginate($workspaceId, 'last_name');
 
         return SubscriberResource::collection($subscribers);
@@ -43,9 +45,10 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SubscriberStoreRequest $request, int $workspaceId): SubscriberResource
+    public function store(SubscriberStoreRequest $request): SubscriberResource
     {
-        $subscriber = $this->apiService->store($workspaceId, collect($request->validated()));
+        $workspaceId = Sendportal::currentWorkspaceId();
+        $subscriber = $this->apiService->storeOrUpdate($workspaceId, collect($request->validated()));
 
         $subscriber->load('segments');
 
@@ -55,16 +58,19 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function show(int $workspaceId, int $id): SubscriberResource
+    public function show(int $id): SubscriberResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
+
         return new SubscriberResource($this->subscribers->find($workspaceId, $id, ['segments']));
     }
 
     /**
      * @throws Exception
      */
-    public function update(SubscriberUpdateRequest $request, int $workspaceId, int $id): SubscriberResource
+    public function update(SubscriberUpdateRequest $request, int $id): SubscriberResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $subscriber = $this->subscribers->update($workspaceId, $id, $request->validated());
 
         return new SubscriberResource($subscriber);
@@ -73,8 +79,9 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(int $workspaceId, int $id): Response
+    public function destroy(int $id): Response
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $this->apiService->delete($workspaceId, $this->subscribers->find($workspaceId, $id));
 
         return response(null, 204);

@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Requests\Api;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest as BaseCampaignStoreRequest;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
@@ -24,6 +25,7 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
         parent::__construct();
 
         $this->campaigns = $campaigns;
+        $this->workspaceId = Sendportal::currentWorkspaceId();
 
         Validator::extendImplicit('valid_status', function ($attribute, $value, $parameters, $validator) {
             return $this->campaign

@@ -7,7 +7,6 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
-use Sendportal\Base\Facades\Sendportal;
 use Tests\TestCase;
 
 class SegmentSubscribersControllerTest extends TestCase
@@ -24,7 +23,6 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment->subscribers()->save($subscriber);
 
         $route = route('sendportal.api.segments.subscribers.index', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -48,7 +46,6 @@ class SegmentSubscribersControllerTest extends TestCase
         $subscriber = $this->createsubscriber();
 
         $route = route('sendportal.api.segments.subscribers.store', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -85,7 +82,6 @@ class SegmentSubscribersControllerTest extends TestCase
         $newSubscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.segments.subscribers.store', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -108,7 +104,6 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment->subscribers()->save($oldSubscriber);
 
         $route = route('sendportal.api.segments.subscribers.update', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 
@@ -148,7 +143,6 @@ class SegmentSubscribersControllerTest extends TestCase
         $segment->subscribers()->save($subscriber);
 
         $route = route('sendportal.api.segments.subscribers.destroy', [
-            'workspaceId' => Sendportal::currentWorkspaceId(),
             'segment' => $segment->id,
         ]);
 

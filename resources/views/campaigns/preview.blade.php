@@ -47,99 +47,100 @@
 
     <div class="col-md-4">
 
-        {!! Form::model($campaign, array('method' => 'POST', 'route' => ['sendportal.campaigns.test', $campaign->id])) !!}
+        <form action="{{ route('sendportal.campaigns.test', $campaign->id) }}" method="POST">
+            @csrf
 
-        <div class="card mb-4">
-            <div class="card-header">
-                {{ __('Test Email') }}
-            </div>
-            <div class="card-body">
-
-                <div class="pb-2"><b>{{ __('RECIPIENT') }}</b></div>
-                <div class="form-group row form-group-schedule">
-                    <div class="col-sm-12">
-                        <input name="recipient_email" id="test-email-recipient" type="email" class="form-control" placeholder="{{ __('Recipient email address') }}">
-                    </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    {{ __('Test Email') }}
                 </div>
+                <div class="card-body">
 
-                <div>
-                    <button type="submit" class="btn btn-sm btn-secondary">{{ __('Send Test Email') }}</button>
-                </div>
-            </div>
-        </div>
-
-        {!! Form::close() !!}
-
-        {!! Form::model($campaign, array('method' => 'PUT', 'route' => ['sendportal.campaigns.send', $campaign->id])) !!}
-
-        <div class="card mb-4">
-            <div class="card-header">
-                {{ __('Sending options') }}
-            </div>
-            <div class="card-body">
-
-                <div class="pb-2"><b>{{ __('RECIPIENTS') }}</b></div>
-                <div class="form-group row form-group-recipients">
-                    <div class="col-sm-12">
-                        <select id="id-field-recipients" class="form-control" name="recipients">
-                            <option value="send_to_all" {{ (old('recipients') ? old('recipients') == 'send_to_all' : $campaign->send_to_all) ? 'selected' : '' }}>
-                                {{ __('All subscribers') }} ({{ $subscriberCount }})
-                            </option>
-                            <option value="send_to_segments" {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? 'selected' : '' }}>
-                                {{ __('Select Segments') }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="segments-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
-                    @forelse($segments as $segment)
-                        <div class="checkbox">
-                            <label>
-                                <input name="segments[]" type="checkbox" value="{{ $segment->id }}">
-                                {{ $segment->name }} ({{ $segment->activeSubscribers()->count() }} {{ __('subscribers') }})
-                            </label>
+                    <div class="pb-2"><b>{{ __('RECIPIENT') }}</b></div>
+                    <div class="form-group row form-group-schedule">
+                        <div class="col-sm-12">
+                            <input name="recipient_email" id="test-email-recipient" type="email" class="form-control" placeholder="{{ __('Recipient email address') }}">
                         </div>
-                    @empty
-                        <div>{{ __('There are no segments to select') }}</div>
-                    @endforelse
-                </div>
+                    </div>
 
-                <div class="pb-2"><b>{{ __('SCHEDULE') }}</b></div>
-                <div class="form-group row form-group-schedule">
-                    <div class="col-sm-12">
-                        <select id="id-field-schedule" class="form-control" name="schedule">
-                            <option value="now" {{ old('schedule') === 'now' || is_null($campaign->scheduled_at) ? 'selected' : '' }}>
-                                {{ __('Dispatch now') }}
-                            </option>
-                            <option value="scheduled" {{ old('schedule') === 'now' || $campaign->scheduled_at ? 'selected' : '' }}>
-                                {{ __('Dispatch at a specific time') }}
-                            </option>
-                        </select>
+                    <div>
+                        <button type="submit" class="btn btn-sm btn-secondary">{{ __('Send Test Email') }}</button>
                     </div>
                 </div>
-
-                <input id="input-field-scheduled_at" class="form-control hide mb-3" name="scheduled_at" type="text" value="{{ $campaign->scheduled_at ?: now() }}">
-
-                <div class="pb-2"><b>{{ __('SENDING BEHAVIOUR') }}</b></div>
-                <div class="form-group row form-group-schedule">
-                    <div class="col-sm-12">
-                        <select id="id-field-behaviour" class="form-control" name="behaviour">
-                            <option value="draft">{{ __('Queue draft') }}</option>
-                            <option value="auto">{{ __('Send automatically') }}</option>
-                        </select>
-                    </div>
-                </div>
-
             </div>
-        </div>
+        </form>
 
-        <div>
-            <a href="{{ route('sendportal.campaigns.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
-            <button type="submit" class="btn btn-primary">{{ __('Send campaign') }}</button>
-        </div>
+        <form action="{{ route('sendportal.campaigns.send', $campaign->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card mb-4">
+                <div class="card-header">
+                    {{ __('Sending options') }}
+                </div>
+                <div class="card-body">
 
-        {!! Form::close() !!}
+                    <div class="pb-2"><b>{{ __('RECIPIENTS') }}</b></div>
+                    <div class="form-group row form-group-recipients">
+                        <div class="col-sm-12">
+                            <select id="id-field-recipients" class="form-control" name="recipients">
+                                <option value="send_to_all" {{ (old('recipients') ? old('recipients') == 'send_to_all' : $campaign->send_to_all) ? 'selected' : '' }}>
+                                    {{ __('All subscribers') }} ({{ $subscriberCount }})
+                                </option>
+                                <option value="send_to_segments" {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? 'selected' : '' }}>
+                                    {{ __('Select Segments') }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="segments-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
+                        @forelse($segments as $segment)
+                            <div class="checkbox">
+                                <label>
+                                    <input name="segments[]" type="checkbox" value="{{ $segment->id }}">
+                                    {{ $segment->name }} ({{ $segment->activeSubscribers()->count() }} {{ __('subscribers') }})
+                                </label>
+                            </div>
+                        @empty
+                            <div>{{ __('There are no segments to select') }}</div>
+                        @endforelse
+                    </div>
+
+                    <div class="pb-2"><b>{{ __('SCHEDULE') }}</b></div>
+                    <div class="form-group row form-group-schedule">
+                        <div class="col-sm-12">
+                            <select id="id-field-schedule" class="form-control" name="schedule">
+                                <option value="now" {{ old('schedule') === 'now' || is_null($campaign->scheduled_at) ? 'selected' : '' }}>
+                                    {{ __('Dispatch now') }}
+                                </option>
+                                <option value="scheduled" {{ old('schedule') === 'now' || $campaign->scheduled_at ? 'selected' : '' }}>
+                                    {{ __('Dispatch at a specific time') }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <input id="input-field-scheduled_at" class="form-control hide mb-3" name="scheduled_at" type="text" value="{{ $campaign->scheduled_at ?: now() }}">
+
+                    <div class="pb-2"><b>{{ __('SENDING BEHAVIOUR') }}</b></div>
+                    <div class="form-group row form-group-schedule">
+                        <div class="col-sm-12">
+                            <select id="id-field-behaviour" class="form-control" name="behaviour">
+                                <option value="draft">{{ __('Queue draft') }}</option>
+                                <option value="auto">{{ __('Send automatically') }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div>
+                <a href="{{ route('sendportal.campaigns.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
+                <button type="submit" class="btn btn-primary">{{ __('Send campaign') }}</button>
+            </div>
+
+        </form>
 
     </div>
 

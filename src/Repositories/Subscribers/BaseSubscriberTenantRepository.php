@@ -27,8 +27,8 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
 
         $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments']));
 
-        // only sync segments if its actually present. This means that users's must
-        // pass through an empty segments array if they want to delete all segments
+        // Only sync segments if its actually present. This means that users must
+        // pass through an empty segments array if they want to delete all segments.
         if (isset($data['segments'])) {
             $this->syncSegments($instance, Arr::get($data, 'segments', []));
         }
@@ -60,8 +60,8 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
 
         $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments', 'id']));
 
-        // only sync segments if its actually present. This means that users's must
-        // pass through an empty segments array if they want to delete all segments
+        // Only sync segments if its actually present. This means that users must
+        // pass through an empty segments array if they want to delete all segments.
         if (isset($data['segments'])) {
             $this->syncSegments($instance, Arr::get($data, 'segments', []));
         }

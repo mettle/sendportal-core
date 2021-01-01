@@ -2,7 +2,6 @@
 
 namespace Sendportal\Base;
 
-use Collective\Html\HtmlServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;
@@ -59,7 +58,6 @@ class SendportalBaseServiceProvider extends ServiceProvider
     {
         $this->app->register(SendportalAppServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
-        $this->app->register(HtmlServiceProvider::class);
         $this->app->register(FormServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(ResolverProvider::class);

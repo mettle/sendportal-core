@@ -13,9 +13,10 @@
             {{ __('Create Template') }}
         </div>
         <div class="card-body">
-            {!! Form::open(['route' => ['sendportal.templates.store'], 'class' => 'form-horizontal']) !!}
-
-            @include('sendportal::templates.partials.form')
+            <form action="{{ route('sendportal.templates.store') }}" method="POST" class="form-horizontal">
+                @csrf
+                @include('sendportal::templates.partials.form')
+            </form>
         </div>
     </div>
 

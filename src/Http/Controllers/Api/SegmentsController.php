@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Api;
 use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\SegmentStoreRequest;
 use Sendportal\Base\Http\Requests\Api\SegmentUpdateRequest;
@@ -33,18 +34,20 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function index(int $workspaceId): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
+
         return SegmentResource::collection($this->segments->paginate($workspaceId, 'name'));
     }
 
     /**
      * @throws Exception
      */
-    public function store(SegmentStoreRequest $request, int $workspaceId): SegmentResource
+    public function store(SegmentStoreRequest $request): SegmentResource
     {
         $input = $request->validated();
-
+        $workspaceId = Sendportal::currentWorkspaceId();
         $segment = $this->apiService->store($workspaceId, collect($input));
 
         $segment->load('subscribers');
@@ -55,16 +58,19 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function show(int $workspaceId, int $id): SegmentResource
+    public function show(int $id): SegmentResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
+
         return new SegmentResource($this->segments->find($workspaceId, $id));
     }
 
     /**
      * @throws Exception
      */
-    public function update(SegmentUpdateRequest $request, int $workspaceId, int $id): SegmentResource
+    public function update(SegmentUpdateRequest $request, int $id): SegmentResource
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $segment = $this->segments->update($workspaceId, $id, $request->validated());
 
         return new SegmentResource($segment);
@@ -73,8 +79,9 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(int $workspaceId, int $id): Response
+    public function destroy(int $id): Response
     {
+        $workspaceId = Sendportal::currentWorkspaceId();
         $this->segments->destroy($workspaceId, $id);
 
         return response(null, 204);

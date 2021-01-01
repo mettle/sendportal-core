@@ -2,7 +2,6 @@
 
 namespace Sendportal\Base;
 
-use Collective\Html\HtmlServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Console\Commands\CampaignDispatchCommand;

@@ -28,16 +28,14 @@ class SubscribersControllerTest extends TestCase
 
         $response = $this->get($route);
 
+        // then
         $response->assertStatus(200);
 
-        // then
-        $expected = [
+        $response->assertJson([
             'data' => [
                 Arr::only($subscriber->toArray(), ['first_name', 'last_name', 'email'])
             ],
-        ];
-
-        $response->assertJson($expected);
+        ]);
     }
 
     /** @test */
@@ -53,14 +51,13 @@ class SubscribersControllerTest extends TestCase
 
         $response = $this->get($route);
 
+        // then
         $response->assertStatus(200);
 
         // then
-        $expected = [
+        $response->assertJson([
             'data' => Arr::only($subscriber->toArray(), ['first_name', 'last_name', 'email']),
-        ];
-
-        $response->assertJson($expected);
+        ]);
     }
 
     /** @test */
@@ -136,7 +133,6 @@ class SubscribersControllerTest extends TestCase
         $subscriber->segments()->attach($segment->id);
 
         // when
-        $this->withoutExceptionHandling();
         $response = $this->delete(route('sendportal.api.subscribers.destroy', [
             'subscriber' => $subscriber->id,
         ]));

@@ -7,7 +7,6 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
-use Sendportal\Base\Facades\Sendportal;
 use Tests\TestCase;
 
 class SubscriberSegmentsControllerTest extends TestCase

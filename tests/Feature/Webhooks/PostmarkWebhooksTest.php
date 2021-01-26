@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Webhooks;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,19 +15,16 @@ class PostmarkWebhooksTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $route = 'sendportal.api.webhooks.postmark';
 
-    /**
-     * @return void
-     */
-    public function testDelivery()
+    /** @test */
+    function it_accepts_delivery_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->delivered_at);
+        self::assertNull($message->delivered_at);
 
         $webhook = [
             'MessageID' => $message->message_id,
@@ -33,20 +32,21 @@ class PostmarkWebhooksTest extends TestCase
             'RecordType' => 'Delivery',
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->delivered_at);
+        // then
+        self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testOpen()
+    /** @test */
+    function it_accepts_open_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->open_count);
-        $this->assertNull($message->opened_at);
+        self::assertEquals(0, $message->open_count);
+        self::assertNull($message->opened_at);
 
         $webhook = [
             'MessageID' => $message->message_id,
@@ -54,21 +54,22 @@ class PostmarkWebhooksTest extends TestCase
             'RecordType' => 'Open',
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->open_count);
-        $this->assertNotNull($message->opened_at);
+        // then
+        self::assertEquals(1, $message->refresh()->open_count);
+        self::assertNotNull($message->opened_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testClick()
+    /** @test */
+    function it_accepts_click_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->click_count);
-        $this->assertNull($message->clicked_at);
+        self::assertEquals(0, $message->click_count);
+        self::assertNull($message->clicked_at);
 
         $webhook = [
             'MessageID' => $message->message_id,
@@ -77,20 +78,21 @@ class PostmarkWebhooksTest extends TestCase
             'OriginalLink' => $this->faker->url,
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->click_count);
-        $this->assertNotNull($message->clicked_at);
+        // then
+        self::assertEquals(1, $message->refresh()->click_count);
+        self::assertNotNull($message->clicked_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testSpamComplaint()
+    /** @test */
+    function it_accepts_spam_complaint_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->unsubscribed_at);
+        self::assertNull($message->unsubscribed_at);
 
         $webhook = [
             'MessageID' => $message->message_id,
@@ -98,16 +100,17 @@ class PostmarkWebhooksTest extends TestCase
             'RecordType' => 'SpamComplaint',
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->unsubscribed_at);
+        // then
+        self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testTemporaryBounce()
+    /** @test */
+    function it_accepts_temporary_bounce_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
         $webhook = [
@@ -117,8 +120,10 @@ class PostmarkWebhooksTest extends TestCase
             'Type' => 'Transient',
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
+        // then
         $this->assertDatabaseHas(
             'sendportal_message_failures',
             [
@@ -128,14 +133,13 @@ class PostmarkWebhooksTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testPermanentBounce()
+    /** @test */
+    function it_accepts_permanent_bounce_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->bounced_at);
+        self::assertNull($message->bounced_at);
 
         $webhook = [
             'MessageID' => $message->message_id,
@@ -144,8 +148,10 @@ class PostmarkWebhooksTest extends TestCase
             'Type' => 'HardBounce',
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
+        // then
         $this->assertDatabaseHas(
             'sendportal_message_failures',
             [
@@ -154,7 +160,7 @@ class PostmarkWebhooksTest extends TestCase
             ]
         );
 
-        $this->assertNotNull($message->refresh()->bounced_at);
+        self::assertNotNull($message->refresh()->bounced_at);
     }
 
     /**
@@ -162,7 +168,7 @@ class PostmarkWebhooksTest extends TestCase
      */
     protected function createMessage(): Message
     {
-        return factory(Message::class)->create([
+        return Message::factory()->create([
             'message_id' => Str::random(),
         ]);
     }

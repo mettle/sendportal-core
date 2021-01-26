@@ -91,7 +91,7 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $this->post($route, $data);
 
-        $this->assertCount(2, $segment->refresh()->subscribers);
+        self::assertCount(2, $segment->refresh()->subscribers);
     }
 
     /** @test */

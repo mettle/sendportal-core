@@ -4,20 +4,85 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Models;
 
+use Carbon\Carbon;
+use Database\Factories\CampaignFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+/**
+ * @property int $id
+ * @property int $workspace_id
+ * @property string $name
+ * @property int $status_id
+ * @property int|null $template_id
+ * @property int|null $email_service_id
+ * @property string|null $subject
+ * @property string|null $content
+ * @property string|null $from_name
+ * @property string|null $from_email
+ * @property bool $is_open_tracking
+ * @property bool $is_click_tracking
+ * @property int|null $open_count
+ * @property int|null $click_count
+ * @property bool $save_to_draft
+ * @property bool $send_to_all
+ * @property Carbon|null $scheduled_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property EloquentCollection $segments
+ * @property CampaignStatus $status
+ * @property Template|null $template
+ * @property EmailService|null $email_service
+ * @property EloquentCollection $messages
+ * @property EloquentCollection $sent_messages
+ * @property EloquentCollection $opens
+ * @property EloquentCollection $clicks
+ * 
+ * @property-read int $active_subscriber_count_attribute
+ * @property-read int $sent_count
+ * @property-read int $unsent_count
+ * @property-read string $sent_count_formatted
+ * @property-read float|int $open_ratio
+ * @property-read float|int $click_ratio
+ * @property-read float|int $bounce_ratio
+ * @property-read string|null $merged_content
+ * @property-read bool $draft
+ * @property-read bool $queued
+ * @property-read bool $sending
+ * @property-read bool $sent
+ * @property-read bool $cancelled
+ * @property-read bool $unique_open_count
+ * @property-read bool $total_open_count
+ * @property-read bool $unique_click_count
+ * @property-read bool $total_click_count
+ * 
+ * @method static CampaignFactory factory
+ */
 class Campaign extends BaseModel
 {
+    use HasFactory;
+
+    protected static function newFactory()
+    {
+        return CampaignFactory::new();
+    }
+
+    /** @var string */
     protected $table = 'sendportal_campaigns';
 
     /** @var array */
     protected $guarded = [];
 
-    // We can't use boolean fields on this model because we have multiple points to update from the controller.
-    /** @var array */
+    /**
+     * We can't use boolean fields on this model because we have multiple points to update from the controller.
+     *
+     * @var array
+     */
     protected $booleanFields = [];
 
     /** @var array */
@@ -40,19 +105,6 @@ class Campaign extends BaseModel
     {
         return $this->belongsToMany(Segment::class, 'sendportal_campaign_segment')->withTimestamps();
     }
-
-    public function getActiveSubscriberCountAttribute(): int
-    {
-        return Subscriber::where('workspace_id', $this->workspace_id)
-            ->whereNull('unsubscribed_at')
-            ->when(!$this->send_to_all, function (Builder $query) {
-                $query->whereHas('segments', function (Builder $subQuery) {
-                    $subQuery->whereIn('sendportal_segments.id', $this->segments->pluck('id'));
-                });
-            })
-            ->count();
-    }
-
     /**
      * Status of the campaign.
      */
@@ -88,7 +140,7 @@ class Campaign extends BaseModel
     /**
      * All of a campaign's sent messages.
      */
-    public function sentMessages(): MorphMany
+    public function sent_messages(): MorphMany
     {
         return $this->morphMany(Message::class, 'source')->whereNotNull('sent_at');
     }
@@ -109,15 +161,24 @@ class Campaign extends BaseModel
         return $this->morphMany(Message::class, 'source')->whereNotNull('clicked_at');
     }
 
-    public function getSentCountAttribute(): int
+    public function getActiveSubscriberCountAttribute(): int
     {
-        return $this->sentMessages->count();
+        return Subscriber::where('workspace_id', $this->workspace_id)
+            ->whereNull('unsubscribed_at')
+            ->when(!$this->send_to_all, function (Builder $query) {
+                $query->whereHas('segments', function (Builder $subQuery) {
+                    $subQuery->whereIn('sendportal_segments.id', $this->segments->pluck('id'));
+                });
+            })
+            ->count();
     }
 
-    /**
-     * @return void
-     */
-    public function getUnsentCountAttribute()
+    public function getSentCountAttribute(): int
+    {
+        return $this->sent_messages->count();
+    }
+
+    public function getUnsentCountAttribute(): int
     {
         if ($this->messages->count()) {
             return ($this->messages->count() - $this->sent_count);
@@ -141,19 +202,6 @@ class Campaign extends BaseModel
         return (string)$value;
     }
 
-    public function formatCount(int $count): string
-    {
-        if ($count > 999999) {
-            return round($count / 1000000) . 'm';
-        }
-
-        if ($count > 9999 && $count <= 999999) {
-            return round($count / 1000) . 'k';
-        }
-
-        return (string)$count;
-    }
-
     /**
      * Get the campaigns's open ratio as an attribute.
      *
@@ -164,15 +212,6 @@ class Campaign extends BaseModel
     {
         if ($openCount = $this->opens->count()) {
             return $openCount / $this->sent_count;
-        }
-
-        return 0;
-    }
-
-    public function getActionRatio(int $actionCount, int $sentCount)
-    {
-        if ($actionCount) {
-            return $actionCount / $sentCount;
         }
 
         return 0;
@@ -292,6 +331,28 @@ class Campaign extends BaseModel
         return (int)$this->clicks()->sum('click_count');
     }
 
+    public function formatCount(int $count): string
+    {
+        if ($count > 999999) {
+            return round($count / 1000000) . 'm';
+        }
+
+        if ($count > 9999 && $count <= 999999) {
+            return round($count / 1000) . 'k';
+        }
+
+        return (string)$count;
+    }
+
+    public function getActionRatio(int $actionCount, int $sentCount)
+    {
+        if ($actionCount) {
+            return $actionCount / $sentCount;
+        }
+
+        return 0;
+    }
+
     /**
      * Determine whether the campaign can be cancelled.
      */
@@ -300,7 +361,8 @@ class Campaign extends BaseModel
         // we can cancel campaigns that still have draft messages, because they haven't been entirely dispatched
         // a campaign that doesn't have any more draft messages (i.e. they have all been sent) cannot be cancelled, because the campaign is completed
 
-        if ($this->status_id === CampaignStatus::STATUS_SENT && $this->save_as_draft && $this->sent_count !== $this->messages()->count()) {
+        if ($this->status_id === CampaignStatus::STATUS_SENT && $this->save_as_draft && $this->sent_count !== $this->messages(
+            )->count()) {
             return true;
         }
 
@@ -312,7 +374,7 @@ class Campaign extends BaseModel
      */
     public function allDraftsCreated(): bool
     {
-        if (!$this->save_as_draft) {
+        if ( ! $this->save_as_draft) {
             return true;
         }
 

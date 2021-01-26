@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\EmailServices;
 
 use Exception;
@@ -18,7 +20,8 @@ class TestEmailServiceControllerTest extends TestCase
     /** @test */
     public function the_test_email_service_page_is_accessible_by_authenticated_users()
     {
-        $service = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $service = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this->get(route('sendportal.email_services.test.create', $service->id));
@@ -30,54 +33,80 @@ class TestEmailServiceControllerTest extends TestCase
     /** @test */
     public function an_email_service_cannot_be_tested_without_a_from_email_address()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        $this->from(route('sendportal.email_services.test.create', $emailService->id))
-            ->post(route('sendportal.email_services.test.store', $emailService->id), [
-                'to' => 'example@example.org',
-                'subject' => 'test',
-                'body' => 'test'
-            ])
-            ->assertRedirect(route('sendportal.email_services.test.create', $emailService->id))
-            ->assertSessionHasErrors('from');
+        $postData = [
+            'to' => 'example@example.org',
+            'subject' => 'test',
+            'body' => 'test'
+        ];
+
+        // when
+        $response = $this->from(route('sendportal.email_services.test.create', $emailService->id))
+            ->post(route('sendportal.email_services.test.store', $emailService->id), $postData);
+
+        // then
+        $response->assertRedirect(route('sendportal.email_services.test.create', $emailService->id));
+        $response->assertSessionHasErrors('from');
     }
 
     /** @test */
     public function an_email_service_cannot_be_tested_without_a_subject()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        $this->from(route('sendportal.email_services.test.create', $emailService->id))
-            ->post(route('sendportal.email_services.test.store', $emailService->id), [
-                'to' => 'example@example.org',
-                'subject' => '',
-                'body' => 'test'
-            ])
-            ->assertRedirect(route('sendportal.email_services.test.create', $emailService->id))
-            ->assertSessionHasErrors('subject');
+        $postData = [
+            'to' => 'example@example.org',
+            'subject' => '',
+            'body' => 'test'
+        ];
+
+        // when
+        $response = $this->from(route('sendportal.email_services.test.create', $emailService->id))
+            ->post(route('sendportal.email_services.test.store', $emailService->id), $postData);
+
+        // then
+        $response->assertRedirect(route('sendportal.email_services.test.create', $emailService->id));
+        $response->assertSessionHasErrors('subject');
     }
 
     /** @test */
     public function an_email_service_cannot_be_tested_without_a_body()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        $this->from(route('sendportal.email_services.test.create', $emailService->id))
-            ->post(route('sendportal.email_services.test.store', $emailService->id), [
-                'to' => 'example@example.org',
-                'subject' => 'test',
-                'body' => ''
-            ])
-            ->assertRedirect(route('sendportal.email_services.test.create', $emailService->id))
-            ->assertSessionHasErrors('body');
+        $postData = [
+            'to' => 'example@example.org',
+            'subject' => 'test',
+            'body' => ''
+        ];
+
+        // when
+        $response = $this->from(route('sendportal.email_services.test.create', $emailService->id))
+            ->post(route('sendportal.email_services.test.store', $emailService->id), $postData);
+
+        // then
+        $response->assertRedirect(route('sendportal.email_services.test.create', $emailService->id));
+        $response->assertSessionHasErrors('body');
     }
 
     /** @test */
     public function an_email_service_can_be_tested_by_an_authenticated_user()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $from = 'test@sendportal.io';
+
+        $postData = [
+            'to' => 'example@example.org',
+            'from' => $from,
+            'subject' => 'test',
+            'body' => 'test'
+        ];
 
         $this->instance(DispatchTestMessage::class, Mockery::mock(DispatchTestMessage::class, function ($mock) use ($emailService, $from) {
             $mock->shouldReceive('testService')
@@ -92,23 +121,28 @@ class TestEmailServiceControllerTest extends TestCase
         }));
 
         // when
-        $this->from(route('sendportal.email_services.test.create', $emailService->id))
-            ->post(route('sendportal.email_services.test.store', $emailService->id), [
-                'to' => 'example@example.org',
-                'from' => $from,
-                'subject' => 'test',
-                'body' => 'test'
-            ])
-            ->assertRedirect(route('sendportal.email_services.index'))
-            ->assertSessionHas('success');
+        $response = $this->from(route('sendportal.email_services.test.create', $emailService->id))
+            ->post(route('sendportal.email_services.test.store', $emailService->id), $postData);
+
+        // then
+        $response->assertRedirect(route('sendportal.email_services.index'));
+        $response->assertSessionHas('success');
     }
 
     /** @test */
     public function it_should_redirect_the_user_to_the_email_service_test_page_if_the_email_service_test_fails()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $from = 'test@sendportal.io';
+
+        $postData = [
+            'to' => 'example@example.org',
+            'from' => $from,
+            'subject' => 'test',
+            'body' => 'test'
+        ];
 
         $this->instance(DispatchTestMessage::class, Mockery::mock(DispatchTestMessage::class, function ($mock) use ($emailService, $from) {
             $mock->shouldReceive('testService')
@@ -123,14 +157,11 @@ class TestEmailServiceControllerTest extends TestCase
         }));
 
         // when
-        $this->from(route('sendportal.email_services.test.create', $emailService->id))
-            ->post(route('sendportal.email_services.test.store', $emailService->id), [
-                'to' => 'example@example.org',
-                'from' => $from,
-                'subject' => 'test',
-                'body' => 'test'
-            ])
-            ->assertRedirect(route('sendportal.email_services.test.create', $emailService->id))
-            ->assertSessionHas('error', 'Response: whoops');
+        $response = $this->from(route('sendportal.email_services.test.create', $emailService->id))
+            ->post(route('sendportal.email_services.test.store', $emailService->id), $postData);
+
+        // then
+        $response->assertRedirect(route('sendportal.email_services.test.create', $emailService->id));
+        $response->assertSessionHas('error', 'Response: whoops');
     }
 }

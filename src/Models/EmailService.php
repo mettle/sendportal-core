@@ -4,13 +4,39 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Models;
 
+use Carbon\Carbon;
+use Database\Factories\EmailServiceFactory;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Sendportal\Base\Facades\Helper;
 use Sendportal\Pro\Models\Automation;
 
+/**
+ * @property int $id
+ * @property int $workspace_id
+ * @property string|null $name
+ * @property int $type_id
+ * @property array $settings
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property EmailServiceType $type
+ * @property EloquentCollection $campaigns
+ *
+ * @method static EmailServiceFactory factory
+ */
 class EmailService extends BaseModel
 {
+    use HasFactory;
+
+    protected static function newFactory()
+    {
+        return EmailServiceFactory::new();
+    }
+
+    /** @var string */
     protected $table = 'sendportal_email_services';
 
     /** @var array */

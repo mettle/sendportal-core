@@ -31,6 +31,7 @@ class EmailServicesControllerTest extends TestCase
     /** @test */
     public function new_email_services_can_be_created_by_authenticated_users()
     {
+        // given
         $emailServiceStoreData = [
             'name' => $this->faker->word,
             'type_id' => EmailServiceType::POSTMARK,
@@ -55,7 +56,8 @@ class EmailServicesControllerTest extends TestCase
     /** @test */
     public function the_email_service_edit_view_is_accessible_by_authenticated_users()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this->get(route('sendportal.email_services.edit', $emailService->id));
@@ -67,8 +69,8 @@ class EmailServicesControllerTest extends TestCase
     /** @test */
     public function an_email_service_is_updateable_by_an_authenticated_user()
     {
-        $this->withoutExceptionHandling();
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $emailServiceUpdateData = [
             'name' => $this->faker->word,
@@ -92,7 +94,8 @@ class EmailServicesControllerTest extends TestCase
     /** @test */
     public function an_email_service_can_be_deleted_by_an_authenticated_user()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $this
@@ -107,6 +110,7 @@ class EmailServicesControllerTest extends TestCase
     /** @test */
     public function email_services_require_the_correct_settings_to_be_saved()
     {
+        // given
         $emailServiceStoreData = [
             'name' => $this->faker->word,
             'type_id' => EmailServiceType::POSTMARK,
@@ -124,9 +128,9 @@ class EmailServicesControllerTest extends TestCase
     /** @test */
     public function email_services_cannot_be_deleted_if_they_are_being_used()
     {
-        $emailService = factory(EmailService::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        factory(Campaign::class)->create([
+        Campaign::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id
         ]);

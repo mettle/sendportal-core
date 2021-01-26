@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Repositories;
 
 use Carbon\CarbonPeriod;
@@ -25,75 +27,91 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_the_grow_chart_data()
+    function it_should_get_the_grow_chart_data()
     {
+        // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
 
+        // when
         $data = $this->repository->getGrowthChartData($period, Sendportal::currentWorkspaceId());
 
-        $this->assertArrayHasKey('startingValue', $data);
-        $this->assertArrayHasKey('runningTotal', $data);
-        $this->assertArrayHasKey('unsubscribers', $data);
+        // then
+        self::assertArrayHasKey('startingValue', $data);
+        self::assertArrayHasKey('runningTotal', $data);
+        self::assertArrayHasKey('unsubscribers', $data);
     }
 
     /** @test */
-    public function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
+    function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
     {
+        // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
 
-        factory(Subscriber::class, 2)->create([
+        Subscriber::factory()->count(2)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'created_at' => $period->getStartDate()->subDay()
         ]);
 
-        $this->assertEquals(2, $this->repository->getGrowthChartData($period, Sendportal::currentWorkspaceId())['startingValue']);
+        // when
+        $data = $this->repository->getGrowthChartData($period, Sendportal::currentWorkspaceId());
+
+        // then
+        self::assertEquals(2, $data['startingValue']);
     }
 
     /** @test */
-    public function it_should_get_the_total_number_of_subscribers_in_the_reference_period_grouped_by_date()
+    function it_should_get_the_total_number_of_subscribers_in_the_reference_period_grouped_by_date()
     {
+        // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
 
-        factory(Subscriber::class)->create([
+        Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'created_at' => $period->getStartDate()->addDay()
         ]);
-        factory(Subscriber::class)->create([
+
+        Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'created_at' => $period->getEndDate()->subDay()
         ]);
 
-        $ignored = factory(Subscriber::class)->create([
+        Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
-            'created_at' => $period->getEndDate()->addDay()
+            'created_at' => $period->getEndDate()->addDay() // should be ignored
         ]);
 
+        // when
         $runningTotal = $this->repository->getGrowthChartData($period, Sendportal::currentWorkspaceId())['runningTotal'];
 
-        $this->assertEquals(2, $runningTotal->count());
+        // then
+        self::assertEquals(2, $runningTotal->count());
     }
 
     /** @test */
-    public function it_should_get_the_total_number_of_unsubscribers_in_the_reference_period_grouped_by_date()
+    function it_should_get_the_total_number_of_unsubscribers_in_the_reference_period_grouped_by_date()
     {
+        // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
 
         $unsubscribed_at = $period->getStartDate()->addWeek();
 
-        factory(Subscriber::class)->create([
+        Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'created_at' => $period->getStartDate()->addDay(),
             'unsubscribed_at' => $unsubscribed_at
         ]);
-        factory(Subscriber::class)->create([
+
+        Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'created_at' => $period->getEndDate()->subDay()
         ]);
 
+        // when
         $unsubscribers = $this->repository->getGrowthChartData($period, Sendportal::currentWorkspaceId())['unsubscribers'];
 
-        $this->assertEquals(1, $unsubscribers->count());
-        $this->assertTrue($unsubscribers->has($unsubscribed_at->format('d-m-Y')));
-        $this->assertEquals(1, $unsubscribers->get($unsubscribed_at->format('d-m-Y'))->total);
+        // then
+        self::assertEquals(1, $unsubscribers->count());
+        self::assertTrue($unsubscribers->has($unsubscribed_at->format('d-m-Y')));
+        self::assertEquals(1, $unsubscribers->get($unsubscribed_at->format('d-m-Y'))->total);
     }
 }

@@ -15,10 +15,11 @@ class WebviewControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_message_can_be_seen_in_the_webview()
+    function a_message_can_be_seen_in_the_webview()
     {
-        $campaign = factory(Campaign::class)->state('withContent')->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
-        $message = factory(Message::class)->create(['source_id' => $campaign->id, 'workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $campaign = Campaign::factory()->withContent()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $message = Message::factory()->create(['source_id' => $campaign->id, 'workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this->get(route('sendportal.webview.show', $message->hash));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Webhooks;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,19 +18,16 @@ class MailjetWebhooksTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $route = 'sendportal.api.webhooks.mailjet';
 
-    /**
-     * @return void
-     */
-    public function testDelivery()
+    /** @test */
+    function it_accepts_delivery_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->delivered_at);
+        self::assertNull($message->delivered_at);
 
         $webhook = [
             'event' => 'sent',
@@ -40,22 +39,23 @@ class MailjetWebhooksTest extends TestCase
             'Payload' => ''
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
         $message = $message->refresh();
 
-        $this->assertEquals('2015-06-03 12:19:09', $message->delivered_at->toDateTimeString());
+        // then
+        self::assertEquals('2015-06-03 12:19:09', $message->delivered_at->toDateTimeString());
     }
 
-    /**
-     * @return void
-     */
-    public function testOpen()
+    /** @test */
+    function it_accepts_open_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->open_count);
-        $this->assertNull($message->opened_at);
+        self::assertEquals(0, $message->open_count);
+        self::assertNull($message->opened_at);
 
         $webhook = [
             'event' =>  'open',
@@ -69,21 +69,22 @@ class MailjetWebhooksTest extends TestCase
             'agent' =>  'Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->open_count);
-        $this->assertEquals('2015-05-31 20:18:39', $message->opened_at->toDateTimeString());
+        // then
+        self::assertEquals(1, $message->refresh()->open_count);
+        self::assertEquals('2015-05-31 20:18:39', $message->opened_at->toDateTimeString());
     }
 
-    /**
-     * @return void
-     */
-    public function testClick()
+    /** @test */
+    function it_accepts_click_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->click_count);
-        $this->assertNull($message->clicked_at);
+        self::assertEquals(0, $message->click_count);
+        self::assertNull($message->clicked_at);
 
         $webhook = [
             'event' => 'click',
@@ -97,20 +98,21 @@ class MailjetWebhooksTest extends TestCase
             'agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->click_count);
-        $this->assertEquals('2015-06-03 12:30:53', $message->clicked_at->toDateTimeString());
+        // then
+        self::assertEquals(1, $message->refresh()->click_count);
+        self::assertEquals('2015-06-03 12:30:53', $message->clicked_at->toDateTimeString());
     }
 
-    /**
-     * @return void
-     */
-    public function testSpamComplaint()
+    /** @test */
+    function it_accepts_spam_complaint_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->unsubscribed_at);
+        self::assertNull($message->unsubscribed_at);
 
         $webhook = [
             'event' => 'spam',
@@ -121,16 +123,17 @@ class MailjetWebhooksTest extends TestCase
             'source' => 'JMRPP'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals('2015-05-05 07:49:55', $message->refresh()->unsubscribed_at->toDateTimeString());
+        // then
+        self::assertEquals('2015-05-05 07:49:55', $message->refresh()->unsubscribed_at->toDateTimeString());
     }
 
-    /**
-     * @return void
-     */
-    public function testTemporaryBounce()
+    /** @test */
+    function it_accepts_temporary_bounce_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
         $webhook = [
@@ -146,8 +149,10 @@ class MailjetWebhooksTest extends TestCase
             'comment' => 'Host or domain name not found. Name service error for name=lbjsnrftlsiuvbsren.com type=A: Host not found'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
+        // then
         $this->assertDatabaseHas(
             'sendportal_message_failures',
             [
@@ -157,14 +162,13 @@ class MailjetWebhooksTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testPermanentBounce()
+    /** @test */
+    function it_accepts_permanent_bounce_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->bounced_at);
+        self::assertNull($message->bounced_at);
 
         $webhook = [
             'event' => 'bounce',
@@ -179,8 +183,10 @@ class MailjetWebhooksTest extends TestCase
             'comment' => 'Host or domain name not found. Name service error for name=lbjsnrftlsiuvbsren.com type=A: Host not found'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
+        // then
         $this->assertDatabaseHas(
             'sendportal_message_failures',
             [
@@ -189,14 +195,13 @@ class MailjetWebhooksTest extends TestCase
             ]
         );
 
-        $this->assertEquals('2015-05-05 07:49:55', $message->refresh()->bounced_at->toDateTimeString());
+        self::assertEquals('2015-05-05 07:49:55', $message->refresh()->bounced_at->toDateTimeString());
     }
 
-    /**
-     * @return void
-     */
-    public function testBlocked()
+    /** @test */
+    function it_accepts_blocked_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
         $webhook = [
@@ -209,8 +214,10 @@ class MailjetWebhooksTest extends TestCase
             'error' => 'user unknown'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
+        // then
         $this->assertDatabaseHas(
             'sendportal_message_failures',
             [
@@ -220,14 +227,13 @@ class MailjetWebhooksTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testUnsub()
+    /** @test */
+    function it_accepts_unsubscribe_webhooks()
     {
-        $subscriber = factory(Subscriber::class)->create();
+        // given
+        $subscriber = Subscriber::factory()->create();
 
-        $message = factory(Message::class)->create([
+        $message = Message::factory()->create([
             'message_id' => Str::random(),
             'subscriber_id' => $subscriber->id
         ]);
@@ -243,27 +249,31 @@ class MailjetWebhooksTest extends TestCase
             'agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36'
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
-
-        $this->assertEquals('2015-06-03 12:35:41', $message->refresh()->unsubscribed_at);
 
         $subscriber = $subscriber->refresh();
 
-        $this->assertNotNull($subscriber->unsubscribed_at);
-        $this->assertEquals(UnsubscribeEventType::COMPLAINT, $subscriber->unsubscribe_event_id);
+        // then
+        self::assertEquals('2015-06-03 12:35:41', $message->refresh()->unsubscribed_at);
+
+        self::assertNotNull($subscriber->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::COMPLAINT, $subscriber->unsubscribe_event_id);
     }
 
     /** @test */
-    public function testGroupedEvents()
+    function it_accepts_grouped_event_webhooks()
     {
-        $campaign = factory(Campaign::class)->create();
+        // given
+        $campaign = Campaign::factory()->create();
 
-        $messageA = factory(Message::class)->create([
+        $messageA = Message::factory()->create([
             'workspace_id' => $campaign->workspace_id,
             'source_id' => $campaign->id,
             'message_id' => Str::random(),
         ]);
-        $messageB = factory(Message::class)->create([
+
+        $messageB = Message::factory()->create([
             'workspace_id' => $campaign->workspace_id,
             'source_id' => $campaign->id,
             'message_id' => Str::random(),
@@ -282,10 +292,12 @@ class MailjetWebhooksTest extends TestCase
             ]
         ];
 
+        // when
         $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals('2015-06-03 12:19:09', $messageA->refresh()->delivered_at->toDateTimeString());
-        $this->assertEquals('2015-06-03 12:19:10', $messageB->refresh()->delivered_at->toDateTimeString());
+        // then
+        self::assertEquals('2015-06-03 12:19:09', $messageA->refresh()->delivered_at->toDateTimeString());
+        self::assertEquals('2015-06-03 12:19:10', $messageB->refresh()->delivered_at->toDateTimeString());
     }
 
     /**
@@ -293,7 +305,7 @@ class MailjetWebhooksTest extends TestCase
      */
     protected function createMessage(): Message
     {
-        return factory(Message::class)->create([
+        return Message::factory()->create([
             'message_id' => Str::random(),
         ]);
     }

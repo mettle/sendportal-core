@@ -27,10 +27,12 @@ class CampaignDispatchControllerTest extends TestCase
 
         $emailService = $this->createEmailService();
 
-        $campaign = factory(Campaign::class)->states('draft')->create([
-            'workspace_id' => Sendportal::currentWorkspaceId(),
-            'email_service_id' => $emailService->id,
-        ]);
+        $campaign = Campaign::factory()
+            ->draft()
+            ->create([
+                'workspace_id' => Sendportal::currentWorkspaceId(),
+                'email_service_id' => $emailService->id,
+            ]);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
@@ -70,12 +72,12 @@ class CampaignDispatchControllerTest extends TestCase
             $mock->shouldReceive('exceedsQuota')->andReturn(true);
         }));
 
-        $emailService = factory(EmailService::class)->create([
+        $emailService = EmailService::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'type_id' => EmailServiceType::SES
         ]);
 
-        $campaign = factory(Campaign::class)->states('draft')->create([
+        $campaign = Campaign::factory()->draft()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
@@ -90,7 +92,7 @@ class CampaignDispatchControllerTest extends TestCase
             ]);
     }
 
-    protected function ignoreQuota()
+    protected function ignoreQuota(): void
     {
         $this->instance(QuotaServiceInterface::class, Mockery::mock(QuotaService::class, function ($mock) {
             $mock->shouldReceive('exceedsQuota')->andReturn(false);

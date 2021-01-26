@@ -22,7 +22,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function the_template_index_is_accessible_to_authorised_users()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -40,7 +40,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_single_template_is_accessible_to_authorised_users()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -81,7 +81,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_can_be_updated_by_authorised_users()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -110,7 +110,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_can_be_deleted_by_authorised_users()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -129,11 +129,11 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        factory(Campaign::class)->create([
+        Campaign::factory()->create([
             'template_id' => $template->id
         ]);
 
@@ -149,7 +149,7 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_name_must_be_unique_for_a_workspace()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -164,13 +164,13 @@ class TemplatesControllerTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors('name');
 
-        $this->assertEquals(1, Template::where('name', $template->name)->count());
+        self::assertEquals(1, Template::where('name', $template->name)->count());
     }
 
     /** @test */
     public function two_workspaces_can_have_the_same_name_for_a_template()
     {
-        $template = factory(Template::class)->create([
+        $template = Template::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -190,6 +190,6 @@ class TemplatesControllerTest extends TestCase
         $this->postJson($route, $request)
             ->assertStatus(201);
 
-        $this->assertEquals(2, Template::where('name', $template->name)->count());
+        self::assertEquals(2, Template::where('name', $template->name)->count());
     }
 }

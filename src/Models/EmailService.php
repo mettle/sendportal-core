@@ -31,6 +31,8 @@ class EmailService extends BaseModel
 {
     use HasFactory;
 
+    // NOTE(david): we require this because of namespace issues when resolving factories from models
+    // not in the default `App\Models` namespace.
     protected static function newFactory()
     {
         return EmailServiceFactory::new();

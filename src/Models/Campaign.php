@@ -67,6 +67,8 @@ class Campaign extends BaseModel
 {
     use HasFactory;
 
+    // NOTE(david): we require this because of namespace issues when resolving factories from models
+    // not in the default `App\Models` namespace.
     protected static function newFactory()
     {
         return CampaignFactory::new();
@@ -361,8 +363,11 @@ class Campaign extends BaseModel
         // we can cancel campaigns that still have draft messages, because they haven't been entirely dispatched
         // a campaign that doesn't have any more draft messages (i.e. they have all been sent) cannot be cancelled, because the campaign is completed
 
-        if ($this->status_id === CampaignStatus::STATUS_SENT && $this->save_as_draft && $this->sent_count !== $this->messages(
-            )->count()) {
+        if (
+            $this->status_id === CampaignStatus::STATUS_SENT
+            && $this->save_as_draft
+            && $this->sent_count !== $this->messages()->count()
+        ) {
             return true;
         }
 

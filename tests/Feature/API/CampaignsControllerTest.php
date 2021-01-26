@@ -83,7 +83,7 @@ class CampaignsControllerTest extends TestCase
     {
         $emailService = $this->createEmailService();
 
-        $campaign = factory(Campaign::class)->states('draft')->create([
+        $campaign = Campaign::factory()->draft()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
@@ -138,6 +138,6 @@ class CampaignsControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseMissing('sendportal_campaigns', $request);
-        $this->assertEquals($campaign->updated_at, $campaign->fresh()->updated_at);
+        self::assertEquals($campaign->updated_at, $campaign->fresh()->updated_at);
     }
 }

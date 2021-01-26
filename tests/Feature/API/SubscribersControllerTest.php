@@ -129,7 +129,7 @@ class SubscribersControllerTest extends TestCase
     {
         // given
         $subscriber = $this->createSubscriber();
-        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
         $subscriber->segments()->attach($segment->id);
 
         // when

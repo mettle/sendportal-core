@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Campaigns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,10 +17,10 @@ class CampaignDispatchControllerTest extends TestCase
     /** @test */
     public function campaigns_can_be_dispatched_to_segments_belonging_to_the_users_workspace()
     {
-        $campaign = factory(Campaign::class)->create([
+        $campaign = Campaign::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $validSegment = factory(Segment::class)->create([
+        $validSegment = Segment::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
@@ -33,13 +35,13 @@ class CampaignDispatchControllerTest extends TestCase
     /** @test */
     public function campaigns_cannot_be_dispatched_to_segments_belonging_to_another_workspace()
     {
-        $campaign = factory(Campaign::class)->create([
+        $campaign = Campaign::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $validSegment = factory(Segment::class)->create([
+        $validSegment = Segment::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $invalidSegment = factory(Segment::class)->create([
+        $invalidSegment = Segment::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId() + 1,
         ]);
 

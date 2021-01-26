@@ -1,17 +1,26 @@
 <?php
 
-/** @var Factory $factory */
+declare(strict_types=1);
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
 
-$factory->define(EmailService::class, function (Faker $faker) {
-    return [
-        'name' => ucwords($faker->word),
-        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
-        'type_id' => $faker->randomElement(EmailServiceType::pluck('id')),
-        'settings' => ['foo' => 'bar'],
-    ];
-});
+class EmailServiceFactory extends Factory
+{
+    /** @var string */
+    protected $model = EmailService::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => ucwords($this->faker->word),
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'type_id' => $this->faker->randomElement(EmailServiceType::pluck('id')),
+            'settings' => ['foo' => 'bar'],
+        ];
+    }
+}

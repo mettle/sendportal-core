@@ -13,14 +13,9 @@ use Tests\TestCase;
 
 class QuotaServiceTest extends TestCase
 {
-    /**
-     * @var QuotaServiceInterface
-     */
+    /** @var QuotaServiceInterface */
     protected $quotaService;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -29,50 +24,54 @@ class QuotaServiceTest extends TestCase
     }
 
     /** @test */
-    public function test_fewer_subscribers_than_quota_available()
+    public function fewer_subscribers_than_quota_available()
     {
-        $emailService = factory(EmailService::class)->create(['type_id' => EmailServiceType::SES]);
+        // given
+        $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
         $this->mockMailAdapter(2);
 
-        $this->assertFalse($this->quotaService->exceedsQuota($emailService, 1));
+        // then
+        self::assertFalse($this->quotaService->exceedsQuota($emailService, 1));
     }
 
     /** @test */
-    public function test_more_subscribers_than_quota_available()
+    public function more_subscribers_than_quota_available()
     {
-        $emailService = factory(EmailService::class)->create(['type_id' => EmailServiceType::SES]);
+        // given
+        $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
         $this->mockMailAdapter(1);
 
-        $this->assertTrue($this->quotaService->exceedsQuota($emailService, 2));
+        // then
+        self::assertTrue($this->quotaService->exceedsQuota($emailService, 2));
     }
 
     /** @test */
-    public function test_send_quota_not_available()
+    public function send_quota_not_available()
     {
-        $emailService = factory(EmailService::class)->create(['type_id' => EmailServiceType::SES]);
+        // given
+        $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
         $this->mockMailAdapter();
 
-        $this->assertFalse($this->quotaService->exceedsQuota($emailService, 1));
+        // then
+        self::assertFalse($this->quotaService->exceedsQuota($emailService, 1));
     }
 
     /** @test */
-    public function test_unlimited_quota()
+    public function unlimited_quota()
     {
-        $emailService = factory(EmailService::class)->create(['type_id' => EmailServiceType::SES]);
+        // given
+        $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
         $this->mockMailAdapter(-1);
 
-        $this->assertFalse($this->quotaService->exceedsQuota($emailService, 1));
+        // then
+        self::assertFalse($this->quotaService->exceedsQuota($emailService, 1));
     }
 
-    /**
-     * @param $quota
-     * @return void
-     */
-    protected function mockMailAdapter($quota = null)
+    protected function mockMailAdapter(int $quota = null): void
     {
         $sendQuota = [];
 

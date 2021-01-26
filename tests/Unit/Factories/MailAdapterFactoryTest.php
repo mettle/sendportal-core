@@ -20,63 +20,63 @@ class MailAdapterFactoryTest extends TestCase
     public function can_build_a_mailgun_adapter()
     {
         // given
-        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::MAILGUN]);
+        $emailService = EmailService::factory()->make(['workspace_id' => null, 'type_id' => EmailServiceType::MAILGUN]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
         $adapter = $adapterFactory->adapter($emailService);
 
         // then
-        $this->assertEquals(MailgunMailAdapter::class, get_class($adapter));
+        self::assertEquals(MailgunMailAdapter::class, get_class($adapter));
     }
 
     /** @test */
     public function can_build_a_sendgrid_adapter()
     {
         // given
-        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::SENDGRID]);
+        $emailService = EmailService::factory()->make(['workspace_id' => null, 'type_id' => EmailServiceType::SENDGRID]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
         $adapter = $adapterFactory->adapter($emailService);
 
         // then
-        $this->assertEquals(SendgridMailAdapter::class, get_class($adapter));
+        self::assertEquals(SendgridMailAdapter::class, get_class($adapter));
     }
 
     /** @test */
     public function can_build_a_postmark_adapter()
     {
         // given
-        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::POSTMARK]);
+        $emailService = EmailService::factory()->make(['workspace_id' => null, 'type_id' => EmailServiceType::POSTMARK]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
         $adapter = $adapterFactory->adapter($emailService);
 
         // then
-        $this->assertEquals(PostmarkMailAdapter::class, get_class($adapter));
+        self::assertEquals(PostmarkMailAdapter::class, get_class($adapter));
     }
 
     /** @test */
     public function can_build_an_ses_adapter()
     {
         // given
-        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => EmailServiceType::SES]);
+        $emailService = EmailService::factory()->make(['workspace_id' => null, 'type_id' => EmailServiceType::SES]);
         $adapterFactory = new MailAdapterFactory();
 
         // when
         $adapter = $adapterFactory->adapter($emailService);
 
         // then
-        $this->assertEquals(SesMailAdapter::class, get_class($adapter));
+        self::assertEquals(SesMailAdapter::class, get_class($adapter));
     }
 
     /** @test */
     public function an_exception_is_thrown_when_building_an_unknown_adapater()
     {
         // given
-        $emailService = factory(EmailService::class)->make(['workspace_id' => null, 'type_id' => 100]);
+        $emailService = EmailService::factory()->make(['workspace_id' => null, 'type_id' => 100]);
         $adapterFactory = new MailAdapterFactory();
 
         // then

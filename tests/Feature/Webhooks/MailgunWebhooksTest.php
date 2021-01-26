@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Webhooks;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,19 +18,12 @@ class MailgunWebhooksTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $route = 'sendportal.api.webhooks.mailgun';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $apiKey;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -36,97 +31,107 @@ class MailgunWebhooksTest extends TestCase
         $this->apiKey = Str::random();
     }
 
-    /**
-     * @return void
-     */
-    public function testDelivery()
+    /** @test */
+    public function it_accepts_delivery_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->delivered_at);
+        self::assertNull($message->delivered_at);
 
         $webhook = $this->resolveWebhook('delivered', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->delivered_at);
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testOpened()
+    /** @test */
+    public function it_accepts_opened_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->open_count);
-        $this->assertNull($message->opened_at);
+        self::assertEquals(0, $message->open_count);
+        self::assertNull($message->opened_at);
 
         $webhook = $this->resolveWebhook('opened', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->open_count);
-        $this->assertNotNull($message->opened_at);
+        // then
+        $response->assertOk();
+
+        self::assertEquals(1, $message->refresh()->open_count);
+        self::assertNotNull($message->opened_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testClicked()
+    /** @test */
+    public function it_accepts_clicked_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->click_count);
-        $this->assertNull($message->clicked_at);
+        self::assertEquals(0, $message->click_count);
+        self::assertNull($message->clicked_at);
 
         $webhook = $this->resolveWebhook('clicked', $message->message_id);
 
         $webhook['event-data']['url'] = $this->faker->url;
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->click_count);
-        $this->assertNotNull($message->clicked_at);
+        // then
+        $response->assertOk();
+
+        self::assertEquals(1, $message->refresh()->click_count);
+        self::assertNotNull($message->clicked_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testComplained()
+    /** @test */
+    public function it_accepts_complained_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->unsubscribed_at);
+        self::assertNull($message->unsubscribed_at);
 
         $webhook = $this->resolveWebhook('complained', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->unsubscribed_at);
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testPermanentFailure()
+    /** @test */
+    public function it_accepts_permanent_failure_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->bounced_at);
+        self::assertNull($message->bounced_at);
 
         $webhook = $this->resolveWebhook('failed', $message->message_id);
 
         $webhook['event-data']['severity'] = 'permanent';
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->bounced_at);
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->bounced_at);
 
         $this->assertDatabaseHas(
             'sendportal_message_failures',
@@ -137,19 +142,21 @@ class MailgunWebhooksTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testTemporaryFailure()
+    /** @test */
+    public function it_accepts_temporary_failure_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
         $webhook = $this->resolveWebhook('failed', $message->message_id);
 
         $webhook['event-data']['severity'] = 'temporary';
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
+
+        // then
+        $response->assertOk();
 
         $this->assertDatabaseHas(
             'sendportal_message_failures',
@@ -162,18 +169,18 @@ class MailgunWebhooksTest extends TestCase
 
     protected function createMessage(): Message
     {
-        $emailService = factory(EmailService::class)->create([
+        $emailService = EmailService::factory()->create([
             'type_id' => EmailServiceType::MAILGUN,
             'settings' => [
                 'key' => $this->apiKey,
             ],
         ]);
 
-        $campaign = factory(Campaign::class)->create([
+        $campaign = Campaign::factory()->create([
             'email_service_id' => $emailService->id,
         ]);
 
-        return factory(Message::class)->create([
+        return Message::factory()->create([
             'message_id' => '<' . Str::random() . '>',
             'source_id' => $campaign->id,
         ]);

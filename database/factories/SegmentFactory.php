@@ -1,19 +1,23 @@
 <?php
 
-/** @var Factory $factory */
+declare(strict_types=1);
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Subscriber;
 
-$factory->define(Segment::class, static function (Faker $faker) {
-    return [
-        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
-        'name' => ucwords($faker->unique()->word)
-    ];
-});
+class SegmentFactory extends Factory
+{
+    /** @var string */
+    protected $model = Segment::class;
 
-$factory->afterCreatingState(Segment::class, 'subscribed', static function (Segment $segment) {
-    $segment->subscribers()->saveMany(factory(Subscriber::class, 2)->make());
-});
+    public function definition(): array
+    {
+        return [
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'name' => ucwords($this->faker->unique()->word)
+        ];
+    }
+}

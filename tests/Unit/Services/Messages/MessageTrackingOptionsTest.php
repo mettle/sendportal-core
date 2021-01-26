@@ -18,8 +18,8 @@ class MessageTrackingOptionsTest extends TestCase
         $trackingOptions = new MessageTrackingOptions();
 
         // then
-        $this->assertTrue($trackingOptions->isOpenTracking());
-        $this->assertTrue($trackingOptions->isClickTracking());
+        self::assertTrue($trackingOptions->isOpenTracking());
+        self::assertTrue($trackingOptions->isClickTracking());
     }
 
     /** @test */
@@ -29,7 +29,7 @@ class MessageTrackingOptionsTest extends TestCase
         $trackingOptions = (new MessageTrackingOptions)->setIsOpenTracking(false);
 
         // then
-        $this->assertFalse($trackingOptions->isOpenTracking());
+        self::assertFalse($trackingOptions->isOpenTracking());
     }
 
     /** @test */
@@ -39,7 +39,7 @@ class MessageTrackingOptionsTest extends TestCase
         $trackingOptions = (new MessageTrackingOptions)->setIsClickTracking(false);
 
         // then
-        $this->assertFalse($trackingOptions->isClickTracking());
+        self::assertFalse($trackingOptions->isClickTracking());
     }
 
     /** @test */
@@ -57,35 +57,35 @@ class MessageTrackingOptionsTest extends TestCase
     public function open_tracking_can_be_turned_off_from_a_campaign()
     {
         // given
-        $campaign = factory(Campaign::class)->state('withoutOpenTracking')->make();
+        $campaign = Campaign::factory()->withoutOpenTracking()->make();
 
         // when
         $trackingOptions = MessageTrackingOptions::fromCampaign($campaign);
 
         // then
-        $this->assertFalse($trackingOptions->isOpenTracking());
-        $this->assertTrue($trackingOptions->isClickTracking());
+        self::assertFalse($trackingOptions->isOpenTracking());
+        self::assertTrue($trackingOptions->isClickTracking());
     }
 
     /** @test */
     public function click_tracking_can_be_turned_off_from_a_campaign()
     {
         // given
-        $campaign = factory(Campaign::class)->state('withoutClickTracking')->make();
+        $campaign = Campaign::factory()->withoutClickTracking()->make();
 
         // when
         $trackingOptions = MessageTrackingOptions::fromCampaign($campaign);
 
         // then
-        $this->assertTrue($trackingOptions->isOpenTracking());
-        $this->assertFalse($trackingOptions->isClickTracking());
+        self::assertTrue($trackingOptions->isOpenTracking());
+        self::assertFalse($trackingOptions->isClickTracking());
     }
 
     /** @test */
     public function open_tracking_can_be_turned_off_from_a_message()
     {
         // given
-        $campaign = factory(Campaign::class)->state('withoutOpenTracking')->make();
+        $campaign = Campaign::factory()->withoutOpenTracking()->make();
         $message = new Message();
         $message->source = $campaign;
 
@@ -93,15 +93,15 @@ class MessageTrackingOptionsTest extends TestCase
         $trackingOptions = MessageTrackingOptions::fromMessage($message);
 
         // then
-        $this->assertFalse($trackingOptions->isOpenTracking());
-        $this->assertTrue($trackingOptions->isClickTracking());
+        self::assertFalse($trackingOptions->isOpenTracking());
+        self::assertTrue($trackingOptions->isClickTracking());
     }
 
     /** @test */
     public function click_tracking_can_be_turned_off_from_a_message()
     {
         // given
-        $campaign = factory(Campaign::class)->state('withoutClickTracking')->make();
+        $campaign = Campaign::factory()->withoutClickTracking()->make();
         $message = new Message();
         $message->source = $campaign;
 
@@ -109,7 +109,7 @@ class MessageTrackingOptionsTest extends TestCase
         $trackingOptions = MessageTrackingOptions::fromMessage($message);
 
         // then
-        $this->assertTrue($trackingOptions->isOpenTracking());
-        $this->assertFalse($trackingOptions->isClickTracking());
+        self::assertTrue($trackingOptions->isOpenTracking());
+        self::assertFalse($trackingOptions->isClickTracking());
     }
 }

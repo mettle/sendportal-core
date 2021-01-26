@@ -19,7 +19,8 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function the_index_of_segments_is_accessible_to_authenticated_users()
     {
-        factory(Segment::class, 3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        Segment::factory()->count(3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this->get(route('sendportal.segments.index'));
@@ -41,6 +42,7 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function new_segments_can_be_created_by_authenticated_users()
     {
+        // given
         $segmentStoreData = [
             'name' => $this->faker->word
         ];
@@ -60,7 +62,8 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function the_segment_edit_view_is_accessible_by_authenticated_users()
     {
-        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this->get(route('sendportal.segments.edit', $segment->id));
@@ -72,7 +75,8 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_segment_is_updateable_by_an_authenticated_user()
     {
-        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $segmentUpdateData = [
             'name' => $this->faker->word
@@ -93,34 +97,44 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function subscribers_are_not_synced_when_the_segment_is_updated()
     {
-        $subscribers = factory(Subscriber::class, 5)->create([
+        // given
+        $subscribers = Subscriber::factory()->count(5)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $segment = factory(Segment::class)->create([
+
+        $segment = Segment::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
+
         $segment->subscribers()->attach($subscribers);
 
-        $this->assertCount($subscribers->count(), $segment->subscribers);
+        self::assertCount($subscribers->count(), $segment->subscribers);
 
+        // when
         $this->put(route('sendportal.segments.update', $segment->id), [
             'name' => 'Very Cool New Name',
         ]);
 
         $segment->refresh();
-        $this->assertCount($subscribers->count(), $segment->subscribers);
+
+        // then
+        self::assertCount($subscribers->count(), $segment->subscribers);
     }
 
 
     /* @test */
     public function a_segment_can_be_deleted()
     {
-        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
+        // when
         $response = $this
             ->delete(route('sendportal.segments.destroy', $segment->id));
 
+        // then
         $response->assertRedirect();
+
         $this->assertDatabaseMissing('sendportal_segments', [
             'id' => $segment->id,
         ]);
@@ -129,16 +143,20 @@ class SegmentsControllerTest extends TestCase
     /** @test */
     public function a_segment_name_must_be_unique_for_a_workspace()
     {
-        $segment = factory(Segment::class)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        // given
+        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $request = [
             'name' => $segment->name,
         ];
 
+        // when
         $response = $this->post(route('sendportal.segments.store'), $request);
 
+        // then
         $response->assertRedirect()
             ->assertSessionHasErrors('name');
-        $this->assertEquals(1, Segment::where('name', $segment->name)->count());
+
+        self::assertEquals(1, Segment::where('name', $segment->name)->count());
     }
 }

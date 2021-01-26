@@ -1,15 +1,24 @@
 <?php
 
-/** @var Factory $factory */
+declare(strict_types=1);
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Template;
 
-$factory->define(Template::class, static function (Faker $faker) {
-    return [
-        'name' => $faker->word,
-        'workspace_id' => \Sendportal\Base\Facades\Sendportal::currentWorkspaceId(),
-        'content' => '{{content}}'
-    ];
-});
+class TemplateFactory extends Factory
+{
+    /** @var string */
+    protected $model = Template::class;
+    
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->word,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'content' => '{{content}}'
+        ];
+    }
+}

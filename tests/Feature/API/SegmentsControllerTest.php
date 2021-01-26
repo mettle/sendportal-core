@@ -115,7 +115,7 @@ class SegmentsControllerTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors('name');
 
-        $this->assertEquals(1, Segment::where('name', $segment->name)->count());
+        self::assertEquals(1, Segment::where('name', $segment->name)->count());
     }
 
     /** @test */
@@ -138,6 +138,6 @@ class SegmentsControllerTest extends TestCase
         $this->postJson($route, $request)
             ->assertStatus(201);
 
-        $this->assertEquals(2, Segment::where('name', $segment->name)->count());
+        self::assertEquals(2, Segment::where('name', $segment->name)->count());
     }
 }

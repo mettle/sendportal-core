@@ -19,8 +19,6 @@ class CampaignReportsControllerTest extends TestCase
         // given
         $campaign = $this->getCampaign();
 
-        $this->withoutExceptionHandling();
-
         // when
         $response = $this->get(route('sendportal.campaigns.reports.index', $campaign->id));
 
@@ -95,10 +93,8 @@ class CampaignReportsControllerTest extends TestCase
 
     private function getCampaign(): Campaign
     {
-        $campaign = factory(Campaign::class)
-            ->state('sent')
+        return Campaign::factory()
+            ->sent()
             ->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
-
-        return $campaign;
     }
 }

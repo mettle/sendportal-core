@@ -27,7 +27,7 @@ use Ramsey\Uuid\Uuid;
  *
  * @property EloquentCollection $segments
  * @property EloquentCollection $messages
- * 
+ *
  * @property-read string $full_name
  *
  * @method static SubscriberFactory factory
@@ -81,15 +81,13 @@ class Subscriber extends BaseModel
         parent::boot();
 
         static::creating(
-            function ($model)
-            {
+            function ($model) {
                 $model->hash = Uuid::uuid4()->toString();
             }
         );
 
         static::deleting(
-            function (self $subscriber)
-            {
+            function (self $subscriber) {
                 $subscriber->segments()->detach();
                 $subscriber->messages()->delete();
             }

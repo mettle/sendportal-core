@@ -27,7 +27,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_the_name_of_the_email_service_is_not_provided()
+    public function it_should_fail_validation_if_the_name_of_the_email_service_is_not_provided()
     {
         // given
         $this->request->merge([
@@ -42,7 +42,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_the_id_of_the_email_service_is_not_provided()
+    public function it_should_fail_validation_if_the_id_of_the_email_service_is_not_provided()
     {
         // given
         $this->request->merge([
@@ -58,7 +58,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_key_or_secret_or_region_or_configuration_set_name_are_not_provided_for_the_ses_email_service()
+    public function it_should_fail_validation_if_key_or_secret_or_region_or_configuration_set_name_are_not_provided_for_the_ses_email_service()
     {
         // given
         $this->request->merge([
@@ -78,7 +78,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_pass_validation_for_the_ses_email_service()
+    public function it_should_pass_validation_for_the_ses_email_service()
     {
         // given
         $this->request->merge([
@@ -99,7 +99,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_the_key_is_not_provided_for_the_sendgrid_email_service()
+    public function it_should_fail_validation_if_the_key_is_not_provided_for_the_sendgrid_email_service()
     {
         // given
         $this->request->merge([
@@ -116,7 +116,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_pass_validation_for_the_sendgrid_email_service()
+    public function it_should_pass_validation_for_the_sendgrid_email_service()
     {
         // given
         $this->request->merge([
@@ -134,7 +134,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_the_key_is_not_provided_for_the_postmark_email_service()
+    public function it_should_fail_validation_if_the_key_is_not_provided_for_the_postmark_email_service()
     {
         // given
         $this->request->merge([
@@ -151,7 +151,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_pass_validation_for_the_postmark_email_service()
+    public function it_should_pass_validation_for_the_postmark_email_service()
     {
         // given
         $this->request->merge([
@@ -169,7 +169,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_key_or_domain_or_zone_are_not_provided_for_the_mailgun_email_service()
+    public function it_should_fail_validation_if_key_or_domain_or_zone_are_not_provided_for_the_mailgun_email_service()
     {
         // given
         $this->request->merge([
@@ -188,7 +188,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailgun_email_service()
+    public function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailgun_email_service()
     {
         // given
         $this->request->merge([
@@ -210,7 +210,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_pass_validation_for_the_mailgun_email_service()
+    public function it_should_pass_validation_for_the_mailgun_email_service()
     {
         // given
         $this->request->merge([
@@ -230,7 +230,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_key_or_secret_or_zone_are_not_provided_for_the_mailjet_email_service()
+    public function it_should_fail_validation_if_key_or_secret_or_zone_are_not_provided_for_the_mailjet_email_service()
     {
         // given
         $this->request->merge([
@@ -249,7 +249,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailjet_email_service()
+    public function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailjet_email_service()
     {
         // given
         $this->request->merge([
@@ -271,7 +271,7 @@ class EmailServiceRequestTest extends TestCase
     }
 
     /** @test */
-    function it_should_pass_validation_for_the_mailjet_email_service()
+    public function it_should_pass_validation_for_the_mailjet_email_service()
     {
         // given
         $this->request->merge([

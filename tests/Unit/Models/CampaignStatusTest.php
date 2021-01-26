@@ -13,7 +13,7 @@ class CampaignStatusTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function it_has_a_cancelled_status()
+    public function it_has_a_cancelled_status()
     {
         // given
         $campaignStatus = CampaignStatus::findOrFail(CampaignStatus::STATUS_CANCELLED);

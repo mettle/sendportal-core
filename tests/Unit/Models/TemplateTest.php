@@ -14,7 +14,7 @@ class TemplateTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function the_template_is_in_use_if_it_has_at_least_one_campaign()
+    public function the_template_is_in_use_if_it_has_at_least_one_campaign()
     {
         // given
         $template = Template::factory()->create();
@@ -28,7 +28,7 @@ class TemplateTest extends TestCase
     }
 
     /** @test */
-    function the_template_is_not_in_use_if_it_has_not_campaigns()
+    public function the_template_is_not_in_use_if_it_has_not_campaigns()
     {
         // given
         $template = Template::factory()->create();

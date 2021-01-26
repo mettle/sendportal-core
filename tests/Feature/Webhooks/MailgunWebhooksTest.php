@@ -32,7 +32,7 @@ class MailgunWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_delivery_webhooks()
+    public function it_accepts_delivery_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -51,7 +51,7 @@ class MailgunWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_opened_webhooks()
+    public function it_accepts_opened_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -72,7 +72,7 @@ class MailgunWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_clicked_webhooks()
+    public function it_accepts_clicked_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -95,7 +95,7 @@ class MailgunWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_complained_webhooks()
+    public function it_accepts_complained_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -114,7 +114,7 @@ class MailgunWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_permanent_failure_webhooks()
+    public function it_accepts_permanent_failure_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -143,7 +143,7 @@ class MailgunWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_temporary_failure_webhooks()
+    public function it_accepts_temporary_failure_webhooks()
     {
         // given
         $message = $this->createMessage();

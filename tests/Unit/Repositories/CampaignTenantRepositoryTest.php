@@ -29,7 +29,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
+    public function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
     {
         // given
         $emailService = $this->createEmailService();
@@ -56,7 +56,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
+    public function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
     {
         // given
         $emailService = $this->createEmailService();
@@ -70,7 +70,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
+    public function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
         // given
         $emailService = $this->createEmailService();
@@ -96,7 +96,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
+    public function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
         // given
         $emailService = $this->createEmailService();
@@ -110,7 +110,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_campaign_method_sets_the_campaign_status_to_cancelled()
+    public function the_cancel_campaign_method_sets_the_campaign_status_to_cancelled()
     {
         // given
         $campaign = Campaign::factory()->queued()->create();
@@ -126,7 +126,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_campaign_method_deletes_draft_messages_if_the_campaign_has_any()
+    public function the_cancel_campaign_method_deletes_draft_messages_if_the_campaign_has_any()
     {
         // given
         $emailService = $this->createEmailService();
@@ -149,7 +149,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_cancel_campaign_method_does_not_delete_sent_messages()
+    public function the_cancel_campaign_method_does_not_delete_sent_messages()
     {
         // given
         $emailService = $this->createEmailService();
@@ -172,7 +172,7 @@ class CampaignTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function the_get_count_method_returns_campaign_message_counts()
+    public function the_get_count_method_returns_campaign_message_counts()
     {
         // given
         $emailService = $this->createEmailService();

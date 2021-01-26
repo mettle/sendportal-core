@@ -27,7 +27,7 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_get_the_grow_chart_data()
+    public function it_should_get_the_grow_chart_data()
     {
         // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
@@ -42,7 +42,7 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
+    public function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
     {
         // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
@@ -60,7 +60,7 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_get_the_total_number_of_subscribers_in_the_reference_period_grouped_by_date()
+    public function it_should_get_the_total_number_of_subscribers_in_the_reference_period_grouped_by_date()
     {
         // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');
@@ -88,7 +88,7 @@ class SubscriberTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_get_the_total_number_of_unsubscribers_in_the_reference_period_grouped_by_date()
+    public function it_should_get_the_total_number_of_unsubscribers_in_the_reference_period_grouped_by_date()
     {
         // given
         $period = CarbonPeriod::create('2019-04-01', '2019-04-30');

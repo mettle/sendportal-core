@@ -16,7 +16,7 @@ class SubscriberTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function it_has_many_messages()
+    public function it_has_many_messages()
     {
         // given
         $subscriber = Subscriber::factory()->create();

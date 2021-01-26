@@ -42,7 +42,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property EloquentCollection $sent_messages
  * @property EloquentCollection $opens
  * @property EloquentCollection $clicks
- * 
+ *
  * @property-read int $active_subscriber_count_attribute
  * @property-read int $sent_count
  * @property-read int $unsent_count
@@ -60,7 +60,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read bool $total_open_count
  * @property-read bool $unique_click_count
  * @property-read bool $total_click_count
- * 
+ *
  * @method static CampaignFactory factory
  */
 class Campaign extends BaseModel
@@ -374,7 +374,7 @@ class Campaign extends BaseModel
      */
     public function allDraftsCreated(): bool
     {
-        if ( ! $this->save_as_draft) {
+        if (! $this->save_as_draft) {
             return true;
         }
 

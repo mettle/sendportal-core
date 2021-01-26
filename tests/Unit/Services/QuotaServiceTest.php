@@ -24,7 +24,7 @@ class QuotaServiceTest extends TestCase
     }
 
     /** @test */
-    function fewer_subscribers_than_quota_available()
+    public function fewer_subscribers_than_quota_available()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
@@ -36,7 +36,7 @@ class QuotaServiceTest extends TestCase
     }
 
     /** @test */
-    function more_subscribers_than_quota_available()
+    public function more_subscribers_than_quota_available()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
@@ -48,7 +48,7 @@ class QuotaServiceTest extends TestCase
     }
 
     /** @test */
-    function send_quota_not_available()
+    public function send_quota_not_available()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
@@ -60,7 +60,7 @@ class QuotaServiceTest extends TestCase
     }
 
     /** @test */
-    function unlimited_quota()
+    public function unlimited_quota()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);

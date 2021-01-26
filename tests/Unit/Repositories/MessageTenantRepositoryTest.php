@@ -31,7 +31,7 @@ class MessageTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_not_count_messages_that_have_not_been_opened_yet()
+    public function it_should_not_count_messages_that_have_not_been_opened_yet()
     {
         // given
         $campaign = Campaign::factory()->create([
@@ -52,7 +52,7 @@ class MessageTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_count_messages_that_have_been_opened_grouped_by_day_period()
+    public function it_should_count_messages_that_have_been_opened_grouped_by_day_period()
     {
         // given
         $opened_at = CarbonImmutable::create(2020, 05, 9, 20);
@@ -94,7 +94,7 @@ class MessageTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_count_messages_that_have_been_opened_grouped_by_two_hours_period()
+    public function it_should_count_messages_that_have_been_opened_grouped_by_two_hours_period()
     {
         // given
         $opened_at = CarbonImmutable::create(2020, 05, 9, 20);
@@ -144,7 +144,7 @@ class MessageTenantRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_should_count_messages_that_have_been_opened_grouped_by_hour_period()
+    public function it_should_count_messages_that_have_been_opened_grouped_by_hour_period()
     {
         // given
         $opened_at = CarbonImmutable::create(2020, 05, 9, 20);

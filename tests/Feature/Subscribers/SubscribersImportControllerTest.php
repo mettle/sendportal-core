@@ -279,7 +279,9 @@ class SubscribersImportControllerTest extends TestCase
         $rows = array_map(
             static function ($row) {
                 return implode(',', $row);
-            }, $rows);
+            },
+            $rows
+        );
 
         array_unshift($rows, implode(',', ['id', 'email', 'first_name', 'last_name']));
 

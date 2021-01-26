@@ -19,7 +19,7 @@ class PostmarkWebhooksTest extends TestCase
     protected $route = 'sendportal.api.webhooks.postmark';
 
     /** @test */
-    function it_accepts_delivery_webhooks()
+    public function it_accepts_delivery_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -40,7 +40,7 @@ class PostmarkWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_open_webhooks()
+    public function it_accepts_open_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -63,7 +63,7 @@ class PostmarkWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_click_webhooks()
+    public function it_accepts_click_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -87,7 +87,7 @@ class PostmarkWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_spam_complaint_webhooks()
+    public function it_accepts_spam_complaint_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -108,7 +108,7 @@ class PostmarkWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_temporary_bounce_webhooks()
+    public function it_accepts_temporary_bounce_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -134,7 +134,7 @@ class PostmarkWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_permanent_bounce_webhooks()
+    public function it_accepts_permanent_bounce_webhooks()
     {
         // given
         $message = $this->createMessage();

@@ -19,7 +19,7 @@ class SendgridWebhooksTest extends TestCase
     protected $route = 'sendportal.api.webhooks.sendgrid';
 
     /** @test */
-    function it_accepts_delivered_webhooks()
+    public function it_accepts_delivered_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -36,7 +36,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_open_webhooks()
+    public function it_accepts_open_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -55,7 +55,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_click_webhooks()
+    public function it_accepts_click_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -75,7 +75,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_spam_report_webhooks()
+    public function it_accepts_spam_report_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -92,7 +92,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_dropped_webhooks()
+    public function it_accepts_dropped_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -117,7 +117,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_deferred_webhooks()
+    public function it_accepts_deferred_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -138,7 +138,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_bounce_webhooks()
+    public function it_accepts_bounce_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -163,7 +163,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_blocked_webhooks()
+    public function it_accepts_blocked_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -184,7 +184,7 @@ class SendgridWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_unsubscribed_webhooks()
+    public function it_accepts_unsubscribed_webhooks()
     {
         // given
         $message = $this->createMessage();

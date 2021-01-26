@@ -17,7 +17,7 @@ class CampaignTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function it_has_many_opens()
+    public function it_has_many_opens()
     {
         // given
         $emailService = $this->createEmailService();
@@ -39,7 +39,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_unique_open_count_attribute_returns_the_number_of_unique_opens_for_a_campaign()
+    public function the_unique_open_count_attribute_returns_the_number_of_unique_opens_for_a_campaign()
     {
         // given
         $emailService = $this->createEmailService();
@@ -56,7 +56,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_total_open_count_attribute_returns_the_total_number_of_opens_for_a_campaign()
+    public function the_total_open_count_attribute_returns_the_total_number_of_opens_for_a_campaign()
     {
         // given
         $emailService = $this->createEmailService();
@@ -72,7 +72,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function it_has_many_clicks()
+    public function it_has_many_clicks()
     {
         // given
         $emailService = $this->createEmailService();
@@ -94,7 +94,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_unique_click_count_attribute_returns_the_number_of_unique_clicks_for_a_campaign()
+    public function the_unique_click_count_attribute_returns_the_number_of_unique_clicks_for_a_campaign()
     {
         // given
         $emailService = $this->createEmailService();
@@ -108,7 +108,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_total_click_count_attribute_returns_the_total_number_of_clicks_for_a_campaign()
+    public function the_total_click_count_attribute_returns_the_total_number_of_clicks_for_a_campaign()
     {
         // given
         $emailService = $this->createEmailService();
@@ -124,7 +124,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
+    public function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
     {
         // given
         $campaign = Campaign::factory()->cancelled()->create();
@@ -134,7 +134,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
     {
         // given
         /** @var Campaign $campaign */
@@ -145,7 +145,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
     {
         // given
         /** @var Campaign $campaign */
@@ -156,7 +156,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sent_and_saves_as_draft_and_not_all_drafts_have_been_sent()
+    public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sent_and_saves_as_draft_and_not_all_drafts_have_been_sent()
     {
         // given
         $campaign = Campaign::factory()->sent()->create([
@@ -186,7 +186,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_can_be_cancelled_method_returns_false_if_the_campaign_is_sent_and_saves_as_draft_and_all_drafts_have_been_sent()
+    public function the_can_be_cancelled_method_returns_false_if_the_campaign_is_sent_and_saves_as_draft_and_all_drafts_have_been_sent()
     {
         // given
         $campaign = Campaign::factory()->sent()->create([
@@ -210,7 +210,7 @@ class CampaignTest extends TestCase
 
 
     /** @test */
-    function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
+    public function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
     {
         // given
         $campaign = Campaign::factory()->sending()->create([
@@ -240,7 +240,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_all_drafts_created_method_returns_false_if_all_drafts_have_not_been_created()
+    public function the_all_drafts_created_method_returns_false_if_all_drafts_have_not_been_created()
     {
         // given
         $campaign = Campaign::factory()->sending()->create([
@@ -270,7 +270,7 @@ class CampaignTest extends TestCase
     }
 
     /** @test */
-    function the_all_drafts_created_method_returns_true_if_the_campaign_does_not_save_as_draft()
+    public function the_all_drafts_created_method_returns_true_if_the_campaign_does_not_save_as_draft()
     {
         // given
         $campaign = Campaign::factory()->sending()->create([

@@ -19,7 +19,7 @@ class AwsWebhooksTest extends TestCase
     protected $route = 'sendportal.api.webhooks.aws';
 
     /** @test */
-    function it_accepts_delivery_webhooks()
+    public function it_accepts_delivery_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -38,7 +38,7 @@ class AwsWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_click_webhooks()
+    public function it_accepts_click_webhooks()
     {
         // given
         $message = $this->createMessage();
@@ -60,7 +60,7 @@ class AwsWebhooksTest extends TestCase
     }
 
     /** @test */
-    function it_accepts_open_webhooks()
+    public function it_accepts_open_webhooks()
     {
         // given
         $message = $this->createMessage();

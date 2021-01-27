@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 class Sendportal extends Facade
 {
-
     /**
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function publicApiRoutes()
+    public static function publicApiRoutes(): void
     {
         static::$app->make('router')->sendportalPublicApiRoutes();
     }
@@ -18,7 +19,7 @@ class Sendportal extends Facade
     /**
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function apiRoutes()
+    public static function apiRoutes(): void
     {
         static::$app->make('router')->sendportalApiRoutes();
     }
@@ -26,7 +27,7 @@ class Sendportal extends Facade
     /**
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function publicWebRoutes()
+    public static function publicWebRoutes(): void
     {
         static::$app->make('router')->sendportalPublicWebRoutes();
     }
@@ -34,61 +35,55 @@ class Sendportal extends Facade
     /**
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function webRoutes()
+    public static function webRoutes(): void
     {
         static::$app->make('router')->sendportalWebRoutes();
     }
 
     /**
-     * @param callable $resolver
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function currentWorkspaceIdResolver(callable $resolver)
+    public static function currentWorkspaceIdResolver(callable $resolver): void
     {
         static::$app->make('sendportal.resolver')->setCurrentWorkspaceIdResolver($resolver);
     }
 
     /**
-     * @return int|null
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function currentWorkspaceId():?int
+    public static function currentWorkspaceId(): ?int
     {
         return static::$app->make('sendportal.resolver')->resolveCurrentWorkspaceId();
     }
 
     /**
-     * @param callable $resolver
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function siderbarHtmlContentResolver(callable $resolver)
+    public static function sidebarHtmlContentResolver(callable $resolver): void
     {
-        static::$app->make('sendportal.resolver')->setSiderbarHtmlContentResolver($resolver);
+        static::$app->make('sendportal.resolver')->setSidebarHtmlContentResolver($resolver);
     }
 
     /**
-     * @return string|null
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function siderbarHtmlContent():?string
+    public static function sidebarHtmlContent(): ?string
     {
-        return static::$app->make('sendportal.resolver')->resolveSiderbarHtmlContent();
+        return static::$app->make('sendportal.resolver')->resolveSidebarHtmlContent();
     }
 
     /**
-     * @param callable $resolver
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function headerHtmlContentResolver(callable $resolver)
+    public static function headerHtmlContentResolver(callable $resolver): void
     {
         static::$app->make('sendportal.resolver')->setHeaderHtmlContentResolver($resolver);
     }
 
     /**
-     * @return string|null
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function headerHtmlContent():?string
+    public static function headerHtmlContent(): ?string
     {
         return static::$app->make('sendportal.resolver')->resolveHeaderHtmlContent();
     }

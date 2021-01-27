@@ -38,7 +38,7 @@
             </a>
         </li>
 
-        {!! \Sendportal\Base\Facades\Sendportal::siderbarHtmlContent() !!}
+        {!! \Sendportal\Base\Facades\Sendportal::sidebarHtmlContent() !!}
 
     </ul>
 </div>

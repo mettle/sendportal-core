@@ -1,29 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sendportal\Base\Services;
 
 use Illuminate\Support\Arr;
 
 class ResolverService
 {
-
-    /**
-     * @var array
-     */
+    /** @var array */
     private $resolvers = [];
 
-    /**
-     * @param callable $callable\
-     */
-    public function setHeaderHtmlContentResolver(callable $callable)
+    public function setHeaderHtmlContentResolver(callable $callable): void
     {
         $this->setResolver('header', $callable);
     }
 
-    /**
-     * @return string|null
-     */
-    public function resolveHeaderHtmlContent():?string
+    public function resolveHeaderHtmlContent(): ?string
     {
         if ($resolver = $this->getResolver('header')) {
             return $resolver();
@@ -32,18 +25,12 @@ class ResolverService
         return null;
     }
 
-    /**
-     * @param callable $callable
-     */
-    public function setSiderbarHtmlContentResolver(callable $callable)
+    public function setSidebarHtmlContentResolver(callable $callable): void
     {
         $this->setResolver('sidebar', $callable);
     }
 
-    /**
-     * @return string|null
-     */
-    public function resolveSiderbarHtmlContent():?string
+    public function resolveSidebarHtmlContent(): ?string
     {
         if ($resolver = $this->getResolver('sidebar')) {
             return $resolver();
@@ -52,38 +39,24 @@ class ResolverService
         return null;
     }
 
-    /**
-     * @param callable $callable
-     */
-    public function setCurrentWorkspaceIdResolver(callable $callable)
+    public function setCurrentWorkspaceIdResolver(callable $callable): void
     {
         $this->setResolver('workspace', $callable);
     }
 
-    /**
-     * @return int|null
-     */
-    public function resolveCurrentWorkspaceId():?int
+    public function resolveCurrentWorkspaceId(): ?int
     {
         $resolver = $this->getResolver('workspace');
 
         return $resolver();
     }
 
-    /**
-     * @param $resolverName
-     * @return mixed
-     */
     private function getResolver(string $resolverName): ?callable
     {
         return Arr::get($this->resolvers, $resolverName);
     }
 
-    /**
-     * @param string $resolverName
-     * @param callable $callable
-     */
-    private function setResolver(string $resolverName, callable $callable)
+    private function setResolver(string $resolverName, callable $callable): void
     {
         $this->resolvers[$resolverName] = $callable;
     }

@@ -10,7 +10,7 @@ class SendportalTestServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        Sendportal::currentWorkspaceIdResolver(function () {
+        Sendportal::setCurrentWorkspaceIdResolver(function () {
             return 1;
         });
 

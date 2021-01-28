@@ -125,7 +125,7 @@ class SegmentsControllerTest extends TestCase
 
         $currentWorkspaceId = Sendportal::currentWorkspaceId();
 
-        Sendportal::currentWorkspaceIdResolver(function () use ($currentWorkspaceId) {
+        Sendportal::setCurrentWorkspaceIdResolver(function () use ($currentWorkspaceId) {
             return $currentWorkspaceId + 1;
         });
 

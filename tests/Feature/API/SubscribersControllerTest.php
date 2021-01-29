@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -125,12 +125,12 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_subscriber_in_a_segment_can_be_deleted()
+    public function a_subscriber_in_a_tag_can_be_deleted()
     {
         // given
         $subscriber = $this->createSubscriber();
-        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
-        $subscriber->segments()->attach($segment->id);
+        $tag = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $subscriber->tags()->attach($tag->id);
 
         // when
         $response = $this->delete(route('sendportal.api.subscribers.destroy', [
@@ -140,7 +140,7 @@ class SubscribersControllerTest extends TestCase
         // then
         $response->assertStatus(204);
         $this->assertDatabaseMissing('sendportal_subscribers', ['id' => $subscriber->id]);
-        $this->assertDatabaseMissing('sendportal_segment_subscriber', [
+        $this->assertDatabaseMissing('sendportal_tag_subscriber', [
             'subscriber_id' => $subscriber->id
         ]);
     }
@@ -172,10 +172,10 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    public function the_store_endpoint_allows_segments_to_be_added_with_the_subscriber()
+    public function the_store_endpoint_allows_tags_to_be_added_with_the_subscriber()
     {
         // given
-        $segment = $this->createSegment();
+        $tag = $this->createTag();
 
         // when
         $route = route('sendportal.api.subscribers.store');
@@ -184,7 +184,7 @@ class SubscribersControllerTest extends TestCase
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->email,
-            'segments' => [$segment->id]
+            'tags' => [$tag->id]
         ];
 
         $response = $this->post($route, $request);
@@ -194,20 +194,20 @@ class SubscribersControllerTest extends TestCase
 
         $this->assertDatabaseHas('sendportal_subscribers', ['email' => $request['email']]);
 
-        $subscriber = Subscriber::with('segments')->where('email', $request['email'])->first();
+        $subscriber = Subscriber::with('tags')->where('email', $request['email'])->first();
 
-        self::assertContains($segment->id, $subscriber->segments->pluck('id'));
+        self::assertContains($tag->id, $subscriber->tags->pluck('id'));
     }
 
     /** @test */
-    public function the_store_endpoint_allows_subscriber_segments_to_be_updated()
+    public function the_store_endpoint_allows_subscriber_tags_to_be_updated()
     {
         // given
-        $segment1 = $this->createSegment();
-        $segment2 = $this->createSegment();
+        $tag1 = $this->createTag();
+        $tag2 = $this->createTag();
 
         $subscriber = $this->createSubscriber();
-        $subscriber->segments()->save($segment1);
+        $subscriber->tags()->save($tag1);
 
         // when
         $route = route('sendportal.api.subscribers.store');
@@ -216,7 +216,7 @@ class SubscribersControllerTest extends TestCase
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $subscriber->email,
-            'segments' => [$segment2->id]
+            'tags' => [$tag2->id]
         ];
 
         $response = $this->post($route, $request);
@@ -225,9 +225,9 @@ class SubscribersControllerTest extends TestCase
         $response->assertStatus(200);
 
         $subscriber = $subscriber->fresh();
-        $subscriber->load('segments');
+        $subscriber->load('tags');
 
-        self::assertContains($segment2->id, $subscriber->segments->pluck('id'));
-        self::assertNotContains($segment1->id, $subscriber->segments->pluck('id'));
+        self::assertContains($tag2->id, $subscriber->tags->pluck('id'));
+        self::assertNotContains($tag1->id, $subscriber->tags->pluck('id'));
     }
 }

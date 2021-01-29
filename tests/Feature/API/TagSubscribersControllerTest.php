@@ -9,21 +9,21 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
 
-class SegmentSubscribersControllerTest extends TestCase
+class TagSubscribersControllerTest extends TestCase
 {
     use RefreshDatabase,
         WithFaker;
 
     /** @test */
-    public function the_index_gets_segment_subscribers()
+    public function the_index_gets_tag_subscribers()
     {
-        $segment = $this->createTag();
+        $tag = $this->createTag();
         $subscriber = $this->createSubscriber();
 
-        $segment->subscribers()->save($subscriber);
+        $tag->subscribers()->save($subscriber);
 
         $route = route('sendportal.api.tags.subscribers.index', [
-            'segment' => $segment->id,
+            'tag' => $tag->id,
         ]);
 
         $response = $this->get($route);
@@ -40,13 +40,13 @@ class SegmentSubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_subscriber_can_be_added_to_a_segment()
+    public function a_subscriber_can_be_added_to_a_tag()
     {
-        $segment = $this->createTag();
+        $tag = $this->createTag();
         $subscriber = $this->createsubscriber();
 
         $route = route('sendportal.api.tags.subscribers.store', [
-            'segment' => $segment->id,
+            'tag' => $tag->id,
         ]);
 
         $request = [
@@ -57,8 +57,8 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('sendportal_segment_subscriber', [
-            'segment_id' => $segment->id,
+        $this->assertDatabaseHas('sendportal_tag_subscriber', [
+            'tag_id' => $tag->id,
             'subscriber_id' => $subscriber->id,
         ]);
 
@@ -74,15 +74,15 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_store_endpoint_is_idempotent()
     {
-        $segment = $this->createTag();
+        $tag = $this->createTag();
         $existingSubscriber = $this->createSubscriber();
 
-        $segment->subscribers()->attach($existingSubscriber);
+        $tag->subscribers()->attach($existingSubscriber);
 
         $newSubscriber = $this->createSubscriber();
 
         $route = route('sendportal.api.tags.subscribers.store', [
-            'segment' => $segment->id,
+            'tag' => $tag->id,
         ]);
 
         $data = [
@@ -91,20 +91,20 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $this->post($route, $data);
 
-        self::assertCount(2, $segment->refresh()->subscribers);
+        self::assertCount(2, $tag->refresh()->subscribers);
     }
 
     /** @test */
-    public function a_segments_subscribers_can_be_synced()
+    public function a_tags_subscribers_can_be_synced()
     {
-        $segment = $this->createTag();
+        $tag = $this->createTag();
         $oldSubscriber = $this->createSubscriber();
         $newSubscriber = $this->createSubscriber();
 
-        $segment->subscribers()->save($oldSubscriber);
+        $tag->subscribers()->save($oldSubscriber);
 
         $route = route('sendportal.api.tags.subscribers.update', [
-            'segment' => $segment->id,
+            'tag' => $tag->id,
         ]);
 
         $request = [
@@ -115,13 +115,13 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('sendportal_segment_subscriber', [
-            'segment_id' => $segment->id,
+        $this->assertDatabaseMissing('sendportal_tag_subscriber', [
+            'tag_id' => $tag->id,
             'subscriber_id' => $oldSubscriber->id,
         ]);
 
-        $this->assertDatabaseHas('sendportal_segment_subscriber', [
-            'segment_id' => $segment->id,
+        $this->assertDatabaseHas('sendportal_tag_subscriber', [
+            'tag_id' => $tag->id,
             'subscriber_id' => $newSubscriber->id,
         ]);
 
@@ -135,15 +135,15 @@ class SegmentSubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_segment_can_be_deleted()
+    public function a_tag_can_be_deleted()
     {
-        $segment = $this->createTag();
+        $tag = $this->createTag();
         $subscriber = $this->createSubscriber();
 
-        $segment->subscribers()->save($subscriber);
+        $tag->subscribers()->save($subscriber);
 
         $route = route('sendportal.api.tags.subscribers.destroy', [
-            'segment' => $segment->id,
+            'tag' => $tag->id,
         ]);
 
         $request = [
@@ -154,8 +154,8 @@ class SegmentSubscribersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('sendportal_segment_subscriber', [
-            'segment_id' => $segment->id,
+        $this->assertDatabaseMissing('sendportal_tag_subscriber', [
+            'tag_id' => $tag->id,
             'subscriber_id' => $subscriber->id,
         ]);
     }

@@ -7,7 +7,7 @@ namespace Tests\Feature\Subscribers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -110,48 +110,48 @@ class SubscribersControllerTest extends TestCase
     }
 
     /** @test */
-    public function the_subscribers_index_can_be_filtered_by_segments()
+    public function the_subscribers_index_can_be_filtered_by_tags()
     {
         // given
-        $firstSegment = Segment::factory()->create([
+        $firstTag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $secondSegment = Segment::factory()->create([
+        $secondTag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $thirdSegment = Segment::factory()->create([
+        $thirdTag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $firstSegmentSubscriber = Subscriber::factory()->create([
+        $firstTagSubscriber = Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $secondSegmentSubscriber = Subscriber::factory()->create([
+        $secondTagSubscriber = Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $thirdSegmentSubscriber = Subscriber::factory()->create([
+        $thirdTagSubscriber = Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $firstSegment->subscribers()->attach($firstSegmentSubscriber->id);
-        $secondSegment->subscribers()->attach($secondSegmentSubscriber->id);
-        $thirdSegment->subscribers()->attach($thirdSegmentSubscriber->id);
+        $firstTag->subscribers()->attach($firstTagSubscriber->id);
+        $secondTag->subscribers()->attach($secondTagSubscriber->id);
+        $thirdTag->subscribers()->attach($thirdTagSubscriber->id);
 
         // when
         $response = $this->get(route('sendportal.subscribers.index', [
-                'segments' => [$firstSegment->id, $secondSegment->id]
-            ]));
+            'tags' => [$firstTag->id, $secondTag->id]
+        ]));
 
         // then
-        $response->assertSee($firstSegmentSubscriber->email);
-        $response->assertSee("{$firstSegmentSubscriber->first_name} {$firstSegmentSubscriber->last_name}");
-        $response->assertSee($secondSegmentSubscriber->email);
-        $response->assertSee("{$secondSegmentSubscriber->first_name} {$secondSegmentSubscriber->last_name}");
-        $response->assertDontSee($thirdSegmentSubscriber->email);
-        $response->assertDontSee("{$thirdSegmentSubscriber->first_name} {$thirdSegmentSubscriber->last_name}");
+        $response->assertSee($firstTagSubscriber->email);
+        $response->assertSee("{$firstTagSubscriber->first_name} {$firstTagSubscriber->last_name}");
+        $response->assertSee($secondTagSubscriber->email);
+        $response->assertSee("{$secondTagSubscriber->first_name} {$secondTagSubscriber->last_name}");
+        $response->assertDontSee($thirdTagSubscriber->email);
+        $response->assertDontSee("{$thirdTagSubscriber->first_name} {$thirdTagSubscriber->last_name}");
     }
 }

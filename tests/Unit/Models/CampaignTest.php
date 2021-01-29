@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -218,17 +218,17 @@ class CampaignTest extends TestCase
             'save_as_draft' => 1,
         ]);
 
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $campaign->segments()->attach($segment->id);
+        $campaign->tags()->attach($tag->id);
 
         $subscribers = Subscriber::factory()->count(5)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $segment->subscribers()->attach($subscribers->pluck('id'));
+        $tag->subscribers()->attach($subscribers->pluck('id'));
 
         // Message Drafts
         Message::factory()->count($subscribers->count())->pending()->create([
@@ -248,17 +248,17 @@ class CampaignTest extends TestCase
             'save_as_draft' => 1,
         ]);
 
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $campaign->segments()->attach($segment->id);
+        $campaign->tags()->attach($tag->id);
 
         $subscribers = Subscriber::factory()->count(5)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $segment->subscribers()->attach($subscribers->pluck('id'));
+        $tag->subscribers()->attach($subscribers->pluck('id'));
 
         // Message Drafts
         Message::factory()->count(3)->pending()->create([

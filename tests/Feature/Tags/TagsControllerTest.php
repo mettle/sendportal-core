@@ -17,7 +17,7 @@ class TagsControllerTest extends TestCase
         WithFaker;
 
     /** @test */
-    public function the_index_of_segments_is_accessible_to_authenticated_users()
+    public function the_index_of_tags_is_accessible_to_authenticated_users()
     {
         // given
         Tag::factory()->count(3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -30,7 +30,7 @@ class TagsControllerTest extends TestCase
     }
 
     /** @test */
-    public function the_segment_create_form_is_accessible_to_authenticated_users()
+    public function the_tag_create_form_is_accessible_to_authenticated_users()
     {
         // when
         $response = $this->get(route('sendportal.tags.create'));
@@ -40,114 +40,114 @@ class TagsControllerTest extends TestCase
     }
 
     /** @test */
-    public function new_segments_can_be_created_by_authenticated_users()
+    public function new_tags_can_be_created_by_authenticated_users()
     {
         // given
-        $segmentStoreData = [
+        $tagStoreData = [
             'name' => $this->faker->word
         ];
 
         // when
         $response = $this
-            ->post(route('sendportal.tags.store'), $segmentStoreData);
+            ->post(route('sendportal.tags.store'), $tagStoreData);
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('sendportal_segments', [
+        $this->assertDatabaseHas('sendportal_tags', [
             'workspace_id' => Sendportal::currentWorkspaceId(),
-            'name' => $segmentStoreData['name']
+            'name' => $tagStoreData['name']
         ]);
     }
 
     /** @test */
-    public function the_segment_edit_view_is_accessible_by_authenticated_users()
+    public function the_tag_edit_view_is_accessible_by_authenticated_users()
     {
         // given
-        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $tag = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
-        $response = $this->get(route('sendportal.tags.edit', $segment->id));
+        $response = $this->get(route('sendportal.tags.edit', $tag->id));
 
         // then
         $response->assertOk();
     }
 
     /** @test */
-    public function a_segment_is_updateable_by_an_authenticated_user()
+    public function a_tag_is_updateable_by_an_authenticated_user()
     {
         // given
-        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $tag = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
-        $segmentUpdateData = [
+        $tagUpdateData = [
             'name' => $this->faker->word
         ];
 
         // when
         $response = $this
-            ->put(route('sendportal.tags.update', $segment->id), $segmentUpdateData);
+            ->put(route('sendportal.tags.update', $tag->id), $tagUpdateData);
 
         // then
         $response->assertRedirect();
-        $this->assertDatabaseHas('sendportal_segments', [
-            'id' => $segment->id,
-            'name' => $segmentUpdateData['name']
+        $this->assertDatabaseHas('sendportal_tags', [
+            'id' => $tag->id,
+            'name' => $tagUpdateData['name']
         ]);
     }
 
     /** @test */
-    public function subscribers_are_not_synced_when_the_segment_is_updated()
+    public function subscribers_are_not_synced_when_the_tag_is_updated()
     {
         // given
         $subscribers = Subscriber::factory()->count(5)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $segment = Tag::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $segment->subscribers()->attach($subscribers);
+        $tag->subscribers()->attach($subscribers);
 
-        self::assertCount($subscribers->count(), $segment->subscribers);
+        self::assertCount($subscribers->count(), $tag->subscribers);
 
         // when
-        $this->put(route('sendportal.tags.update', $segment->id), [
+        $this->put(route('sendportal.tags.update', $tag->id), [
             'name' => 'Very Cool New Name',
         ]);
 
-        $segment->refresh();
+        $tag->refresh();
 
         // then
-        self::assertCount($subscribers->count(), $segment->subscribers);
+        self::assertCount($subscribers->count(), $tag->subscribers);
     }
 
 
     /* @test */
-    public function a_segment_can_be_deleted()
+    public function a_tag_can_be_deleted()
     {
         // given
-        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $tag = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this
-            ->delete(route('sendportal.tags.destroy', $segment->id));
+            ->delete(route('sendportal.tags.destroy', $tag->id));
 
         // then
         $response->assertRedirect();
 
-        $this->assertDatabaseMissing('sendportal_segments', [
-            'id' => $segment->id,
+        $this->assertDatabaseMissing('sendportal_tags', [
+            'id' => $tag->id,
         ]);
     }
 
     /** @test */
-    public function a_segment_name_must_be_unique_for_a_workspace()
+    public function a_tag_name_must_be_unique_for_a_workspace()
     {
         // given
-        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $tag = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $request = [
-            'name' => $segment->name,
+            'name' => $tag->name,
         ];
 
         // when
@@ -157,6 +157,6 @@ class TagsControllerTest extends TestCase
         $response->assertRedirect()
             ->assertSessionHasErrors('name');
 
-        self::assertEquals(1, Tag::where('name', $segment->name)->count());
+        self::assertEquals(1, Tag::where('name', $tag->name)->count());
     }
 }

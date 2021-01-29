@@ -1,21 +1,21 @@
 @extends('sendportal::layouts.app')
 
-@section('title', __('New Segment'))
+@section('title', __('New Tag'))
 
 @section('heading')
-    {{ __('Segments') }}
+    {{ __('Tags') }}
 @stop
 
 @section('content')
 
     @component('sendportal::layouts.partials.card')
-        @slot('cardHeader', __('Create Segment'))
+        @slot('cardHeader', __('Create Tag'))
 
         @slot('cardBody')
-            <form action="{{ route('sendportal.segments.store') }}" method="POST" class="form-horizontal">
+            <form action="{{ route('sendportal.tags.store') }}" method="POST" class="form-horizontal">
                 @csrf
 
-                @include('sendportal::segments.partials.form')
+                @include('sendportal::tags.partials.form')
 
                 <x-sendportal.submit-button :label="__('Save')" />
             </form>

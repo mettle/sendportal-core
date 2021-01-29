@@ -1,17 +1,17 @@
 @extends('sendportal::layouts.app')
 
-@section('title', __('Segments'))
+@section('title', __('Tags'))
 
 @section('heading')
-    {{ __('Segments') }}
+    {{ __('Tags') }}
 @endsection
 
 @section('content')
     @component('sendportal::layouts.partials.actions')
 
         @slot('right')
-            <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.segments.create') }}">
-                <i class="fa fa-plus"></i> {{ __('New Segment') }}
+            <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.tags.create') }}">
+                <i class="fa fa-plus"></i> {{ __('New Tag') }}
             </a>
         @endslot
     @endcomponent
@@ -27,22 +27,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($segments as $segment)
+                @forelse($tags as $tag)
                     <tr>
                         <td>
-                            <a href="{{ route('sendportal.segments.edit', $segment->id) }}">
-                                {{ $segment->name }}
+                            <a href="{{ route('sendportal.tags.edit', $tag->id) }}">
+                                {{ $tag->name }}
                             </a>
                         </td>
-                        <td>{{ $segment->subscribers_count }}</td>
+                        <td>{{ $tag->subscribers_count }}</td>
                         <td>
-                            @include('sendportal::segments.partials.actions')
+                            @include('sendportal::tags.partials.actions')
                         </td>
                     </tr>
                 @empty
                     <tr>
                         <td colspan="100%">
-                            <p class="empty-table-text">{{ __('You have not created any segments.') }}</p>
+                            <p class="empty-table-text">{{ __('You have not created any tags.') }}</p>
                         </td>
                     </tr>
                 @endforelse

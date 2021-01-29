@@ -129,13 +129,6 @@ class WebRoutes
 
                 // Templates.
                 $appRouter->resource('templates', 'TemplatesController')->except(['show']);
-
-                // Ajax.
-                $appRouter->name('ajax.')->prefix('ajax')->namespace('Ajax')->group(static function (
-                    Router $ajaxRouter
-                ) {
-                    $ajaxRouter->post('tags/store', 'TagsController@store')->name('tags.store');
-                });
             });
         };
     }

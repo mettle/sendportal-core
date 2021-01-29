@@ -8,7 +8,7 @@ use Sendportal\Base\Http\Requests\Api\SegmentStoreRequest;
 use Sendportal\Base\Http\Resources\Segment as SegmentResource;
 use Sendportal\Base\Services\Segments\ApiSegmentService;
 
-class SegmentsController extends Controller
+class TagsController extends Controller
 {
     /**
      * @var ApiSegmentService

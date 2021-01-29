@@ -2,23 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Http\Requests;
+namespace Sendportal\Base\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Sendportal\Base\Facades\Sendportal;
 
-class SegmentUpdateRequest extends FormRequest
+class TagUpdateRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'name' => [
                 'required',
-                'max:255',
                 Rule::unique('sendportal_segments')
-                    ->where('workspace_id', Sendportal::currentWorkspaceId())
-                    ->ignore($this->segment),
+                    ->where('workspace_id', $this->route('workspaceId'))
+                    ->ignore($this->route('segment')),
+            ],
+            'subscribers' => [
+                'array',
+                'nullable',
             ],
         ];
     }

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Segments;
+namespace Tests\Feature\Tags;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
-class SegmentsControllerTest extends TestCase
+class TagsControllerTest extends TestCase
 {
     use RefreshDatabase,
         WithFaker;
@@ -20,10 +20,10 @@ class SegmentsControllerTest extends TestCase
     public function the_index_of_segments_is_accessible_to_authenticated_users()
     {
         // given
-        Segment::factory()->count(3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        Tag::factory()->count(3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
-        $response = $this->get(route('sendportal.segments.index'));
+        $response = $this->get(route('sendportal.tags.index'));
 
         // then
         $response->assertOk();
@@ -33,7 +33,7 @@ class SegmentsControllerTest extends TestCase
     public function the_segment_create_form_is_accessible_to_authenticated_users()
     {
         // when
-        $response = $this->get(route('sendportal.segments.create'));
+        $response = $this->get(route('sendportal.tags.create'));
 
         // then
         $response->assertOk();
@@ -49,7 +49,7 @@ class SegmentsControllerTest extends TestCase
 
         // when
         $response = $this
-            ->post(route('sendportal.segments.store'), $segmentStoreData);
+            ->post(route('sendportal.tags.store'), $segmentStoreData);
 
         // then
         $response->assertRedirect();
@@ -63,10 +63,10 @@ class SegmentsControllerTest extends TestCase
     public function the_segment_edit_view_is_accessible_by_authenticated_users()
     {
         // given
-        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
-        $response = $this->get(route('sendportal.segments.edit', $segment->id));
+        $response = $this->get(route('sendportal.tags.edit', $segment->id));
 
         // then
         $response->assertOk();
@@ -76,7 +76,7 @@ class SegmentsControllerTest extends TestCase
     public function a_segment_is_updateable_by_an_authenticated_user()
     {
         // given
-        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $segmentUpdateData = [
             'name' => $this->faker->word
@@ -84,7 +84,7 @@ class SegmentsControllerTest extends TestCase
 
         // when
         $response = $this
-            ->put(route('sendportal.segments.update', $segment->id), $segmentUpdateData);
+            ->put(route('sendportal.tags.update', $segment->id), $segmentUpdateData);
 
         // then
         $response->assertRedirect();
@@ -102,7 +102,7 @@ class SegmentsControllerTest extends TestCase
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $segment = Segment::factory()->create([
+        $segment = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
@@ -111,7 +111,7 @@ class SegmentsControllerTest extends TestCase
         self::assertCount($subscribers->count(), $segment->subscribers);
 
         // when
-        $this->put(route('sendportal.segments.update', $segment->id), [
+        $this->put(route('sendportal.tags.update', $segment->id), [
             'name' => 'Very Cool New Name',
         ]);
 
@@ -126,11 +126,11 @@ class SegmentsControllerTest extends TestCase
     public function a_segment_can_be_deleted()
     {
         // given
-        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         // when
         $response = $this
-            ->delete(route('sendportal.segments.destroy', $segment->id));
+            ->delete(route('sendportal.tags.destroy', $segment->id));
 
         // then
         $response->assertRedirect();
@@ -144,19 +144,19 @@ class SegmentsControllerTest extends TestCase
     public function a_segment_name_must_be_unique_for_a_workspace()
     {
         // given
-        $segment = Segment::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+        $segment = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $request = [
             'name' => $segment->name,
         ];
 
         // when
-        $response = $this->post(route('sendportal.segments.store'), $request);
+        $response = $this->post(route('sendportal.tags.store'), $request);
 
         // then
         $response->assertRedirect()
             ->assertSessionHasErrors('name');
 
-        self::assertEquals(1, Segment::where('name', $segment->name)->count());
+        self::assertEquals(1, Tag::where('name', $segment->name)->count());
     }
 }

@@ -17,12 +17,12 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_index_gets_segment_subscribers()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $subscriber = $this->createSubscriber();
 
         $segment->subscribers()->save($subscriber);
 
-        $route = route('sendportal.api.segments.subscribers.index', [
+        $route = route('sendportal.api.tags.subscribers.index', [
             'segment' => $segment->id,
         ]);
 
@@ -42,10 +42,10 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_subscriber_can_be_added_to_a_segment()
     {
-        $segment = $this->createsegment();
+        $segment = $this->createTag();
         $subscriber = $this->createsubscriber();
 
-        $route = route('sendportal.api.segments.subscribers.store', [
+        $route = route('sendportal.api.tags.subscribers.store', [
             'segment' => $segment->id,
         ]);
 
@@ -74,14 +74,14 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function the_store_endpoint_is_idempotent()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $existingSubscriber = $this->createSubscriber();
 
         $segment->subscribers()->attach($existingSubscriber);
 
         $newSubscriber = $this->createSubscriber();
 
-        $route = route('sendportal.api.segments.subscribers.store', [
+        $route = route('sendportal.api.tags.subscribers.store', [
             'segment' => $segment->id,
         ]);
 
@@ -97,13 +97,13 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_segments_subscribers_can_be_synced()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $oldSubscriber = $this->createSubscriber();
         $newSubscriber = $this->createSubscriber();
 
         $segment->subscribers()->save($oldSubscriber);
 
-        $route = route('sendportal.api.segments.subscribers.update', [
+        $route = route('sendportal.api.tags.subscribers.update', [
             'segment' => $segment->id,
         ]);
 
@@ -137,12 +137,12 @@ class SegmentSubscribersControllerTest extends TestCase
     /** @test */
     public function a_segment_can_be_deleted()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $subscriber = $this->createSubscriber();
 
         $segment->subscribers()->save($subscriber);
 
-        $route = route('sendportal.api.segments.subscribers.destroy', [
+        $route = route('sendportal.api.tags.subscribers.destroy', [
             'segment' => $segment->id,
         ]);
 

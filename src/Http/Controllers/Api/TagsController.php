@@ -9,23 +9,23 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\Api\SegmentStoreRequest;
-use Sendportal\Base\Http\Requests\Api\SegmentUpdateRequest;
-use Sendportal\Base\Http\Resources\Segment as SegmentResource;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Services\Segments\ApiSegmentService;
+use Sendportal\Base\Http\Requests\Api\TagStoreRequest;
+use Sendportal\Base\Http\Requests\Api\TagUpdateRequest;
+use Sendportal\Base\Http\Resources\Tag as SegmentResource;
+use Sendportal\Base\Repositories\TagTenantRepository;
+use Sendportal\Base\Services\Tags\ApiTagService;
 
 class SegmentsController extends Controller
 {
-    /** @var SegmentTenantRepository */
+    /** @var TagTenantRepository */
     private $segments;
 
-    /** @var ApiSegmentService */
+    /** @var ApiTagService */
     private $apiService;
 
     public function __construct(
-        SegmentTenantRepository $segments,
-        ApiSegmentService $apiService
+        TagTenantRepository $segments,
+        ApiTagService $apiService
     ) {
         $this->segments = $segments;
         $this->apiService = $apiService;
@@ -44,7 +44,7 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SegmentStoreRequest $request): SegmentResource
+    public function store(TagStoreRequest $request): SegmentResource
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
@@ -68,7 +68,7 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function update(SegmentUpdateRequest $request, int $id): SegmentResource
+    public function update(TagUpdateRequest $request, int $id): SegmentResource
     {
         $workspaceId = Sendportal::currentWorkspaceId();
         $segment = $this->segments->update($workspaceId, $id, $request->validated());

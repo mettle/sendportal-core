@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Sendportal\Base\Facades\Sendportal;
 
-class SegmentStoreRequest extends FormRequest
+class TagStoreRequest extends FormRequest
 {
     public function rules(): array
     {

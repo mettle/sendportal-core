@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Services\Subscribers\Segments;
+namespace Sendportal\Base\Services\Subscribers\Tags;
 
 use Exception;
 use Illuminate\Support\Collection;
@@ -19,7 +19,7 @@ class ApiSubscriberSegmentService
     }
 
     /**
-     * Add segments to a subscriber.
+     * Add tags to a subscriber.
      *
      * @param int $workspaceId
      * @param int $subscriberId
@@ -43,7 +43,7 @@ class ApiSubscriberSegmentService
     }
 
     /**
-     * Sync the list of segments a subscriber is associated with.
+     * Sync the list of tags a subscriber is associated with.
      *
      * @param int $workspaceId
      * @param int $subscriberId
@@ -54,17 +54,17 @@ class ApiSubscriberSegmentService
      */
     public function update(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
     {
-        $subscriber = $this->subscribers->find($workspaceId, $subscriberId, ['segments']);
+        $subscriber = $this->subscribers->find($workspaceId, $subscriberId, ['tags']);
 
         $subscriber->segments()->sync($segmentIds);
 
-        $subscriber->load('segments');
+        $subscriber->load('tags');
 
         return $subscriber->segments->toBase();
     }
 
     /**
-     * Remove segments from a subscriber.
+     * Remove tags from a subscriber.
      *
      * @param int $workspaceId
      * @param int $subscriberId

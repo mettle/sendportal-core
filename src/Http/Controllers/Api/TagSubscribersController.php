@@ -8,24 +8,24 @@ use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\Api\SegmentSubscriberDestroyRequest;
-use Sendportal\Base\Http\Requests\Api\SegmentSubscriberStoreRequest;
-use Sendportal\Base\Http\Requests\Api\SegmentSubscriberUpdateRequest;
+use Sendportal\Base\Http\Requests\Api\TagSubscriberDestroyRequest;
+use Sendportal\Base\Http\Requests\Api\TagSubscriberStoreRequest;
+use Sendportal\Base\Http\Requests\Api\TagSubscriberUpdateRequest;
 use Sendportal\Base\Http\Resources\Subscriber as SubscriberResource;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
-use Sendportal\Base\Services\Segments\ApiSegmentSubscriberService;
+use Sendportal\Base\Repositories\TagTenantRepository;
+use Sendportal\Base\Services\Tags\ApiTagSubscriberService;
 
-class SegmentSubscribersController extends Controller
+class TagSubscribersController extends Controller
 {
-    /** @var SegmentTenantRepository */
+    /** @var TagTenantRepository */
     private $segments;
 
-    /** @var ApiSegmentSubscriberService */
+    /** @var ApiTagSubscriberService */
     private $apiService;
 
     public function __construct(
-        SegmentTenantRepository $segments,
-        ApiSegmentSubscriberService $apiService
+        TagTenantRepository $segments,
+        ApiTagSubscriberService $apiService
     ) {
         $this->segments = $segments;
         $this->apiService = $apiService;
@@ -45,7 +45,7 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function store(SegmentSubscriberStoreRequest $request, int $segmentId): AnonymousResourceCollection
+    public function store(TagSubscriberStoreRequest $request, int $segmentId): AnonymousResourceCollection
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
@@ -57,7 +57,7 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function update(SegmentSubscriberUpdateRequest $request, int $segmentId): AnonymousResourceCollection
+    public function update(TagSubscriberUpdateRequest $request, int $segmentId): AnonymousResourceCollection
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
@@ -69,7 +69,7 @@ class SegmentSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(SegmentSubscriberDestroyRequest $request, int $segmentId): AnonymousResourceCollection
+    public function destroy(TagSubscriberDestroyRequest $request, int $segmentId): AnonymousResourceCollection
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();

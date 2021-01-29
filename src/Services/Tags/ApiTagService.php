@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Services\Segments;
+namespace Sendportal\Base\Services\Tags;
 
 use Exception;
 use Illuminate\Support\Collection;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Repositories\SegmentTenantRepository;
 
-class ApiSegmentService
+class ApiTagService
 {
     /** @var SegmentTenantRepository */
     private $segments;

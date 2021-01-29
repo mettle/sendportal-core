@@ -17,12 +17,12 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_retrieve_a_list_of_a_subscribers_segments()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $subscriber = $this->createSubscriber();
 
-        $subscriber->segments()->save($segment);
+        $subscriber->tags()->save($segment);
 
-        $route = route('sendportal.api.subscribers.segments.index', [
+        $route = route('sendportal.api.subscribers.tags.index', [
             'subscriber' => $subscriber->id,
         ]);
 
@@ -42,15 +42,15 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_add_new_segments_to_the_subscriber()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $subscriber = $this->createSubscriber();
 
-        $route = route('sendportal.api.subscribers.segments.store', [
+        $route = route('sendportal.api.subscribers.tags.store', [
             'subscriber' => $subscriber->id,
         ]);
 
         $request = [
-            'segments' => [$segment->id]
+            'tags' => [$segment->id]
         ];
 
         $response = $this->post($route, $request);
@@ -75,17 +75,17 @@ class SubscriberSegmentsControllerTest extends TestCase
     public function can_update_the_segments_associated_with_the_subscriber()
     {
         $subscriber = $this->createSubscriber();
-        $oldSegment = $this->createSegment();
-        $newSegment = $this->createSegment();
+        $oldSegment = $this->createTag();
+        $newSegment = $this->createTag();
 
-        $subscriber->segments()->save($oldSegment);
+        $subscriber->tags()->save($oldSegment);
 
-        $route = route('sendportal.api.subscribers.segments.update', [
+        $route = route('sendportal.api.subscribers.tags.update', [
             'subscriber' => $subscriber->id,
         ]);
 
         $request = [
-            'segments' => [$newSegment->id],
+            'tags' => [$newSegment->id],
         ];
 
         $response = $this->put($route, $request);
@@ -114,17 +114,17 @@ class SubscriberSegmentsControllerTest extends TestCase
     /** @test */
     public function can_remove_segments_from_the_subscriber()
     {
-        $segment = $this->createSegment();
+        $segment = $this->createTag();
         $subscriber = $this->createSubscriber();
 
-        $subscriber->segments()->save($segment);
+        $subscriber->tags()->save($segment);
 
-        $route = route('sendportal.api.subscribers.segments.destroy', [
+        $route = route('sendportal.api.subscribers.tags.destroy', [
             'subscriber' => $subscriber->id,
         ]);
 
         $request = [
-            'segments' => [$segment->id],
+            'tags' => [$segment->id],
         ];
 
         $response = $this->delete($route, $request);

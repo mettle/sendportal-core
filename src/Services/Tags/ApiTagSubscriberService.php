@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Services\Segments;
+namespace Sendportal\Base\Services\Tags;
 
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Models;
 
 use Carbon\Carbon;
-use Database\Factories\SegmentFactory;
+use Database\Factories\TagFactory;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,9 +21,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property EloquentCollection $subscribers
  * @property EloquentCollection $active_subscribers
  *
- * @method static SegmentFactory factory
+ * @method static TagFactory factory
  */
-class Segment extends BaseModel
+class Tag extends BaseModel
 {
     use HasFactory;
 
@@ -31,7 +31,7 @@ class Segment extends BaseModel
     // not in the default `App\Models` namespace.
     protected static function newFactory()
     {
-        return SegmentFactory::new();
+        return TagFactory::new();
     }
 
     /** @var string */

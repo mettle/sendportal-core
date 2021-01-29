@@ -3,18 +3,18 @@
 <x-sendportal.text-field name="from_name" :label="__('From Name')" :value="$campaign->from_name ?? old('from_name')" />
 <x-sendportal.text-field name="from_email" :label="__('From Email')" type="email" :value="$campaign->from_email ?? old('from_email')" />
 
-<x-sendportal.select-field name="template_id" :label="__('Template')" :options="$templates" :value="$campaign->template_id ?? null" />
+<x-sendportal.select-field name="template_id" :label="__('Template')" :options="$templates" :value="$campaign->template_id ?? old('template_id')" />
 
 @if ($emailServices->count() === 1)
     <input type="hidden" name="email_service_id" value="{{ $emailServices->first()->id }}" />
 @else
-    <x-sendportal.select-field name="email_service_id" :label="__('Email Service')" :options="$emailServices->pluck('name', 'id')" :value="isset($campaign->email_service_id) ? $campaign->email_service_id : null" />
+    <x-sendportal.select-field name="email_service_id" :label="__('Email Service')" :options="$emailServices->pluck('name', 'id')" :value="$campaign->email_service_id ?? old('email_service_id')" />
 @endif
 
 <x-sendportal.checkbox-field name="is_open_tracking" :label="__('Track Opens')" value="1" :checked="$campaign->is_open_tracking ?? true" />
 <x-sendportal.checkbox-field name="is_click_tracking" :label="__('Track Clicks')" value="1" :checked="$campaign->is_click_tracking ?? true" />
 
-<x-sendportal.textarea-field name="content" :label="__('Content')">{{ $campaign->content ?? '' }}</x-sendportal.textarea-field>
+<x-sendportal.textarea-field name="content" :label="__('Content')">{{ $campaign->content ?? old('content') }}</x-sendportal.textarea-field>
 
 <div class="form-group row">
     <div class="offset-sm-3 col-sm-9">

@@ -25,28 +25,28 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
         /** @var Subscriber $instance */
         $instance = $this->getNewInstance();
 
-        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments']));
+        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['tags']));
 
-        // Only sync segments if its actually present. This means that users must
-        // pass through an empty segments array if they want to delete all segments.
-        if (isset($data['segments'])) {
-            $this->syncSegments($instance, Arr::get($data, 'segments', []));
+        // Only sync tags if its actually present. This means that users must
+        // pass through an empty tags array if they want to delete all tags.
+        if (isset($data['tags'])) {
+            $this->syncTags($instance, Arr::get($data, 'tags', []));
         }
 
         return $subscriber;
     }
 
     /**
-     * Sync Segments to a Subscriber.
+     * Sync Tags to a Subscriber.
      *
      * @param Subscriber $subscriber
-     * @param array $segments
+     * @param array $tags
      *
      * @return mixed
      */
-    public function syncSegments(Subscriber $subscriber, array $segments = [])
+    public function syncTags(Subscriber $subscriber, array $tags = [])
     {
-        return $subscriber->segments()->sync($segments);
+        return $subscriber->tags()->sync($tags);
     }
 
     /**
@@ -58,12 +58,12 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
 
         $instance = $this->find($workspaceId, $id);
 
-        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['segments', 'id']));
+        $subscriber = $this->executeSave($workspaceId, $instance, Arr::except($data, ['tags', 'id']));
 
-        // Only sync segments if its actually present. This means that users must
-        // pass through an empty segments array if they want to delete all segments.
-        if (isset($data['segments'])) {
-            $this->syncSegments($instance, Arr::get($data, 'segments', []));
+        // Only sync tags if its actually present. This means that users must
+        // pass through an empty tags array if they want to delete all tags.
+        if (isset($data['tags'])) {
+            $this->syncTags($instance, Arr::get($data, 'tags', []));
         }
 
         return $subscriber;
@@ -133,14 +133,14 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
     }
 
     /**
-     * Filter by segment.
+     * Filter by tag.
      */
     protected function applySegmentFilter(Builder $instance, array $filters = []): void
     {
-        if ($segmentIds = Arr::get($filters, 'segments')) {
+        if ($tagIds = Arr::get($filters, 'tags')) {
             $instance->select('sendportal_subscribers.*')
-                ->leftJoin('sendportal_segment_subscriber', 'sendportal_subscribers.id', '=', 'sendportal_segment_subscriber.subscriber_id')
-                ->whereIn('sendportal_segment_subscriber.segment_id', $segmentIds)
+                ->leftJoin('sendportal_tag_subscriber', 'sendportal_subscribers.id', '=', 'sendportal_tag_subscriber.subscriber_id')
+                ->whereIn('sendportal_tag_subscriber.tag_id', $tagIds)
                 ->distinct();
         }
     }

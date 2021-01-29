@@ -12,7 +12,7 @@ use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Repositories\TagTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TemplateTenantRepository;
 use Sendportal\Base\Services\Campaigns\CampaignStatisticsService;
@@ -25,8 +25,8 @@ class CampaignsController extends Controller
     /** @var TemplateTenantRepository */
     protected $templates;
 
-    /** @var SegmentTenantRepository */
-    protected $segments;
+    /** @var TagTenantRepository */
+    protected $tags;
 
     /** @var EmailServiceTenantRepository */
     protected $emailServices;
@@ -42,14 +42,14 @@ class CampaignsController extends Controller
     public function __construct(
         CampaignTenantRepositoryInterface $campaigns,
         TemplateTenantRepository $templates,
-        SegmentTenantRepository $segments,
+        TagTenantRepository $tags,
         EmailServiceTenantRepository $emailServices,
         SubscriberTenantRepositoryInterface $subscribers,
         CampaignStatisticsService $campaignStatisticsService
     ) {
         $this->campaigns = $campaigns;
         $this->templates = $templates;
-        $this->segments = $segments;
+        $this->tags = $tags;
         $this->emailServices = $emailServices;
         $this->subscribers = $subscribers;
         $this->campaignStatisticsService = $campaignStatisticsService;
@@ -143,9 +143,9 @@ class CampaignsController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        $segments = $this->segments->all(Sendportal::currentWorkspaceId(), 'name');
+        $tags = $this->tags->all(Sendportal::currentWorkspaceId(), 'name');
 
-        return view('sendportal::campaigns.preview', compact('campaign', 'segments', 'subscriberCount'));
+        return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'subscriberCount'));
     }
 
     /**

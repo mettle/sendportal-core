@@ -39,7 +39,7 @@ class SubscriberTagsController extends Controller
         $workspaceId = Sendportal::currentWorkspaceId();
         $subscriber = $this->subscribers->find($workspaceId, $subscriberId, ['tags']);
 
-        return TagResource::collection($subscriber->segments);
+        return TagResource::collection($subscriber->tags);
     }
 
     /**

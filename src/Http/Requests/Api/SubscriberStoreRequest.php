@@ -14,7 +14,7 @@ class SubscriberStoreRequest extends FormRequest
             'first_name' => ['nullable'],
             'last_name' => ['nullable'],
             'email' => ['required', 'email'],
-            'segments' => ['array', 'nullable'],
+            'tags' => ['array', 'nullable'],
             'unsubscribed_at' => ['nullable', 'date'],
         ];
     }

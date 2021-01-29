@@ -18,38 +18,38 @@ use Sendportal\Base\Services\Tags\ApiTagSubscriberService;
 class TagSubscribersController extends Controller
 {
     /** @var TagTenantRepository */
-    private $segments;
+    private $tags;
 
     /** @var ApiTagSubscriberService */
     private $apiService;
 
     public function __construct(
-        TagTenantRepository $segments,
+        TagTenantRepository $tags,
         ApiTagSubscriberService $apiService
     ) {
-        $this->segments = $segments;
+        $this->tags = $tags;
         $this->apiService = $apiService;
     }
 
     /**
      * @throws Exception
      */
-    public function index(int $segmentId): AnonymousResourceCollection
+    public function index(int $tagId): AnonymousResourceCollection
     {
         $workspaceId = Sendportal::currentWorkspaceId();
-        $segment = $this->segments->find($workspaceId, $segmentId, ['subscribers']);
+        $tag = $this->tags->find($workspaceId, $tagId, ['subscribers']);
 
-        return SubscriberResource::collection($segment->subscribers);
+        return SubscriberResource::collection($tag->subscribers);
     }
 
     /**
      * @throws Exception
      */
-    public function store(TagSubscriberStoreRequest $request, int $segmentId): AnonymousResourceCollection
+    public function store(TagSubscriberStoreRequest $request, int $tagId): AnonymousResourceCollection
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
-        $subscribers = $this->apiService->store($workspaceId, $segmentId, collect($input['subscribers']));
+        $subscribers = $this->apiService->store($workspaceId, $tagId, collect($input['subscribers']));
 
         return SubscriberResource::collection($subscribers);
     }
@@ -57,11 +57,11 @@ class TagSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function update(TagSubscriberUpdateRequest $request, int $segmentId): AnonymousResourceCollection
+    public function update(TagSubscriberUpdateRequest $request, int $tagId): AnonymousResourceCollection
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
-        $subscribers = $this->apiService->update($workspaceId, $segmentId, collect($input['subscribers']));
+        $subscribers = $this->apiService->update($workspaceId, $tagId, collect($input['subscribers']));
 
         return SubscriberResource::collection($subscribers);
     }
@@ -69,11 +69,11 @@ class TagSubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function destroy(TagSubscriberDestroyRequest $request, int $segmentId): AnonymousResourceCollection
+    public function destroy(TagSubscriberDestroyRequest $request, int $tagId): AnonymousResourceCollection
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
-        $subscribers = $this->apiService->destroy($workspaceId, $segmentId, collect($input['subscribers']));
+        $subscribers = $this->apiService->destroy($workspaceId, $tagId, collect($input['subscribers']));
 
         return SubscriberResource::collection($subscribers);
     }

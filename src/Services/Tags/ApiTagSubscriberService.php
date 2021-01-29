@@ -7,64 +7,64 @@ namespace Sendportal\Base\Services\Tags;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Repositories\TagTenantRepository;
 
-class ApiSegmentSubscriberService
+class ApiTagSubscriberService
 {
-    /** @var SegmentTenantRepository */
-    private $segments;
+    /** @var TagTenantRepository */
+    private $tags;
 
-    public function __construct(SegmentTenantRepository $segments)
+    public function __construct(TagTenantRepository $tags)
     {
-        $this->segments = $segments;
+        $this->tags = $tags;
     }
 
     /**
-     * Add new subscribers to a segment.
+     * Add new subscribers to a tag.
      *
      * @throws Exception
      */
-    public function store(int $workspaceId, int $segmentId, Collection $subscriberIds): Collection
+    public function store(int $workspaceId, int $tagId, Collection $subscriberIds): Collection
     {
-        $segment = $this->segments->find($workspaceId, $segmentId);
+        $tag = $this->tags->find($workspaceId, $tagId);
 
         /** @var Collection $existingSubscribers */
-        $existingSubscribers = $segment->subscribers()->pluck('sendportal_subscribers.id')->toBase();
+        $existingSubscribers = $tag->subscribers()->pluck('sendportal_subscribers.id')->toBase();
 
         $subscribersToStore = $subscriberIds->diff($existingSubscribers);
 
-        $segment->subscribers()->attach($subscribersToStore);
+        $tag->subscribers()->attach($subscribersToStore);
 
-        return $segment->subscribers->toBase();
+        return $tag->subscribers->toBase();
     }
 
     /**
-     * Sync subscribers on a segment.
+     * Sync subscribers on a tag.
      *
      * @throws Exception
      */
-    public function update(int $workspaceId, int $segmentId, Collection $subscriberIds): EloquentCollection
+    public function update(int $workspaceId, int $tagId, Collection $subscriberIds): EloquentCollection
     {
-        $segment = $this->segments->find($workspaceId, $segmentId);
+        $tag = $this->tags->find($workspaceId, $tagId);
 
-        $segment->subscribers()->sync($subscriberIds);
+        $tag->subscribers()->sync($subscriberIds);
 
-        $segment->load('subscribers');
+        $tag->load('subscribers');
 
-        return $segment->subscribers;
+        return $tag->subscribers;
     }
 
     /**
-     * Remove subscribers from a segment.
+     * Remove subscribers from a tag.
      *
      * @throws Exception
      */
-    public function destroy(int $workspaceId, int $segmentId, Collection $subscriberIds): EloquentCollection
+    public function destroy(int $workspaceId, int $tagId, Collection $subscriberIds): EloquentCollection
     {
-        $segment = $this->segments->find($workspaceId, $segmentId);
+        $tag = $this->tags->find($workspaceId, $tagId);
 
-        $segment->subscribers()->detach($subscriberIds);
+        $tag->subscribers()->detach($subscriberIds);
 
-        return $segment->subscribers;
+        return $tag->subscribers;
     }
 }

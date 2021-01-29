@@ -25,7 +25,7 @@ use Ramsey\Uuid\Uuid;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property EloquentCollection $segments
+ * @property EloquentCollection $tags
  * @property EloquentCollection $messages
  *
  * @property-read string $full_name
@@ -62,9 +62,9 @@ class Subscriber extends BaseModel
         'unsubscribed_at' => 'datetime',
     ];
 
-    public function segments(): BelongsToMany
+    public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Segment::class, 'sendportal_segment_subscriber')->withTimestamps();
+        return $this->belongsToMany(Tag::class, 'sendportal_tag_subscriber')->withTimestamps();
     }
 
     public function messages(): HasMany
@@ -90,7 +90,7 @@ class Subscriber extends BaseModel
 
         static::deleting(
             function (self $subscriber) {
-                $subscriber->segments()->detach();
+                $subscriber->tags()->detach();
                 $subscriber->messages()->delete();
             }
         );

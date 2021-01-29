@@ -7,7 +7,7 @@ namespace Sendportal\Base\Http\Requests\Api;
 use Illuminate\Foundation\Http\FormRequest;
 use Sendportal\Base\Rules\CanAccessTag;
 
-class SubscriberSegmentStoreRequest extends FormRequest
+class SubscriberTagStoreRequest extends FormRequest
 {
     public function rules(): array
     {

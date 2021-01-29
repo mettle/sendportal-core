@@ -7,13 +7,13 @@ namespace Sendportal\Base\Http\Requests\Api;
 use Illuminate\Foundation\Http\FormRequest;
 use Sendportal\Base\Rules\CanAccessTag;
 
-class SubscriberSegmentUpdateRequest extends FormRequest
+class SubscriberTagUpdateRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'tags' => ['array', 'required'],
-            'tags.*' => ['integer', new CanAccessTag($this->user())]
+            'tags.*' => ['integer', new CanAccessTag()]
         ];
     }
 }

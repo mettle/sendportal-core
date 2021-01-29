@@ -113,8 +113,8 @@ class WebRoutes
                     $servicesRouter->post('{id}/test', 'TestEmailServiceController@store')->name('test.store');
                 });
 
-                // Segments.
-                $appRouter->resource('segments', 'Segments\SegmentsController')->except(['show']);
+                // Tags.
+                $appRouter->resource('tags', 'Tags\TagsController')->except(['show']);
                 $appRouter->resource('templates', 'TemplatesController');
 
                 // Subscribers.
@@ -134,7 +134,7 @@ class WebRoutes
                 $appRouter->name('ajax.')->prefix('ajax')->namespace('Ajax')->group(static function (
                     Router $ajaxRouter
                 ) {
-                    $ajaxRouter->post('segments/store', 'SegmentsController@store')->name('segments.store');
+                    $ajaxRouter->post('tags/store', 'TagsController@store')->name('tags.store');
                 });
             });
         };

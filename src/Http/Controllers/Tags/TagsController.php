@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sendportal\Base\Http\Controllers\Segments;
+namespace Sendportal\Base\Http\Controllers\Tags;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -10,18 +10,17 @@ use Illuminate\View\View;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\TagStoreRequest;
-use Sendportal\Base\Http\Requests\SegmentUpdateRequest;
+use Sendportal\Base\Http\Requests\TagUpdateRequest;
 use Sendportal\Base\Repositories\TagTenantRepository;
-use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 
-class SegmentsController extends Controller
+class TagsController extends Controller
 {
     /** @var TagTenantRepository */
-    private $segmentRepository;
+    private $tagRepository;
 
-    public function __construct(TagTenantRepository $segmentRepository)
+    public function __construct(TagTenantRepository $tagRepository)
     {
-        $this->segmentRepository = $segmentRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     /**
@@ -29,9 +28,9 @@ class SegmentsController extends Controller
      */
     public function index(): View
     {
-        $segments = $this->segmentRepository->paginate(Sendportal::currentWorkspaceId(), 'name');
+        $tags = $this->tagRepository->paginate(Sendportal::currentWorkspaceId(), 'name');
 
-        return view('sendportal::tags.index', compact('segments'));
+        return view('sendportal::tags.index', compact('tags'));
     }
 
     public function create(): View
@@ -44,7 +43,7 @@ class SegmentsController extends Controller
      */
     public function store(TagStoreRequest $request): RedirectResponse
     {
-        $this->segmentRepository->store(Sendportal::currentWorkspaceId(), $request->all());
+        $this->tagRepository->store(Sendportal::currentWorkspaceId(), $request->all());
 
         return redirect()->route('sendportal.tags.index');
     }
@@ -52,19 +51,19 @@ class SegmentsController extends Controller
     /**
      * @throws Exception
      */
-    public function edit(int $id, SubscriberTenantRepositoryInterface $subscriberRepository): View
+    public function edit(int $id): View
     {
-        $segment = $this->segmentRepository->find(Sendportal::currentWorkspaceId(), $id, ['subscribers']);
+        $tag = $this->tagRepository->find(Sendportal::currentWorkspaceId(), $id, ['subscribers']);
 
-        return view('sendportal::tags.edit', compact('segment'));
+        return view('sendportal::tags.edit', compact('tag'));
     }
 
     /**
      * @throws Exception
      */
-    public function update(int $id, SegmentUpdateRequest $request): RedirectResponse
+    public function update(int $id, TagUpdateRequest $request): RedirectResponse
     {
-        $this->segmentRepository->update(Sendportal::currentWorkspaceId(), $id, $request->all());
+        $this->tagRepository->update(Sendportal::currentWorkspaceId(), $id, $request->all());
 
         return redirect()->route('sendportal.tags.index');
     }
@@ -74,7 +73,7 @@ class SegmentsController extends Controller
      */
     public function destroy(int $id): RedirectResponse
     {
-        $this->segmentRepository->destroy(Sendportal::currentWorkspaceId(), $id);
+        $this->tagRepository->destroy(Sendportal::currentWorkspaceId(), $id);
 
         return redirect()->route('sendportal.tags.index');
     }

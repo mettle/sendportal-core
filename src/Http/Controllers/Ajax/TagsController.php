@@ -3,25 +3,25 @@
 namespace Sendportal\Base\Http\Controllers\Ajax;
 
 use Sendportal\Base\Http\Controllers\Controller;
-use Sendportal\Base\Http\Requests\Api\SegmentStoreRequest;
+use Sendportal\Base\Http\Requests\Api\TagStoreRequest;
 
-use Sendportal\Base\Http\Resources\Segment as SegmentResource;
-use Sendportal\Base\Services\Segments\ApiSegmentService;
+use Sendportal\Base\Http\Resources\Tag as TagResource;
+use Sendportal\Base\Services\Tags\ApiTagService;
 
 class TagsController extends Controller
 {
     /**
-     * @var ApiSegmentService
+     * @var ApiTagService
      */
     protected $apiService;
 
     /**
      * SegmentsController constructor.
      *
-     * @param ApiSegmentService $apiService
+     * @param ApiTagService $apiService
      */
     public function __construct(
-        ApiSegmentService $apiService
+        ApiTagService $apiService
     ) {
         $this->apiService = $apiService;
     }
@@ -29,16 +29,16 @@ class TagsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param SegmentStoreRequest $request
+     * @param TagStoreRequest $request
      *
-     * @return SegmentResource
+     * @return TagResource
      */
-    public function store(SegmentStoreRequest $request)
+    public function store(TagStoreRequest $request)
     {
         $input = $request->validated();
 
-        $segment = $this->apiService->store($input);
+        $tag = $this->apiService->store($input);
 
-        return new SegmentResource($segment);
+        return new TagResource($tag);
     }
 }

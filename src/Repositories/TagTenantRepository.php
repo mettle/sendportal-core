@@ -2,14 +2,14 @@
 
 namespace Sendportal\Base\Repositories;
 
-use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Tag;
 
-class SegmentTenantRepository extends BaseTenantRepository
+class TagTenantRepository extends BaseTenantRepository
 {
     /**
      * @var string
      */
-    protected $modelName = Segment::class;
+    protected $modelName = Tag::class;
 
     /**
      * {@inheritDoc}
@@ -26,13 +26,13 @@ class SegmentTenantRepository extends BaseTenantRepository
     /**
      * Sync subscribers
      *
-     * @param Segment $segment
+     * @param Tag $tag
      * @param array $subscribers
      * @return array
      */
-    public function syncSubscribers(Segment $segment, array $subscribers = [])
+    public function syncSubscribers(Tag $tag, array $subscribers = [])
     {
-        return $segment->subscribers()->sync($subscribers);
+        return $tag->subscribers()->sync($subscribers);
     }
 
     /**

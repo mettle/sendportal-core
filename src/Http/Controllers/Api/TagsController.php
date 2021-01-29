@@ -11,23 +11,23 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\TagStoreRequest;
 use Sendportal\Base\Http\Requests\Api\TagUpdateRequest;
-use Sendportal\Base\Http\Resources\Tag as SegmentResource;
+use Sendportal\Base\Http\Resources\Tag as TagResource;
 use Sendportal\Base\Repositories\TagTenantRepository;
 use Sendportal\Base\Services\Tags\ApiTagService;
 
-class SegmentsController extends Controller
+class TagsController extends Controller
 {
     /** @var TagTenantRepository */
-    private $segments;
+    private $tags;
 
     /** @var ApiTagService */
     private $apiService;
 
     public function __construct(
-        TagTenantRepository $segments,
+        TagTenantRepository $tags,
         ApiTagService $apiService
     ) {
-        $this->segments = $segments;
+        $this->tags = $tags;
         $this->apiService = $apiService;
     }
 
@@ -38,42 +38,42 @@ class SegmentsController extends Controller
     {
         $workspaceId = Sendportal::currentWorkspaceId();
 
-        return SegmentResource::collection($this->segments->paginate($workspaceId, 'name'));
+        return TagResource::collection($this->tags->paginate($workspaceId, 'name'));
     }
 
     /**
      * @throws Exception
      */
-    public function store(TagStoreRequest $request): SegmentResource
+    public function store(TagStoreRequest $request): TagResource
     {
         $input = $request->validated();
         $workspaceId = Sendportal::currentWorkspaceId();
-        $segment = $this->apiService->store($workspaceId, collect($input));
+        $tag = $this->apiService->store($workspaceId, collect($input));
 
-        $segment->load('subscribers');
+        $tag->load('subscribers');
 
-        return new SegmentResource($segment);
+        return new TagResource($tag);
     }
 
     /**
      * @throws Exception
      */
-    public function show(int $id): SegmentResource
+    public function show(int $id): TagResource
     {
         $workspaceId = Sendportal::currentWorkspaceId();
 
-        return new SegmentResource($this->segments->find($workspaceId, $id));
+        return new TagResource($this->tags->find($workspaceId, $id));
     }
 
     /**
      * @throws Exception
      */
-    public function update(TagUpdateRequest $request, int $id): SegmentResource
+    public function update(TagUpdateRequest $request, int $id): TagResource
     {
         $workspaceId = Sendportal::currentWorkspaceId();
-        $segment = $this->segments->update($workspaceId, $id, $request->validated());
+        $tag = $this->tags->update($workspaceId, $id, $request->validated());
 
-        return new SegmentResource($segment);
+        return new TagResource($tag);
     }
 
     /**
@@ -82,7 +82,7 @@ class SegmentsController extends Controller
     public function destroy(int $id): Response
     {
         $workspaceId = Sendportal::currentWorkspaceId();
-        $this->segments->destroy($workspaceId, $id);
+        $this->tags->destroy($workspaceId, $id);
 
         return response(null, 204);
     }

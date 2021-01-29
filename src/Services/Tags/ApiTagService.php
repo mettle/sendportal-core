@@ -6,32 +6,32 @@ namespace Sendportal\Base\Services\Tags;
 
 use Exception;
 use Illuminate\Support\Collection;
-use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Models\Tag;
+use Sendportal\Base\Repositories\TagTenantRepository;
 
 class ApiTagService
 {
-    /** @var SegmentTenantRepository */
-    private $segments;
+    /** @var TagTenantRepository */
+    private $tags;
 
-    public function __construct(SegmentTenantRepository $segments)
+    public function __construct(TagTenantRepository $tags)
     {
-        $this->segments = $segments;
+        $this->tags = $tags;
     }
 
     /**
-     * Store a new segment, optionally including attached subscribers.
+     * Store a new tag, optionally including attached subscribers.
      *
      * @throws Exception
      */
-    public function store(int $workspaceId, Collection $data): Segment
+    public function store(int $workspaceId, Collection $data): Tag
     {
-        $segment = $this->segments->store($workspaceId, $data->except('subscribers')->toArray());
+        $tag = $this->tags->store($workspaceId, $data->except('subscribers')->toArray());
 
         if (!empty($data['subscribers'])) {
-            $segment->subscribers()->attach($data['subscribers']);
+            $tag->subscribers()->attach($data['subscribers']);
         }
 
-        return $segment;
+        return $tag;
     }
 }

@@ -16,7 +16,7 @@ class TagStoreRequest extends FormRequest
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('sendportal_segments')
+                Rule::unique('sendportal_tags')
                     ->where('workspace_id', Sendportal::currentWorkspaceId()),
             ],
         ];
@@ -25,7 +25,7 @@ class TagStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.unique' => __('The segment name must be unique.'),
+            'name.unique' => __('The tag name must be unique.'),
         ];
     }
 }

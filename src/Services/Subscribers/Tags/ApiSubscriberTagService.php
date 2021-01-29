@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Support\Collection;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 
-class ApiSubscriberSegmentService
+class ApiSubscriberTagService
 {
     /** @var SubscriberTenantRepositoryInterface */
     private $subscribers;
@@ -23,23 +23,23 @@ class ApiSubscriberSegmentService
      *
      * @param int $workspaceId
      * @param int $subscriberId
-     * @param Collection $segmentIds
+     * @param Collection $tagIds
      *
      * @return Collection
      * @throws Exception
      */
-    public function store(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
+    public function store(int $workspaceId, int $subscriberId, Collection $tagIds): Collection
     {
         $subscriber = $this->subscribers->find($workspaceId, $subscriberId);
 
-        /** @var Collection $existingSegments */
-        $existingSegments = $subscriber->segments()->pluck('segment.id')->toBase();
+        /** @var Collection $existingTags */
+        $existingTags = $subscriber->tags()->pluck('tag.id')->toBase();
 
-        $segmentsToStore = $segmentIds->diff($existingSegments);
+        $tagsToStore = $tagIds->diff($existingTags);
 
-        $subscriber->segments()->attach($segmentsToStore);
+        $subscriber->tags()->attach($tagsToStore);
 
-        return $subscriber->segments->toBase();
+        return $subscriber->tags->toBase();
     }
 
     /**
@@ -47,20 +47,20 @@ class ApiSubscriberSegmentService
      *
      * @param int $workspaceId
      * @param int $subscriberId
-     * @param Collection $segmentIds
+     * @param Collection $tagIds
      *
      * @return Collection
      * @throws Exception
      */
-    public function update(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
+    public function update(int $workspaceId, int $subscriberId, Collection $tagIds): Collection
     {
         $subscriber = $this->subscribers->find($workspaceId, $subscriberId, ['tags']);
 
-        $subscriber->segments()->sync($segmentIds);
+        $subscriber->tags()->sync($tagIds);
 
         $subscriber->load('tags');
 
-        return $subscriber->segments->toBase();
+        return $subscriber->tags->toBase();
     }
 
     /**
@@ -68,17 +68,17 @@ class ApiSubscriberSegmentService
      *
      * @param int $workspaceId
      * @param int $subscriberId
-     * @param Collection $segmentIds
+     * @param Collection $tagIds
      *
      * @return Collection
      * @throws Exception
      */
-    public function destroy(int $workspaceId, int $subscriberId, Collection $segmentIds): Collection
+    public function destroy(int $workspaceId, int $subscriberId, Collection $tagIds): Collection
     {
         $subscriber = $this->subscribers->find($workspaceId, $subscriberId);
 
-        $subscriber->segments()->detach($segmentIds);
+        $subscriber->tags()->detach($tagIds);
 
-        return $subscriber->segments;
+        return $subscriber->tags;
     }
 }

@@ -31,7 +31,7 @@ class SubscriberRequest extends FormRequest
             'last_name' => [
                 'max:255',
             ],
-            'segments' => [
+            'tags' => [
                 'nullable',
                 'array',
             ],

@@ -25,18 +25,18 @@ class ImportSubscriberService
         $subscriber = null;
 
         if (!empty(Arr::get($data, 'id'))) {
-            $subscriber = $this->subscribers->findBy($workspaceId, 'id', $data['id'], ['segments']);
+            $subscriber = $this->subscribers->findBy($workspaceId, 'id', $data['id'], ['tags']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->findBy($workspaceId, 'email', Arr::get($data, 'email'), ['segments']);
+            $subscriber = $this->subscribers->findBy($workspaceId, 'email', Arr::get($data, 'email'), ['tags']);
         }
 
         if (!$subscriber) {
-            $subscriber = $this->subscribers->store($workspaceId, Arr::except($data, ['id', 'segments']));
+            $subscriber = $this->subscribers->store($workspaceId, Arr::except($data, ['id', 'tags']));
         }
 
-        $data['segments'] = array_merge($subscriber->segments->pluck('id')->toArray(), Arr::get($data, 'segments'));
+        $data['tags'] = array_merge($subscriber->tags->pluck('id')->toArray(), Arr::get($data, 'tags'));
 
         $this->subscribers->update($workspaceId, $subscriber->id, $data);
 

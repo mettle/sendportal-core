@@ -35,7 +35,7 @@ class Tag extends BaseModel
     }
 
     /** @var string */
-    protected $table = 'sendportal_segments';
+    protected $table = 'sendportal_tags';
 
     /** @var array */
     protected $fillable = [
@@ -49,19 +49,19 @@ class Tag extends BaseModel
 
     public function campaigns(): BelongsToMany
     {
-        return $this->belongsToMany(Campaign::class, 'sendportal_campaign_segment');
+        return $this->belongsToMany(Campaign::class, 'sendportal_campaign_tag');
     }
 
     /**
-     * Subscribers in this segment.
+     * Subscribers in this tag.
      */
     public function subscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Subscriber::class, 'sendportal_segment_subscriber')->withTimestamps();
+        return $this->belongsToMany(Subscriber::class, 'sendportal_tag_subscriber')->withTimestamps();
     }
 
     /**
-     * Active subscribers in this segment.
+     * Active subscribers in this tag.
      */
     public function activeSubscribers(): BelongsToMany
     {

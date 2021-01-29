@@ -14,9 +14,9 @@ class TagUpdateRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('sendportal_segments')
+                Rule::unique('sendportal_tags')
                     ->where('workspace_id', $this->route('workspaceId'))
-                    ->ignore($this->route('segment')),
+                    ->ignore($this->route('tag')),
             ],
             'subscribers' => [
                 'array',
@@ -28,7 +28,7 @@ class TagUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.unique' => __('The segment name must be unique.'),
+            'name.unique' => __('The tag name must be unique.'),
         ];
     }
 }

@@ -15,21 +15,21 @@ class ApiRoutes
                 $apiRouter->apiResource('campaigns', 'CampaignsController');
                 $apiRouter->post('campaigns/{id}/send', 'CampaignDispatchController@send')->name('campaigns.send');
                 $apiRouter->apiResource('subscribers', 'SubscribersController');
-                $apiRouter->apiResource('segments', 'SegmentsController');
+                $apiRouter->apiResource('tags', 'TagsController');
 
-                $apiRouter->apiResource('subscribers.segments', 'SubscriberSegmentsController')
+                $apiRouter->apiResource('subscribers.tags', 'SubscriberTagsController')
                     ->except(['show', 'update', 'destroy']);
-                $apiRouter->put('subscribers/{subscriber}/segments', 'SubscriberSegmentsController@update')
-                    ->name('subscribers.segments.update');
-                $apiRouter->delete('subscribers/{subscriber}/segments', 'SubscriberSegmentsController@destroy')
-                    ->name('subscribers.segments.destroy');
+                $apiRouter->put('subscribers/{subscriber}/tags', 'SubscriberTagsController@update')
+                    ->name('subscribers.tags.update');
+                $apiRouter->delete('subscribers/{subscriber}/tags', 'SubscriberTagsController@destroy')
+                    ->name('subscribers.tags.destroy');
 
-                $apiRouter->apiResource('segments.subscribers', 'SegmentSubscribersController')
+                $apiRouter->apiResource('tags.subscribers', 'TagSubscribersController')
                     ->except(['show', 'update', 'destroy']);
-                $apiRouter->put('segments/{segment}/subscribers', 'SegmentSubscribersController@update')
-                    ->name('segments.subscribers.update');
-                $apiRouter->delete('segments/{segment}/subscribers', 'SegmentSubscribersController@destroy')
-                    ->name('segments.subscribers.destroy');
+                $apiRouter->put('tags/{tag}/subscribers', 'TagSubscribersController@update')
+                    ->name('tags.subscribers.update');
+                $apiRouter->delete('tags/{tag}/subscribers', 'TagSubscribersController@destroy')
+                    ->name('tags.subscribers.destroy');
 
                 $apiRouter->apiResource('templates', 'TemplatesController');
             });

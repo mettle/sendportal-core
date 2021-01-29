@@ -6,19 +6,19 @@ namespace Sendportal\Base\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\Tag;
 
-class CanAccessSegment implements Rule
+class CanAccessTag implements Rule
 {
     public function passes($attribute, $value): bool
     {
-        $segment = Segment::find($value);
+        $tag = Tag::find($value);
 
-        if (!$segment) {
+        if (!$tag) {
             return false;
         }
 
-        return $segment->workspace_id == Sendportal::currentWorkspaceId();
+        return $tag->workspace_id == Sendportal::currentWorkspaceId();
     }
 
     /**
@@ -28,6 +28,6 @@ class CanAccessSegment implements Rule
      */
     public function message(): string
     {
-        return 'Segment ID :input does not exist.';
+        return 'Tag ID :input does not exist.';
     }
 }

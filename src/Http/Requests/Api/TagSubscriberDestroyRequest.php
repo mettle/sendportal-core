@@ -7,7 +7,7 @@ namespace Sendportal\Base\Http\Requests\Api;
 use Illuminate\Foundation\Http\FormRequest;
 use Sendportal\Base\Rules\CanAccessSubscriber;
 
-class SegmentSubscriberDestroyRequest extends FormRequest
+class TagSubscriberDestroyRequest extends FormRequest
 {
     public function rules(): array
     {

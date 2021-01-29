@@ -17,39 +17,48 @@ class CampaignDispatchControllerTest extends TestCase
     /** @test */
     public function campaigns_can_be_dispatched_to_tags_belonging_to_the_users_workspace()
     {
+        // given
         $campaign = Campaign::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $validSegment = Tag::factory()->create([
+
+        $validTag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
+        // when
         $response = $this->put(route('sendportal.campaigns.send', $campaign->id), [
             'recipients' => 'send_to_tags',
-            'tags' => [$validSegment->id],
+            'tags' => [$validTag->id],
         ]);
 
+        // then
         $response->assertSessionHasNoErrors();
     }
 
     /** @test */
     public function campaigns_cannot_be_dispatched_to_tags_belonging_to_another_workspace()
     {
+        // given
         $campaign = Campaign::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $validSegment = Tag::factory()->create([
+
+        $validTag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $invalidSegment = Tag::factory()->create([
+
+        $invalidTag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId() + 1,
         ]);
 
+        // when
         $response = $this->put(route('sendportal.campaigns.send', $campaign->id), [
             'recipients' => 'send_to_tags',
-            'tags' => [$validSegment->id, $invalidSegment->id],
+            'tags' => [$validTag->id, $invalidTag->id],
         ]);
 
+        // then
         $response->assertSessionHasErrors([
             'tags' => 'One or more of the tags is invalid.',
         ]);

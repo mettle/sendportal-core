@@ -75,17 +75,17 @@ class SubscriberTagsControllerTest extends TestCase
     public function can_update_the_tags_associated_with_the_subscriber()
     {
         $subscriber = $this->createSubscriber();
-        $oldSegment = $this->createTag();
-        $newSegment = $this->createTag();
+        $oldTag = $this->createTag();
+        $newTag = $this->createTag();
 
-        $subscriber->tags()->save($oldSegment);
+        $subscriber->tags()->save($oldTag);
 
         $route = route('sendportal.api.subscribers.tags.update', [
             'subscriber' => $subscriber->id,
         ]);
 
         $request = [
-            'tags' => [$newSegment->id],
+            'tags' => [$newTag->id],
         ];
 
         $response = $this->put($route, $request);
@@ -93,18 +93,18 @@ class SubscriberTagsControllerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('sendportal_tag_subscriber', [
-            'tag_id' => $oldSegment->id,
+            'tag_id' => $oldTag->id,
             'subscriber_id' => $subscriber->id,
         ]);
 
         $this->assertDatabaseHas('sendportal_tag_subscriber', [
-            'tag_id' => $newSegment->id,
+            'tag_id' => $newTag->id,
             'subscriber_id' => $subscriber->id,
         ]);
 
         $expected = [
             'data' => [
-                Arr::only($newSegment->toArray(), ['name'])
+                Arr::only($newTag->toArray(), ['name'])
             ],
         ];
 

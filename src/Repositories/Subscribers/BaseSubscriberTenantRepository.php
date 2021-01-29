@@ -99,7 +99,7 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
     {
         $this->applyNameFilter($instance, $filters);
         $this->applyStatusFilter($instance, $filters);
-        $this->applySegmentFilter($instance, $filters);
+        $this->applyTagFilter($instance, $filters);
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
     /**
      * Filter by tag.
      */
-    protected function applySegmentFilter(Builder $instance, array $filters = []): void
+    protected function applyTagFilter(Builder $instance, array $filters = []): void
     {
         if ($tagIds = Arr::get($filters, 'tags')) {
             $instance->select('sendportal_subscribers.*')

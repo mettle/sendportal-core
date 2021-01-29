@@ -7,8 +7,8 @@ namespace Tests;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
-use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 
 trait SendportalTestSupportTrait
 {

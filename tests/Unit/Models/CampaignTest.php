@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 use Tests\TestCase;
 
 class CampaignTest extends TestCase

@@ -5,8 +5,8 @@ namespace Sendportal\Base\Pipelines\Campaigns;
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 
 class CreateMessages
 {

@@ -7,8 +7,8 @@ namespace Tests\Feature\Subscribers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 use Tests\TestCase;
 
 class SubscribersControllerTest extends TestCase

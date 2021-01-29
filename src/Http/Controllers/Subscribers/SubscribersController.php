@@ -17,8 +17,8 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriberRequest;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Sendportal\Base\Repositories\TagTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\TagTenantRepository;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubscribersController extends Controller

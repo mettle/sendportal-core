@@ -10,14 +10,11 @@ use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Campaigns\MySqlCampaignTenantRepository;
 use Sendportal\Base\Repositories\Campaigns\PostgresCampaignTenantRepository;
-use Sendportal\Base\Repositories\Campaigns\SqliteCampaignTenantRepository;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MySqlMessageTenantRepository;
 use Sendportal\Base\Repositories\Messages\PostgresMessageTenantRepository;
-use Sendportal\Base\Repositories\Messages\SqliteMessageTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\MySqlSubscriberTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\PostgresSubscriberTenantRepository;
-use Sendportal\Base\Repositories\Subscribers\SqliteSubscriberTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Services\Helper;
 use Sendportal\Base\Services\QuotaService;
@@ -40,11 +37,7 @@ class SendportalAppServiceProvider extends ServiceProvider
                 return $app->make(PostgresCampaignTenantRepository::class);
             }
 
-            if ($this->usingMySQL()) {
-                return $app->make(MySqlCampaignTenantRepository::class);
-            }
-
-            return $app->make(SqliteCampaignTenantRepository::class);
+            return $app->make(MySqlCampaignTenantRepository::class);
         });
 
         // Message repository.
@@ -53,11 +46,7 @@ class SendportalAppServiceProvider extends ServiceProvider
                 return $app->make(PostgresMessageTenantRepository::class);
             }
 
-            if ($this->usingMySQL()) {
-                return $app->make(MySqlMessageTenantRepository::class);
-            }
-
-            return $app->make(SqliteMessageTenantRepository::class);
+            return $app->make(MySqlMessageTenantRepository::class);
         });
 
         // Subscriber repository.
@@ -66,11 +55,7 @@ class SendportalAppServiceProvider extends ServiceProvider
                 return $app->make(PostgresSubscriberTenantRepository::class);
             }
 
-            if ($this->usingMySQL()) {
-                return $app->make(MySqlSubscriberTenantRepository::class);
-            }
-
-            return $app->make(SqliteSubscriberTenantRepository::class);
+            return $app->make(MySqlSubscriberTenantRepository::class);
         });
 
         $this->app->bind(QuotaServiceInterface::class, QuotaService::class);

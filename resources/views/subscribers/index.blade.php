@@ -25,11 +25,11 @@
                     </select>
                 </div>
 
-                @if(count($segments))
-                    <div id="segmentFilterSelector" class="mr-2">
-                        <select multiple="" class="selectpicker form-control form-control-sm" name="segments[]" data-width="auto">
-                            @foreach($segments as $segmentId => $segmentName)
-                                <option value="{{ $segmentId }}" @if(in_array($segmentId, request()->get('segments') ?? [])) selected @endif>{{ $segmentName }}</option>
+                @if(count($tags))
+                    <div id="tagFilterSelector" class="mr-2">
+                        <select multiple="" class="selectpicker form-control form-control-sm" name="tags[]" data-width="auto">
+                            @foreach($tags as $tagId => $tagName)
+                                <option value="{{ $tagId }}" @if(in_array($tagId, request()->get('tags') ?? [])) selected @endif>{{ $tagName }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -59,8 +59,8 @@
 
                 </div>
             </div>
-            <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.segments.index') }}">
-                <i class="fa fa-tag color-gray-400 mr-1"></i> {{ __('Segments') }}
+            <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.tags.index') }}">
+                <i class="fa fa-tag color-gray-400 mr-1"></i> {{ __('Tags') }}
             </a>
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.subscribers.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('New Subscriber') }}
@@ -75,7 +75,7 @@
                 <tr>
                     <th>{{ __('Email') }}</th>
                     <th>{{ __('Name') }}</th>
-                    <th>{{ __('Segments') }}</th>
+                    <th>{{ __('Tags') }}</th>
                     <th>{{ __('Created') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
@@ -91,8 +91,8 @@
                         </td>
                         <td>{{ $subscriber->full_name }}</td>
                         <td>
-                            @forelse($subscriber->segments as $segment)
-                                <span class="badge badge-light">{{ $segment->name }}</span>
+                            @forelse($subscriber->tags as $tag)
+                                <span class="badge badge-light">{{ $tag->name }}</span>
                             @empty
                                 -
                             @endforelse

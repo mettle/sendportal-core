@@ -59,7 +59,7 @@
 
                 <x-sendportal.file-field name="file" :label="__('File')" required="required" />
 
-                <x-sendportal.select-field name="segments[]" :label="__('Segments')" :options="$segments" multiple />
+                <x-sendportal.select-field name="tags[]" :label="__('Tags')" :options="$tags" multiple />
 
                 <div class="form-group row">
                     <div class="offset-sm-3 col-sm-9">

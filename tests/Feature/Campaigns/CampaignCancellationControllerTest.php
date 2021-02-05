@@ -9,8 +9,8 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 use Tests\TestCase;
 
 class CampaignCancellationControllerTest extends TestCase
@@ -123,7 +123,7 @@ class CampaignCancellationControllerTest extends TestCase
     /** @test */
     public function when_a_sending_not_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
     {
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
         $campaign = Campaign::factory()->sending()->create([
@@ -131,13 +131,13 @@ class CampaignCancellationControllerTest extends TestCase
             'save_as_draft' => 0,
             'send_to_all' => 0,
         ]);
-        $campaign->segments()->attach($segment->id);
+        $campaign->tags()->attach($tag->id);
 
         // Dispatched
         $subscriber = Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $subscriber->segments()->attach($segment->id);
+        $subscriber->tags()->attach($tag->id);
         Message::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => $subscriber->id,
@@ -149,7 +149,7 @@ class CampaignCancellationControllerTest extends TestCase
         $otherSubscriber = Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $otherSubscriber->segments()->attach($segment->id);
+        $otherSubscriber->tags()->attach($tag->id);
         Message::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => $otherSubscriber->id,
@@ -170,14 +170,14 @@ class CampaignCancellationControllerTest extends TestCase
             'send_to_all' => 0,
             'save_as_draft' => 1,
         ]);
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $campaign->segments()->attach($segment->id);
+        $campaign->tags()->attach($tag->id);
         $subscribers = Subscriber::factory()->count(5)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $segment->subscribers()->attach($subscribers->pluck('id'));
+        $tag->subscribers()->attach($subscribers->pluck('id'));
 
         // Message Drafts
         Message::factory()->count(3)->pending()->create([
@@ -200,14 +200,14 @@ class CampaignCancellationControllerTest extends TestCase
             'send_to_all' => 0,
             'save_as_draft' => 1,
         ]);
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $campaign->segments()->attach($segment->id);
+        $campaign->tags()->attach($tag->id);
         $subscribers = Subscriber::factory()->count(5)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
-        $segment->subscribers()->attach($subscribers->pluck('id'));
+        $tag->subscribers()->attach($subscribers->pluck('id'));
 
         // Message Drafts
         Message::factory()->count($subscribers->count())->pending()->create([

@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property EloquentCollection $segments
+ * @property EloquentCollection $tags
  * @property CampaignStatus $status
  * @property Template|null $template
  * @property EmailService|null $email_service
@@ -101,11 +101,11 @@ class Campaign extends BaseModel
     ];
 
     /**
-     * Segments this campaign was sent to.
+     * Tags this campaign was sent to.
      */
-    public function segments(): BelongsToMany
+    public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Segment::class, 'sendportal_campaign_segment')->withTimestamps();
+        return $this->belongsToMany(Tag::class, 'sendportal_campaign_tag')->withTimestamps();
     }
     /**
      * Status of the campaign.
@@ -168,8 +168,8 @@ class Campaign extends BaseModel
         return Subscriber::where('workspace_id', $this->workspace_id)
             ->whereNull('unsubscribed_at')
             ->when(!$this->send_to_all, function (Builder $query) {
-                $query->whereHas('segments', function (Builder $subQuery) {
-                    $subQuery->whereIn('sendportal_segments.id', $this->segments->pluck('id'));
+                $query->whereHas('tags', function (Builder $subQuery) {
+                    $subQuery->whereIn('sendportal_tags.id', $this->tags->pluck('id'));
                 });
             })
             ->count();

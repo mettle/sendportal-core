@@ -86,23 +86,23 @@
                                 <option value="send_to_all" {{ (old('recipients') ? old('recipients') == 'send_to_all' : $campaign->send_to_all) ? 'selected' : '' }}>
                                     {{ __('All subscribers') }} ({{ $subscriberCount }})
                                 </option>
-                                <option value="send_to_segments" {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? 'selected' : '' }}>
-                                    {{ __('Select Segments') }}
+                                <option value="send_to_tags" {{ (old('recipients') ? old('recipients') == 'send_to_tags' : !$campaign->send_to_all) ? 'selected' : '' }}>
+                                    {{ __('Select Tags') }}
                                 </option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="segments-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
-                        @forelse($segments as $segment)
+                    <div class="tags-container {{ (old('recipients') ? old('recipients') == 'send_to_tags' : !$campaign->send_to_all) ? '' : 'hide' }}">
+                        @forelse($tags as $tag)
                             <div class="checkbox">
                                 <label>
-                                    <input name="segments[]" type="checkbox" value="{{ $segment->id }}">
-                                    {{ $segment->name }} ({{ $segment->activeSubscribers()->count() }} {{ __('subscribers') }})
+                                    <input name="tags[]" type="checkbox" value="{{ $tag->id }}">
+                                    {{ $tag->name }} ({{ $tag->activeSubscribers()->count() }} {{ __('subscribers') }})
                                 </label>
                             </div>
                         @empty
-                            <div>{{ __('There are no segments to select') }}</div>
+                            <div>{{ __('There are no tags to select') }}</div>
                         @endforelse
                     </div>
 
@@ -156,7 +156,7 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        var target = $('.segments-container');
+        var target = $('.tags-container');
         $('#id-field-recipients').change(function() {
             if (this.value == 'send_to_all') {
                 target.addClass('hide');

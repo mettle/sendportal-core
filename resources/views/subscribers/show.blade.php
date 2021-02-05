@@ -48,10 +48,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><b>{{ __('Segments') }}</b></td>
+                                <td><b>{{ __('Tags') }}</b></td>
                                 <td>
-                                    @foreach($subscriber->segments as $segment)
-                                        <span class="badge badge-light">{{ $segment->name }}</span>
+                                    @foreach($subscriber->tags as $tag)
+                                        <span class="badge badge-light">{{ $tag->name }}</span>
                                     @endforeach
                                 </td>
                             </tr>

@@ -54,7 +54,7 @@ class CampaignDispatchController extends Controller
             'send_to_all' => $request->get('recipients') === 'send_to_all',
         ]);
 
-        $campaign->segments()->sync($request->get('segments'));
+        $campaign->tags()->sync($request->get('tags'));
 
         if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return redirect()->route('sendportal.campaigns.edit', $id)

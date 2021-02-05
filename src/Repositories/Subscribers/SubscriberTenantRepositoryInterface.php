@@ -11,7 +11,7 @@ use Sendportal\Base\Models\Subscriber;
 
 interface SubscriberTenantRepositoryInterface extends BaseTenantInterface
 {
-    public function syncSegments(Subscriber $subscriber, array $segments = []);
+    public function syncTags(Subscriber $subscriber, array $tags = []);
 
     public function countActive($workspaceId): int;
 

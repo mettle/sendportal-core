@@ -50,7 +50,7 @@ class SubscribersController extends Controller
         $workspaceId = Sendportal::currentWorkspaceId();
         $subscriber = $this->apiService->storeOrUpdate($workspaceId, collect($request->validated()));
 
-        $subscriber->load('segments');
+        $subscriber->load('tags');
 
         return new SubscriberResource($subscriber);
     }
@@ -62,7 +62,7 @@ class SubscribersController extends Controller
     {
         $workspaceId = Sendportal::currentWorkspaceId();
 
-        return new SubscriberResource($this->subscribers->find($workspaceId, $id, ['segments']));
+        return new SubscriberResource($this->subscribers->find($workspaceId, $id, ['tags']));
     }
 
     /**

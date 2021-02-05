@@ -9,8 +9,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 use Tests\TestCase;
 
 class SubscribersImportControllerTest extends TestCase
@@ -101,10 +101,10 @@ class SubscribersImportControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_should_allow_attaching_subscribers_to_an_existing_segment()
+    public function it_should_allow_attaching_subscribers_to_an_existing_tag()
     {
         // given
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
@@ -116,7 +116,7 @@ class SubscribersImportControllerTest extends TestCase
         $response = $this
             ->post(route('sendportal.subscribers.import.store'), [
                 'file' => $file,
-                'segments' => [$segment->id]
+                'tags' => [$tag->id]
             ]);
 
         // then
@@ -124,14 +124,14 @@ class SubscribersImportControllerTest extends TestCase
         $response->assertSessionHas('success');
 
         $this->assertDatabaseCount('sendportal_subscribers', 1);
-        $this->assertDatabaseCount('sendportal_segment_subscriber', 1);
+        $this->assertDatabaseCount('sendportal_tag_subscriber', 1);
     }
 
     /** @test */
-    public function it_should_allow_attaching_subscribers_to_multiple_segment()
+    public function it_should_allow_attaching_subscribers_to_multiple_tag()
     {
         // given
-        $segments = Segment::factory()->count(2)->create([
+        $tags = Tag::factory()->count(2)->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
@@ -143,7 +143,7 @@ class SubscribersImportControllerTest extends TestCase
         $response = $this
             ->post(route('sendportal.subscribers.import.store'), [
                 'file' => $file,
-                'segments' => $segments->pluck('id')->toArray()
+                'tags' => $tags->pluck('id')->toArray()
             ]);
 
         // then
@@ -151,7 +151,7 @@ class SubscribersImportControllerTest extends TestCase
         $response->assertSessionHas('success');
 
         $this->assertDatabaseCount('sendportal_subscribers', 1);
-        $this->assertDatabaseCount('sendportal_segment_subscriber', 2);
+        $this->assertDatabaseCount('sendportal_tag_subscriber', 2);
     }
 
     /** @test */
@@ -237,20 +237,20 @@ class SubscribersImportControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_should_not_remove_existing_segments_from_a_subscriber_when_importing_subscribers_with_a_new_segment()
+    public function it_should_not_remove_existing_tags_from_a_subscriber_when_importing_subscribers_with_a_new_tag()
     {
         // given
         $subscriber = Subscriber::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
-        $subscriber->segments()->attach(
-            Segment::factory()->create([
+        $subscriber->tags()->attach(
+            Tag::factory()->create([
                 'workspace_id' => Sendportal::currentWorkspaceId(),
             ])
         );
 
-        $segment = Segment::factory()->create([
+        $tag = Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
 
@@ -262,7 +262,7 @@ class SubscribersImportControllerTest extends TestCase
         $response = $this
             ->post(route('sendportal.subscribers.import.store'), [
                 'file' => $file,
-                'segments' => [$segment->id]
+                'tags' => [$tag->id]
             ]);
 
         $subscriber->refresh();
@@ -271,7 +271,7 @@ class SubscribersImportControllerTest extends TestCase
         $response->assertRedirect(route('sendportal.subscribers.index'));
         $response->assertSessionHas('success');
 
-        $this->assertDatabaseCount('sendportal_segment_subscriber', 2);
+        $this->assertDatabaseCount('sendportal_tag_subscriber', 2);
     }
 
     protected function createFakeCsvFile(array $rows)

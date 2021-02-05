@@ -7,8 +7,8 @@ namespace Tests;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 
 trait SendportalTestSupportTrait
 {
@@ -30,9 +30,9 @@ trait SendportalTestSupportTrait
             ]);
     }
 
-    protected function createSegment(): Segment
+    protected function createTag(): Tag
     {
-        return Segment::factory()->create([
+        return Tag::factory()->create([
             'workspace_id' => Sendportal::currentWorkspaceId(),
         ]);
     }

@@ -11,7 +11,7 @@ use Sendportal\Base\Http\Requests\CampaignStoreRequest as BaseCampaignStoreReque
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Repositories\TagTenantRepository;
 
 class CampaignStoreRequest extends BaseCampaignStoreRequest
 {
@@ -44,7 +44,7 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
 
     public function rules(): array
     {
-        $segments = app(SegmentTenantRepository::class)->pluck(
+        $tags = app(TagTenantRepository::class)->pluck(
             $this->workspaceId,
             'id'
         );
@@ -54,12 +54,12 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
                 'required',
                 'boolean',
             ],
-            'segments' => [
+            'tags' => [
                 'required_unless:send_to_all,1',
                 'array',
-                Rule::in($segments),
+                Rule::in($tags),
             ],
-            'segments.*' => [
+            'tags.*' => [
                 'integer',
             ],
             'scheduled_at' => [
@@ -80,7 +80,7 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
     {
         return [
             'valid_status' => __('A campaign cannot be updated if its status is not draft'),
-            'segments.in' => 'One or more of the segments is invalid.',
+            'tags.in' => 'One or more of the tags is invalid.',
         ];
     }
 }

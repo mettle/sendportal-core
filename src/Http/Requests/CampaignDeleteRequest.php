@@ -24,7 +24,7 @@ class CampaignDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'segments' => [
+            'tags' => [
                 'required_unless:recipients,send_to_all',
                 'array',
             ],
@@ -37,7 +37,7 @@ class CampaignDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'segments.required_unless' => __('At least one segment must be selected')
+            'tags.required_unless' => __('At least one tag must be selected')
         ];
     }
 }

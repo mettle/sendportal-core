@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateMessagesTable extends Migration
+class CreateMessagesTable extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sendportal_messages', function (Blueprint $table) {
+        $prefix = $this->getPrefix();
+
+        Schema::create("{$prefix}messages", function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('hash')->unique();
             $table->unsignedInteger('workspace_id')->index();

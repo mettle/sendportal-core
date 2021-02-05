@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\EmailServiceType;
+use Sendportal\Base\UpgradeMigration;
 
-class AddMailjetEmailService extends Migration
+class AddMailjetEmailService extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class AddMailjetEmailService extends Migration
      */
     public function up()
     {
-        DB::table('sendportal_email_service_types')
+        $prefix = $this->getPrefix();
+
+        DB::table("{$prefix}email_service_types")
             ->insert(
                 [
                     'id' => EmailServiceType::MAILJET,

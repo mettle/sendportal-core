@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class DropSegmentNameUnique extends Migration
+class DropSegmentNameUnique extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class DropSegmentNameUnique extends Migration
      */
     public function up()
     {
-        Schema::table('sendportal_segments', function (Blueprint $table) {
-            $table->dropUnique('sendportal_segments_name_unique');
+        $prefix = $this->getPrefix();
+
+        Schema::table("{$prefix}segments", function (Blueprint $table) use ($prefix) {
+            $table->dropUnique("{$prefix}segments_name_unique");
         });
     }
 }

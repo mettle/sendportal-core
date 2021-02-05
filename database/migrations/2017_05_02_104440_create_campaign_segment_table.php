@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateCampaignSegmentTable extends Migration
+class CreateCampaignSegmentTable extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateCampaignSegmentTable extends Migration
      */
     public function up()
     {
-        Schema::create('sendportal_campaign_segment', function (Blueprint $table) {
+        $prefix = $this->getPrefix();
+
+        Schema::create("{$prefix}campaign_segment", function (Blueprint $table) use ($prefix) {
             $table->increments('id');
             $table->unsignedInteger('segment_id');
             $table->unsignedInteger('campaign_id');
             $table->timestamps();
 
-            $table->foreign('segment_id')->references('id')->on('sendportal_segments');
-            $table->foreign('campaign_id')->references('id')->on('sendportal_campaigns');
+            $table->foreign('segment_id')->references('id')->on("{$prefix}segments");
+            $table->foreign('campaign_id')->references('id')->on("{$prefix}campaigns");
         });
     }
 }

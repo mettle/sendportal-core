@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class AdjustTemplateContent extends Migration
+class AdjustTemplateContent extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class AdjustTemplateContent extends Migration
      */
     public function up()
     {
-        Schema::table('sendportal_templates', function (Blueprint $table) {
+        $prefix = $this->getPrefix();
+
+        Schema::table("{$prefix}templates", function (Blueprint $table) {
             $table->longText('content')->change();
         });
     }

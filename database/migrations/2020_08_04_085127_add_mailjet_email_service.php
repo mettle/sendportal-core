@@ -13,9 +13,9 @@ class AddMailjetEmailService extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $email_service_types = $this->getTableName('email_service_types');
 
-        DB::table("{$prefix}email_service_types")
+        DB::table($email_service_types)
             ->insert(
                 [
                     'id' => EmailServiceType::MAILJET,

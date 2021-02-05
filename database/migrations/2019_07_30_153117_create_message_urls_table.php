@@ -13,9 +13,7 @@ class CreateMessageUrlsTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        Schema::create("{$prefix}message_urls", function (Blueprint $table) {
+        Schema::create('sendportal_message_urls', function (Blueprint $table) {
             $table->increments('id');
             $table->string('source_type')->index();
             $table->unsignedInteger('source_id')->index();

@@ -3,22 +3,21 @@
 namespace Sendportal\Base;
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use RuntimeException;
 
 class UpgradeMigration extends Migration
 {
-    protected static $prefix;
-
-    protected function getPrefix(): string
+    protected function getTableName(string $baseName): string
     {
-        if (isset(static::$prefix)) {
-            return static::$prefix;
+        if (Schema::hasTable("sendportal_{$baseName}")) {
+            return "sendportal_{$baseName}";
         }
 
-        $exists = DB::table('migrations')
-            ->where('migration', '2017_04_11_133343_create_email_service_tables')
-            ->exists();
+        if (Schema::hasTable($baseName)) {
+            return $baseName;
+        }
 
-        return static::$prefix = $exists ? '' : 'sendportal_';
+        throw new RuntimeException('Could not find appropriate table for base name ' . $baseName);
     }
 }

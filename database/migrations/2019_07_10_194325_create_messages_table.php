@@ -13,9 +13,7 @@ class CreateMessagesTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        Schema::create("{$prefix}messages", function (Blueprint $table) {
+        Schema::create('sendportal_messages', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('hash')->unique();
             $table->unsignedInteger('workspace_id')->index();

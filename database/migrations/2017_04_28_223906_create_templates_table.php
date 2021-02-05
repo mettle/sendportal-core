@@ -13,9 +13,7 @@ class CreateTemplatesTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        Schema::create("{$prefix}templates", function (Blueprint $table) {
+        Schema::create('sendportal_templates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name');

@@ -13,14 +13,12 @@ class CreateCampaignStatusesTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        Schema::create("{$prefix}campaign_statuses", function (Blueprint $table) {
+        Schema::create('sendportal_campaign_statuses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
 
-        DB::table("{$prefix}campaign_statuses")
+        DB::table('sendportal_campaign_statuses')
             ->insert([
                ['name' => 'Draft'],
                ['name' => 'Queued'],

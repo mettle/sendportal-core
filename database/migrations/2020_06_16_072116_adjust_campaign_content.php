@@ -13,9 +13,9 @@ class AdjustCampaignContent extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $campaigns = $this->getTableName('campaigns');
 
-        Schema::table("{$prefix}campaigns", function (Blueprint $table) {
+        Schema::table($campaigns, function (Blueprint $table) {
             $table->longText('content')->change();
         });
     }

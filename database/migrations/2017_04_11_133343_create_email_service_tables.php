@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Sendportal\Base\Models\EmailServiceType;
 use Sendportal\Base\UpgradeMigration;
 
@@ -14,17 +15,15 @@ class CreateEmailServiceTables extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        \Schema::create("{$prefix}email_service_types", function (Blueprint $table) {
+        Schema::create('sendportal_email_service_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
         });
 
-        $this->seedEmailServiceTypes($prefix);
+        $this->seedEmailServiceTypes();
 
-        \Schema::create("{$prefix}email_services", function (Blueprint $table) use ($prefix) {
+        Schema::create('sendportal_email_services', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name')->nullable();
@@ -32,11 +31,11 @@ class CreateEmailServiceTables extends UpgradeMigration
             $table->mediumText('settings');
             $table->timestamps();
 
-            $table->foreign('type_id')->references('id')->on("{$prefix}email_service_types");
+            $table->foreign('type_id')->references('id')->on('sendportal_email_service_types');
         });
     }
 
-    protected function seedEmailServiceTypes(string $prefix)
+    protected function seedEmailServiceTypes()
     {
         $serviceTypes = [
             [
@@ -58,7 +57,7 @@ class CreateEmailServiceTables extends UpgradeMigration
         ];
 
         foreach ($serviceTypes as $type) {
-            DB::table("{$prefix}email_service_types")
+            DB::table('sendportal_email_service_types')
                 ->insert(
                     $type + [
                         'created_at' => now(),

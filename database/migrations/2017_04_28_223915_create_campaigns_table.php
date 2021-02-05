@@ -13,9 +13,11 @@ class CreateCampaignsTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $campaign_statuses = $this->getTableName('campaign_statuses');
+        $templates = $this->getTableName('templates');
+        $email_services = $this->getTableName('email_services');
 
-        Schema::create("{$prefix}campaigns", function (Blueprint $table) use ($prefix) {
+        Schema::create('sendportal_campaigns', function (Blueprint $table) use ($campaign_statuses, $templates, $email_services) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name');
@@ -36,9 +38,9 @@ class CreateCampaignsTable extends UpgradeMigration
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamps();
 
-            $table->foreign('status_id')->references('id')->on("{$prefix}campaign_statuses");
-            $table->foreign('template_id')->references('id')->on("{$prefix}templates");
-            $table->foreign('email_service_id')->references('id')->on("{$prefix}email_services");
+            $table->foreign('status_id')->references('id')->on($campaign_statuses);
+            $table->foreign('template_id')->references('id')->on($templates);
+            $table->foreign('email_service_id')->references('id')->on($email_services);
         });
     }
 }

@@ -13,9 +13,9 @@ class CreateSubscribersTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $unsubscribe_event_types = $this->getTableName('unsubscribe_event_types');
 
-        Schema::create("{$prefix}subscribers", function (Blueprint $table) use ($prefix) {
+        Schema::create('sendportal_subscribers', function (Blueprint $table) use ($unsubscribe_event_types) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->uuid('hash')->unique();
@@ -28,7 +28,7 @@ class CreateSubscribersTable extends UpgradeMigration
             $table->timestamps();
 
             $table->index('created_at');
-            $table->foreign('unsubscribe_event_id')->references('id')->on("{$prefix}unsubscribe_event_types");
+            $table->foreign('unsubscribe_event_id')->references('id')->on($unsubscribe_event_types);
         });
     }
 }

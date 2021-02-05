@@ -13,16 +13,17 @@ class CreateSegmentSubscriberTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $segments = $this->getTableName('segments');
+        $subscribers = $this->getTableName('subscribers');
 
-        Schema::create("{$prefix}segment_subscriber", function (Blueprint $table) use ($prefix) {
+        Schema::create('sendportal_segment_subscriber', function (Blueprint $table) use ($segments, $subscribers) {
             $table->increments('id');
             $table->unsignedInteger('segment_id');
             $table->unsignedInteger('subscriber_id');
             $table->timestamps();
 
-            $table->foreign('segment_id')->references('id')->on("{$prefix}segments");
-            $table->foreign('subscriber_id')->references('id')->on("{$prefix}subscribers");
+            $table->foreign('segment_id')->references('id')->on($segments);
+            $table->foreign('subscriber_id')->references('id')->on($subscribers);
         });
     }
 }

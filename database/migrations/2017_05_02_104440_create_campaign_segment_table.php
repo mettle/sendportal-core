@@ -13,16 +13,17 @@ class CreateCampaignSegmentTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $segments = $this->getTableName('segments');
+        $campaigns = $this->getTableName('campaigns');
 
-        Schema::create("{$prefix}campaign_segment", function (Blueprint $table) use ($prefix) {
+        Schema::create('sendportal_campaign_segment', function (Blueprint $table) use ($campaigns, $segments) {
             $table->increments('id');
             $table->unsignedInteger('segment_id');
             $table->unsignedInteger('campaign_id');
             $table->timestamps();
 
-            $table->foreign('segment_id')->references('id')->on("{$prefix}segments");
-            $table->foreign('campaign_id')->references('id')->on("{$prefix}campaigns");
+            $table->foreign('segment_id')->references('id')->on($segments);
+            $table->foreign('campaign_id')->references('id')->on($campaigns);
         });
     }
 }

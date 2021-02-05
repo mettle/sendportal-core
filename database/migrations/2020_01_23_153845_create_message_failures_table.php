@@ -13,9 +13,9 @@ class CreateMessageFailuresTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $messages = $this->getTableName('messages');
 
-        Schema::create("{$prefix}message_failures", function (Blueprint $table) use ($prefix) {
+        Schema::create('sendportal_message_failures', function (Blueprint $table) use ($messages) {
             $table->bigIncrements('id');
             $table->unsignedInteger('message_id');
             $table->string('severity')->nullable()->default(null);
@@ -23,7 +23,7 @@ class CreateMessageFailuresTable extends UpgradeMigration
             $table->timestamp('failed_at')->nullable()->default(null);
             $table->timestamps();
 
-            $table->foreign('message_id')->references('id')->on("{$prefix}messages");
+            $table->foreign('message_id')->references('id')->on($messages);
         });
     }
 }

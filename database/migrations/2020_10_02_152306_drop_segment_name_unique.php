@@ -13,10 +13,10 @@ class DropSegmentNameUnique extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
+        $segments = $this->getTableName('segments');
 
-        Schema::table("{$prefix}segments", function (Blueprint $table) use ($prefix) {
-            $table->dropUnique("{$prefix}segments_name_unique");
+        Schema::table($segments, function (Blueprint $table) use ($segments) {
+            $table->dropUnique("{$segments}_name_unique");
         });
     }
 }

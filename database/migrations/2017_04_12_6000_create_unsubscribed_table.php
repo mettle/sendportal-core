@@ -15,9 +15,7 @@ class CreateUnsubscribedTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        Schema::create("{$prefix}unsubscribe_event_types", function (Blueprint $table) {
+        Schema::create('sendportal_unsubscribe_event_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -30,7 +28,7 @@ class CreateUnsubscribedTable extends UpgradeMigration
         ];
 
         foreach ($types as $id => $name) {
-            DB::table("{$prefix}unsubscribe_event_types")->insert([
+            DB::table('sendportal_unsubscribe_event_types')->insert([
                 'id' => $id,
                 'name' => $name
             ]);

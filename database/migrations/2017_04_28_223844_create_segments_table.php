@@ -13,9 +13,7 @@ class CreateSegmentsTable extends UpgradeMigration
      */
     public function up()
     {
-        $prefix = $this->getPrefix();
-
-        Schema::create("{$prefix}segments", function (Blueprint $table) {
+        Schema::create('sendportal_segments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name')->unique();

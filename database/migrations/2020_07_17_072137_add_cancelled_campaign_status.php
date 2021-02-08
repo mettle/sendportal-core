@@ -1,13 +1,15 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Sendportal\Base\UpgradeMigration;
 
-class AddCancelledCampaignStatus extends Migration
+class AddCancelledCampaignStatus extends UpgradeMigration
 {
     public function up()
     {
-        DB::table('sendportal_campaign_statuses')
+        $campaign_statuses = $this->getTableName('campaign_statuses');
+
+        DB::table($campaign_statuses)
             ->insert([
                 'id' => 5,
                 'name' => 'Cancelled',

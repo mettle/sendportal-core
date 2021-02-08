@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Sendportal\Base\Models\EmailServiceType;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateEmailServiceTables extends Migration
+class CreateEmailServiceTables extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -14,7 +15,7 @@ class CreateEmailServiceTables extends Migration
      */
     public function up()
     {
-        \Schema::create('sendportal_email_service_types', function (Blueprint $table) {
+        Schema::create('sendportal_email_service_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
@@ -22,7 +23,7 @@ class CreateEmailServiceTables extends Migration
 
         $this->seedEmailServiceTypes();
 
-        \Schema::create('sendportal_email_services', function (Blueprint $table) {
+        Schema::create('sendportal_email_services', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('workspace_id')->index();
             $table->string('name')->nullable();

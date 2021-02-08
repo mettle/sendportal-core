@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateMessageUrlsTable extends Migration
+class CreateMessageUrlsTable extends UpgradeMigration
 {
     /**
      * Run the migrations.

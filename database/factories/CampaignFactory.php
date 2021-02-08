@@ -1,66 +1,113 @@
 <?php
 
-/** @var Factory $factory */
+declare(strict_types=1);
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Template;
-use Sendportal\Base\Models\Workspace;
 
-$factory->define(Campaign::class, function (Faker $faker) {
-    return [
-        'name' => $faker->word,
-        'workspace_id' => factory(Workspace::class),
-        'subject' => $faker->title,
-        'from_name' => $faker->name,
-        'from_email' => $faker->email,
-        'email_service_id' => factory(EmailService::class),
-        'is_open_tracking' => true,
-        'is_click_tracking' => true,
-    ];
-});
+class CampaignFactory extends Factory
+{
+    /** @var string */
+    protected $model = Campaign::class;
 
-$factory->state(Campaign::class, 'withContent', function (Faker $faker) {
-    return [
-        'content' => $faker->paragraph,
-    ];
-});
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->word,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'subject' => $this->faker->title,
+            'from_name' => $this->faker->name,
+            'from_email' => $this->faker->email,
+            'email_service_id' => EmailService::factory(),
+            'is_open_tracking' => true,
+            'is_click_tracking' => true,
+        ];
+    }
 
-$factory->state(Campaign::class, 'withTemplate', function () {
-    return [
-        'template_id' => factory(Template::class),
-    ];
-});
+    public function withContent(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'content' => $this->faker->paragraph,
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'draft', function () {
-    return [
-        'status_id' => CampaignStatus::STATUS_DRAFT,
-    ];
-});
+    public function withTemplate(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'template_id' => Template::factory(),
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'queued', [
-    'status_id' => CampaignStatus::STATUS_QUEUED,
-]);
+    public function draft(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => CampaignStatus::STATUS_DRAFT,
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'sending', [
-    'status_id' => CampaignStatus::STATUS_SENDING,
-]);
+    public function queued(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => CampaignStatus::STATUS_QUEUED,
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'sent', [
-    'status_id' => CampaignStatus::STATUS_SENT,
-]);
+    public function sending(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => CampaignStatus::STATUS_SENDING,
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'cancelled', [
-    'status_id' => CampaignStatus::STATUS_CANCELLED,
-]);
+    public function sent(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => CampaignStatus::STATUS_SENT,
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'withoutOpenTracking', static function () {
-    return ['is_open_tracking' => false];
-});
+    public function cancelled(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status_id' => CampaignStatus::STATUS_CANCELLED,
+            ];
+        });
+    }
 
-$factory->state(Campaign::class, 'withoutClickTracking', static function () {
-    return ['is_click_tracking' => false];
-});
+    public function withoutOpenTracking(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_open_tracking' => false,
+            ];
+        });
+    }
+
+    public function withoutClickTracking(): CampaignFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_click_tracking' => false,
+            ];
+        });
+    }
+}

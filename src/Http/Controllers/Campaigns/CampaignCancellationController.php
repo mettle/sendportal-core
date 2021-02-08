@@ -7,16 +7,14 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
-use Sendportal\Base\Traits\ResolvesCurrentWorkspace;
 
 class CampaignCancellationController extends Controller
 {
-    use ResolvesCurrentWorkspace;
-
     /** @var CampaignTenantRepositoryInterface $campaignRepository */
     private $campaignRepository;
 
@@ -30,7 +28,7 @@ class CampaignCancellationController extends Controller
      */
     public function confirm(int $campaignId)
     {
-        $campaign = $this->campaignRepository->find($this->currentWorkspace()->id, $campaignId, ['status']);
+        $campaign = $this->campaignRepository->find(Sendportal::currentWorkspaceId(), $campaignId, ['status']);
 
         return view('sendportal::campaigns.cancel', [
             'campaign' => $campaign,
@@ -43,7 +41,7 @@ class CampaignCancellationController extends Controller
     public function cancel(int $campaignId)
     {
         /** @var Campaign $campaign */
-        $campaign = $this->campaignRepository->find($this->currentWorkspace()->id, $campaignId, ['status']);
+        $campaign = $this->campaignRepository->find(Sendportal::currentWorkspaceId(), $campaignId, ['status']);
         $originalStatus = $campaign->status;
 
         if (!$campaign->canBeCancelled()) {

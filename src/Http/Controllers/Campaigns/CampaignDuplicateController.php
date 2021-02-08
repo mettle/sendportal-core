@@ -6,6 +6,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
@@ -27,7 +28,7 @@ class CampaignDuplicateController extends Controller
      */
     public function duplicate(int $campaignId): RedirectResponse
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $campaignId);
+        $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $campaignId);
 
         return redirect()->route('sendportal.campaigns.create')->withInput([
             'name' => $campaign->name . ' - Duplicate',

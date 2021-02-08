@@ -13,11 +13,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Sendportal\Base\Events\SubscriberAddedEvent;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriberRequest;
 use Sendportal\Base\Models\UnsubscribeEventType;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
+use Sendportal\Base\Repositories\TagTenantRepository;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubscribersController extends Controller
@@ -25,13 +26,13 @@ class SubscribersController extends Controller
     /** @var SubscriberTenantRepositoryInterface */
     private $subscriberRepo;
 
-    /** @var SegmentTenantRepository */
-    private $segmentRepo;
+    /** @var TagTenantRepository */
+    private $tagRepo;
 
-    public function __construct(SubscriberTenantRepositoryInterface $subscriberRepo, SegmentTenantRepository $segmentRepo)
+    public function __construct(SubscriberTenantRepositoryInterface $subscriberRepo, TagTenantRepository $tagRepo)
     {
         $this->subscriberRepo = $subscriberRepo;
-        $this->segmentRepo = $segmentRepo;
+        $this->tagRepo = $tagRepo;
     }
 
     /**
@@ -39,18 +40,16 @@ class SubscribersController extends Controller
      */
     public function index(): View
     {
-        $workspace = auth()->user()->currentWorkspace();
-
         $subscribers = $this->subscriberRepo->paginate(
-            $workspace->id,
+            Sendportal::currentWorkspaceId(),
             'email',
-            ['segments'],
+            ['tags'],
             50,
             request()->all()
         );
-        $segments = $this->segmentRepo->pluck($workspace->id, 'name', 'id');
+        $tags = $this->tagRepo->pluck(Sendportal::currentWorkspaceId(), 'name', 'id');
 
-        return view('sendportal::subscribers.index', compact('subscribers', 'segments'));
+        return view('sendportal::subscribers.index', compact('subscribers', 'tags'));
     }
 
     /**
@@ -58,10 +57,10 @@ class SubscribersController extends Controller
      */
     public function create(): View
     {
-        $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
-        $selectedSegments = [];
+        $tags = $this->tagRepo->pluck(Sendportal::currentWorkspaceId());
+        $selectedTags = [];
 
-        return view('sendportal::subscribers.create', compact('segments', 'selectedSegments'));
+        return view('sendportal::subscribers.create', compact('tags', 'selectedTags'));
     }
 
     /**
@@ -73,7 +72,7 @@ class SubscribersController extends Controller
         $data['unsubscribed_at'] = $request->has('subscribed') ? null : now();
         $data['unsubscribe_event_id'] = $request->has('subscribed') ? null : UnsubscribeEventType::MANUAL_BY_ADMIN;
 
-        $subscriber = $this->subscriberRepo->store(auth()->user()->currentWorkspace()->id, $data);
+        $subscriber = $this->subscriberRepo->store(Sendportal::currentWorkspaceId(), $data);
 
         event(new SubscriberAddedEvent($subscriber));
 
@@ -86,9 +85,9 @@ class SubscribersController extends Controller
     public function show(int $id): View
     {
         $subscriber = $this->subscriberRepo->find(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             $id,
-            ['segments', 'messages.source']
+            ['tags', 'messages.source']
         );
 
         return view('sendportal::subscribers.show', compact('subscriber'));
@@ -99,11 +98,11 @@ class SubscribersController extends Controller
      */
     public function edit(int $id): View
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
-        $segments = $this->segmentRepo->pluck(auth()->user()->currentWorkspace()->id);
-        $selectedSegments = $subscriber->segments->pluck('id', 'name');
+        $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
+        $tags = $this->tagRepo->pluck(Sendportal::currentWorkspaceId());
+        $selectedTags = $subscriber->tags->pluck('name', 'id');
 
-        return view('sendportal::subscribers.edit', compact('subscriber', 'segments', 'selectedSegments'));
+        return view('sendportal::subscribers.edit', compact('subscriber', 'tags', 'selectedTags'));
     }
 
     /**
@@ -111,7 +110,7 @@ class SubscribersController extends Controller
      */
     public function update(SubscriberRequest $request, int $id): RedirectResponse
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
         $data = $request->validated();
 
         // updating subscriber from subscribed -> unsubscribed
@@ -124,11 +123,11 @@ class SubscribersController extends Controller
             $data['unsubscribe_event_id'] = null;
         }
 
-        if (!$request->has('segments')) {
-            $data['segments'] = [];
+        if (!$request->has('tags')) {
+            $data['tags'] = [];
         }
 
-        $this->subscriberRepo->update(auth()->user()->currentWorkspace()->id, $id, $data);
+        $this->subscriberRepo->update(Sendportal::currentWorkspaceId(), $id, $data);
 
         return redirect()->route('sendportal.subscribers.index');
     }
@@ -138,7 +137,7 @@ class SubscribersController extends Controller
      */
     public function destroy($id)
     {
-        $subscriber = $this->subscriberRepo->find(auth()->user()->currentWorkspace()->id, $id);
+        $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
 
         $subscriber->delete();
 
@@ -155,7 +154,7 @@ class SubscribersController extends Controller
      */
     public function export()
     {
-        $subscribers = $this->subscriberRepo->all(auth()->user()->currentWorkspace()->id, 'id');
+        $subscribers = $this->subscriberRepo->all(Sendportal::currentWorkspaceId(), 'id');
 
         if (!$subscribers->count()) {
             return redirect()->route('sendportal.subscribers.index')->withErrors(__('There are no subscribers to export'));

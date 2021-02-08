@@ -12,13 +12,14 @@
         @slot('cardHeader', __('Edit Subscriber'))
 
         @slot('cardBody')
-            {!! Form::model($subscriber, ['method' => 'put', 'class' => 'form-horizontal', 'route' => ['sendportal.subscribers.update', $subscriber->id]]) !!}
+            <form action="{{ route('sendportal.subscribers.update', $subscriber->id) }}" method="POST" class="form-horizontal">
+                @csrf
+                @method('PUT')
 
-            @include('sendportal::subscribers.partials.form')
+                @include('sendportal::subscribers.partials.form')
 
-            {!! Form::submitButton(__('Save')) !!}
-
-            {!! Form::close() !!}
+                <x-sendportal.submit-button :label="__('Save')" />
+            </form>
         @endSlot
     @endcomponent
 

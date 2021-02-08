@@ -6,6 +6,8 @@ namespace Sendportal\Base\Models;
 
 class EmailServiceType extends BaseModel
 {
+    protected $table = 'sendportal_email_service_types';
+
     public const SES = 1;
     public const SENDGRID = 2;
     public const MAILGUN = 3;

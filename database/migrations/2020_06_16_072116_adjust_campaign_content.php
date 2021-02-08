@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class AdjustCampaignContent extends Migration
+class AdjustCampaignContent extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class AdjustCampaignContent extends Migration
      */
     public function up()
     {
-        Schema::table('campaigns', function (Blueprint $table) {
+        $campaigns = $this->getTableName('campaigns');
+
+        Schema::table($campaigns, function (Blueprint $table) {
             $table->longText('content')->change();
         });
     }

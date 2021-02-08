@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,12 +18,15 @@ class SubscriberTest extends TestCase
     /** @test */
     public function it_has_many_messages()
     {
-        $subscriber = factory(Subscriber::class)->create();
+        // given
+        $subscriber = Subscriber::factory()->create();
+
         [$campaignOne, $messageOne] = $this->createCampaignAndMessage($subscriber);
         [$campaignTwo, $messageTwo] = $this->createCampaignAndMessage($subscriber);
 
         $messages = $subscriber->messages;
 
+        // then
         static::assertInstanceOf(HasMany::class, $subscriber->messages());
         static::assertCount(2, $messages);
 
@@ -41,8 +46,8 @@ class SubscriberTest extends TestCase
      */
     protected function createCampaignAndMessage(Subscriber $subscriber)
     {
-        $campaign = factory(Campaign::class)->state('sent')->create();
-        $message = factory(Message::class)->create([
+        $campaign = Campaign::factory()->sent()->create();
+        $message = Message::factory()->create([
             'subscriber_id' => $subscriber->id,
             'source_id' => $campaign->id,
         ]);

@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
@@ -38,7 +39,7 @@ class CampaignDispatchController extends Controller
      */
     public function send(CampaignDispatchRequest $request, int $id): RedirectResponse
     {
-        $campaign = $this->campaigns->find(auth()->user()->currentWorkspace()->id, $id, ['email_service', 'messages']);
+        $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $id, ['email_service', 'messages']);
 
         if ($campaign->status_id !== CampaignStatus::STATUS_DRAFT) {
             return redirect()->route('sendportal.campaigns.status', $id);
@@ -53,7 +54,7 @@ class CampaignDispatchController extends Controller
             'send_to_all' => $request->get('recipients') === 'send_to_all',
         ]);
 
-        $campaign->segments()->sync($request->get('segments'));
+        $campaign->tags()->sync($request->get('tags'));
 
         if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return redirect()->route('sendportal.campaigns.edit', $id)

@@ -1,4 +1,4 @@
-{!! Form::textField('settings[key]', __('AWS Access Key'), \Arr::get($settings ?? [], 'key'), ['autocomplete' => 'off']) !!}
-{!! Form::textField('settings[secret]', __('AWS Secret Access Key'), \Arr::get($settings ?? [], 'secret'), ['autocomplete' => 'off']) !!}
-{!! Form::textField('settings[region]', __('AWS Region'), \Arr::get($settings ?? [], 'region')) !!}
-{!! Form::textField('settings[configuration_set_name]', __('Configuration Set Name'), \Arr::get($settings ?? [], 'configuration_set_name')) !!}
+<x-sendportal.text-field name="settings[key]" :label="__('AWS Access Key')" :value="Arr::get($settings ?? [], 'key')" autocomplete="off" />
+<x-sendportal.text-field name="settings[secret]" :label="__('AWS Secret Access Key')" :value="Arr::get($settings ?? [], 'secret')" autocomplete="off" />
+<x-sendportal.text-field name="settings[region]" :label="__('AWS Region')" :value="Arr::get($settings ?? [], 'region')" />
+<x-sendportal.text-field name="settings[configuration_set_name]" :label="__('Configuration Set Name')" :value="Arr::get($settings ?? [], 'configuration_set_name')" />

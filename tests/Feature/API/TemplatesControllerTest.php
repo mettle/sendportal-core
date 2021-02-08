@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Traits\NormalizeTags;
@@ -21,19 +22,13 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function the_template_index_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $route = route('sendportal.api.templates.index', [
-            'workspaceId' => $user->currentWorkspace()->id
-        ]);
+        $route = route('sendportal.api.templates.index');
 
-        $this
-            ->actingAs($user, 'api')
-            ->getJson($route)
+        $this->getJson($route)
             ->assertOk()
             ->assertJson([
                 'data' => [
@@ -45,20 +40,15 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_single_template_is_accessible_to_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.show', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id
+            'template' => $template->id,
         ]);
 
-        $this
-            ->actingAs($user, 'api')
-            ->getJson($route)
+        $this->getJson($route)
             ->assertOk()
             ->assertJson([
                 'data' => Arr::only($template->toArray(), ['id', 'name', 'content']),
@@ -66,11 +56,9 @@ class TemplatesControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_template_can_be_created_by_authorised_users()
+    public function a_template_can_be_created()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $route = route('sendportal.api.templates.store', $user->currentWorkspace()->id);
+        $route = route('sendportal.api.templates.store');
 
         $request = [
             'name' => $this->faker->name,
@@ -83,26 +71,22 @@ class TemplatesControllerTest extends TestCase
         ];
 
         $this
-            ->actingAs($user, 'api')
             ->postJson($route, $request)
             ->assertStatus(201)
             ->assertJson(['data' => $normalisedRequest]);
 
-        $this->assertDatabaseHas('templates', $normalisedRequest);
+        $this->assertDatabaseHas('sendportal_templates', $normalisedRequest);
     }
 
     /** @test */
     public function a_template_can_be_updated_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.update', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id
+            'template' => $template->id,
         ]);
 
         $request = [
@@ -115,36 +99,29 @@ class TemplatesControllerTest extends TestCase
             'content' => $this->normalizeTags($request['content'], 'content')
         ];
 
-        $this
-            ->actingAs($user, 'api')
-            ->putJson($route, $request)
+        $this->putJson($route, $request)
             ->assertOk()
             ->assertJson(['data' => $normalisedRequest]);
 
-        $this->assertDatabaseMissing('templates', $template->toArray());
-        $this->assertDatabaseHas('templates', $normalisedRequest);
+        $this->assertDatabaseMissing('sendportal_templates', $template->toArray());
+        $this->assertDatabaseHas('sendportal_templates', $normalisedRequest);
     }
 
     /** @test */
     public function a_template_can_be_deleted_by_authorised_users()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
         $route = route('sendportal.api.templates.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id
+            'template' => $template->id,
         ]);
 
-        $this
-            ->actingAs($user, 'api')
-            ->deleteJson($route)
+        $this->deleteJson($route)
             ->assertStatus(204);
 
-        $this->assertDatabaseMissing('templates', [
+        $this->assertDatabaseMissing('sendportal_templates', [
             'id' => $template->id
         ]);
     }
@@ -152,24 +129,19 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $campaign = factory(Campaign::class)->create([
+        Campaign::factory()->create([
             'template_id' => $template->id
         ]);
 
         $route = route('sendportal.api.templates.destroy', [
-            'workspaceId' => $user->currentWorkspace()->id,
-            'template' => $template->id
+            'template' => $template->id,
         ]);
 
-        $this
-            ->actingAs($user, 'api')
-            ->deleteJson($route)
+        $this->deleteJson($route)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['template']);
     }
@@ -177,53 +149,47 @@ class TemplatesControllerTest extends TestCase
     /** @test */
     public function a_template_name_must_be_unique_for_a_workspace()
     {
-        $user = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $user->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $route = route('sendportal.api.templates.store', [
-            'workspaceId' => $user->currentWorkspace()->id,
-        ]);
+        $route = route('sendportal.api.templates.store');
 
         $request = [
             'name' => $template->name,
+            'content' => 'test'
         ];
 
-        $this
-            ->actingAs($user, 'api')
-            ->postJson($route, $request)
+        $this->postJson($route, $request)
             ->assertStatus(422)
             ->assertJsonValidationErrors('name');
 
-        $this->assertEquals(1, Template::where('name', $template->name)->count());
+        self::assertEquals(1, Template::where('name', $template->name)->count());
     }
 
     /** @test */
     public function two_workspaces_can_have_the_same_name_for_a_template()
     {
-        $userA = $this->createUserWithWorkspace();
-        $userB = $this->createUserWithWorkspace();
-
-        $template = factory(Template::class)->create([
-            'workspace_id' => $userA->currentWorkspace()->id
+        $template = Template::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId()
         ]);
 
-        $route = route('sendportal.api.templates.store', [
-            'workspaceId' => $userB->currentWorkspace()->id,
-        ]);
+        $currentWorkspaceId = Sendportal::currentWorkspaceId();
+
+        Sendportal::setCurrentWorkspaceIdResolver(function () use ($currentWorkspaceId) {
+            return $currentWorkspaceId + 1;
+        });
+
+        $route = route('sendportal.api.templates.store');
 
         $request = [
             'name' => $template->name,
             'content' => 'newContent {{ content }}',
         ];
 
-        $this
-            ->actingAs($userB, 'api')
-            ->postJson($route, $request)
+        $this->postJson($route, $request)
             ->assertStatus(201);
 
-        $this->assertEquals(2, Template::where('name', $template->name)->count());
+        self::assertEquals(2, Template::where('name', $template->name)->count());
     }
 }

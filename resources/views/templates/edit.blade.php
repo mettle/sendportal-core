@@ -13,9 +13,11 @@
             {{ __('Edit Template') }}
         </div>
         <div class="card-body">
-            {!! Form::model($template, ['method' => 'put', 'route' => ['sendportal.templates.update', $template->id], 'class' => 'form-horizontal']) !!}
-
-            @include('sendportal::templates.partials.form')
+            <form action="{{ route('sendportal.templates.update', $template->id) }}" method="POST" class="form-horizontal">
+                @csrf
+                @method('PUT')
+                @include('sendportal::templates.partials.form')
+            </form>
         </div>
     </div>
 

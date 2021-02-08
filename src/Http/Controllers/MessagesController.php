@@ -6,8 +6,8 @@ namespace Sendportal\Base\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Services\Content\MergeContent;
@@ -45,7 +45,7 @@ class MessagesController extends Controller
         $params['sent'] = true;
 
         $messages = $this->messageRepo->paginateWithSource(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             'sent_atDesc',
             [],
             50,
@@ -63,7 +63,7 @@ class MessagesController extends Controller
     public function draft(): View
     {
         $messages = $this->messageRepo->paginateWithSource(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             'created_atDesc',
             [],
             50,
@@ -80,7 +80,7 @@ class MessagesController extends Controller
      */
     public function show(int $messageId): View
     {
-        $message = $this->messageRepo->find(auth()->user()->currentWorkspace()->id, $messageId);
+        $message = $this->messageRepo->find(Sendportal::currentWorkspaceId(), $messageId);
 
         $content = $this->mergeContent->handle($message);
 
@@ -95,7 +95,7 @@ class MessagesController extends Controller
     public function send(): RedirectResponse
     {
         if (!$message = $this->messageRepo->find(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             request('id'),
             ['subscriber']
         )) {
@@ -122,20 +122,18 @@ class MessagesController extends Controller
     public function delete(): RedirectResponse
     {
         if (!$message = $this->messageRepo->find(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             request('id')
         )) {
             return redirect()->back()->withErrors(__('Unable to locate that message'));
         }
 
-        $response = Gate::inspect('delete', $message);
-
-        if (! $response->allowed()) {
-            return redirect()->back()->withErrors($response->message());
+        if ($message->sent_at) {
+            return redirect()->back()->withErrors(__('A sent message cannot be deleted'));
         }
 
         $this->messageRepo->destroy(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             $message->id
         );
 
@@ -157,7 +155,7 @@ class MessagesController extends Controller
         }
 
         if (!$messages = $this->messageRepo->getWhereIn(
-            auth()->user()->currentWorkspace()->id,
+            Sendportal::currentWorkspaceId(),
             request('messages'),
             ['subscriber']
         )) {

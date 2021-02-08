@@ -55,6 +55,6 @@ class CampaignDispatchService
      */
     protected function findCampaign(int $id): ?Campaign
     {
-        return Campaign::with('segments')->find($id);
+        return Campaign::with('tags')->find($id);
     }
 }

@@ -6,10 +6,10 @@ namespace Tests\Feature\Content;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Template;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Services\Content\MergeContent;
 use Tests\TestCase;
 
@@ -33,7 +33,7 @@ class MergeContentTest extends TestCase
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p>' . $content . '</p></body></html>';
 
-        $this->assertEquals($expectedHtml, $mergedContent);
+        self::assertEquals($expectedHtml, $mergedContent);
     }
 
     /** @test */
@@ -47,40 +47,7 @@ class MergeContentTest extends TestCase
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p>Hello this is some </p></body></html>';
 
-        $this->assertEquals($expectedHtml, $mergedContent);
-    }
-
-    private function generateCampaignMessage(?string $campaignContent, ?string $templateContent = null): Message
-    {
-        /** @var Workspace $workspace */
-        $workspace = factory(Workspace::class)->create();
-
-        /** @var Template $template */
-        $template = factory(Template::class)->create([
-            'content' => $templateContent ?? '<p>{{content}}</p>',
-            'workspace_id' => $workspace->id
-        ]);
-
-        /** @var Campaign $campaign */
-        $campaign = factory(Campaign::class)->create([
-            'template_id' => $template->id,
-            'content' => $campaignContent,
-            'workspace_id' => $workspace->id
-        ]);
-
-        return factory(Message::class)->create([
-            'source_type' => Campaign::class,
-            'source_id' => $campaign->id,
-            'workspace_id' => $workspace->id
-        ]);
-    }
-
-    private function mergeContent(Message $message): string
-    {
-        /** @var MergeContent $mergeContent */
-        $mergeContent = app(MergeContent::class);
-
-        return $mergeContent->handle($message);
+        self::assertEquals($expectedHtml, $mergedContent);
     }
 
     /** @test */
@@ -99,7 +66,7 @@ class MergeContentTest extends TestCase
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p><a href="' . $route . '">Unsubscribe Here</a></p></body></html>';
 
-        $this->assertEquals($expectedHtml, $mergedContent);
+        self::assertEquals($expectedHtml, $mergedContent);
     }
 
     /** @test */
@@ -116,7 +83,7 @@ class MergeContentTest extends TestCase
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p>Hi, ' . $message->recipient_email . '</p></body></html>';
 
-        $this->assertEquals($expectedHtml, $mergedContent);
+        self::assertEquals($expectedHtml, $mergedContent);
     }
 
     /** @test */
@@ -133,7 +100,7 @@ class MergeContentTest extends TestCase
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p>Hi, ' . $message->subscriber->first_name . '</p></body></html>';
 
-        $this->assertEquals($expectedHtml, $mergedContent);
+        self::assertEquals($expectedHtml, $mergedContent);
     }
 
     /** @test */
@@ -151,6 +118,36 @@ class MergeContentTest extends TestCase
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p>Hi, ' . $message->subscriber->last_name . '</p></body></html>';
 
-        $this->assertEquals($expectedHtml, $mergedContent);
+        self::assertEquals($expectedHtml, $mergedContent);
+    }
+
+    private function generateCampaignMessage(?string $campaignContent, ?string $templateContent = null): Message
+    {
+        /** @var Template $template */
+        $template = Template::factory()->create([
+            'content' => $templateContent ?? '<p>{{content}}</p>',
+            'workspace_id' => Sendportal::currentWorkspaceId()
+        ]);
+
+        /** @var Campaign $campaign */
+        $campaign = Campaign::factory()->create([
+            'template_id' => $template->id,
+            'content' => $campaignContent,
+            'workspace_id' => Sendportal::currentWorkspaceId()
+        ]);
+
+        return Message::factory()->create([
+            'source_type' => Campaign::class,
+            'source_id' => $campaign->id,
+            'workspace_id' => Sendportal::currentWorkspaceId()
+        ]);
+    }
+
+    private function mergeContent(Message $message): string
+    {
+        /** @var MergeContent $mergeContent */
+        $mergeContent = app(MergeContent::class);
+
+        return $mergeContent->handle($message);
     }
 }

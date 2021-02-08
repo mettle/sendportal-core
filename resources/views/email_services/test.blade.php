@@ -10,27 +10,25 @@
         @slot('cardHeader', __('Test Email Service') . ' : ' . $emailService->name)
 
         @slot('cardBody')
-            {!! Form::open(['method' => 'POST', 'class' => 'form-horizontal', 'route' => ['sendportal.email_services.test.store', $emailService->id]]) !!}
+            <form action="{{ route('sendportal.email_services.test.store', $emailService->id) }}" method="POST" class="form-horizontal">
+                @csrf
 
-            {!! Form::textField('to', 'To Email', auth()->user()->email, ['readonly' => 'readonly']) !!}
+                <x-sendportal.text-field name="to" :label="__('To Email')" />
 
-            <div class="form-group row form-group-email">
-                <label for="id-field-email" class="control-label col-sm-3">{{ __('From Email') }}</label>
-                <div class="col-sm-9">
-                    <input id="id-field-email" class="form-control" name="from" type="email" required>
-                    <small class="form-text text-muted">{{ __('Must be a verified :service email address or domain', ['service' => $emailService->type->name]) }}</small>
+                <div class="form-group row form-group-email">
+                    <label for="id-field-email" class="control-label col-sm-3">{{ __('From Email') }}</label>
+                    <div class="col-sm-9">
+                        <input id="id-field-email" class="form-control" name="from" type="email" required>
+                        <small class="form-text text-muted">{{ __('Must be a verified :service email address or domain', ['service' => $emailService->type->name]) }}</small>
+                    </div>
                 </div>
-            </div>
 
-            {!! Form::textField('subject', __('Subject'), 'Sendportal Test Email', null, ['required' => 'required']) !!}
+                <x-sendportal.text-field name="subject" :label="__('Subject')" value="Sendportal Test Email" required="required" />
 
-            {!! Form::textareaField('body', __('Email Body'), 'This is a test for the email service ' . $emailService->name, [
-                'required' => 'required',
-                'rows' => 5
-            ]) !!}
+                <x-sendportal.textarea-field name="body" :label="__('Email Body')" required="required" rows="5">This is a test for the email service {{ $emailService->name }}</x-sendportal.textarea-field>
 
-            {!! Form::submitButton(__('Test')) !!}
-            {!! Form::close() !!}
+                <x-sendportal.submit-button :label="__('Test')" />
+            </form>
         @endSlot
     @endcomponent
 

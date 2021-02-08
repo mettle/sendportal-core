@@ -5,7 +5,7 @@ namespace Sendportal\Base\Http\Controllers;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\View\View;
-use Sendportal\Base\Models\Workspace;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
@@ -46,24 +46,24 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        $workspace = auth()->user()->currentWorkspace();
-        $completedCampaigns = $this->campaigns->completedCampaigns($workspace->id, ['status']);
-        $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspace);
+        $workspaceId = Sendportal::currentWorkspaceId();
+        $completedCampaigns = $this->campaigns->completedCampaigns($workspaceId, ['status']);
+        $subscriberGrowthChart = $this->getSubscriberGrowthChart($workspaceId);
 
         return view('sendportal::dashboard.index', [
-            'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspace->id),
+            'recentSubscribers' => $this->subscribers->getRecentSubscribers($workspaceId),
             'completedCampaigns' => $completedCampaigns,
-            'campaignStats' => $this->campaignStatisticsService->getForCollection($completedCampaigns, $workspace),
+            'campaignStats' => $this->campaignStatisticsService->getForCollection($completedCampaigns, $workspaceId),
             'subscriberGrowthChartLabels' => json_encode($subscriberGrowthChart['labels']),
             'subscriberGrowthChartData' => json_encode($subscriberGrowthChart['data']),
         ]);
     }
 
-    protected function getSubscriberGrowthChart(Workspace $workspace): array
+    protected function getSubscriberGrowthChart($workspaceId): array
     {
         $period = CarbonPeriod::create(now()->subDays(30)->startOfDay(), now()->endOfDay());
 
-        $growthChartData = $this->subscribers->getGrowthChartData($period, $workspace->id);
+        $growthChartData = $this->subscribers->getGrowthChartData($period, $workspaceId);
 
         $growthChart = [
             'labels' => [],

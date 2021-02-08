@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Sendportal\Base\Models\UnsubscribeEventType;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateUnsubscribedTable extends Migration
+class CreateUnsubscribedTable extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateUnsubscribedTable extends Migration
      */
     public function up()
     {
-        Schema::create('unsubscribe_event_types', function (Blueprint $table) {
+        Schema::create('sendportal_unsubscribe_event_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -28,7 +28,7 @@ class CreateUnsubscribedTable extends Migration
         ];
 
         foreach ($types as $id => $name) {
-            DB::table('unsubscribe_event_types')->insert([
+            DB::table('sendportal_unsubscribe_event_types')->insert([
                 'id' => $id,
                 'name' => $name
             ]);

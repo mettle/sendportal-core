@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateSubscribersTable extends Migration
+class CreateSubscribersTable extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateSubscribersTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscribers', function (Blueprint $table) {
+        $unsubscribe_event_types = $this->getTableName('unsubscribe_event_types');
+
+        Schema::create('sendportal_subscribers', function (Blueprint $table) use ($unsubscribe_event_types) {
             $table->increments('id');
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->uuid('hash')->unique();
             $table->string('email')->index();
             $table->string('first_name')->nullable();
@@ -26,8 +28,7 @@ class CreateSubscribersTable extends Migration
             $table->timestamps();
 
             $table->index('created_at');
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
-            $table->foreign('unsubscribe_event_id')->references('id')->on('unsubscribe_event_types');
+            $table->foreign('unsubscribe_event_id')->references('id')->on($unsubscribe_event_types);
         });
     }
 }

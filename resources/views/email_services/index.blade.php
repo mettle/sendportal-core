@@ -57,11 +57,3 @@
         </div>
     </div>
 @endsection
-
-@push('js')
-    <script>
-        function askConfirm() {
-            return confirm("{{ __('A test email will be sent to :recipient. Do you want to proceeed?', ['recipient' => auth()->user()->email]) }}");
-        }
-    </script>
-@endpush

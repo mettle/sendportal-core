@@ -45,7 +45,7 @@ class ApiSubscriberService
     public function delete(int $workspaceId, Subscriber $subscriber): bool
     {
         return DB::transaction(function () use ($workspaceId, $subscriber) {
-            $subscriber->segments()->detach();
+            $subscriber->tags()->detach();
             return $this->subscribers->destroy($workspaceId, $subscriber->id);
         });
     }

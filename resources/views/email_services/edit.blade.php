@@ -10,14 +10,15 @@
         @slot('cardHeader', __('Edit Email Service'))
 
         @slot('cardBody')
-            {!! Form::open(['method' => 'PUT', 'class' => 'form-horizontal', 'route' => ['sendportal.email_services.update', $emailService->id]]) !!}
+            <form action="{{ route('sendportal.email_services.update', $emailService->id) }}" method="POST" class="form-horizontal">
+                @csrf
+                @method('PUT')
+                <x-sendportal.text-field name="name" :label="__('Name')" :value="$emailService->name" />
 
-            {!! Form::textField('name', __('Name'), $emailService->name) !!}
+                @include('sendportal::email_services.options.' . strtolower($emailServiceType->name), ['settings' => $emailService->settings])
 
-            @include('sendportal::email_services.options.' . strtolower($emailServiceType->name), ['settings' => $emailService->settings])
-
-            {!! Form::submitButton(__('Update')) !!}
-            {!! Form::close() !!}
+                <x-sendportal.submit-button :label="__('Update')" />
+            </form>
         @endSlot
     @endcomponent
 

@@ -6,12 +6,12 @@ namespace Tests\Feature\API;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
-use Sendportal\Base\Models\Workspace;
 use Sendportal\Base\Services\QuotaService;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -25,18 +25,18 @@ class CampaignDispatchControllerTest extends TestCase
     {
         $this->ignoreQuota();
 
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = factory(Campaign::class)->states('draft')->create([
-            'workspace_id' => $workspace->id,
-            'email_service_id' => $emailService->id,
-        ]);
+        $campaign = Campaign::factory()
+            ->draft()
+            ->create([
+                'workspace_id' => Sendportal::currentWorkspaceId(),
+                'email_service_id' => $emailService->id,
+            ]);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => $workspace->id,
-                'id' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
+                'id' => $campaign->id
             ]))
             ->assertOk()
             ->assertJson([
@@ -51,15 +51,13 @@ class CampaignDispatchControllerTest extends TestCase
     {
         $this->ignoreQuota();
 
-        [$workspace, $emailService] = $this->createUserWithWorkspaceAndEmailService();
+        $emailService = $this->createEmailService();
 
-        $campaign = $this->createCampaign($workspace, $emailService);
+        $campaign = $this->createCampaign($emailService);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => $workspace->id,
                 'id' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
@@ -74,23 +72,19 @@ class CampaignDispatchControllerTest extends TestCase
             $mock->shouldReceive('exceedsQuota')->andReturn(true);
         }));
 
-        $workspace = factory(Workspace::class)->create();
-
-        $emailService = factory(EmailService::class)->create([
-            'workspace_id' => $workspace->id,
+        $emailService = EmailService::factory()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'type_id' => EmailServiceType::SES
         ]);
 
-        $campaign = factory(Campaign::class)->states('draft')->create([
-            'workspace_id' => $workspace->id,
+        $campaign = Campaign::factory()->draft()->create([
+            'workspace_id' => Sendportal::currentWorkspaceId(),
             'email_service_id' => $emailService->id,
         ]);
 
         $this
             ->postJson(route('sendportal.api.campaigns.send', [
-                'workspaceId' => $workspace->id,
                 'id' => $campaign->id,
-                'api_token' => $workspace->owner->api_token,
             ]))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
@@ -98,7 +92,7 @@ class CampaignDispatchControllerTest extends TestCase
             ]);
     }
 
-    protected function ignoreQuota()
+    protected function ignoreQuota(): void
     {
         $this->instance(QuotaServiceInterface::class, Mockery::mock(QuotaService::class, function ($mock) {
             $mock->shouldReceive('exceedsQuota')->andReturn(false);

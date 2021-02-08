@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,20 +16,24 @@ class TemplateTest extends TestCase
     /** @test */
     public function the_template_is_in_use_if_it_has_at_least_one_campaign()
     {
-        $template = factory(Template::class)->create();
+        // given
+        $template = Template::factory()->create();
 
-        $campaign = factory(Campaign::class)->create([
+        Campaign::factory()->create([
             'template_id' => $template->id
         ]);
 
+        // then
         static::assertTrue($template->isInUse());
     }
 
     /** @test */
     public function the_template_is_not_in_use_if_it_has_not_campaigns()
     {
-        $template = factory(Template::class)->create();
+        // given
+        $template = Template::factory()->create();
 
+        // then
         static::assertFalse($template->isInUse());
     }
 }

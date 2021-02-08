@@ -1,10 +1,12 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Sendportal\Base\Models\EmailServiceType;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateEmailServiceTables extends Migration
+class CreateEmailServiceTables extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,7 +15,7 @@ class CreateEmailServiceTables extends Migration
      */
     public function up()
     {
-        \Schema::create('email_service_types', function (Blueprint $table) {
+        Schema::create('sendportal_email_service_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
@@ -21,41 +23,47 @@ class CreateEmailServiceTables extends Migration
 
         $this->seedEmailServiceTypes();
 
-        \Schema::create('email_services', function (Blueprint $table) {
+        Schema::create('sendportal_email_services', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->string('name')->nullable();
             $table->unsignedInteger('type_id');
             $table->mediumText('settings');
             $table->timestamps();
 
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
-            $table->foreign('type_id')->references('id')->on('email_service_types');
+            $table->foreign('type_id')->references('id')->on('sendportal_email_service_types');
         });
     }
 
     protected function seedEmailServiceTypes()
     {
-        EmailServiceType::unguard();
+        $serviceTypes = [
+            [
+                'id' => EmailServiceType::SES,
+                'name' => 'SES'
+            ],
+            [
+                'id' => EmailServiceType::SENDGRID,
+                'name' => 'SendGrid'
+            ],
+            [
+                'id' => EmailServiceType::MAILGUN,
+                'name' => 'Mailgun'
+            ],
+            [
+                'id' => EmailServiceType::POSTMARK,
+                'name' => 'Postmark'
+            ]
+        ];
 
-        EmailServiceType::create([
-            'id' => EmailServiceType::SES,
-            'name' => 'SES'
-        ]);
-
-        EmailServiceType::create([
-            'id' => EmailServiceType::SENDGRID,
-            'name' => 'SendGrid'
-        ]);
-
-        EmailServiceType::create([
-            'id' => EmailServiceType::MAILGUN,
-            'name' => 'Mailgun'
-        ]);
-
-        EmailServiceType::create([
-            'id' => EmailServiceType::POSTMARK,
-            'name' => 'Postmark'
-        ]);
+        foreach ($serviceTypes as $type) {
+            DB::table('sendportal_email_service_types')
+                ->insert(
+                    $type + [
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+        }
     }
 }

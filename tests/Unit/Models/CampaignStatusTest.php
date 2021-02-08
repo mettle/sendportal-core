@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,8 +15,10 @@ class CampaignStatusTest extends TestCase
     /** @test */
     public function it_has_a_cancelled_status()
     {
+        // given
         $campaignStatus = CampaignStatus::findOrFail(CampaignStatus::STATUS_CANCELLED);
 
+        // then
         static::assertEquals('Cancelled', $campaignStatus->name);
     }
 }

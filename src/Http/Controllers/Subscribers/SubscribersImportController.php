@@ -15,9 +15,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Validation\ValidationException;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscribersImportRequest;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Repositories\TagTenantRepository;
 use Sendportal\Base\Services\Subscribers\ImportSubscriberService;
 
 class SubscribersImportController extends Controller
@@ -33,11 +34,11 @@ class SubscribersImportController extends Controller
     /**
      * @throws Exception
      */
-    public function show(SegmentTenantRepository $segmentRepo): ViewContract
+    public function show(TagTenantRepository $tagRepo): ViewContract
     {
-        $segments = $segmentRepo->pluck(auth()->user()->currentWorkspace()->id, 'name', 'id');
+        $tags = $tagRepo->pluck(Sendportal::currentWorkspaceId(), 'name', 'id');
 
-        return view('sendportal::subscribers.import', compact('segments'));
+        return view('sendportal::subscribers.import', compact('tags'));
     }
 
     /**
@@ -71,9 +72,8 @@ class SubscribersImportController extends Controller
             (new FastExcel)->import(Storage::disk('local')->path($path), function (array $line) use ($request, &$counter) {
                 $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
-                $data['segments'] = $request->get('segments') ?? [];
-
-                $subscriber = $this->subscriberService->import(auth()->user()->currentWorkspace()->id, $data);
+                $data['tags'] = $request->get('tags') ?? [];
+                $subscriber = $this->subscriberService->import(Sendportal::currentWorkspaceId(), $data);
 
                 if ($subscriber->wasRecentlyCreated) {
                     $counter['created']++;

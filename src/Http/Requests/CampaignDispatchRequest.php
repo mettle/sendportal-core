@@ -4,23 +4,24 @@ namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Sendportal\Base\Repositories\SegmentTenantRepository;
+use Sendportal\Base\Facades\Sendportal;
+use Sendportal\Base\Repositories\TagTenantRepository;
 
 class CampaignDispatchRequest extends FormRequest
 {
     public function rules(): array
     {
-        /** @var SegmentTenantRepository $segments */
-        $segments = app(SegmentTenantRepository::class)->pluck(
-            auth()->user()->currentWorkspace()->id,
+        /** @var TagTenantRepository $tags */
+        $tags = app(TagTenantRepository::class)->pluck(
+            Sendportal::currentWorkspaceId(),
             'id'
         );
 
         return [
-            'segments' => [
+            'tags' => [
                 'required_unless:recipients,send_to_all',
                 'array',
-                Rule::in($segments),
+                Rule::in($tags),
             ],
         ];
     }
@@ -28,8 +29,8 @@ class CampaignDispatchRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'segments.required_unless' => __('At least one segment must be selected'),
-            'segments.in' => __('One or more of the segments is invalid.'),
+            'tags.required_unless' => __('At least one tag must be selected'),
+            'tags.in' => __('One or more of the tags is invalid.'),
         ];
     }
 }

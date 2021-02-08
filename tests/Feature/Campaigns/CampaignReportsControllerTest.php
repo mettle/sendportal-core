@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Campaigns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Tests\TestCase;
 
@@ -16,12 +17,10 @@ class CampaignReportsControllerTest extends TestCase
     public function a_sent_campaign_report_is_accessible_by_authenticated_users()
     {
         // given
-        [$campaign, $user] = $this->getCampaignAndUser();
-
-        $this->withoutExceptionHandling();
+        $campaign = $this->getCampaign();
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.index', $campaign->id));
+        $response = $this->get(route('sendportal.campaigns.reports.index', $campaign->id));
 
         // then
         $response->assertOk();
@@ -31,10 +30,10 @@ class CampaignReportsControllerTest extends TestCase
     public function sent_campaign_recipients_are_accessible_by_authenticated_users()
     {
         // given
-        [$campaign, $user] = $this->getCampaignAndUser();
+        $campaign = $this->getCampaign();
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.recipients', $campaign->id));
+        $response = $this->get(route('sendportal.campaigns.reports.recipients', $campaign->id));
 
         // then
         $response->assertOk();
@@ -44,10 +43,10 @@ class CampaignReportsControllerTest extends TestCase
     public function sent_campaign_opens_are_accessible_by_authenticated_users()
     {
         // given
-        [$campaign, $user] = $this->getCampaignAndUser();
+        $campaign = $this->getCampaign();
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.opens', $campaign->id));
+        $response = $this->get(route('sendportal.campaigns.reports.opens', $campaign->id));
 
         // then
         $response->assertOk();
@@ -57,10 +56,10 @@ class CampaignReportsControllerTest extends TestCase
     public function sent_campaign_clicks_are_accessible_by_authenticated_users()
     {
         // given
-        [$campaign, $user] = $this->getCampaignAndUser();
+        $campaign = $this->getCampaign();
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.clicks', $campaign->id));
+        $response = $this->get(route('sendportal.campaigns.reports.clicks', $campaign->id));
 
         // then
         $response->assertOk();
@@ -70,10 +69,10 @@ class CampaignReportsControllerTest extends TestCase
     public function sent_campaign_bounces_are_accessible_by_authenticated_users()
     {
         // given
-        [$campaign, $user] = $this->getCampaignAndUser();
+        $campaign = $this->getCampaign();
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.bounces', $campaign->id));
+        $response = $this->get(route('sendportal.campaigns.reports.bounces', $campaign->id));
 
         // then
         $response->assertOk();
@@ -83,22 +82,19 @@ class CampaignReportsControllerTest extends TestCase
     public function sent_campaign_unsubscribes_are_accessible_by_authenticated_users()
     {
         // given
-        [$campaign, $user] = $this->getCampaignAndUser();
+        $campaign = $this->getCampaign();
 
         // when
-        $response = $this->actingAs($user)->get(route('sendportal.campaigns.reports.unsubscribes', $campaign->id));
+        $response = $this->get(route('sendportal.campaigns.reports.unsubscribes', $campaign->id));
 
         // then
         $response->assertOk();
     }
 
-    private function getCampaignAndUser(): array
+    private function getCampaign(): Campaign
     {
-        [$workspace, $user] = $this->createUserAndWorkspace();
-        $campaign = factory(Campaign::class)
-            ->state('sent')
-            ->create(['workspace_id' => $workspace->id]);
-
-        return [$campaign, $user];
+        return Campaign::factory()
+            ->sent()
+            ->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
     }
 }

@@ -30,7 +30,7 @@ class Campaign extends JsonResource
             'open_count' => $this->open_count,
             'click_count' => $this->click_count,
             'send_to_all' => $this->send_to_all,
-            'segments' => $this->whenLoaded('segments', $this->segments->modelKeys()),
+            'tags' => $this->whenLoaded('tags', $this->tags->modelKeys()),
             'save_as_draft' => $this->save_as_draft,
             'scheduled_at' => $this->scheduled_at ? $this->scheduled_at->toDateTimeString() : null,
             'created_at' => $this->created_at->toDateTimeString(),

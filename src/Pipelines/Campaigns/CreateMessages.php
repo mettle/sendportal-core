@@ -5,8 +5,8 @@ namespace Sendportal\Base\Pipelines\Campaigns;
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 
 class CreateMessages
 {
@@ -30,7 +30,7 @@ class CreateMessages
         if ($campaign->send_to_all) {
             $this->handleAllSubscribers($campaign);
         } else {
-            $this->handleSegments($campaign);
+            $this->handleTags($campaign);
         }
 
         return $next($campaign);
@@ -52,32 +52,32 @@ class CreateMessages
     }
 
     /**
-     * Loop through each segment
+     * Loop through each tag
      *
      * @param Campaign $campaign
      */
-    protected function handleSegments(Campaign $campaign)
+    protected function handleTags(Campaign $campaign)
     {
-        foreach ($campaign->segments as $segment) {
-            $this->handleSegment($campaign, $segment);
+        foreach ($campaign->tags as $tag) {
+            $this->handleTag($campaign, $tag);
         }
     }
 
     /**
-     * Handle each segment
+     * Handle each tag
      *
      * @param Campaign $campaign
-     * @param Segment $segment
+     * @param Tag $tag
      *
      * @return void
      */
-    protected function handleSegment(Campaign $campaign, Segment $segment): void
+    protected function handleTag(Campaign $campaign, Tag $tag): void
     {
-        \Log::info('- Handling Campaign Segment id='.$segment->id);
+        \Log::info('- Handling Campaign Tag id='.$tag->id);
 
-        $segment->subscribers()->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
+        $tag->subscribers()->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
             $this->dispatchToSubscriber($campaign, $subscribers);
-        }, 'subscribers.id');
+        }, 'sendportal_subscribers.id');
     }
 
     /**

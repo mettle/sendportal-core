@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Webhooks;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,105 +15,113 @@ class AwsWebhooksTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /**
-     * @var string
-     */
-    protected $route = 'api.webhooks.aws';
+    /** @var string */
+    protected $route = 'sendportal.api.webhooks.aws';
 
-    /**
-     * @return void
-     */
-    public function testDelivery()
+    /** @test */
+    public function it_accepts_delivery_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->delivered_at);
+        self::assertNull($message->delivered_at);
 
         $webhook = $this->resolveWebhook('delivery', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->delivered_at);
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testClick()
+    /** @test */
+    public function it_accepts_click_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->click_count);
-        $this->assertNull($message->clicked_at);
+        self::assertEquals(0, $message->click_count);
+        self::assertNull($message->clicked_at);
 
         $link = ['link' => $this->faker->url];
         $webhook = $this->resolveWebhook('click', $message->message_id, $link);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->click_count);
-        $this->assertNotNull($message->clicked_at);
+        // then
+        $response->assertOk();
+
+        self::assertEquals(1, $message->refresh()->click_count);
+        self::assertNotNull($message->clicked_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testOpen()
+    /** @test */
+    public function it_accepts_open_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertEquals(0, $message->open_count);
-        $this->assertNull($message->opened_at);
+        self::assertEquals(0, $message->open_count);
+        self::assertNull($message->opened_at);
 
         $webhook = $this->resolveWebhook('open', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertEquals(1, $message->refresh()->open_count);
-        $this->assertNotNull($message->opened_at);
+        // then
+        $response->assertOk();
+
+        self::assertEquals(1, $message->refresh()->open_count);
+        self::assertNotNull($message->opened_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testComplaint()
+    /** @test */
+    public function it_accepts_complaint_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->unsubscribed_at);
+        self::assertNull($message->unsubscribed_at);
 
         $webhook = $this->resolveWebhook('complaint', $message->message_id);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->unsubscribed_at);
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /**
-     * @return void
-     */
-    public function testBounce()
+    /** @test */
+    public function it_accepts_bounce_webhooks()
     {
+        // given
         $message = $this->createMessage();
 
-        $this->assertNull($message->bounced_at);
+        self::assertNull($message->bounced_at);
 
         $bounceType = ['bounceType' => 'permanent'];
         $webhook = $this->resolveWebhook('bounce', $message->message_id, $bounceType);
 
-        $this->json('POST', route($this->route), $webhook)
-            ->assertOk();
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
 
-        $this->assertNotNull($message->refresh()->bounced_at);
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->bounced_at);
     }
 
     protected function createMessage(): Message
     {
-        return factory(Message::class)->create(
+        return Message::factory()->create(
             [
                 'message_id' => Str::random(),
             ]
@@ -121,15 +131,17 @@ class AwsWebhooksTest extends TestCase
     protected function resolveWebhook(string $type, string $messageId, array $properties = []): array
     {
         return [
-            'Message' => json_encode([
-                $type => [
-                    'timestamp' => now()->timestamp,
-                ] + $properties,
-                'eventType' => $type,
-                'mail' => [
-                    'messageId' => $messageId,
+            'Message' => json_encode(
+                [
+                    $type => [
+                            'timestamp' => now()->timestamp,
+                        ] + $properties,
+                    'eventType' => $type,
+                    'mail' => [
+                        'messageId' => $messageId,
+                    ]
                 ]
-            ]),
+            ),
             'Type' => 'Notification',
         ];
     }

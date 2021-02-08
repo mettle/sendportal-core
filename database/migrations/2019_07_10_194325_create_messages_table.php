@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sendportal\Base\UpgradeMigration;
 
-class CreateMessagesTable extends Migration
+class CreateMessagesTable extends UpgradeMigration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('sendportal_messages', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('hash')->unique();
-            $table->unsignedInteger('workspace_id');
+            $table->unsignedInteger('workspace_id')->index();
             $table->unsignedInteger('subscriber_id')->index();
             $table->string('source_type')->index();
             $table->unsignedInteger('source_id')->index();
@@ -37,8 +37,6 @@ class CreateMessagesTable extends Migration
             $table->timestamp('opened_at')->nullable()->default(null)->index();
             $table->timestamp('clicked_at')->nullable()->default(null)->index();
             $table->timestamps();
-
-            $table->foreign('workspace_id')->references('id')->on('workspaces');
         });
     }
 }

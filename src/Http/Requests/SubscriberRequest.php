@@ -5,6 +5,7 @@ namespace Sendportal\Base\Http\Requests;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Sendportal\Base\Facades\Sendportal;
 
 /**
  * @property-read string $subscriber
@@ -18,10 +19,10 @@ class SubscriberRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('subscribers', 'email')
+                Rule::unique('sendportal_subscribers', 'email')
                     ->ignore($this->subscriber, 'id')
                     ->where(static function (Builder $query) {
-                        $query->where('workspace_id', auth()->user()->currentWorkspace()->id);
+                        $query->where('workspace_id', Sendportal::currentWorkspaceId());
                     })
             ],
             'first_name' => [
@@ -30,7 +31,7 @@ class SubscriberRequest extends FormRequest
             'last_name' => [
                 'max:255',
             ],
-            'segments' => [
+            'tags' => [
                 'nullable',
                 'array',
             ],

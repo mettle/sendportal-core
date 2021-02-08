@@ -26,6 +26,7 @@ class EmailServiceTestRequest extends FormRequest
     {
         return [
             'from' => ['required', 'email'],
+            'to' => ['required', 'email'],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string', 'max:255'],
         ];

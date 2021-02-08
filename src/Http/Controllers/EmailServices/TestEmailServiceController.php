@@ -5,6 +5,7 @@ namespace Sendportal\Base\Http\Controllers\EmailServices;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\EmailServiceTestRequest;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
@@ -23,7 +24,7 @@ class TestEmailServiceController extends Controller
 
     public function create(int $emailServiceId)
     {
-        $emailService = $this->emailServices->find(auth()->user()->currentWorkspace()->id, $emailServiceId);
+        $emailService = $this->emailServices->find(Sendportal::currentWorkspaceId(), $emailServiceId);
 
         return view('sendportal::email_services.test', compact('emailService'));
     }
@@ -33,16 +34,16 @@ class TestEmailServiceController extends Controller
      */
     public function store(int $emailServiceId, EmailServiceTestRequest $request, DispatchTestMessage $dispatchTestMessage): RedirectResponse
     {
-        $emailService = $this->emailServices->find(auth()->user()->currentWorkspace()->id, $emailServiceId);
+        $emailService = $this->emailServices->find(Sendportal::currentWorkspaceId(), $emailServiceId);
 
         $options = new MessageOptions();
         $options->setFromEmail($request->input('from'));
         $options->setSubject($request->input('subject'));
-        $options->setTo($request->user()->email);
+        $options->setTo($request->input('to'));
         $options->setBody($request->input('body'));
 
         try {
-            $messageId = $dispatchTestMessage->testService(auth()->user()->currentWorkspace()->id, $emailService, $options);
+            $messageId = $dispatchTestMessage->testService(Sendportal::currentWorkspaceId(), $emailService, $options);
 
             if (!$messageId) {
                 return redirect()

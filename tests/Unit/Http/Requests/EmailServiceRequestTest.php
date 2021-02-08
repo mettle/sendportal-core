@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -13,6 +16,7 @@ class EmailServiceRequestTest extends TestCase
 {
     use WithFaker;
 
+    /** @var EmailServiceRequest */
     protected $request;
 
     public function setUp(): void
@@ -25,33 +29,38 @@ class EmailServiceRequestTest extends TestCase
     /** @test */
     public function it_should_fail_validation_if_the_name_of_the_email_service_is_not_provided()
     {
+        // given
         $this->request->merge([
             'type_id' => EmailServiceType::SES
         ]);
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('name'));
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('name'));
     }
 
     /** @test */
     public function it_should_fail_validation_if_the_id_of_the_email_service_is_not_provided()
     {
+        // given
         $this->request->merge([
             'name' => 'Test'
         ]);
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('type_id'));
-        $this->assertEquals(1, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('type_id'));
+        self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_fail_validation_if_key_or_secret_or_region_or_configuration_set_name_are_not_provided_for_the_ses_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::SES
@@ -59,17 +68,19 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.key'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.secret'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.region'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.configuration_set_name'));
-        $this->assertEquals(4, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.key'));
+        self::assertTrue($validator->getMessageBag()->has('settings.secret'));
+        self::assertTrue($validator->getMessageBag()->has('settings.region'));
+        self::assertTrue($validator->getMessageBag()->has('settings.configuration_set_name'));
+        self::assertEquals(4, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_pass_validation_for_the_ses_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::SES,
@@ -83,12 +94,14 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertTrue($validator->passes());
+        // then
+        self::assertTrue($validator->passes());
     }
 
     /** @test */
     public function it_should_fail_validation_if_the_key_is_not_provided_for_the_sendgrid_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::SENDGRID
@@ -96,14 +109,16 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.key'));
-        $this->assertEquals(1, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.key'));
+        self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_pass_validation_for_the_sendgrid_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::SENDGRID,
@@ -114,12 +129,14 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertTrue($validator->passes());
+        // then
+        self::assertTrue($validator->passes());
     }
 
     /** @test */
     public function it_should_fail_validation_if_the_key_is_not_provided_for_the_postmark_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::POSTMARK
@@ -127,14 +144,16 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.key'));
-        $this->assertEquals(1, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.key'));
+        self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_pass_validation_for_the_postmark_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::POSTMARK,
@@ -145,12 +164,14 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertTrue($validator->passes());
+        // then
+        self::assertTrue($validator->passes());
     }
 
     /** @test */
     public function it_should_fail_validation_if_key_or_domain_or_zone_are_not_provided_for_the_mailgun_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::MAILGUN,
@@ -158,16 +179,18 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.key'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.domain'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.zone'));
-        $this->assertEquals(3, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.key'));
+        self::assertTrue($validator->getMessageBag()->has('settings.domain'));
+        self::assertTrue($validator->getMessageBag()->has('settings.zone'));
+        self::assertEquals(3, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailgun_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::MAILGUN,
@@ -180,14 +203,16 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.zone'));
-        $this->assertEquals(1, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.zone'));
+        self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_pass_validation_for_the_mailgun_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::MAILGUN,
@@ -200,12 +225,14 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertTrue($validator->passes());
+        // then
+        self::assertTrue($validator->passes());
     }
 
     /** @test */
     public function it_should_fail_validation_if_key_or_secret_or_zone_are_not_provided_for_the_mailjet_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::MAILJET,
@@ -213,16 +240,18 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.key'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.secret'));
-        $this->assertTrue($validator->getMessageBag()->has('settings.zone'));
-        $this->assertEquals(3, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.key'));
+        self::assertTrue($validator->getMessageBag()->has('settings.secret'));
+        self::assertTrue($validator->getMessageBag()->has('settings.zone'));
+        self::assertEquals(3, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailjet_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::MAILJET,
@@ -235,14 +264,16 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertFalse($validator->passes());
-        $this->assertTrue($validator->getMessageBag()->has('settings.zone'));
-        $this->assertEquals(1, $validator->getMessageBag()->count());
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.zone'));
+        self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
     /** @test */
     public function it_should_pass_validation_for_the_mailjet_email_service()
     {
+        // given
         $this->request->merge([
             'name' => 'Test',
             'type_id' => EmailServiceType::MAILJET,
@@ -255,13 +286,11 @@ class EmailServiceRequestTest extends TestCase
 
         $validator = $this->getValidator();
 
-        $this->assertTrue($validator->passes());
+        // then
+        self::assertTrue($validator->passes());
     }
 
-    /**
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function getValidator(): \Illuminate\Contracts\Validation\Validator
+    protected function getValidator(): ValidatorContract
     {
         return Validator::make($this->request->all(), $this->request->rules(), $this->request->messages());
     }

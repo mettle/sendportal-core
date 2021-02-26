@@ -11,6 +11,7 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 use Sendportal\Base\Services\Content\MergeContentService;
+use Sendportal\Base\Services\Content\MergeSubjectService;
 use Sendportal\Base\Services\Messages\DispatchMessage;
 
 class MessagesController extends Controller
@@ -22,16 +23,21 @@ class MessagesController extends Controller
     protected $dispatchMessage;
 
     /** @var MergeContentService */
-    protected $mergeContent;
+    protected $mergeContentService;
+
+    /** @var MergeSubjectService */
+    protected $mergeSubjectService;
 
     public function __construct(
         MessageTenantRepositoryInterface $messageRepo,
         DispatchMessage $dispatchMessage,
-        MergeContentService $mergeContent
+        MergeContentService $mergeContentService,
+        MergeSubjectService $mergeSubjectService
     ) {
         $this->messageRepo = $messageRepo;
         $this->dispatchMessage = $dispatchMessage;
-        $this->mergeContent = $mergeContent;
+        $this->mergeContentService = $mergeContentService;
+        $this->mergeSubjectService = $mergeSubjectService;
     }
 
     /**
@@ -82,9 +88,10 @@ class MessagesController extends Controller
     {
         $message = $this->messageRepo->find(Sendportal::currentWorkspaceId(), $messageId);
 
-        $content = $this->mergeContent->handle($message);
+        $content = $this->mergeContentService->handle($message);
+        $subject = $this->mergeSubjectService->handle($message);
 
-        return view('sendportal::messages.show', compact('content', 'message'));
+        return view('sendportal::messages.show', compact('content', 'message', 'subject'));
     }
 
     /**

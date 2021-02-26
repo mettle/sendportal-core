@@ -38,7 +38,7 @@ class DispatchMessage
         MarkAsSent $markAsSent
     ) {
         $this->mergeContentService = $mergeContentService;
-        $this->mergeContentService = $mergeSubjectService;
+        $this->mergeSubjectService = $mergeSubjectService;
         $this->resolveEmailService = $resolveEmailService;
         $this->relayMessage = $relayMessage;
         $this->markAsSent = $markAsSent;
@@ -55,6 +55,8 @@ class DispatchMessage
             return null;
         }
 
+        $message = $this->mergeSubject($message);
+
         $mergedContent = $this->getMergedContent($message);
 
         $emailService = $this->getEmailService($message);
@@ -66,6 +68,19 @@ class DispatchMessage
         $this->markSent($message, $messageId);
 
         return $messageId;
+    }
+
+    /**
+     * The message's subject is merged and persisted to the database
+     * so that we have a permanent record of the merged tags at the
+     * time of dispatch.
+     */
+    protected function mergeSubject(Message $message): Message
+    {
+        $message->subject = $this->mergeSubjectService->handle($message);
+        $message->save();
+
+        return $message;
     }
 
     /**
@@ -85,7 +100,7 @@ class DispatchMessage
             ->setTo($message->recipient_email)
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)
-            ->setSubject($this->mergeSubjectService->handle($message))
+            ->setSubject($message->subject)
             ->setTrackingOptions($trackingOptions);
 
         $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);

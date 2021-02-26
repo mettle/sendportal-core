@@ -61,7 +61,23 @@ class CampaignsController extends Controller
     public function index(): ViewContract
     {
         $workspaceId = Sendportal::currentWorkspaceId();
-        $campaigns = $this->campaigns->paginate($workspaceId, 'created_atDesc', ['status']);
+        $params = ['draft' => true];
+        $campaigns = $this->campaigns->paginate($workspaceId, 'created_atDesc', ['status'], 25, $params);
+
+        return view('sendportal::campaigns.index', [
+            'campaigns' => $campaigns,
+            'campaignStats' => $this->campaignStatisticsService->getForPaginator($campaigns, $workspaceId),
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function sent(): ViewContract
+    {
+        $workspaceId = Sendportal::currentWorkspaceId();
+        $params = ['sent' => true];
+        $campaigns = $this->campaigns->paginate($workspaceId, 'created_atDesc', ['status'], 25, $params);
 
         return view('sendportal::campaigns.index', [
             'campaigns' => $campaigns,

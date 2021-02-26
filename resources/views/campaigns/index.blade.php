@@ -8,6 +8,8 @@
 
 @section('content')
 
+    @include('sendportal::campaigns.partials.nav')
+
     @component('sendportal::layouts.partials.actions')
         @slot('right')
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.campaigns.create') }}">
@@ -22,9 +24,11 @@
                 <thead>
                 <tr>
                     <th>{{ __('Name') }}</th>
-                    <th>{{ __('Sent') }}</th>
-                    <th>{{ __('Opened') }}</th>
-                    <th>{{ __('Clicked') }}</th>
+                    @if (request()->routeIs('sendportal.campaigns.sent'))
+                        <th>{{ __('Sent') }}</th>
+                        <th>{{ __('Opened') }}</th>
+                        <th>{{ __('Clicked') }}</th>
+                    @endif
                     <th>{{ __('Created') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Actions') }}</th>
@@ -42,9 +46,13 @@
                                 <a href="{{ route('sendportal.campaigns.status', $campaign->id) }}">{{ $campaign->name }}</a>
                             @endif
                         </td>
-                        <td>{{ $campaignStats[$campaign->id]['counts']['sent'] }}</td>
-                        <td>{{ number_format($campaignStats[$campaign->id]['ratios']['open'] * 100, 1) . '%' }}</td>
-                        <td>{{ number_format($campaignStats[$campaign->id]['ratios']['click'] * 100, 1) . '%' }}</td>
+                        @if (request()->routeIs('sendportal.campaigns.sent'))
+                            <td>{{ $campaignStats[$campaign->id]['counts']['sent'] }}</td>
+                            <td>{{ number_format($campaignStats[$campaign->id]['ratios']['open'] * 100, 1) . '%' }}</td>
+                            <td>
+                                {{ number_format($campaignStats[$campaign->id]['ratios']['click'] * 100, 1) . '%' }}
+                            </td>
+                        @endif
                         <td><span title="{{ $campaign->created_at }}">{{ $campaign->created_at->diffForHumans() }}</span></td>
                         <td>
                             @include('sendportal::campaigns.partials.status')
@@ -95,7 +103,13 @@
                 @empty
                     <tr>
                         <td colspan="100%">
-                            <p class="empty-table-text">{{ __('You have not created any campaigns.') }}</p>
+                            <p class="empty-table-text">
+                                @if (request()->routeIs('sendportal.campaigns.index'))
+                                    {{ __('You do not have any draft campaigns.') }}
+                                @else
+                                    {{ __('You do not have any sent campaigns.') }}
+                                @endif
+                            </p>
                         </td>
                     </tr>
                 @endforelse

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories\Campaigns;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Models\Campaign;
@@ -75,5 +77,36 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
         }
 
         $campaign->messages()->whereNull('sent_at')->delete();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function applyFilters(Builder $instance, array $filters = []): void
+    {
+        $this->applySentFilter($instance, $filters);
+    }
+
+    /**
+     * Filter by sent status.
+     */
+    protected function applySentFilter(Builder $instance, array $filters = []): void
+    {
+        if (Arr::get($filters, 'draft')) {
+            $draftStatuses = [
+                CampaignStatus::STATUS_DRAFT,
+                CampaignStatus::STATUS_QUEUED,
+                CampaignStatus::STATUS_SENDING,
+            ];
+
+            $instance->whereIn('status_id', $draftStatuses);
+        } elseif (Arr::get($filters, 'sent')) {
+            $sentStatuses = [
+                CampaignStatus::STATUS_SENT,
+                CampaignStatus::STATUS_CANCELLED,
+            ];
+
+            $instance->whereIn('status_id', $sentStatuses);
+        }
     }
 }

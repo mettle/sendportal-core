@@ -51,10 +51,12 @@ class WebRoutes
                 $appRouter->get('/', 'DashboardController@index')->name('dashboard');
 
                 // Campaigns.
-                $appRouter->resource('campaigns', 'Campaigns\CampaignsController')->except(['destroy']);
+                $appRouter->resource('campaigns', 'Campaigns\CampaignsController')->except(['show', 'destroy']);
                 $appRouter->name('campaigns.')->prefix('campaigns')->namespace('Campaigns')->group(static function (
                     Router $campaignRouter
                 ) {
+                    $campaignRouter->get('sent', 'CampaignsController@sent')->name('sent');
+                    $campaignRouter->get('{id}', 'CampaignsController@show')->name('show');
                     $campaignRouter->get('{id}/preview', 'CampaignsController@preview')->name('preview');
                     $campaignRouter->put('{id}/send', 'CampaignDispatchController@send')->name('send');
                     $campaignRouter->get('{id}/status', 'CampaignsController@status')->name('status');

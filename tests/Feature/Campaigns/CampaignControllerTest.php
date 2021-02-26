@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
+use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Template;
 use Tests\TestCase;
@@ -28,6 +29,109 @@ class CampaignControllerTest extends TestCase
 
         // then
         $response->assertOk();
+    }
+
+    /** @test */
+    public function draft_campaigns_appear_on_the_draft_index()
+    {
+        $statuses = [
+            CampaignStatus::STATUS_DRAFT,
+            CampaignStatus::STATUS_QUEUED,
+            CampaignStatus::STATUS_SENDING,
+        ];
+
+        foreach ($statuses as $status) {
+            $campaign = Campaign::factory()->create(
+                [
+                    'workspace_id' => Sendportal::currentWorkspaceId(),
+                    'status_id' => $status,
+                ]
+            );
+
+            $this
+                ->get(route('sendportal.campaigns.index'))
+                ->assertSee($campaign->name);
+        }
+    }
+
+    /** @test */
+    public function sent_campaigns_dont_appear_on_the_draft_index()
+    {
+        $statuses = [
+            CampaignStatus::STATUS_SENT,
+            CampaignStatus::STATUS_CANCELLED,
+        ];
+
+        foreach ($statuses as $status) {
+            $campaign = Campaign::factory()->create(
+                [
+                    'workspace_id' => Sendportal::currentWorkspaceId(),
+                    'status_id' => $status,
+                ]
+            );
+
+            $this
+                ->get(route('sendportal.campaigns.index'))
+                ->assertDontSee($campaign->name);
+        }
+    }
+
+    /** @test */
+    public function the_sent_index_of_campaigns_is_accessible_to_authenticated_users()
+    {
+        // given
+        Campaign::factory()->count(3)->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
+
+        // when
+        $response = $this->get(route('sendportal.campaigns.sent'));
+
+        // then
+        $response->assertOk();
+    }
+
+    /** @test */
+    public function sent_campaigns_appear_on_the_sent_index()
+    {
+        $statuses = [
+            CampaignStatus::STATUS_SENT,
+            CampaignStatus::STATUS_CANCELLED,
+        ];
+
+        foreach ($statuses as $status) {
+            $campaign = Campaign::factory()->create(
+                [
+                    'workspace_id' => Sendportal::currentWorkspaceId(),
+                    'status_id' => $status,
+                ]
+            );
+
+            $this
+                ->get(route('sendportal.campaigns.sent'))
+                ->assertSee($campaign->name);
+        }
+    }
+
+    /** @test */
+    public function draft_campaigns_dont_appear_on_the_sent_index()
+    {
+        $statuses = [
+            CampaignStatus::STATUS_DRAFT,
+            CampaignStatus::STATUS_QUEUED,
+            CampaignStatus::STATUS_SENDING,
+        ];
+
+        foreach ($statuses as $status) {
+            $campaign = Campaign::factory()->create(
+                [
+                    'workspace_id' => Sendportal::currentWorkspaceId(),
+                    'status_id' => $status,
+                ]
+            );
+
+            $this
+                ->get(route('sendportal.campaigns.sent'))
+                ->assertDontSee($campaign->name);
+        }
     }
 
     /** @test */

@@ -10,7 +10,7 @@ use Illuminate\View\View;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
-use Sendportal\Base\Services\Content\MergeContent;
+use Sendportal\Base\Services\Content\MergeContentService;
 use Sendportal\Base\Services\Messages\DispatchMessage;
 
 class MessagesController extends Controller
@@ -21,13 +21,13 @@ class MessagesController extends Controller
     /** @var DispatchMessage */
     protected $dispatchMessage;
 
-    /** @var MergeContent */
+    /** @var MergeContentService */
     protected $mergeContent;
 
     public function __construct(
         MessageTenantRepositoryInterface $messageRepo,
         DispatchMessage $dispatchMessage,
-        MergeContent $mergeContent
+        MergeContentService $mergeContent
     ) {
         $this->messageRepo = $messageRepo;
         $this->dispatchMessage = $dispatchMessage;

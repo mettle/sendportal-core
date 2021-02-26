@@ -8,14 +8,14 @@ use Exception;
 use Illuminate\Contracts\View\View as ViewContract;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Services\Content\MergeContent;
+use Sendportal\Base\Services\Content\MergeContentService;
 
 class WebviewController extends Controller
 {
-    /** @var MergeContent */
+    /** @var MergeContentService */
     private $merger;
 
-    public function __construct(MergeContent $merger)
+    public function __construct(MergeContentService $merger)
     {
         $this->merger = $merger;
     }

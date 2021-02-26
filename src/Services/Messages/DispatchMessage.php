@@ -10,7 +10,8 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Message;
-use Sendportal\Base\Services\Content\MergeContent;
+use Sendportal\Base\Services\Content\MergeContentService;
+use Sendportal\Base\Services\Content\MergeSubjectService;
 
 class DispatchMessage
 {
@@ -20,21 +21,26 @@ class DispatchMessage
     /** @var RelayMessage */
     protected $relayMessage;
 
-    /** @var MergeContent */
-    protected $mergeContent;
+    /** @var MergeContentService */
+    protected $mergeContentService;
+
+    /** @var MergeSubjectService */
+    protected $mergeSubjectService;
 
     /** @var MarkAsSent */
     protected $markAsSent;
 
     public function __construct(
-        MergeContent $mergeContent,
+        MergeContentService $mergeContentService,
+        MergeSubjectService $mergeSubjectService,
         ResolveEmailService $resolveEmailService,
         RelayMessage $relayMessage,
         MarkAsSent $markAsSent
     ) {
+        $this->mergeContentService = $mergeContentService;
+        $this->mergeContentService = $mergeSubjectService;
         $this->resolveEmailService = $resolveEmailService;
         $this->relayMessage = $relayMessage;
-        $this->mergeContent = $mergeContent;
         $this->markAsSent = $markAsSent;
     }
 
@@ -67,7 +73,7 @@ class DispatchMessage
      */
     protected function getMergedContent(Message $message): string
     {
-        return $this->mergeContent->handle($message);
+        return $this->mergeContentService->handle($message);
     }
 
     /**
@@ -79,7 +85,7 @@ class DispatchMessage
             ->setTo($message->recipient_email)
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)
-            ->setSubject($message->subject)
+            ->setSubject($this->mergeSubjectService->handle($message))
             ->setTrackingOptions($trackingOptions);
 
         $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
@@ -108,13 +114,13 @@ class DispatchMessage
             return false;
         }
 
-        if (! $message->isCampaign()) {
+        if (!$message->isCampaign()) {
             return true;
         }
 
         $campaign = Campaign::find($message->source_id);
 
-        if (! $campaign) {
+        if (!$campaign) {
             return false;
         }
 

@@ -13,6 +13,7 @@ class EmailServiceType extends BaseModel
     public const MAILGUN = 3;
     public const POSTMARK = 4;
     public const MAILJET = 5;
+    public const SMTP = 6;
 
     /** @var array */
     protected static $types = [
@@ -21,6 +22,7 @@ class EmailServiceType extends BaseModel
         self::MAILGUN => 'Mailgun',
         self::POSTMARK => 'Postmark',
         self::MAILJET => 'Mailjet',
+        self::SMTP => 'SMTP',
     ];
 
     /**

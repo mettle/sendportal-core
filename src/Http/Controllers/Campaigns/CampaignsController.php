@@ -76,7 +76,7 @@ class CampaignsController extends Controller
     {
         $workspaceId = Sendportal::currentWorkspaceId();
         $templates = [null => '- None -'] + $this->templates->pluck($workspaceId);
-        $emailServices = $this->emailServices->all(Sendportal::currentWorkspaceId());
+        $emailServices = $this->emailServices->all(Sendportal::currentWorkspaceId(), 'id', ['type']);
 
         return view('sendportal::campaigns.create', compact('templates', 'emailServices'));
     }

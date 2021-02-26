@@ -75,6 +75,12 @@ class EmailServiceRequest extends FormRequest
                     'settings.zone.required' =>  __('The Mailgun Email Service requires you to enter a zone'),
                 ];
 
+            case EmailServiceType::SMTP:
+                return [
+                    'settings.host.required' =>  __('The SMTP Email Service requires you to enter a host'),
+                    'settings.port.required' =>  __('The SMTP Email Service requires you to enter a port'),
+                ];
+
             default:
                 return [];
         }
@@ -109,6 +115,12 @@ class EmailServiceRequest extends FormRequest
                     'settings.key' => 'required',
                     'settings.secret' => 'required',
                     'settings.zone' => ['required', 'in:Default,US'],
+                ];
+
+            case EmailServiceType::SMTP:
+                return [
+                    'settings.host' => 'required',
+                    'settings.port' => 'required'
                 ];
 
             default:

@@ -43,12 +43,12 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
                     ->where('sendportal_messages.workspace_id', $workspaceId);
             })
             ->select('sendportal_campaigns.id as campaign_id')
-            ->selectRaw('count(sendportal_messages.id) as total')
-            ->selectRaw('count(case when sendportal_messages.opened_at IS NOT NULL then 1 end) as opened')
-            ->selectRaw('count(case when sendportal_messages.clicked_at IS NOT NULL then 1 end) as clicked')
-            ->selectRaw('count(case when sendportal_messages.sent_at IS NOT NULL then 1 end) as sent')
-            ->selectRaw('count(case when sendportal_messages.bounced_at IS NOT NULL then 1 end) as bounced')
-            ->selectRaw('count(case when sendportal_messages.sent_at IS NULL then 1 end) as pending')
+            ->selectRaw(sprintf('count(%ssendportal_messages.id) as total', DB::getTablePrefix()))
+            ->selectRaw(sprintf('count(case when %ssendportal_messages.opened_at IS NOT NULL then 1 end) as opened', DB::getTablePrefix()))
+            ->selectRaw(sprintf('count(case when %ssendportal_messages.clicked_at IS NOT NULL then 1 end) as clicked', DB::getTablePrefix()))
+            ->selectRaw(sprintf('count(case when %ssendportal_messages.sent_at IS NOT NULL then 1 end) as sent', DB::getTablePrefix()))
+            ->selectRaw(sprintf('count(case when %ssendportal_messages.bounced_at IS NOT NULL then 1 end) as bounced', DB::getTablePrefix()))
+            ->selectRaw(sprintf('count(case when %ssendportal_messages.sent_at IS NULL then 1 end) as pending', DB::getTablePrefix()))
             ->groupBy('sendportal_campaigns.id')
             ->orderBy('sendportal_campaigns.id')
             ->get();

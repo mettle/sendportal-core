@@ -10,8 +10,6 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
-use Sendportal\Base\Models\Template;
-use Sendportal\Base\Services\Content\MergeContentService;
 use Sendportal\Base\Services\Content\MergeSubjectService;
 use Tests\TestCase;
 
@@ -81,8 +79,7 @@ class MergeSubjectTest extends TestCase
         string $email,
         string $firstName,
         string $lastName
-    ): Message
-    {
+    ): Message {
         /** @var Campaign $campaign */
         $campaign = Campaign::factory()->create([
             'content' => '<p>Content</p>',

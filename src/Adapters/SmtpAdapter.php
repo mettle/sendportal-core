@@ -22,8 +22,8 @@ class SmtpAdapter extends BaseMailAdapter
         $failedRecipients = [];
 
         try {
-            $result = $this->resolveClient()->send($this->resolveMessage( $subject,  $content, $fromEmail,  $fromName,  $toEmail), $failedRecipients);
-        } catch(Swift_TransportException $e) {
+            $result = $this->resolveClient()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail), $failedRecipients);
+        } catch (Swift_TransportException $e) {
             return $this->resolveMessageId(0);
         }
 
@@ -60,7 +60,7 @@ class SmtpAdapter extends BaseMailAdapter
         return $this->transport;
     }
 
-    protected function resolveMessage(string $subject, string $content,string $fromEmail, string $fromName, string $toEmail): Swift_Message
+    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail): Swift_Message
     {
         $msg = new Swift_Message($subject, $content, 'text/html');
 

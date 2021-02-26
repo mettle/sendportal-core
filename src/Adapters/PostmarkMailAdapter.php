@@ -29,7 +29,9 @@ class PostmarkMailAdapter extends BaseMailAdapter
             null,
             null,
             null,
-            $trackingOptions->isClickTracking() ? 'HtmlAndText' : 'None'
+            $trackingOptions->isClickTracking() ? 'HtmlAndText' : 'None',
+            null,
+            Arr::get($this->config, 'message_stream')
         );
 
         return $this->resolveMessageId($result);

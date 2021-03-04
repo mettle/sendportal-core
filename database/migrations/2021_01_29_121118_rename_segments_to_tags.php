@@ -16,7 +16,13 @@ class RenameSegmentsToTags extends Migration
         Schema::rename('sendportal_segments', 'sendportal_tags');
 
         Schema::table('sendportal_segment_subscriber', function (Blueprint $table) {
-            $table->dropForeign(['segment_id']);
+            $foreignKeys = $this->listTableForeignKeys('sendportal_segment_subscriber');
+
+            if (in_array('sendportal_segment_subscriber_segment_id_foreign', $foreignKeys)) {
+                $table->dropForeign('sendportal_segment_subscriber_segment_id_foreign');
+            } else if (in_array('segment_subscriber_segment_id_foreign', $foreignKeys)) {
+                $table->dropForeign('segment_subscriber_segment_id_foreign');
+            }
 
             $table->renameColumn('segment_id', 'tag_id');
 
@@ -27,7 +33,13 @@ class RenameSegmentsToTags extends Migration
 
 
         Schema::table('sendportal_campaign_segment', function (Blueprint $table) {
-            $table->dropForeign(['segment_id']);
+            $foreignKeys = $this->listTableForeignKeys('sendportal_campaign_segment');
+
+            if (in_array('sendportal_campaign_segment_segment_id_foreign', $foreignKeys)) {
+                $table->dropForeign('sendportal_campaign_segment_segment_id_foreign');
+            } else if (in_array('campaign_segment_segment_id_foreign', $foreignKeys)) {
+                $table->dropForeign('campaign_segment_segment_id_foreign');
+            }
 
             $table->renameColumn('segment_id', 'tag_id');
 
@@ -35,5 +47,14 @@ class RenameSegmentsToTags extends Migration
         });
 
         Schema::rename("sendportal_campaign_segment", "sendportal_campaign_tag");
+    }
+
+    protected function listTableForeignKeys(string $table): array
+    {
+        $conn = Schema::getConnection()->getDoctrineSchemaManager();
+
+        return array_map(function($key) {
+            return $key->getName();
+        }, $conn->listTableForeignKeys($table));
     }
 }

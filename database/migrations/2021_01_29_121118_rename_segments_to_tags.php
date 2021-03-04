@@ -20,7 +20,7 @@ class RenameSegmentsToTags extends Migration
 
             if (in_array('sendportal_segment_subscriber_segment_id_foreign', $foreignKeys)) {
                 $table->dropForeign('sendportal_segment_subscriber_segment_id_foreign');
-            } else if (in_array('segment_subscriber_segment_id_foreign', $foreignKeys)) {
+            } elseif (in_array('segment_subscriber_segment_id_foreign', $foreignKeys)) {
                 $table->dropForeign('segment_subscriber_segment_id_foreign');
             }
 
@@ -37,7 +37,7 @@ class RenameSegmentsToTags extends Migration
 
             if (in_array('sendportal_campaign_segment_segment_id_foreign', $foreignKeys)) {
                 $table->dropForeign('sendportal_campaign_segment_segment_id_foreign');
-            } else if (in_array('campaign_segment_segment_id_foreign', $foreignKeys)) {
+            } elseif (in_array('campaign_segment_segment_id_foreign', $foreignKeys)) {
                 $table->dropForeign('campaign_segment_segment_id_foreign');
             }
 
@@ -53,7 +53,7 @@ class RenameSegmentsToTags extends Migration
     {
         $conn = Schema::getConnection()->getDoctrineSchemaManager();
 
-        return array_map(function($key) {
+        return array_map(function ($key) {
             return $key->getName();
         }, $conn->listTableForeignKeys($table));
     }

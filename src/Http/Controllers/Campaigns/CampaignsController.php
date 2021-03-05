@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
+use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
@@ -76,7 +77,11 @@ class CampaignsController extends Controller
     {
         $workspaceId = Sendportal::currentWorkspaceId();
         $templates = [null => '- None -'] + $this->templates->pluck($workspaceId);
-        $emailServices = $this->emailServices->all(Sendportal::currentWorkspaceId(), 'id', ['type']);
+        $emailServices = $this->emailServices->all(Sendportal::currentWorkspaceId(), 'id', ['type'])
+            ->map(static function (EmailService $emailService) {
+                $emailService->formatted_name = "{$emailService->name} ({$emailService->type->name})";
+                return $emailService;
+            });
 
         return view('sendportal::campaigns.create', compact('templates', 'emailServices'));
     }
@@ -109,7 +114,11 @@ class CampaignsController extends Controller
     {
         $workspaceId = Sendportal::currentWorkspaceId();
         $campaign = $this->campaigns->find($workspaceId, $id);
-        $emailServices = $this->emailServices->all($workspaceId);
+        $emailServices = $this->emailServices->all($workspaceId, 'id', ['type'])
+            ->map(static function (EmailService $emailService) {
+                $emailService->formatted_name = "{$emailService->name} ({$emailService->type->name})";
+                return $emailService;
+            });
         $templates = [null => '- None -'] + $this->templates->pluck($workspaceId);
 
         return view('sendportal::campaigns.edit', compact('campaign', 'emailServices', 'templates'));

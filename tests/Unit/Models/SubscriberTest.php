@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\MessageFailure;
 use Sendportal\Base\Models\Subscriber;
 use Tests\TestCase;
 
@@ -37,6 +38,25 @@ class SubscriberTest extends TestCase
         static::assertTrue($messages->contains($messageTwo));
         static::assertEquals(Campaign::class, $messageTwo->source_type);
         static::assertEquals($campaignTwo->id, $messageTwo->source_id);
+    }
+
+    /** @test */
+    public function deleting_a_subscriber_also_deletes_its_messages_and_any_failures_associated_to_them()
+    {
+        // given
+        $subscriber = Subscriber::factory()->create();
+        $message = Message::factory()->create([
+            'subscriber_id' => $subscriber->id,
+        ]);
+        $message->failures()->create();
+
+        // when
+        $subscriber->delete();
+
+        // then
+        static::assertCount(0, Subscriber::all());
+        static::assertCount(0, Message::all());
+        static::assertCount(0, MessageFailure::all());
     }
 
     /**

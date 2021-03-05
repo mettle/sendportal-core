@@ -90,7 +90,7 @@ class Subscriber extends BaseModel
         static::deleting(
             function (self $subscriber) {
                 $subscriber->tags()->detach();
-                $subscriber->messages->each(static function (Message $message) {
+                $subscriber->messages()->each(static function (Message $message) {
                     $message->failures()->delete();
                 });
                 $subscriber->messages()->delete();

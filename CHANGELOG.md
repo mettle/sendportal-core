@@ -12,7 +12,7 @@
 
 ## 2.0.0 - 2021-02-08
 
-- Allow Core package to be installed as a package ([#85](https://github.com/mettle/sendportal-core/pull/85))
+- Allow Core to be installed as a package in an existing project ([#85](https://github.com/mettle/sendportal-core/pull/85))
 - Bump Laravel to v8 ([#103](https://github.com/mettle/sendportal-core/pull/103))
 
 ## 1.0.10 - 2020-10-15

@@ -1,6 +1,6 @@
 # Sendportal Core
 
-## 2.0.1 - ???
+## 2.0.1 - 2021-03-08
 
 - Message subject tags ([#114](https://github.com/mettle/sendportal-core/pull/114))
 - Add SMTP driver ([#112](https://github.com/mettle/sendportal-core/pull/112))

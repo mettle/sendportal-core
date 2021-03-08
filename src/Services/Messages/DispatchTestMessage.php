@@ -10,7 +10,7 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
-use Sendportal\Base\Services\Content\MergeContent;
+use Sendportal\Base\Services\Content\MergeContentService;
 
 class DispatchTestMessage
 {
@@ -20,7 +20,7 @@ class DispatchTestMessage
     /** @var RelayMessage */
     protected $relayMessage;
 
-    /** @var MergeContent */
+    /** @var MergeContentService */
     protected $mergeContent;
 
     /** @var CampaignTenantRepositoryInterface */
@@ -28,7 +28,7 @@ class DispatchTestMessage
 
     public function __construct(
         CampaignTenantRepositoryInterface $campaignTenant,
-        MergeContent $mergeContent,
+        MergeContentService $mergeContent,
         ResolveEmailService $resolveEmailService,
         RelayMessage $relayMessage
     ) {

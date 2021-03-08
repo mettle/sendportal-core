@@ -10,7 +10,7 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Template;
-use Sendportal\Base\Services\Content\MergeContent;
+use Sendportal\Base\Services\Content\MergeContentService;
 use Tests\TestCase;
 
 class MergeContentTest extends TestCase
@@ -145,8 +145,8 @@ class MergeContentTest extends TestCase
 
     private function mergeContent(Message $message): string
     {
-        /** @var MergeContent $mergeContent */
-        $mergeContent = app(MergeContent::class);
+        /** @var MergeContentService $mergeContent */
+        $mergeContent = app(MergeContentService::class);
 
         return $mergeContent->handle($message);
     }

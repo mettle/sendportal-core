@@ -12,7 +12,7 @@ use Sendportal\Base\Traits\NormalizeTags;
 use Sendportal\Pro\Repositories\AutomationScheduleRepository;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
-class MergeContent
+class MergeContentService
 {
     use NormalizeTags;
 
@@ -117,7 +117,6 @@ class MergeContent
             'webview_url'
         ];
 
-        // NOTE: regex doesn't seem to work here - I think it may be due to all the tags and inverted commas in html?
         foreach ($tags as $tag) {
             $content = $this->normalizeTags($content, $tag);
         }

@@ -41,7 +41,7 @@
                 </tr>
                 <tr>
                     <td><b>{{ __('Subject') }}:</b></td>
-                    <td>{{ $message->subject }}</td>
+                    <td>{{ $subject }}</td>
                 </tr>
                 <tr>
                     <td><b>{{ __('From') }}:</b></td>

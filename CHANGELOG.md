@@ -1,8 +1,22 @@
 # Sendportal Core
 
+## 2.0.1 - 2021-03-08
+
+- Message subject tags ([#114](https://github.com/mettle/sendportal-core/pull/114))
+- Add SMTP driver ([#112](https://github.com/mettle/sendportal-core/pull/112))
+- Split campaigns index ([#111](https://github.com/mettle/sendportal-core/pull/111))
+- Delete failed messages on subscriber deletion ([#110](https://github.com/mettle/sendportal-core/pull/110))
+- Fix rename segments to tags migration ([#115](https://github.com/mettle/sendportal-core/pull/115))
+- Fix table prefixing in raw query ([#107](https://github.com/mettle/sendportal-core/pull/107))
+
+## 2.0.0 - 2021-02-08
+
+- Allow Core to be installed as a package in an existing project ([#85](https://github.com/mettle/sendportal-core/pull/85))
+- Bump Laravel to v8 ([#103](https://github.com/mettle/sendportal-core/pull/103))
+
 ## 1.0.10 - 2020-10-15
 
-- Resolve invalid message issue ([#87](https://github.com/mettle/sendportal-core/pull/83))
+- Resolve invalid message issue ([#87](https://github.com/mettle/sendportal-core/pull/87))
 
 ## 1.0.9 - 2020-10-09
 

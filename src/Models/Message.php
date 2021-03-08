@@ -95,6 +95,10 @@ class Message extends BaseModel
         static::creating(function ($model) {
             $model->hash = $model->hash ?: Uuid::uuid4()->toString();
         });
+
+        static::deleting(function (self $message) {
+            $message->failures()->delete();
+        });
     }
 
     public function failures(): HasMany

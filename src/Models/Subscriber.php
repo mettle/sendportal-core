@@ -87,10 +87,12 @@ class Subscriber extends BaseModel
                 $model->hash = Uuid::uuid4()->toString();
             }
         );
-
         static::deleting(
             function (self $subscriber) {
                 $subscriber->tags()->detach();
+                $subscriber->messages()->each(static function (Message $message) {
+                    $message->failures()->delete();
+                });
                 $subscriber->messages()->delete();
             }
         );

@@ -19,7 +19,7 @@ class CampaignFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->sentence,
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'subject' => $this->faker->title,
             'from_name' => $this->faker->name,

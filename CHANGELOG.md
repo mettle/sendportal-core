@@ -3,7 +3,6 @@
 ## 2.0.1 - ???
 
 - Message subject tags ([#114](https://github.com/mettle/sendportal-core/pull/114))
-- Support the definition of a message stream for the Postmark email service ([#113](https://github.com/mettle/sendportal-core/pull/113))
 - Add SMTP driver ([#112](https://github.com/mettle/sendportal-core/pull/112))
 - Split campaigns index ([#111](https://github.com/mettle/sendportal-core/pull/111))
 - Delete failed messages on subscriber deletion ([#110](https://github.com/mettle/sendportal-core/pull/110))

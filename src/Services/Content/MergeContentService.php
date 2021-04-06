@@ -93,7 +93,7 @@ class MergeContentService
 
     protected function mergeContent(?string $customContent, string $templateContent): string
     {
-        return str_ireplace(['{{content}}', '{{ content }}'], $customContent, $templateContent);
+        return str_ireplace(['{{content}}', '{{ content }}'], $customContent ?: '', $templateContent);
     }
 
     protected function mergeTags(string $content, Message $message): string

@@ -50,4 +50,7 @@
             </table>
         </div>
     </div>
+
+    @include('sendportal::layouts.partials.pagination', ['records' => $tags])
+
 @endsection

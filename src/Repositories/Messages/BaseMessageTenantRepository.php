@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories\Messages;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -61,6 +62,17 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
             ->whereNotNull('sent_at')
             ->orderBy('recipient_email')
             ->paginate(50);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function countForSourcesBetween(int $workspaceId, array $sourceIds, Carbon $start, Carbon $end): int
+    {
+        return $this->getQueryBuilder($workspaceId)
+            ->whereIn('source_id', $sourceIds)
+            ->whereBetween('sent_at', [$start, $end])
+            ->count();
     }
 
     /**

@@ -36,8 +36,9 @@ class EmailServicesController extends Controller
     public function create(): View
     {
         $emailServiceTypes = $this->emailServices->getEmailServiceTypes()->pluck('name', 'id');
+        $quotaPeriods = $this->emailServices->getQuotaPeriods();
 
-        return view('sendportal::email_services.create', compact('emailServiceTypes'));
+        return view('sendportal::email_services.create', compact('emailServiceTypes', 'quotaPeriods'));
     }
 
     /**
@@ -64,10 +65,11 @@ class EmailServicesController extends Controller
     public function edit(int $emailServiceId)
     {
         $emailServiceTypes = $this->emailServices->getEmailServiceTypes()->pluck('name', 'id');
+        $quotaPeriods = $this->emailServices->getQuotaPeriods();
         $emailService = $this->emailServices->find(Sendportal::currentWorkspaceId(), $emailServiceId);
         $emailServiceType = $this->emailServices->findType($emailService->type_id);
 
-        return view('sendportal::email_services.edit', compact('emailServiceTypes', 'emailService', 'emailServiceType'));
+        return view('sendportal::email_services.edit', compact('emailServiceTypes', 'emailService', 'emailServiceType', 'quotaPeriods'));
     }
 
     /**
@@ -105,9 +107,10 @@ class EmailServicesController extends Controller
     public function emailServicesTypeAjax($emailServiceTypeId): JsonResponse
     {
         $emailServiceType = $this->emailServices->findType($emailServiceTypeId);
+        $quotaPeriods = $this->emailServices->getQuotaPeriods();
 
         $view = view()
-            ->make('sendportal::email_services.options.' . strtolower($emailServiceType->name))
+            ->make('sendportal::email_services.options.' . strtolower($emailServiceType->name), compact('quotaPeriods'))
             ->render();
 
         return response()->json([

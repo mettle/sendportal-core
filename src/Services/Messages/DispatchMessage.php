@@ -6,6 +6,8 @@ namespace Sendportal\Base\Services\Messages;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Sendportal\Base\Exceptions\MessageLimitReachedException;
+use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\EmailService;
@@ -30,18 +32,23 @@ class DispatchMessage
     /** @var MarkAsSent */
     protected $markAsSent;
 
+    /** @var QuotaServiceInterface */
+    protected $quotaService;
+
     public function __construct(
         MergeContentService $mergeContentService,
         MergeSubjectService $mergeSubjectService,
         ResolveEmailService $resolveEmailService,
         RelayMessage $relayMessage,
-        MarkAsSent $markAsSent
+        MarkAsSent $markAsSent,
+        QuotaServiceInterface $quotaService
     ) {
         $this->mergeContentService = $mergeContentService;
         $this->mergeSubjectService = $mergeSubjectService;
         $this->resolveEmailService = $resolveEmailService;
         $this->relayMessage = $relayMessage;
         $this->markAsSent = $markAsSent;
+        $this->quotaService = $quotaService;
     }
 
     /**
@@ -58,10 +65,12 @@ class DispatchMessage
         $message = $this->mergeSubject($message);
 
         $mergedContent = $this->getMergedContent($message);
-
         $emailService = $this->getEmailService($message);
-
         $trackingOptions = MessageTrackingOptions::fromMessage($message);
+
+        if ($this->quotaService->hasReachedMessageLimit($emailService)) {
+            throw new MessageLimitReachedException;
+        }
 
         $messageId = $this->dispatch($message, $emailService, $trackingOptions, $mergedContent);
 

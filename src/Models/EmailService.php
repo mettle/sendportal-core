@@ -31,6 +31,9 @@ class EmailService extends BaseModel
 {
     use HasFactory;
 
+    public const QUOTA_PERIOD_HOUR = 'hour';
+    public const QUOTA_PERIOD_DAY = 'day';
+
     // NOTE(david): we require this because of namespace issues when resolving factories from models
     // not in the default `App\Models` namespace.
     protected static function newFactory()

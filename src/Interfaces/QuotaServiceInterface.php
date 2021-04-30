@@ -6,5 +6,5 @@ use Sendportal\Base\Models\EmailService;
 
 interface QuotaServiceInterface
 {
-    public function exceedsQuota(EmailService $emailService, int $messageCount): bool;
+    public function hasReachedMessageLimit(EmailService $emailService): bool;
 }

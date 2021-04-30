@@ -7,8 +7,10 @@ namespace Tests\Unit\Services;
 use Aws\Sdk;
 use Aws\Ses\SesClient;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
+use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
+use Sendportal\Base\Models\Message;
 use Tests\TestCase;
 
 class QuotaServiceTest extends TestCase
@@ -24,7 +26,7 @@ class QuotaServiceTest extends TestCase
     }
 
     /** @test */
-    public function fewer_subscribers_than_quota_available()
+    public function ses_message_limit_has_not_been_reached()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
@@ -32,23 +34,23 @@ class QuotaServiceTest extends TestCase
         $this->mockMailAdapter(2);
 
         // then
-        self::assertFalse($this->quotaService->exceedsQuota($emailService, 1));
+        self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
     }
 
     /** @test */
-    public function more_subscribers_than_quota_available()
+    public function ses_message_limit_has_been_reached()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
-        $this->mockMailAdapter(1);
+        $this->mockMailAdapter(1, 1);
 
         // then
-        self::assertTrue($this->quotaService->exceedsQuota($emailService, 2));
+        self::assertTrue($this->quotaService->hasReachedMessageLimit($emailService));
     }
 
     /** @test */
-    public function send_quota_not_available()
+    public function ses_message_limit_quota_not_available()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
@@ -56,11 +58,11 @@ class QuotaServiceTest extends TestCase
         $this->mockMailAdapter();
 
         // then
-        self::assertFalse($this->quotaService->exceedsQuota($emailService, 1));
+        self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
     }
 
     /** @test */
-    public function unlimited_quota()
+    public function ses_message_limit_unlimited_quota()
     {
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
@@ -68,17 +70,186 @@ class QuotaServiceTest extends TestCase
         $this->mockMailAdapter(-1);
 
         // then
-        self::assertFalse($this->quotaService->exceedsQuota($emailService, 1));
+        self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
     }
 
-    protected function mockMailAdapter(int $quota = null): void
+    /** @test */
+    public function smtp_hourly_message_limit_reached()
+    {
+        // given
+        $emailService = EmailService::factory()->create(
+            [
+                'type_id' => EmailServiceType::SMTP,
+                'settings' => [
+                    'quota_limit' => 5,
+                    'quota_period' => EmailService::QUOTA_PERIOD_HOUR,
+                ],
+            ]
+        );
+
+        $campaign = Campaign::factory()->create(
+            [
+                'email_service_id' => $emailService->id,
+                'workspace_id' => $emailService->workspace_id,
+            ]
+        );
+
+        Message::factory()->count(5)->create(
+            [
+                'source_id' => $campaign->id,
+                'workspace_id' => $emailService->workspace_id,
+                'sent_at' => now()->subMinute(),
+            ]
+        );
+
+        // then
+        self::assertTrue($this->quotaService->hasReachedMessageLimit($emailService));
+    }
+
+    /** @test */
+    public function smtp_hourly_message_limit_not_reached()
+    {
+        // given
+        $emailService = EmailService::factory()->create(
+            [
+                'type_id' => EmailServiceType::SMTP,
+                'settings' => [
+                    'quota_limit' => 5,
+                    'quota_period' => EmailService::QUOTA_PERIOD_HOUR,
+                ],
+            ]
+        );
+
+        $campaign = Campaign::factory()->create(
+            [
+                'email_service_id' => $emailService->id,
+                'workspace_id' => $emailService->workspace_id,
+            ]
+        );
+
+        Message::factory()->count(3)->create(
+            [
+                'source_id' => $campaign->id,
+                'workspace_id' => $emailService->workspace_id,
+                'sent_at' => now()->subHours(2),
+            ]
+        );
+
+        Message::factory()->count(2)->create(
+            [
+                'source_id' => $campaign->id,
+                'workspace_id' => $emailService->workspace_id,
+                'sent_at' => now()->subMinute(),
+            ]
+        );
+
+        // then
+        self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
+    }
+
+    /** @test */
+    public function smtp_daily_message_limit_reached()
+    {
+        // given
+        $emailService = EmailService::factory()->create(
+            [
+                'type_id' => EmailServiceType::SMTP,
+                'settings' => [
+                    'quota_limit' => 5,
+                    'quota_period' => EmailService::QUOTA_PERIOD_DAY,
+                ],
+            ]
+        );
+
+        $campaign = Campaign::factory()->create(
+            [
+                'email_service_id' => $emailService->id,
+                'workspace_id' => $emailService->workspace_id,
+            ]
+        );
+
+        Message::factory()->count(5)->create(
+            [
+                'source_id' => $campaign->id,
+                'workspace_id' => $emailService->workspace_id,
+                'sent_at' => now()->subHours(12),
+            ]
+        );
+
+        // then
+        self::assertTrue($this->quotaService->hasReachedMessageLimit($emailService));
+    }
+
+    /** @test */
+    public function smtp_daily_message_limit_not_reached()
+    {
+        // given
+        $emailService = EmailService::factory()->create(
+            [
+                'type_id' => EmailServiceType::SMTP,
+                'settings' => [
+                    'quota_limit' => 5,
+                    'quota_period' => EmailService::QUOTA_PERIOD_DAY,
+                ],
+            ]
+        );
+
+        $campaign = Campaign::factory()->create(
+            [
+                'email_service_id' => $emailService->id,
+                'workspace_id' => $emailService->workspace_id,
+            ]
+        );
+
+        Message::factory()->count(3)->create(
+            [
+                'source_id' => $campaign->id,
+                'workspace_id' => $emailService->workspace_id,
+                'sent_at' => now()->subHours(2),
+            ]
+        );
+
+        // then
+        self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
+    }
+
+    /** @test */
+    public function smtp_message_limit_not_set()
+    {
+        // given
+        $emailService = EmailService::factory()->create(
+            [
+                'type_id' => EmailServiceType::SMTP,
+            ]
+        );
+
+        $campaign = Campaign::factory()->create(
+            [
+                'email_service_id' => $emailService->id,
+                'workspace_id' => $emailService->workspace_id,
+            ]
+        );
+
+        Message::factory()->count(3)->create(
+            [
+                'source_id' => $campaign->id,
+                'workspace_id' => $emailService->workspace_id,
+                'sent_at' => now()->subHours(2),
+            ]
+        );
+
+        // then
+        self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
+    }
+
+    protected function mockMailAdapter(int $quota = null, int $sent = 0): void
     {
         $sendQuota = [];
 
         if ($quota) {
             $sendQuota = [
                 'Max24HourSend' => $quota,
-                'SentLast24Hours' => 0,
+                'SentLast24Hours' => $sent,
             ];
         }
 

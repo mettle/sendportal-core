@@ -3,8 +3,18 @@ name: Laravel CI
 jobs:
   phpunit:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container: [
+          "kirschbaumdevelopment/laravel-test-runner:7.3",
+          "kirschbaumdevelopment/laravel-test-runner:7.4",
+          "kirschbaumdevelopment/laravel-test-runner:8.0"
+        ]
+
     container:
-      image: kirschbaumdevelopment/laravel-test-runner:7.3
+      image: ${{ matrix.container }}
+
+    name: ${{ matrix.container }}
 
     services:
       mysql:

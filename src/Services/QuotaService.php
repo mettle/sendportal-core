@@ -78,7 +78,7 @@ class QuotaService implements QuotaServiceInterface
 
         $quotaPeriod = Arr::get($emailService, 'settings.quota_period');
 
-        switch($quotaPeriod) {
+        switch ($quotaPeriod) {
             case EmailService::QUOTA_PERIOD_HOUR:
                 $start = now()->subHour();
                 break;

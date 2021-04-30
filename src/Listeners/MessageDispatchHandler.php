@@ -47,6 +47,5 @@ class MessageDispatchHandler implements ShouldQueue
 
             $this->release($delay);
         }
-
     }
 }

@@ -2,16 +2,13 @@
 
 namespace Sendportal\Base\Services;
 
-use DomainException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Adapters\BaseMailAdapter;
-use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Factories\MailAdapterFactory;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
-use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
 
 class QuotaService implements QuotaServiceInterface
 {
@@ -21,13 +18,11 @@ class QuotaService implements QuotaServiceInterface
             case EmailServiceType::SES:
                 return $this->exceedsSesQuota($emailService);
 
-            case EmailServiceType::SMTP:
-                return $this->exceedsSmtpQuota($emailService);
-
             case EmailServiceType::SENDGRID:
             case EmailServiceType::MAILGUN:
             case EmailServiceType::POSTMARK:
             case EmailServiceType::MAILJET:
+            case EmailServiceType::SMTP:
                 return false;
         }
 
@@ -66,39 +61,5 @@ class QuotaService implements QuotaServiceInterface
         $sent = Arr::get($quota, 'SentLast24Hours');
 
         return $sent >= $limit;
-    }
-
-    protected function exceedsSmtpQuota(EmailService $emailService): bool
-    {
-        $quotaLimit = Arr::get($emailService, 'settings.quota_limit');
-
-        if (! $quotaLimit) {
-            return false;
-        }
-
-        $quotaPeriod = Arr::get($emailService, 'settings.quota_period');
-
-        switch ($quotaPeriod) {
-            case EmailService::QUOTA_PERIOD_HOUR:
-                $start = now()->subHour();
-                break;
-
-            case EmailService::QUOTA_PERIOD_DAY:
-                $start = now()->subDay();
-                break;
-
-            default:
-                throw new DomainException('Unrecognised quota period');
-        }
-
-        $messageCount = app(MessageTenantRepositoryInterface::class)
-            ->countForSourcesBetween(
-                Sendportal::currentWorkspaceId(),
-                $emailService->campaigns->pluck('id')->toArray(),
-                $start,
-                now()
-            );
-
-        return $messageCount >= $quotaLimit;
     }
 }

@@ -31,18 +31,6 @@ class EmailServiceTenantRepository extends BaseTenantRepository
     }
 
     /**
-     * @return string[]
-     */
-    public function getQuotaPeriods(): array
-    {
-        return [
-            null => '',
-            EmailService::QUOTA_PERIOD_HOUR => 'Per Hour',
-            EmailService::QUOTA_PERIOD_DAY => 'Per Day',
-        ];
-    }
-
-    /**
      * @param $emailServiceTypeId
      * @return array
      */

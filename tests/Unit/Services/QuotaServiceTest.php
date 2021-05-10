@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use Aws\Sdk;
-use Aws\Ses\SesClient;
 use Sendportal\Base\Exceptions\MessageLimitReachedException;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Traits\MocksSesMailAdapter;
 use Tests\TestCase;
 
 class QuotaServiceTest extends TestCase
 {
+    use MocksSesMailAdapter;
+
     /** @var QuotaServiceInterface */
     protected $quotaService;
 
@@ -32,7 +33,7 @@ class QuotaServiceTest extends TestCase
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
-        $this->mockMailAdapter(2);
+        $this->mockSesMailAdapter(2);
 
         // then
         self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
@@ -44,7 +45,7 @@ class QuotaServiceTest extends TestCase
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
-        $this->mockMailAdapter(1, 1);
+        $this->mockSesMailAdapter(1, 1);
 
         // then
         self::assertTrue($this->quotaService->hasReachedMessageLimit($emailService));
@@ -56,7 +57,7 @@ class QuotaServiceTest extends TestCase
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
-        $this->mockMailAdapter();
+        $this->mockSesMailAdapter();
 
         // then
         self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
@@ -68,7 +69,7 @@ class QuotaServiceTest extends TestCase
         // given
         $emailService = EmailService::factory()->create(['type_id' => EmailServiceType::SES]);
 
-        $this->mockMailAdapter(-1);
+        $this->mockSesMailAdapter(-1);
 
         // then
         self::assertFalse($this->quotaService->hasReachedMessageLimit($emailService));
@@ -95,36 +96,11 @@ class QuotaServiceTest extends TestCase
             ]
         );
 
-        $this->mockMailAdapter(1, 1);
+        $this->mockSesMailAdapter(1, 1);
 
         $this->withoutExceptionHandling()
             ->expectException(MessageLimitReachedException::class);
 
         $this->post(route('sendportal.messages.send'), ['id' => $message->id]);
-    }
-
-    protected function mockMailAdapter(int $quota = null, int $sent = 0): void
-    {
-        $sendQuota = [];
-
-        if ($quota) {
-            $sendQuota = [
-                'Max24HourSend' => $quota,
-                'SentLast24Hours' => $sent,
-            ];
-        }
-
-        $sesClient = $this->getMockBuilder(SesClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $sesClient->method('__call')->willReturn(collect($sendQuota));
-
-        $aws = $this->getMockBuilder(Sdk::class)->getMock();
-        $aws->method('createClient')->willReturn($sesClient);
-
-        $this->app->singleton('aws', function () use ($aws) {
-            return $aws;
-        });
     }
 }

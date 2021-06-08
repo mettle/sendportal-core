@@ -50,6 +50,10 @@ class HandlePostalWebhook implements ShouldQueue
             case 'MessageBounced':
                 $this->handleBounce($messageId, $event->payload);
                 break;
+                
+            case 'MessageDeliveryFailed':
+                $this->handleFailed($messageId, $event->payload);
+                break;
 
             default:
                 throw new RuntimeException("Unknown Postal webhook event type '{$eventName}'.");
@@ -89,7 +93,18 @@ class HandlePostalWebhook implements ShouldQueue
         $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
     }
 
-   
+    private function handleFailed(string $messageId, array $content): void
+    {
+        $severity = Arr::get($content, 'payload.status');
+        $description = Arr::get($content, 'payload.output');
+        $timestamp = $this->extractTimestamp($content);
+
+        $this->emailWebhookService->handleFailure($messageId, $severity, $description, $timestamp);
+
+        if ($severity === 'HardFail') {
+            $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
+        }
+    }
 
     private function extractEventName(array $payload): string
     {
@@ -105,6 +120,6 @@ class HandlePostalWebhook implements ShouldQueue
 
     private function extractTimestamp($payload): Carbon
     {
-        return Carbon::createFromTimestamp(Arr::get($payload, 'timestamp'));
+        return Carbon::createFromTimestamp(Arr::get($payload, 'payload.timestamp'));
     }
 }

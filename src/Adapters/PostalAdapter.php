@@ -21,7 +21,7 @@ class PostalAdapter extends BaseMailAdapter
      */
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
-        $client = new Client('https://' . Arr::get($this->config, 'domain'), Arr::get($this->config, 'key'));
+        $client = new Client('https://' . Arr::get($this->config, 'postal_host'), Arr::get($this->config, 'key'));
         
         $message = new SendMessage($client);
         $message->to($toEmail);
@@ -30,12 +30,6 @@ class PostalAdapter extends BaseMailAdapter
         $message->htmlBody($content);
         $response = $message->send();
         
-        /*
-        throw_if(
-            !in_array($response->statusCode(), [Response::HTTP_OK, Response::HTTP_ACCEPTED]),
-            new DomainException($response->body(), $response->statusCode())
-        );
-        */
         return $this->resolveMessageId($response);
     }
 
@@ -47,7 +41,6 @@ class PostalAdapter extends BaseMailAdapter
             return (string) $message->id();    
         }
         
-
         throw new DomainException('Unable to resolve message ID');
     }
 }

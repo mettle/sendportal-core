@@ -54,6 +54,10 @@ class HandlePostalWebhook implements ShouldQueue
             case 'MessageDeliveryFailed':
                 $this->handleFailed($messageId, $event->payload);
                 break;
+                
+            case 'MessageHeld':
+                $this->handleHeld($messageId, $event->payload);
+                break;
 
             default:
                 throw new RuntimeException("Unknown Postal webhook event type '{$eventName}'.");
@@ -102,6 +106,19 @@ class HandlePostalWebhook implements ShouldQueue
         $this->emailWebhookService->handleFailure($messageId, $severity, $description, $timestamp);
 
         if ($severity === 'HardFail') {
+            $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
+        }
+    }
+    
+    private function handleHeld(string $messageId, array $content): void
+    {
+        $severity = Arr::get($content, 'payload.status');
+        $description = Arr::get($content, 'payload.details');
+        $timestamp = $this->extractTimestamp($content);
+
+        $this->emailWebhookService->handleFailure($messageId, $severity, $description, $timestamp);
+
+        if ($severity === 'Held') {
             $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
         }
     }

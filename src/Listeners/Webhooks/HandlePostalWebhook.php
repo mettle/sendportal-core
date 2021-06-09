@@ -48,6 +48,7 @@ class HandlePostalWebhook implements ShouldQueue
                 break;
 
             case 'MessageBounced':
+                $messageId = $this->extractMessageIdBounced($event->payload);
                 $this->handleBounce($messageId, $event->payload);
                 break;
                 
@@ -89,8 +90,8 @@ class HandlePostalWebhook implements ShouldQueue
 
     private function handleBounce(string $messageId, array $content): void
     {
-        $timestamp = $this->extractTimestampFailed($content);
-        $description = Arr::get($content, 'reason');
+        $timestamp = $this->extractTimestampBounced($content);
+        $description = Arr::get($content, 'payload.bounce.subject');
 
         $this->emailWebhookService->handleFailure($messageId, 'Permanent', $description, $timestamp);
 
@@ -127,6 +128,13 @@ class HandlePostalWebhook implements ShouldQueue
     {
         return Arr::get($payload, 'event');
     }
+    
+    private function extractMessageIdBounced(array $payload): string
+    {
+        $messageId = Arr::get($payload, 'payload.original_message.id');
+
+        return trim((string) $messageId);
+    }
 
     private function extractMessageId(array $payload): string
     {
@@ -135,6 +143,11 @@ class HandlePostalWebhook implements ShouldQueue
         return trim((string) $messageId);
     }
 
+    private function extractTimestampBounced($payload): Carbon
+    {
+        return Carbon::createFromTimestamp(Arr::get($payload, 'payload.bounce.timestamp'));
+    }
+    
     private function extractTimestampFailed($payload): Carbon
     {
         return Carbon::createFromTimestamp(Arr::get($payload, 'payload.timestamp'));

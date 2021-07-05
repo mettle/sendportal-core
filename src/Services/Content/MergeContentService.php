@@ -128,12 +128,12 @@ class MergeContentService
     {
         $tags = [
             'email' => $message->recipient_email,
-            'first_name' => $message->subscriber ? $message->subscriber->first_name : '',
-            'last_name' => $message->subscriber ? $message->subscriber->last_name : '',
+            'first_name' => optional($message->subscriber)->first_name ?? '',
+            'last_name' => optional($message->subscriber)->last_name ?? ''
         ];
 
         foreach ($tags as $key => $replace) {
-            $content = str_ireplace('{{' . $key . '}}', $replace ?: '', $content);
+            $content = str_ireplace('{{' . $key . '}}', $replace, $content);
         }
 
         return $content;

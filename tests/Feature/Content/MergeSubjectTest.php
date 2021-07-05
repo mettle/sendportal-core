@@ -47,6 +47,20 @@ class MergeSubjectTest extends TestCase
     }
 
     /** @test */
+    public function the_first_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_first_name_is_null()
+    {
+        // given
+        $subject = 'Hi, {{first_name}}';
+        $message = $this->generateCampaignMessage($subject, 'foo@bar.com');
+
+        // when
+        $mergedSubject = $this->mergeSubject($message);
+
+        // then
+        self::assertEquals('Hi, ', $mergedSubject);
+    }
+
+    /** @test */
     public function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
     {
         // given
@@ -58,6 +72,20 @@ class MergeSubjectTest extends TestCase
 
         // then
         self::assertEquals('Hi, bar', $mergedSubject);
+    }
+
+    /** @test */
+    public function the_last_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_last_name_is_null()
+    {
+        // given
+        $subject = 'Hi, {{last_name}}';
+        $message = $this->generateCampaignMessage($subject, 'foo@bar.com');
+
+        // when
+        $mergedSubject = $this->mergeSubject($message);
+
+        // then
+        self::assertEquals('Hi, ', $mergedSubject);
     }
 
     /** @test */
@@ -77,8 +105,8 @@ class MergeSubjectTest extends TestCase
     private function generateCampaignMessage(
         string $campaignSubject,
         string $email,
-        string $firstName,
-        string $lastName
+        ?string $firstName = null,
+        ?string $lastName = null
     ): Message {
         /** @var Campaign $campaign */
         $campaign = Campaign::factory()->create([

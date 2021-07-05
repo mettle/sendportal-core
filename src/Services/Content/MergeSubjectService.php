@@ -44,7 +44,7 @@ class MergeSubjectService
         ];
 
         foreach ($tags as $key => $replace) {
-            $messageSubject = str_ireplace('{{' . $key . '}}', $replace, $messageSubject);
+            $messageSubject = str_ireplace('{{' . $key . '}}', $replace ?: '', $messageSubject);
         }
 
         return $messageSubject;

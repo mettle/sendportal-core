@@ -6,6 +6,7 @@
 - Add german translation ([#140](https://github.com/mettle/sendportal-core/pull/140))
 - PHP 8: Bug fix for str_ireplace - empty values ([#133](https://github.com/mettle/sendportal-core/pull/133))
 - Update GitHub workflow for PHP CS Fixer v3 ([#130](https://github.com/mettle/sendportal-core/pull/130))
+- Update dependencies
 
 ## 2.0.2 - 2021-04-30
 - Add matrix strategy to cover all supported php versions ([#127](https://github.com/mettle/sendportal-core/pull/127))

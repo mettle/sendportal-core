@@ -10,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
-use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 
@@ -19,17 +18,10 @@ class CampaignDispatchController extends Controller
     /** @var CampaignTenantRepositoryInterface */
     protected $campaigns;
 
-    /**
-     * @var QuotaServiceInterface
-     */
-    protected $quotaService;
-
     public function __construct(
-        CampaignTenantRepositoryInterface $campaigns,
-        QuotaServiceInterface $quotaService
+        CampaignTenantRepositoryInterface $campaigns
     ) {
         $this->campaigns = $campaigns;
-        $this->quotaService = $quotaService;
     }
 
     /**
@@ -55,11 +47,6 @@ class CampaignDispatchController extends Controller
         ]);
 
         $campaign->tags()->sync($request->get('tags'));
-
-        if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
-            return redirect()->route('sendportal.campaigns.edit', $id)
-                ->withErrors(__('The number of subscribers for this campaign exceeds your SES quota'));
-        }
 
         $scheduledAt = $request->get('schedule') === 'scheduled' ? Carbon::parse($request->get('scheduled_at')) : now();
 

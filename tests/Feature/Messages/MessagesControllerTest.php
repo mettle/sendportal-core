@@ -8,11 +8,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Traits\MocksSesMailAdapter;
 use Tests\TestCase;
 
 class MessagesControllerTest extends TestCase
 {
+    use MocksSesMailAdapter;
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mockSesMailAdapter();
+    }
 
     /** @test */
     public function the_index_of_sent_messages_is_accessible_to_an_authenticated_user()

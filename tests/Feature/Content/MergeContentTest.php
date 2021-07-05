@@ -40,7 +40,7 @@ class MergeContentTest extends TestCase
     public function it_can_handle_a_null_value_for_campaign_content()
     {
         $content = null;
-        $message = $this->generateCampaignMessage(null, '<p>Hello this is some {{content}}</p>');
+        $message = $this->generateCampaignMessage($content, '<p>Hello this is some {{content}}</p>');
 
         $mergedContent = $this->mergeContent($message);
 

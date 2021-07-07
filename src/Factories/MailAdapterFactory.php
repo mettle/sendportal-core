@@ -11,6 +11,7 @@ use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Adapters\SmtpAdapter;
+use Sendportal\Base\Adapters\PostalAdapter;
 use Sendportal\Base\Interfaces\MailAdapterInterface;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
@@ -25,6 +26,7 @@ class MailAdapterFactory
         EmailServiceType::POSTMARK => PostmarkMailAdapter::class,
         EmailServiceType::MAILJET => MailjetAdapter::class,
         EmailServiceType::SMTP => SmtpAdapter::class,
+        EmailServiceType::POSTAL => PostalAdapter::class,
     ];
 
     /**

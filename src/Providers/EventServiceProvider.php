@@ -10,12 +10,14 @@ use Sendportal\Base\Events\Webhooks\MailjetWebhookReceived;
 use Sendportal\Base\Events\Webhooks\PostmarkWebhookReceived;
 use Sendportal\Base\Events\Webhooks\SendgridWebhookReceived;
 use Sendportal\Base\Events\Webhooks\SesWebhookReceived;
+use Sendportal\Base\Events\Webhooks\PostalWebhookReceived;
 use Sendportal\Base\Listeners\MessageDispatchHandler;
 use Sendportal\Base\Listeners\Webhooks\HandleMailgunWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandleMailjetWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandlePostmarkWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandleSendgridWebhook;
 use Sendportal\Base\Listeners\Webhooks\HandleSesWebhook;
+use Sendportal\Base\Listeners\Webhooks\HandlePostalWebhook;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MailjetWebhookReceived::class => [
             HandleMailjetWebhook::class
+        ],
+        PostalWebhookReceived::class => [
+            HandlePostalWebhook::class
         ],
         SubscriberAddedEvent::class => [
             // ...

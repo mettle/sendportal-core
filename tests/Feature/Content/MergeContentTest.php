@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Template;
 use Sendportal\Base\Services\Content\MergeContentService;
 use Tests\TestCase;
@@ -104,6 +105,26 @@ class MergeContentTest extends TestCase
     }
 
     /** @test */
+    public function first_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_first_name_is_null()
+    {
+        $message = $this->generateCampaignMessage('Hi, {{ first_name }}');
+
+        $message->subscriber()->associate(Subscriber::factory()->create([
+            'first_name' => null,
+            'last_name' => $this->faker->lastName
+        ]));
+
+        // when
+        $mergedContent = $this->mergeContent($message);
+
+        // NOTE(david): the string has to be formatted like this to match!
+        $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><p>Hi, </p></body></html>';
+
+        self::assertEquals($expectedHtml, $mergedContent);
+    }
+
+    /** @test */
     public function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
     {
         // given
@@ -117,6 +138,26 @@ class MergeContentTest extends TestCase
         // NOTE(david): the string has to be formatted like this to match!
         $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html><body><p>Hi, ' . $message->subscriber->last_name . '</p></body></html>';
+
+        self::assertEquals($expectedHtml, $mergedContent);
+    }
+
+    /** @test */
+    public function last_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_last_name_is_null()
+    {
+        $message = $this->generateCampaignMessage('Hi, {{ last_name }}');
+
+        $message->subscriber()->associate(Subscriber::factory()->create([
+            'first_name' => $this->faker->firstName,
+            'last_name' => null
+        ]));
+
+        // when
+        $mergedContent = $this->mergeContent($message);
+
+        // NOTE(david): the string has to be formatted like this to match!
+        $expectedHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><p>Hi, </p></body></html>';
 
         self::assertEquals($expectedHtml, $mergedContent);
     }

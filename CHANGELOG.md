@@ -1,7 +1,21 @@
 # Sendportal Core
 
-## 2.0.1 - 2021-03-08
+## 2.0.3 - 2021-07-05
+- Self-host CSS and JS assets ([#144](https://github.com/mettle/sendportal-core/pull/144))
+- Handle merge content and subject when subscriber first name or last name are null ([#143](https://github.com/mettle/sendportal-core/pull/143))
+- Add german translation ([#140](https://github.com/mettle/sendportal-core/pull/140))
+- PHP 8: Bug fix for str_ireplace - empty values ([#133](https://github.com/mettle/sendportal-core/pull/133))
+- Update GitHub workflow for PHP CS Fixer v3 ([#130](https://github.com/mettle/sendportal-core/pull/130))
+- Update dependencies
 
+## 2.0.2 - 2021-04-30
+- Add matrix strategy to cover all supported php versions ([#127](https://github.com/mettle/sendportal-core/pull/127))
+- Tag Pagination ([#126](https://github.com/mettle/sendportal-core/pull/126))
+- Keep query string for subscribers pagination ([#122](https://github.com/mettle/sendportal-core/pull/122))
+- Support PHP 8 ([#120](https://github.com/mettle/sendportal-core/pull/120))
+- Update dependencies
+
+## 2.0.1 - 2021-03-08
 - Message subject tags ([#114](https://github.com/mettle/sendportal-core/pull/114))
 - Add SMTP driver ([#112](https://github.com/mettle/sendportal-core/pull/112))
 - Split campaigns index ([#111](https://github.com/mettle/sendportal-core/pull/111))
@@ -10,16 +24,13 @@
 - Fix table prefixing in raw query ([#107](https://github.com/mettle/sendportal-core/pull/107))
 
 ## 2.0.0 - 2021-02-08
-
 - Allow Core to be installed as a package in an existing project ([#85](https://github.com/mettle/sendportal-core/pull/85))
 - Bump Laravel to v8 ([#103](https://github.com/mettle/sendportal-core/pull/103))
 
 ## 1.0.10 - 2020-10-15
-
 - Resolve invalid message issue ([#87](https://github.com/mettle/sendportal-core/pull/87))
 
 ## 1.0.9 - 2020-10-09
-
 - Set Subscriber unsubscribed_at via API ([#83](https://github.com/mettle/sendportal-core/pull/83))
 - Adjust quota service ([#82](https://github.com/mettle/sendportal-core/pull/82))
 - Ensure template names are unique ([#81](https://github.com/mettle/sendportal-core/pull/81))

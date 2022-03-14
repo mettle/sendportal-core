@@ -16,7 +16,7 @@ class AddPostalEmailServiceType extends Migration
         DB::table('sendportal_email_service_types')
             ->insert(
                 [
-                    'id' => EmailServiceType::Postal,
+                    'id' => EmailServiceType::POSTAL,
                     'name' => 'Postal',
                     'created_at' => now(),
                     'updated_at' => now(),

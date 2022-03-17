@@ -33,7 +33,7 @@ class PostalAdapter extends BaseMailAdapter
         return $this->resolveMessageId($response);
     }
 
-   
+ 
 
     protected function resolveMessageId($response): string
     {

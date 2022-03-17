@@ -6,7 +6,6 @@ namespace Sendportal\Base\Http\Controllers\Campaigns;
 
 use Exception;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Campaign;

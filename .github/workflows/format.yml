@@ -1,9 +1,6 @@
 name: Format [PHP]
 
-on:
-  pull_request:
-    paths:
-      - '**.php'
+on: [push]
 
 jobs:
   php-cs-fixer:
@@ -11,6 +8,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Run php-cs-fixer
         uses: docker://oskarstark/php-cs-fixer-ga

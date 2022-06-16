@@ -22,13 +22,13 @@ class MailgunWebhooksTest extends TestCase
     protected $route = 'sendportal.api.webhooks.mailgun';
 
     /** @var string */
-    protected $apiKey;
+    protected $webHookKey;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->apiKey = Str::random();
+        $this->webHookKey = Str::random();
     }
 
     /** @test */
@@ -172,7 +172,7 @@ class MailgunWebhooksTest extends TestCase
         $emailService = EmailService::factory()->create([
             'type_id' => EmailServiceType::MAILGUN,
             'settings' => [
-                'key' => $this->apiKey,
+                'webhook_key' => $this->webHookKey,
             ],
         ]);
 
@@ -192,7 +192,7 @@ class MailgunWebhooksTest extends TestCase
 
         $token = Str::random();
 
-        $signature = hash_hmac('sha256', $timestamp . $token, $this->apiKey);
+        $signature = hash_hmac('sha256', $timestamp . $token, $this->webHookKey);
 
         return [
             'event-data' => [

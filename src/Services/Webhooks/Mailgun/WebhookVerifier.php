@@ -14,6 +14,6 @@ class WebhookVerifier
 //            return false;
 //        }
 
-        return hash_hmac('sha256', $timestamp . $token, $signingKey) === $signature;
+        return hash_equals(hash_hmac('sha256', $timestamp . $token, $signingKey), $signature);
     }
 }

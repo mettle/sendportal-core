@@ -181,7 +181,7 @@ class HandleMailgunWebhook implements ShouldQueue
         }
 
         /** @var string|null $signingKey */
-        $signingKey = $emailservice->settings['key'] ?? null;
+        $signingKey = $emailservice->settings['webhook_key'] ?? null;
 
         if (!$signingKey) {
             return false;

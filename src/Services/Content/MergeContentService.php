@@ -133,7 +133,7 @@ class MergeContentService
         ];
 
         foreach ($tags as $key => $replace) {
-            $content = str_ireplace('{{' . $key . '}}', $replace, $content);
+            $content = str_ireplace(["{{ $key }}", "{{$key}}"], $replace, $content);
         }
 
         return $content;

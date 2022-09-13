@@ -51,6 +51,13 @@ class ResolverService
         return $resolver();
     }
 
+    public function resolveCurrentWorkspaceName()
+    {
+        $resolver = $this->getResolver('workspace');
+
+        return $resolver()->name;
+    }
+
     private function getResolver(string $resolverName): ?callable
     {
         return Arr::get($this->resolvers, $resolverName);

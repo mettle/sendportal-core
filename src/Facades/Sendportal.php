@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string|null sidebarHtmlContent
  * @method static void setHeaderHtmlContentResolver(callable $resolver)
  * @method static string|null headerHtmlContent
+ * @method static string|null currentWorkspaceName
  */
 class Sendportal extends Facade
 {

@@ -10,7 +10,9 @@ use Illuminate\Http\RedirectResponse;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
+use Sendportal\Base\Http\Resources\Workspace;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Workspace as ModelsWorkspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
@@ -109,7 +111,8 @@ class CampaignsController extends Controller
     {
         $workspaceId = Sendportal::currentWorkspaceId();
         $validated = $request->validated();
-        $validated['from_email'] = Sendportal::currentWorkspaceName() . '@socialconnector.io';
+        $workspaceName = ModelsWorkspace::where('id', $workspaceId)->first();
+        $validated['from_email'] = $workspaceName->name . '@socialconnector.io';
         $campaign = $this->campaigns->store($workspaceId, $this->handleCheckboxes($validated));
 
         return redirect()->route('sendportal.campaigns.preview', $campaign->id);

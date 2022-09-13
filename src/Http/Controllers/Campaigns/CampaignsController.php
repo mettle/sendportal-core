@@ -108,7 +108,7 @@ class CampaignsController extends Controller
     public function store(CampaignStoreRequest $request): RedirectResponse
     {
         $workspaceId = Sendportal::currentWorkspaceId();
-        $request->from_email = Sendportal::currentWorkspaceName() . '@socialconnector.io';
+        $request['from_email'] = Sendportal::currentWorkspaceName() . '@socialconnector.io';
         $campaign = $this->campaigns->store($workspaceId, $this->handleCheckboxes($request->validated()));
 
         return redirect()->route('sendportal.campaigns.preview', $campaign->id);

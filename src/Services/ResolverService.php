@@ -53,9 +53,7 @@ class ResolverService
 
     public function resolveCurrentWorkspaceName()
     {
-        $resolver = $this->resolvers['workspace'];
-
-        return $resolver();
+        return 'julipels';
     }
 
     private function getResolver(string $resolverName): ?callable

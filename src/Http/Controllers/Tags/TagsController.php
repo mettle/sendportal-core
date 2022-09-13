@@ -43,6 +43,7 @@ class TagsController extends Controller
      */
     public function store(TagStoreRequest $request): RedirectResponse
     {
+        return $requuest->all();
         $this->tagRepository->store(Sendportal::currentWorkspaceId(), $request->all());
 
         return redirect()->route('sendportal.tags.index');

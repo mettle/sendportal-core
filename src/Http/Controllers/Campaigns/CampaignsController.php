@@ -151,10 +151,12 @@ class CampaignsController extends Controller
     public function update(int $campaignId, CampaignStoreRequest $request): RedirectResponse
     {
         $workspaceId = Sendportal::currentWorkspaceId();
+        $validated = $request->validated();
+        $validated['from_email'] = $workspaceName->name . '@socialconnector.io';
         $campaign = $this->campaigns->update(
             $workspaceId,
             $campaignId,
-            $this->handleCheckboxes($request->validated())
+            $this->handleCheckboxes($validated)
         );
 
         return redirect()->route('sendportal.campaigns.preview', $campaign->id);

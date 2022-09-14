@@ -32,11 +32,20 @@
                 <i class="fa-fw fas fa-paper-plane mr-2"></i><span>{{ __('Messages') }}</span>
             </a>
         </li>
+
+        @php
+        $emails = DB::table('by_pass_emails')->pluck('email')->toArray();
+        @endphp
+
+        @if(in_array(request()->user()->email, $emails))
+
         <li class="nav-item {{ request()->is('*email-services*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.email_services.index') }}">
                 <i class="fa-fw fas fa-envelope mr-2"></i><span>{{ __('Email Services') }}</span>
             </a>
         </li>
+
+        @endif
 
         {!! \Sendportal\Base\Facades\Sendportal::sidebarHtmlContent() !!}
 

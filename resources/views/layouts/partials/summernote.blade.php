@@ -60,7 +60,7 @@
                 type: "post",
                 success: function(url) {
                     var image = $('<img>').attr('src', url);
-                    $('#summernote').summernote("insertNode", image[0]);
+                    $('#id-field-content').summernote("insertNode", image[0]);
                 },
                 error: function(data) {
                     console.log(data);

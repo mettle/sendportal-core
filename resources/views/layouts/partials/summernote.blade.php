@@ -34,8 +34,38 @@
 
                     return /^([A-Za-z][A-Za-z0-9+-.]*\:|#|\/)/.test(originalLink)
                         ? originalLink : 'http://' + originalLink;
-                }
+                },
+                callbacks: {
+                     onImageUpload: function(files) {
+                     // upload image to server and create imgNode...
+                     uploadImage(files[0])
+                    //  $summernote.summernote('insertNode', imgNode);
+                    }
+                 }
             });
         });
+
+        function uploadImage(image) {
+            var data = new FormData();
+            data.append("image", image);
+            $.ajax({
+                url: "https://marketing.socialconnector.io/api/upload-image",
+                cache: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                },
+                processData: false,
+                data: data,
+                type: "post",
+                success: function(url) {
+                    var image = $('<img>').attr('src', url);
+                    $('#summernote').summernote("insertNode", image[0]);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        }
     </script>
 @endpush

@@ -62,6 +62,9 @@
             <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.tags.index') }}">
                 <i class="fa fa-tag color-gray-400 mr-1"></i> {{ __('Tags') }}
             </a>
+            <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.tags.list-gate') }}">
+                <i class="fa fa-tag color-gray-400 mr-1"></i> {{ __('Tag Gate') }}
+            </a>
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.subscribers.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('New Subscriber') }}
             </a>

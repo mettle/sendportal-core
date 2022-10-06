@@ -74,6 +74,10 @@ class Campaign extends BaseModel
         return CampaignFactory::new();
     }
 
+
+
+
+
     /** @var string */
     protected $table = 'sendportal_campaigns';
 

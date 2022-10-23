@@ -15,7 +15,7 @@
         "mailgun/mailgun-php": "^3.2",
         "mailjet/mailjet-apiv3-php": "^1.5",
         "nyholm/psr7": "^1.3",
-        "rap2hpoutre/fast-excel": "^2.3",
+        "rap2hpoutre/fast-excel": "^4.1",
         "sendgrid/sendgrid": "^7.9",
         "wildbit/postmark-php": "^4.0",
         "postal/postal": "^1.0"

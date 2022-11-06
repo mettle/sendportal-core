@@ -36,7 +36,7 @@ class TemplatesController extends Controller
      */
     public function index(): View
     {
-        $templates = $this->templates->paginate(Sendportal::currentWorkspaceId(), 'name');
+        $templates = $this->templates->paginate(Sendportal::currentWorkspaceId(), 'name', [], 25, request()->all());
 
         return view('sendportal::templates.index', compact('templates'));
     }

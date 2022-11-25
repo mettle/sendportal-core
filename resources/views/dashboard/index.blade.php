@@ -13,6 +13,11 @@
                 <div class="card-header card-header-accent">
                     <div class="card-header-inner">
                         {{ __('Total Subscribers') }}
+                        <div class="float-right">
+                            <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-sm btn-secondary">
+                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">0</span> Unit(s)
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -213,5 +218,11 @@
                 }
             });
         });
+        $( document ). ready( function(){
+            $.get("/get-unit-balance", function(data, status){
+                $('#unit-balance').html(data.data.unit_balance);
+            });
+        } )
+       
     </script>
 @endpush

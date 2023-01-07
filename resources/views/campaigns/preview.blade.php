@@ -13,7 +13,7 @@
         <div class="card mb-4">
             <div class="card-header card-header-accent">
                 <div class="card-header-inner">
-                    {{ __('Content') }}
+                    {{ __('Content tra') }}
                 </div>
             </div>
             <div class="card-body">

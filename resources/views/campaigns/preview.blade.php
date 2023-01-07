@@ -89,11 +89,27 @@
                                 <option value="send_to_tags" {{ (old('recipients') ? old('recipients') == 'send_to_tags' : !$campaign->send_to_all) ? 'selected' : '' }}>
                                     {{ __('Select Tags') }}
                                 </option>
+                                <option value="send_to_segments" {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? 'selected' : '' }}>
+                                    {{ __('Select Segments') }}
+                                </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="tags-container {{ (old('recipients') ? old('recipients') == 'send_to_tags' : !$campaign->send_to_all) ? '' : 'hide' }}">
+                        @forelse($tags as $tag)
+                            <div class="checkbox">
+                                <label>
+                                    <input name="tags[]" type="checkbox" value="{{ $tag->id }}">
+                                    {{ $tag->name }} ({{ $tag->activeSubscribers()->count() }} {{ __('subscribers') }})
+                                </label>
+                            </div>
+                        @empty
+                            <div>{{ __('There are no tags to select') }}</div>
+                        @endforelse
+                    </div>
+
+                    <div class="tags-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
                         @forelse($tags as $tag)
                             <div class="checkbox">
                                 <label>

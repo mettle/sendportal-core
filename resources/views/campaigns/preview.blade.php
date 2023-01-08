@@ -181,12 +181,12 @@
             }
         });
 
-        var target = $('.segments-container');
+        var segmentTarget = $('.segments-container');
         $('#id-field-recipients').change(function() {
             if (this.value == 'send_to_all') {
-                target.addClass('hide');
+                segmentTarget.addClass('hide');
             } else {
-                target.removeClass('hide');
+                segmentTarget.removeClass('hide');
             }
         });
 

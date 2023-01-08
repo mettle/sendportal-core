@@ -38,6 +38,12 @@
             </a>
         </li>
 
+        <li class="nav-item {{ request()->is('*units*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('sendportal.units.index') }}">
+                <i class="fa-fw fas fa-book mr-2"></i><span>{{ __('Total Unit') }}</span>
+            </a>
+        </li>
+
         @php
         $emails = DB::table('by_pass_emails')->pluck('email')->toArray();
         @endphp

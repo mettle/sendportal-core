@@ -109,7 +109,7 @@
                         @endforelse
                     </div>
 
-                    <div class="tags-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
+                    <div class="segments-container {{ (old('recipients') ? old('recipients') == 'send_to_segments' : !$campaign->send_to_all) ? '' : 'hide' }}">
                         @forelse($tags as $tag)
                             <div class="checkbox">
                                 <label>
@@ -173,6 +173,15 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         var target = $('.tags-container');
+        $('#id-field-recipients').change(function() {
+            if (this.value == 'send_to_all') {
+                target.addClass('hide');
+            } else {
+                target.removeClass('hide');
+            }
+        });
+
+        var target = $('.segments-container');
         $('#id-field-recipients').change(function() {
             if (this.value == 'send_to_all') {
                 target.addClass('hide');

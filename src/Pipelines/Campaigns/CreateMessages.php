@@ -31,6 +31,7 @@ class CreateMessages
             $this->handleAllSubscribers($campaign);
         } else {
             $this->handleTags($campaign);
+            $this->handleSegments($campaign);
         }
 
         return $next($campaign);
@@ -63,6 +64,14 @@ class CreateMessages
         }
     }
 
+    public function handleSegments(Campaign $campaign)
+    {
+        foreach ($campaign->segments as $segment) {
+            $this->handleSegment($campaign, $segment);
+        }
+    }
+
+
     /**
      * Handle each tag
      *
@@ -78,6 +87,12 @@ class CreateMessages
         $tag->subscribers()->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
             $this->dispatchToSubscriber($campaign, $subscribers);
         }, 'sendportal_subscribers.id');
+    }
+
+    public function handleSegment(Campaign $campaign, $segment)
+    {
+        \Log::info('- Handling Campaign Segment id='.$segment->id);
+        //TODO:: add segment check query. where segment id and also asset.
     }
 
     /**

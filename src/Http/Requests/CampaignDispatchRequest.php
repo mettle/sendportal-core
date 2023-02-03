@@ -18,7 +18,7 @@ class CampaignDispatchRequest extends FormRequest
             'id'
         );
 
-        $segments = Segment::where('owner', request()->user->id ?? 0)->pluck('id');
+        $segments = Segment::where('owner', request()->user->sc_user_id ?? 0)->pluck('id');
 
 
         return [
@@ -41,7 +41,7 @@ class CampaignDispatchRequest extends FormRequest
             'tags.required_if' => __('At least one tag must be selected'),
             'tag_segments.required_if' => __('At least one segment must be selected'),
             'tags.in' => __('One or more of the tags is invalid.'),
-            'segment_tags.in' => __('One or more of the tags is invalid.'),
+            'segment_tags.in' => __('One or more of the tags segments invalid.'),
         ];
     }
 }

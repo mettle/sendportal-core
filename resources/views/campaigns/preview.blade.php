@@ -186,7 +186,7 @@
             if (this.value == 'send_to_all') {
                 segmentTarget.addClass('hide');
             } else {
-                segmentTarget.removeClass('hide');
+                // segmentTarget.removeClass('hide');
             }
         });
 

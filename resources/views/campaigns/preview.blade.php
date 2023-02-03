@@ -169,24 +169,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
 
+
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         var target = $('.tags-container');
+        var segmentTarget = $('.segments-container');
         $('#id-field-recipients').change(function() {
             if (this.value == 'send_to_all') {
                 target.addClass('hide');
             } else {
+                segmentTarget.addClass('hide');
                 target.removeClass('hide');
             }
         });
 
-        var segmentTarget = $('.segments-container');
+
         $('#id-field-recipients').change(function() {
             if (this.value == 'send_to_all') {
                 segmentTarget.addClass('hide');
+
             } else {
-                // segmentTarget.removeClass('hide');
+                target.addClass('hide');
+                segmentTarget.removeClass('hide');
             }
         });
 

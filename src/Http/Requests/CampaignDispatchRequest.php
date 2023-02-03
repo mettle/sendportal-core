@@ -39,7 +39,7 @@ class CampaignDispatchRequest extends FormRequest
     {
         return [
             'tags.required_if' => __('At least one tag must be selected'),
-            'tag_segments.required_if' => __('At least one segment must be selected'),
+            'segment_tags.required_if' => __('At least one segment must be selected'),
             'tags.in' => __('One or more of the tags is invalid.'),
             'segment_tags.in' => __('One or more of the tags segments invalid.'),
         ];

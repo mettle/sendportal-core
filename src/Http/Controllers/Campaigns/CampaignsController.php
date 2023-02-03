@@ -12,6 +12,7 @@ use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Http\Resources\Workspace;
 use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Workspace as ModelsWorkspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;
@@ -178,7 +179,11 @@ class CampaignsController extends Controller
 
         $tags = $this->tags->all(Sendportal::currentWorkspaceId(), 'name');
 
-        return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'subscriberCount'));
+        $scUserID = request()->user()->sc_user_id ?? 0;
+
+        $segmentTags = Segment::where('owner', $scUserID)->get();
+
+        return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount'));
     }
 
     /**

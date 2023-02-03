@@ -10,4 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 class SendportalCampaignSegment extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }

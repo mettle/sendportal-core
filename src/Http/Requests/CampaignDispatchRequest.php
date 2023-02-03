@@ -18,8 +18,9 @@ class CampaignDispatchRequest extends FormRequest
             'id'
         );
 
-        $segments = Segment::where('owner', request()->user->sc_user_id ?? 0)->pluck('id');
+        $scUserID = request()->user()->sc_user_id ?? 0;
 
+        $segments = Segment::where('owner', $scUserID)->pluck('id');
 
         return [
             'tags' => [

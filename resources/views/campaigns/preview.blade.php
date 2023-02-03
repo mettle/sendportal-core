@@ -114,7 +114,7 @@
                             @forelse($segmentTags as $tag)
                                 <div class="checkbox">
                                     <label>
-                                        <input name="tags[]" type="checkbox" value="{{ $tag->id }}">
+                                        <input name="segment_tags[]" type="checkbox" value="{{ $tag->id }}">
                                         {{ $tag->name }}
                                     </label>
                                 </div>

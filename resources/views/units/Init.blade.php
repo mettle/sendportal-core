@@ -17,7 +17,6 @@
     <script>
         
                 function payWithSocialPay(data) {
-                    console.log(data.amount_charge);
                     var handler = SocialPay.invoice({
                     public_key: "PUBLIC_KEY_cl8soodjc0003iggmxp5phm2ucl8soodjc0004iggmmucwstpa",
                     order_id: data.order_id,

@@ -37,10 +37,8 @@
             </div>
         </div>
         @if(isset($transaction_payload))
-        <!-- {{dd($transaction_payload)}} -->
             <script>
                 function payWithSocialPay(data) {
-                    console.log(data);
                     var handler = SocialPay.invoice({
                     public_key: "PUBLIC_KEY_cl8soodjc0003iggmxp5phm2ucl8soodjc0004iggmmucwstpa",
                     order_id: "'"+data.order_id+"'",

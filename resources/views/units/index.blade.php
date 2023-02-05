@@ -42,66 +42,29 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>{{ __('Date') }}</th>
-                    <th>{{ __('Subject') }}</th>
-                    <th>{{ __('Source') }}</th>
-                    <th>{{ __('Recipient') }}</th>
-                    <th>{{ __('Status') }}</th>
-                    @if(request()->route()->named('sendportal.messages.draft'))
-                        <th>{{ __('Actions') }}</th>
-                        <th>
-                            <button class="btn btn-xs btn-light" id="select-all">Select All</button>
-                            <form action="{{ route('sendportal.messages.send-selected') }}" method="post" id="send-selected-form" style="display: inline-block;">
-                                @csrf
-                                <button type="submit" class="btn btn-xs btn-light">{{ __('Send Selected') }}</button>
-                            </form>
-                        </th>
-                    @endif
+                    <th>{{ __('Fullname') }}</th>
+                    <th>{{ __('Old Balance') }}</th>
+                    <th>{{ __('Action') }}</th>
+                    <th>{{ __('Amount') }}</th>
+                    <th>{{ __('New Balance') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                     @forelse($unit_history as $history)
                         <tr>
                             <td>
-                                {{dd($history)}}
-                                {{ $message->sent_at ?? $message->created_at }}
+                                {{ $history->user_unit->user->name }}
                             </td>
-                            <td>{{ $message->subject }}</td>
+                            <td>{{ $history->old_unit_balance }}</td>
                             <td>
-                                @if($message->isCampaign())
-                                    <i class="fas fa-envelope color-gray-300"></i>
-                                    <a href="{{ route('sendportal.campaigns.reports.index', $message->source_id) }}">
-                                        {{ $message->source->name }}
-                                    </a>
-                                @elseif($message->isAutomation())
-                                    <i class="fas fa-sync-alt color-gray-300"></i>
-                                    <a href="{{ route('sendportal.automations.show', $message->source->automation_step->automation_id) }}">
-                                        {{ $message->source->automation_step->automation->name }}
-                                    </a>
-                                @endif
+                                {{ $history->action }}
                             </td>
-                            <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
                             <td>
-                                @include('sendportal::messages.partials.status-row')
+                                {{ $history->amount }}
                             </td>
-                            @if(request()->route()->named('sendportal.messages.draft') &&  ! $message->sent_at)
-                                <td>
-                                    <form action="{{ route('sendportal.messages.send') }}" method="post" class="d-inline-block">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $message->id }}">
-                                        <a href="{{ route('sendportal.messages.show', $message->id) }}" class="btn btn-xs btn-light">{{ __('Preview') }}</a>
-                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Send Now') }}</button>
-                                    </form>
-                                    <form action="{{ route('sendportal.messages.delete', $message->id) }}" method="post" class="d-inline-block delete-message">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-xs btn-light">{{ __('Delete') }}</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="messages[]" value="{{ $message->id }}" class="message-select" form="send-selected-form">
-                                </td>
-                            @endif
+                            <td>
+                                {{ $history->new_unit_balance }}
+                            </td>
                         </tr>
                     @empty
                         <tr>

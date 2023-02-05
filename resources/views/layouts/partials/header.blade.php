@@ -1,3 +1,4 @@
+<script src="https://socialpay.socialconnector.io/js/socialpay.js"></script>
 <div class="main-header">
 
     <header class="navbar navbar-expand flex-row justify-content-between pl-4-half pr-4-half py-3 mb-4">

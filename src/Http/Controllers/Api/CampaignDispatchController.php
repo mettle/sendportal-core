@@ -2,6 +2,8 @@
 
 namespace Sendportal\Base\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\Api\CampaignDispatchRequest;
@@ -35,8 +37,45 @@ class CampaignDispatchController extends Controller
      */
     public function send(CampaignDispatchRequest $request, $campaignId)
     {
+
         $campaign = $request->getCampaign(['email_service', 'messages']);
         $workspaceId = Sendportal::currentWorkspaceId();
+
+        // check if the Authenticated user has units to send the request
+        $unitBalance = DB::table('user_units')->where('id', Auth::user()->id)->first()->unit_balance;
+        $perUnitPrice = 5;
+        if($unitBalance <= 0){
+            return response()->json([
+               'status' => false,
+               'message' => 'You do not have units to send this request'
+            ], 400);
+        }else{
+            $reciepient = $request->recipients;
+            $no_of_reciepient = 0;
+            $workspace = $request->user()->currentWorkspace();
+            if($reciepient == 'send_to_all'){
+                $allSubscriber = DB::table('sendportal_subscribers')->where('workspace_id', $workspaceId)->count();
+
+                if($allSubscriber*$perUnitPrice > $unitBalance){
+                    return response()->json([
+                       'status' => false,
+                       'message' => 'You do not have enough units to send this request'
+                    ], 400);
+                }
+            }else{
+
+                // get All tags
+                $all_tags = $request->tags;
+                $taggedSubscriber = DB::table("sendportal_tag_subscriber")->whereIn('tag_id', $all_tags)->count();
+                if($taggedSubscriber*$perUnitPrice > $unitBalance){
+                    return response()->json([
+                       'status' => false,
+                       'message' => 'You do not have enough units to send this request'
+                    ], 400);
+                }
+            }
+        }
+        
 
         if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return response([

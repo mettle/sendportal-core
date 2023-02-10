@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Pipelines\Campaigns;
 
 use Sendportal\Base\Events\MessageDispatchEvent;
+use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
@@ -92,7 +93,12 @@ class CreateMessages
     public function handleSegment(Campaign $campaign, $segment)
     {
         \Log::info('- Handling Campaign Segment id='.$segment->id);
-        //TODO:: add segment check query. where segment id and also asset.
+
+        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->pluck('user_id')->toArray();
+
+        Subscriber::whereIn('sc_user_id', $userIds)->chunkById(1000, function ($subscribers) use ($campaign) {
+            $this->dispatchToSubscriber($campaign, $subscribers);
+        });
     }
 
     /**

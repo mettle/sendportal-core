@@ -10,6 +10,7 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest as BaseCampaignStoreRequest;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
+use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TagTenantRepository;
 
@@ -49,17 +50,27 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'id'
         );
 
+        $segments = Segment::where('owner', request()->user->id ?? 0)->pluck('id');
+
         $rules = [
             'send_to_all' => [
                 'required',
                 'boolean',
             ],
             'tags' => [
-                'required_unless:send_to_all,1',
+                'required_if:send_to_tags,1',
                 'array',
                 Rule::in($tags),
             ],
             'tags.*' => [
+                'integer',
+            ],
+            'segment_tags' => [
+                'required_if:send_to_segments,1',
+                'array',
+                Rule::in($segments),
+            ],
+            'segment_tags.*' => [
                 'integer',
             ],
             'scheduled_at' => [

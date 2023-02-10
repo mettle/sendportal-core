@@ -69,9 +69,9 @@
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.subscribers.create') }}">
                 <i class="fa fa-plus mr-1"></i> {{ __('New Subscriber') }}
             </a>
-            <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.tags.refresh') }}">
-                <i class="fa fa-plus mr-1"></i> {{ __('Referesh Subscribers') }}
-            </a>
+{{--            <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.tags.refresh') }}">--}}
+{{--                <i class="fa fa-plus mr-1"></i> {{ __('Referesh Subscribers') }}--}}
+{{--            </a>--}}
         @endslot
     @endcomponent
 

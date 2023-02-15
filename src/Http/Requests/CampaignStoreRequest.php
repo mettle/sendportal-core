@@ -57,7 +57,7 @@ class CampaignStoreRequest extends FormRequest
                 'boolean',
                 'nullable'
             ],
-            'recurrent' => [
+            'type' => [
                 'in:recurrent',
                 'nullable'
             ],

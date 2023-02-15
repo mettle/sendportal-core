@@ -112,13 +112,7 @@ class Campaign extends BaseModel
         return $this->belongsToMany(Tag::class, 'sendportal_campaign_tag')->withTimestamps();
     }
 
-    /**
-     * Segments this campaign was sent to.
-     */
-    public function segments(): BelongsToMany
-    {
-        return $this->belongsToMany(SendportalCampaignSegment::class, 'sendportal_campaign_segments')->withTimestamps();
-    }
+
     /**
      * Status of the campaign.
      */

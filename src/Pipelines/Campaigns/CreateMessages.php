@@ -6,6 +6,7 @@ use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\SendportalCampaignSegment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
 
@@ -67,8 +68,9 @@ class CreateMessages
 
     public function handleSegments(Campaign $campaign)
     {
+        $segments = SendportalCampaignSegment::where('campaign_id', $campaign->id)->get();
         \Log::info(json_encode($campaign));
-        foreach ($campaign->segments as $segment) {
+        foreach ($segments as $segment) {
             \Log::info(json_encode($segment));
             $this->handleSegment($campaign, $segment);
         }

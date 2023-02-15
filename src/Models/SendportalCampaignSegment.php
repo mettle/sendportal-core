@@ -11,5 +11,8 @@ class SendportalCampaignSegment extends Model
 {
     use HasFactory;
 
+    protected $table = 'sendportal_campaign_segments';
+
+
     protected $guarded = [];
 }

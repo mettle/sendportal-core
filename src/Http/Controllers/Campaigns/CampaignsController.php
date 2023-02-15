@@ -187,6 +187,7 @@ class CampaignsController extends Controller
         return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount'));
     }
 
+
     /**
      * @return RedirectResponse|ViewContract
      * @throws Exception

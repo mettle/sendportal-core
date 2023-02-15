@@ -67,7 +67,9 @@ class CreateMessages
 
     public function handleSegments(Campaign $campaign)
     {
+        \Log::info(json_encode($campaign));
         foreach ($campaign->segments as $segment) {
+            \Log::info(json_encode($segment));
             $this->handleSegment($campaign, $segment);
         }
     }

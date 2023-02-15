@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @method static SegmentFactory factory
  */
-class SendportalSegment extends BaseModel
+class Segment extends BaseModel
 {
     use HasFactory;
 

@@ -8,9 +8,11 @@ namespace Sendportal\Base\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CampaignSegment extends Model
+class SendportalSegment extends Model
 {
     use HasFactory;
 
-    protected $table = 'campaign_segments';
+    protected $table = 'sendportal_segments';
+
+    protected $guarded = [];
 }

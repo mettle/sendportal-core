@@ -5,7 +5,7 @@ namespace Sendportal\Base\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\CampaignSegment;
+use Sendportal\Base\Models\SendportalSegment;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Repositories\TagTenantRepository;
 
@@ -21,7 +21,7 @@ class CampaignDispatchRequest extends FormRequest
 
         $scUserID = request()->user()->sc_user_id ?? 0;
 
-        $segments = CampaignSegment::where('workspace_id', Sendportal::currentWorkspaceId())->pluck('id');
+        $segments = SendportalSegment::where('workspace_id', Sendportal::currentWorkspaceId())->pluck('id');
 
         return [
             'tags' => [

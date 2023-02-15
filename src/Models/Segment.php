@@ -52,7 +52,7 @@ class Segment extends BaseModel
      */
     public function subscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id')->as('asset')
+        return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id')->as('asset')->where('subscribers.workspace_id', $this->workspace_id)
             ->withPivot('user_id', 'sc_user_id')->withTimestamps();
     }
 

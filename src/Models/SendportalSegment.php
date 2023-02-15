@@ -52,7 +52,7 @@ class SendportalSegment extends BaseModel
      */
     public function subscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id', 'sc_user_id')->withTimestamps();
+        return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id')->withPivot('sc_user_id')->withTimestamps();
     }
 
     /**

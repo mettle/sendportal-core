@@ -68,9 +68,8 @@ class CreateMessages
 
     public function handleSegments(Campaign $campaign)
     {
-        $segments = SendportalCampaignSegment::where('campaign_id', $campaign->id)->get();
         \Log::info(json_encode($campaign));
-        foreach ($segments as $segment) {
+        foreach ($campaign->segments as $segment) {
             \Log::info(json_encode($segment));
             $this->handleSegment($campaign, $segment);
         }

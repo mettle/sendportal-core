@@ -11,6 +11,7 @@ use Sendportal\Base\Http\Requests\CampaignStoreRequest as BaseCampaignStoreReque
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\Segment;
+use Sendportal\Base\Models\SendportalSegment;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TagTenantRepository;
 
@@ -50,7 +51,7 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'id'
         );
 
-//        $segments = Segment::where('owner', request()->user->id ?? 0)->pluck('id');
+        $segments = SendportalSegment::where('workspace_id', $this->workspaceId)->pluck('id');
 
         $rules = [
             'send_to_all' => [

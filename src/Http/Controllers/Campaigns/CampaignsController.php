@@ -143,7 +143,9 @@ class CampaignsController extends Controller
             });
         $templates = [null => '- None -'] + $this->templates->pluck($workspaceId);
 
-        return view('sendportal::campaigns.edit', compact('campaign', 'emailServices', 'templates'));
+        $types = ['recurrent' => 'recurrent', 'onetime' => 'onetime'];
+
+        return view('sendportal::campaigns.edit', compact('campaign', 'emailServices', 'templates', 'types'));
     }
 
     /**

@@ -113,6 +113,7 @@ class CampaignsController extends Controller
         $workspaceId = Sendportal::currentWorkspaceId();
         $validated = $request->validated();
         $workspaceName = ModelsWorkspace::where('id', $workspaceId)->first();
+
         $validated['from_email'] = $workspaceName->name . '@socialconnector.io';
         $campaign = $this->campaigns->store($workspaceId, $this->handleCheckboxes($validated));
 

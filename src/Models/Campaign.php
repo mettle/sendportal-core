@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property Carbon|null $updated_at
  *
  * @property EloquentCollection $tags
+ * @property EloquentCollection $segments
  * @property CampaignStatus $status
  * @property Template|null $template
  * @property EmailService|null $email_service
@@ -117,7 +118,7 @@ class Campaign extends BaseModel
      */
     public function segments(): BelongsToMany
     {
-        return $this->belongsToMany(SendportalSegment::class)->withTimestamps();
+        return $this->belongsToMany(SendportalSegment::class,'sendportal_campaign_segments')->withTimestamps();
     }
 
 

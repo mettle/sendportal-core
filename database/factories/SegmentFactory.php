@@ -6,13 +6,12 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Sendportal\Base\Facades\Sendportal;
-use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\SendportalCampaignSegment;
+use Sendportal\Base\Models\SendportalSegment;
 
 class SegmentFactory extends Factory
 {
     /** @var string */
-    protected $model = SendportalCampaignSegment::class;
+    protected $model = SendportalSegment::class;
 
     public function definition(): array
     {

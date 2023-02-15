@@ -99,7 +99,7 @@ class CreateMessages
 
         $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->pluck('user_id')->toArray();
 
-        Subscriber::whereIn('sc_user_id', $userIds)->chunkById(1000, function ($subscribers) use ($campaign) {
+        Subscriber::whereIn('sc_user_id', $userIds)->where('workspace_id',$campaign->workspace_id)->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
             $this->dispatchToSubscriber($campaign, $subscribers);
         });
     }

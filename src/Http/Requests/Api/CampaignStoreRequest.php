@@ -50,7 +50,7 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'id'
         );
 
-        $segments = Segment::where('owner', request()->user->id ?? 0)->pluck('id');
+//        $segments = Segment::where('owner', request()->user->id ?? 0)->pluck('id');
 
         $rules = [
             'send_to_all' => [

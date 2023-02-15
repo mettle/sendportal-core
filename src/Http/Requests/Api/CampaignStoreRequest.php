@@ -65,11 +65,11 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'tags.*' => [
                 'integer',
             ],
-            'segment_tags' => [
-                'required_if:send_to_segments,1',
-                'array',
-                Rule::in($segments),
-            ],
+//            'segment_tags' => [
+//                'required_if:send_to_segments,1',
+//                'array',
+//                Rule::in($segments),
+//            ],
             'segment_tags.*' => [
                 'integer',
             ],

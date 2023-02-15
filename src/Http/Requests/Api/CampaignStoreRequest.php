@@ -11,7 +11,6 @@ use Sendportal\Base\Http\Requests\CampaignStoreRequest as BaseCampaignStoreReque
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TagTenantRepository;
 
@@ -66,11 +65,11 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'tags.*' => [
                 'integer',
             ],
-//            'segment_tags' => [
-//                'required_if:send_to_segments,1',
-//                'array',
-//                Rule::in($segments),
-//            ],
+            'segment_tags' => [
+                'required_if:send_to_segments,1',
+                'array',
+                Rule::in($segments),
+            ],
             'segment_tags.*' => [
                 'integer',
             ],

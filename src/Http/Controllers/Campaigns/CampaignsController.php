@@ -196,7 +196,7 @@ class CampaignsController extends Controller
         $workspaceId = Sendportal::currentWorkspaceId();
         $campaign = $this->campaigns->find($workspaceId, $id, ['status']);
 
-        if ($campaign->sent) {
+        if ($campaign->sent|| $campaign->type == 'recurrent') {
             return redirect()->route('sendportal.campaigns.reports.index', $id);
         }
 

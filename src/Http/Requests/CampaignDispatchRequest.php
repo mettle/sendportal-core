@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Segment;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Repositories\TagTenantRepository;
 
 class CampaignDispatchRequest extends FormRequest

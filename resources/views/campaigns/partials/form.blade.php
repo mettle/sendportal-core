@@ -5,9 +5,9 @@
 
 <x-sendportal.select-field name="template_id" :label="__('Template')" :options="$templates" :value="$campaign->template_id ?? old('template_id')" />
 
-<x-sendportal.select-field name="type" :label="__('Type')" :options="$types" :value="" />
-
 <x-sendportal.select-field name="email_service_id" :label="__('Email Service')" :options="$emailServices->pluck('formatted_name', 'id')" :value="$campaign->email_service_id ?? old('email_service_id')" />
+
+<x-sendportal.checkbox-field name="is_recurrent" :label="__('Recurrent')" value="recurrent" />
 
 <x-sendportal.checkbox-field name="is_open_tracking" :label="__('Track Opens')" value="1" :checked="$campaign->is_open_tracking ?? true" />
 <x-sendportal.checkbox-field name="is_click_tracking" :label="__('Track Clicks')" value="1" :checked="$campaign->is_click_tracking ?? true" />

@@ -46,7 +46,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued || $campaign->sending) {
+        if ( $campaign->type != 'recurrent' and ($campaign->queued || $campaign->sending)) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -78,7 +78,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued || $campaign->sending) {
+        if ( $campaign->type != 'recurrent' and ($campaign->queued || $campaign->sending)) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -102,7 +102,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued || $campaign->sending) {
+        if ( $campaign->type != 'recurrent' and ($campaign->queued || $campaign->sending)) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -126,7 +126,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued || $campaign->sending) {
+        if ( $campaign->type != 'recurrent' and ($campaign->queued || $campaign->sending)) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -149,7 +149,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued || $campaign->sending) {
+        if ( $campaign->type != 'recurrent' and ($campaign->queued || $campaign->sending)) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
@@ -172,7 +172,7 @@ class CampaignReportsController extends Controller
             return redirect()->route('sendportal.campaigns.edit', $id);
         }
 
-        if ($campaign->queued || $campaign->sending) {
+        if ( $campaign->type != 'recurrent' and ($campaign->queued || $campaign->sending)) {
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 

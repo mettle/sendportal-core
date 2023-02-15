@@ -117,7 +117,7 @@ class Campaign extends BaseModel
      */
     public function segments(): BelongsToMany
     {
-        return $this->belongsToMany(SendportalSegment::class, 'sendportal_segments')->withTimestamps();
+        return $this->belongsToMany(SendportalSegment::class)->withTimestamps();
     }
 
 

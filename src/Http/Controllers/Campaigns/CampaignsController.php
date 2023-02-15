@@ -13,7 +13,6 @@ use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Http\Resources\Workspace;
 use Sendportal\Base\Models\SendportalSegment;
 use Sendportal\Base\Models\EmailService;
-use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\Workspace as ModelsWorkspace;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Repositories\EmailServiceTenantRepository;

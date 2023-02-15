@@ -65,4 +65,5 @@ class Segment extends BaseModel
             ->whereNull('unsubscribed_at')
             ->withTimestamps();
     }
+
 }

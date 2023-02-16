@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Pipelines\Campaigns;
 
 use Sendportal\Base\Events\MessageDispatchEvent;
+use Sendportal\Base\Jobs\AddSegmentSubscriberJob;
 use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
@@ -99,9 +100,18 @@ class CreateMessages
 
         $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->pluck('user_id')->toArray();
 
-        Subscriber::whereIn('sc_user_id', $userIds)->where('workspace_id',$campaign->workspace_id)->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
-            $this->dispatchToSubscriber($campaign, $subscribers);
-        });
+        if($campaign->type === 'recurrent')
+        {
+            AddSegmentSubscriberJob::dispatch($userIds, $campaign->workspace_id)->onQueue('events');
+            Subscriber::whereIn('sc_user_id', $userIds)->where('workspace_id',$campaign->workspace_id)->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
+                $this->dispatchToSubscriber($campaign, $subscribers);
+            });
+        }else {
+            AddSegmentSubscriberJob::dispatchSync($userIds, $campaign->workspace_id);
+            Subscriber::whereIn('sc_user_id', $userIds)->where('workspace_id', $campaign->workspace_id)->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
+                $this->dispatchToSubscriber($campaign, $subscribers);
+            });
+        }
     }
 
     /**

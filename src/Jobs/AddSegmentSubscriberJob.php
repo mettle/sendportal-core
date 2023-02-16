@@ -37,7 +37,7 @@ class AddSegmentSubscriberJob implements ShouldQueue
     public function handle()
     {
 
-        $users = $this->userIds;
+        $users = array_unique($this->userIds);
 
         foreach ($users as $user)
         {

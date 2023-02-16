@@ -15,6 +15,8 @@ class AddSegmentSubscriberJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $userIds, $workspaceId;
+
     /**
      * Create a new job instance.
      *

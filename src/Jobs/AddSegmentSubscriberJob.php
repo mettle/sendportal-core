@@ -50,15 +50,19 @@ class AddSegmentSubscriberJob implements ShouldQueue
                         ['workspace_id' => $this->workspaceId, 'name' => 'lead']
                     );
 
-                    $subscriber = new Subscriber();
-                    $subscriber->first_name = explode(' ', $scUser->name)[0] ?? null;
-                    $subscriber->last_name = explode(' ', $scUser->name)[1] ?? null;
-                    $subscriber->workspace_id = $this->workspaceId;
-                    $subscriber->email = $scUser->email;
-                    $subscriber->sc_user_id = $scUser->id;
-                    $subscriber->save();
+                    $checkExistingUser = Subscriber::where('workspace_id', $this->workspaceId)->where('sc_user_id', $scUser->id)->first();
 
-                    $subscriber->tags()->attach($leadTag);
+                    if(empty($checkExistingUser)) {
+                        $subscriber = new Subscriber();
+                        $subscriber->first_name = explode(' ', $scUser->name)[0] ?? null;
+                        $subscriber->last_name = explode(' ', $scUser->name)[1] ?? null;
+                        $subscriber->workspace_id = $this->workspaceId;
+                        $subscriber->email = $scUser->email;
+                        $subscriber->sc_user_id = $scUser->id;
+                        $subscriber->save();
+
+                        $subscriber->tags()->attach($leadTag);
+                    }
 
                 }
 

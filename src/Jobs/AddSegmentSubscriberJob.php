@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Sendportal\Base\Models\SocialconnectorUser;
 use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\Tag;
 
 class AddSegmentSubscriberJob implements ShouldQueue
 {
@@ -40,11 +41,11 @@ class AddSegmentSubscriberJob implements ShouldQueue
 
         foreach ($users as $user)
         {
-            $subscriber = Subscriber::where('sc_user_id', $this->userIds)->where('workspace_id', $this->workspaceId)->first();
+            $subscriber = Subscriber::where('sc_user_id', $user)->where('workspace_id', $this->workspaceId)->first();
             if(empty($subscriber)) {
                 $scUser = SocialconnectorUser::where('id', $user)->first();
                 if(!empty($scUser)) {
-                    $leadTag = updateOrCreate(
+                    $leadTag = Tag::updateOrCreate(
                         ['workspace_id' => $this->workspaceId, 'name' => 'lead'],
                         ['workspace_id' => $this->workspaceId, 'name' => 'lead']
                     );

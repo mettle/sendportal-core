@@ -38,9 +38,7 @@ class Tag extends BaseModel
     protected $table = 'sendportal_tags';
 
     /** @var array */
-    protected $fillable = [
-        'name',
-    ];
+    protected $guarded = [];
 
     /** @var array */
     protected $withCount = [

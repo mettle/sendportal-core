@@ -11,6 +11,7 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignDispatchRequest;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
+use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\CampaignStatus;
 use Sendportal\Base\Models\SendportalCampaignSegment;
 use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
@@ -59,7 +60,11 @@ class CampaignDispatchController extends Controller
 
         $segmentTags = $request->get('segment_tags');
 
+        $totalCampaignSubscriberCount = $campaign->unsent_count;
+
+
         foreach ($segmentTags as $segment) {
+            $totalCampaignSubscriberCount += Asset::where('contract', $segment)->where('type', 'segment')->where('total', '>=', 1)->count();
             SendportalCampaignSegment::updateOrCreate(['segment_id' => $segment, 'campaign_id' => $campaign->id], [
                 'segment_id' => $segment, 'campaign_id' => $campaign->id
             ]);
@@ -70,6 +75,13 @@ class CampaignDispatchController extends Controller
         if ($this->quotaService->exceedsQuota($campaign->email_service, $campaign->unsent_count)) {
             return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('The number of subscribers for this campaign exceeds your SES quota'));
+        }
+
+        $totalUserUnit = \DB::table('user_units')->where('workspace_id', Sendportal::currentWorkspaceId())->first()->unit_balance ?? 0;
+
+        if ($totalUserUnit < $totalCampaignSubscriberCount) {
+            return redirect()->route('sendportal.campaigns.edit', $id)
+                ->withErrors(__('The number of subscribers for this campaign exceeds your unit quota'));
         }
 
         $scheduledAt = $request->get('schedule') === 'scheduled' ? Carbon::parse($request->get('scheduled_at')) : now();

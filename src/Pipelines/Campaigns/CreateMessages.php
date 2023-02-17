@@ -3,6 +3,7 @@
 namespace Sendportal\Base\Pipelines\Campaigns;
 
 use Sendportal\Base\Events\MessageDispatchEvent;
+use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Jobs\AddSegmentSubscriberJob;
 use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\Campaign;
@@ -71,6 +72,7 @@ class CreateMessages
     {
         \Log::info(json_encode($campaign));
         foreach ($campaign->segments as $segment) {
+
             \Log::info(json_encode($segment));
             $this->handleSegment($campaign, $segment);
         }
@@ -114,6 +116,30 @@ class CreateMessages
         }
     }
 
+    public function deductUnit($workspaceId)
+    {
+        return DB::transaction(function()use($workspaceId) {
+            $totalUserUnit = \DB::table('user_units')->where('workspace_id', Sendportal::currentWorkspaceId())->sharedLock()->first();
+
+            if(empty($totalUserUnit))
+            {
+                return false;
+            }
+
+            if(($totalUserUnit['unit_balance'])<= 0) {
+                return false;
+            }
+
+            $totalUserUnit = $totalUserUnit->unit_balance - 1;
+            $totalUserUnit->save();
+
+            return true;
+
+        });
+
+
+    }
+
     /**
      * Dispatch the campaign to a given subscriber
      *
@@ -125,6 +151,10 @@ class CreateMessages
         \Log::info('- Number of subscribers in this chunk: ' . count($subscribers));
 
         foreach ($subscribers as $subscriber) {
+            if(!$this->deductUnit($campaign->workspace_id)) {
+                break;
+            }
+
             if (! $this->canSendToSubscriber($campaign->id, $subscriber->id)) {
                 continue;
             }

@@ -2,6 +2,7 @@
 
 namespace Sendportal\Base\Pipelines\Campaigns;
 
+use App\Models\UserUnitHistory;
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Jobs\AddSegmentSubscriberJob;
@@ -118,7 +119,7 @@ class CreateMessages
 
     public function deductUnit($workspaceId)
     {
-        return DB::transaction(function()use($workspaceId) {
+        return \DB::transaction(function()use($workspaceId) {
             $totalUserUnit = \DB::table('user_units')->where('workspace_id', Sendportal::currentWorkspaceId())->sharedLock()->first();
 
             if(empty($totalUserUnit))
@@ -129,15 +130,30 @@ class CreateMessages
             if(($totalUserUnit['unit_balance'])<= 0) {
                 return false;
             }
-
-            $totalUserUnit = $totalUserUnit->unit_balance - 1;
+            $old_balance = $totalUserUnit['unit_balance'];
+            $totalUserUnit->unit_balance = $new_balance = $totalUserUnit->unit_balance - 1;
             $totalUserUnit->save();
+            $this->updateUserUnitHistory('deduct',$totalUserUnit->id,$old_balance,1,$new_balance);
 
             return true;
 
         });
 
 
+    }
+
+    public function updateUserUnitHistory($action, $user_unit_id, $old_units, $amount, $new_units)
+    {
+
+        $history =  \DB::table('user_unit_histories')->create([
+            "user_unit_id" => $user_unit_id,
+            "action" => $action,
+            "old_unit_balance" => $old_units,
+            "amount" => $amount,
+            'workspace_id' => Sendportal::currentWorkspaceId(),
+            "new_unit_balance" => $new_units
+        ]);
+        return $history;
     }
 
     /**

@@ -117,9 +117,9 @@ class CreateMessages
         }
     }
 
-    public function deductUnit($workspaceId)
+    public function deductUnit($workspaceId,$note='')
     {
-        return \DB::transaction(function()use($workspaceId) {
+        return \DB::transaction(function()use($workspaceId,$note) {
             $totalUserUnit = \DB::table('user_units')->where('workspace_id', Sendportal::currentWorkspaceId())->sharedLock()->first();
 
             if(empty($totalUserUnit))
@@ -133,7 +133,7 @@ class CreateMessages
             $old_balance = $totalUserUnit['unit_balance'];
             $totalUserUnit->unit_balance = $new_balance = $totalUserUnit->unit_balance - 1;
             $totalUserUnit->save();
-            $this->updateUserUnitHistory('deduct',$totalUserUnit->id,$old_balance,1,$new_balance);
+            $this->updateUserUnitHistory('deduct',$totalUserUnit->id,$old_balance,1,$new_balance,$note);
 
             return true;
 
@@ -142,7 +142,7 @@ class CreateMessages
 
     }
 
-    public function updateUserUnitHistory($action, $user_unit_id, $old_units, $amount, $new_units)
+    public function updateUserUnitHistory($action, $user_unit_id, $old_units, $amount, $new_units,$tags='')
     {
 
         $history =  \DB::table('user_unit_histories')->create([
@@ -150,6 +150,7 @@ class CreateMessages
             "action" => $action,
             "old_unit_balance" => $old_units,
             "amount" => $amount,
+            'tags'=>$tags,
             'workspace_id' => Sendportal::currentWorkspaceId(),
             "new_unit_balance" => $new_units
         ]);
@@ -167,12 +168,13 @@ class CreateMessages
         \Log::info('- Number of subscribers in this chunk: ' . count($subscribers));
 
         foreach ($subscribers as $subscriber) {
-            if(!$this->deductUnit($campaign->workspace_id)) {
-                break;
-            }
 
             if (! $this->canSendToSubscriber($campaign->id, $subscriber->id)) {
                 continue;
+            }
+
+            if(!$this->deductUnit($campaign->workspace_id,"Processed Campaign $campaign->id for subscriber $subscriber->id")) {
+                break;
             }
 
             $this->dispatch($campaign, $subscriber);

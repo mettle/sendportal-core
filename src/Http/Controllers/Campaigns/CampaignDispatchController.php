@@ -58,7 +58,7 @@ class CampaignDispatchController extends Controller
 
         $campaign->tags()->sync($request->get('tags'));
 
-        $segmentTags = $request->get('segment_tags');
+        $segmentTags = $request->get('segment_tags') ?? [];
 
         $totalCampaignSubscriberCount = $campaign->unsent_count;
 

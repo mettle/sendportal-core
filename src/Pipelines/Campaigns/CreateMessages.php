@@ -120,7 +120,7 @@ class CreateMessages
     public function deductUnit($workspaceId,$note='')
     {
         return \DB::transaction(function()use($workspaceId,$note) {
-            $totalUserUnit = \DB::table('user_units')->where('workspace_id', Sendportal::currentWorkspaceId())->sharedLock()->first();
+            $totalUserUnit = \DB::table('user_units')->where('workspace_id',$workspaceId)->sharedLock()->first();
 
             if(empty($totalUserUnit))
             {
@@ -133,7 +133,7 @@ class CreateMessages
             $old_balance = $totalUserUnit['unit_balance'];
             $totalUserUnit->unit_balance = $new_balance = $totalUserUnit->unit_balance - 1;
             $totalUserUnit->save();
-            $this->updateUserUnitHistory('deduct',$totalUserUnit->id,$old_balance,1,$new_balance,$note);
+            $this->updateUserUnitHistory($workspaceId,'deduct',$totalUserUnit->id,$old_balance,1,$new_balance,$note);
 
             return true;
 
@@ -142,7 +142,7 @@ class CreateMessages
 
     }
 
-    public function updateUserUnitHistory($action, $user_unit_id, $old_units, $amount, $new_units,$tags='')
+    public function updateUserUnitHistory($workspace_id,$action, $user_unit_id, $old_units, $amount, $new_units,$tags='')
     {
 
         $history =  \DB::table('user_unit_histories')->create([
@@ -151,7 +151,7 @@ class CreateMessages
             "old_unit_balance" => $old_units,
             "amount" => $amount,
             'tags'=>$tags,
-            'workspace_id' => Sendportal::currentWorkspaceId(),
+            'workspace_id' => $workspace_id,
             "new_unit_balance" => $new_units
         ]);
         return $history;

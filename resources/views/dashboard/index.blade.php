@@ -14,8 +14,8 @@
                     <div class="card-header-inner">
                         {{ __('Total Subscribers') }}
                         <div class="float-right">
-                            <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-sm btn-secondary">
-                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">0</span> Unit(s)
+                            <a href="{{ route('sendportal.units.index') }}" class="btn btn-sm btn-secondary">
+                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">{{$totalUserUnit}}</span> Unit(s)
                             </a>
                         </div>
                     </div>
@@ -223,6 +223,6 @@
                 $('#unit-balance').html(data.data.unit_balance);
             });
         } )
-       
+
     </script>
 @endpush

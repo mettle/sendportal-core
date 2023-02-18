@@ -127,10 +127,10 @@ class CreateMessages
                 return false;
             }
 
-            if(($totalUserUnit['unit_balance'])<= 0) {
+            if($totalUserUnit->unit_balance <= 0) {
                 return false;
             }
-            $old_balance = $totalUserUnit['unit_balance'];
+            $old_balance = $totalUserUnit->unit_balance;
             $totalUserUnit->unit_balance = $new_balance = $totalUserUnit->unit_balance - 1;
             $totalUserUnit->save();
             $this->updateUserUnitHistory($workspaceId,'deduct',$totalUserUnit->id,$old_balance,1,$new_balance,$note);

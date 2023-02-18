@@ -2,7 +2,7 @@
 
 namespace Sendportal\Base\Pipelines\Campaigns;
 
-use App\Models\UserUnitHistory;
+
 use Sendportal\Base\Events\MessageDispatchEvent;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Jobs\AddSegmentSubscriberJob;
@@ -12,6 +12,8 @@ use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\SendportalCampaignSegment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
+use Sendportal\Base\Models\UserUnit;
+use Sendportal\Base\Models\UserUnitHistory;
 
 class CreateMessages
 {
@@ -120,7 +122,7 @@ class CreateMessages
     public function deductUnit($workspaceId,$note='')
     {
         return \DB::transaction(function()use($workspaceId,$note) {
-            $totalUserUnit = \DB::table('user_units')->where('workspace_id',$workspaceId)->sharedLock()->first();
+            $totalUserUnit = UserUnit::where('workspace_id',$workspaceId)->sharedLock()->first();
 
             if(empty($totalUserUnit))
             {
@@ -145,7 +147,7 @@ class CreateMessages
     public function updateUserUnitHistory($workspace_id,$action, $user_unit_id, $old_units, $amount, $new_units,$tags='')
     {
 
-        $history =  \DB::table('user_unit_histories')->create([
+        $history =  UserUnitHistory::create([
             "user_unit_id" => $user_unit_id,
             "action" => $action,
             "old_unit_balance" => $old_units,

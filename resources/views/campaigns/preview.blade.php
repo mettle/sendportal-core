@@ -115,7 +115,8 @@
                                 <div class="checkbox">
                                     <label>
                                         <input name="segment_tags[]" type="checkbox" value="{{ $tag->id }}">
-                                        {{ $tag->name }}
+                                        {{ $tag->name }} ( {{ \Sendportal\Base\Models\Asset::where('contract', $tag->id)->where('type', 'segment')->count() }}
+
                                     </label>
                                 </div>
                             @empty

@@ -57,7 +57,7 @@ class Segment extends BaseModel
         return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id')->as('asset')->where('sendportal_subscribers.workspace_id', $this->workspace_id)
             ->withPivot('user_id', 'sc_user_id')->withTimestamps();
     }
-    public function getSegmentSubscribersCount(){
+    public function getSegmentSubscribersCountAttribute(){
         return Asset::where("contract",$this->id)->where('type','segment')->groupBy('user_id')->count();
     }
 

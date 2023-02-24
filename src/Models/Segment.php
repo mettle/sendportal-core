@@ -35,9 +35,7 @@ class Segment extends BaseModel
     /** @var array */
     protected $withCount = [
         'subscribers',
-        'segmentSubscribers'
     ];
-
     protected $with = [
         'segmentSubscribersCount'
     ];

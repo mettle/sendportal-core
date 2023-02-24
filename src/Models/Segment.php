@@ -59,7 +59,7 @@ class Segment extends BaseModel
             ->withPivot('user_id', 'sc_user_id')->withTimestamps();
     }
     public function segmentSubscribersCount(){
-        return Asset::where("contract",$this->id)->where('type','segment')->groupBy('user_id');
+        return Asset::where("contract",$this->id)->where('type','segment')->groupBy('user_id')->count();
     }
 
     /**

@@ -80,7 +80,6 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>{{ __('Email') }}</th>
                     <th>{{ __('Name') }}</th>
                     <th>{{ __('Tags') }}</th>
                     <th>{{ __('Created') }}</th>
@@ -93,10 +92,9 @@
                     <tr>
                         <td>
                             <a href="{{ route('sendportal.subscribers.show', $subscriber->id) }}">
-                                {{ $subscriber->email }}
+                                {{ $subscriber->full_name }}
                             </a>
                         </td>
-                        <td>{{ $subscriber->full_name }}</td>
                         <td>
                             @forelse($subscriber->tags as $tag)
                                 <span class="badge badge-light">{{ $tag->name }}</span>

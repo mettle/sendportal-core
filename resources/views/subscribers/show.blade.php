@@ -22,10 +22,7 @@
                 <div class="card-table">
                     <div class="table">
                         <table class="table">
-                            <tr>
-                                <td><b>{{ __('Email') }}</b></td>
-                                <td>{{ $subscriber->email }}</td>
-                            </tr>
+
                             <tr>
                                 <td><b>{{ __('First Name') }}</b></td>
                                 <td>{{ $subscriber->first_name }}</td>

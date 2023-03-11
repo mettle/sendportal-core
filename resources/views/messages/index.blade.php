@@ -88,7 +88,7 @@
                                     </a>
                                 @endif
                             </td>
-                            <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->recipient_email }}</a></td>
+                            <td><a href="{{ route('sendportal.subscribers.show', $message->subscriber_id) }}">{{ $message->subscriber->first_name ?? '-' }} &nbsp; {{ $message->subscriber->last_name ?? '-' }}</a></td>
                             <td>
                                 @include('sendportal::messages.partials.status-row')
                             </td>

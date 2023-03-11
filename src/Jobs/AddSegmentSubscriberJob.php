@@ -60,7 +60,7 @@ class AddSegmentSubscriberJob implements ShouldQueue
                         $subscriber->email = $scUser->email;
                         $subscriber->sc_user_id = $scUser->id;
                         $subscriber->save();
-
+                        $subscriber->tags()->detach($leadTag);
                         $subscriber->tags()->attach($leadTag);
                     }
 

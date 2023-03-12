@@ -13,7 +13,7 @@
     @component('sendportal::layouts.partials.actions')
         @slot('right')
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.campaigns.create') }}">
-                <i class="fa fa-plus mr-1"></i> {{ __('New Campaigner') }}
+                <i class="fa fa-plus mr-1"></i> {{ __('New Campaign') }}
             </a>
         @endslot
     @endcomponent

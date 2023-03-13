@@ -50,7 +50,9 @@ class CampaignStoreRequest extends BaseCampaignStoreRequest
             'id'
         );
 
+
         $segments = Segment::where('workspace_id', $this->workspaceId)->pluck('id');
+
 
         $rules = [
             'send_to_all' => [

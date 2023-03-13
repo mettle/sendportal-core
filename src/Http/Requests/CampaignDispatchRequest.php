@@ -20,7 +20,9 @@ class CampaignDispatchRequest extends FormRequest
 
         $scUserID = request()->user()->sc_user_id ?? 0;
 
+
         $segments = Segment::where('workspace_id', Sendportal::currentWorkspaceId())->pluck('id');
+
 
         return [
             'tags' => [

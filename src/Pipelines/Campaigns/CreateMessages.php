@@ -103,7 +103,7 @@ class CreateMessages
     {
         \Log::info('- Handling Campaign Segment id='.$segment->id);
 
-        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->pluck('user_id')->toArray();
+        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->distinct('user_id')->pluck('user_id')->toArray();
 
         if($campaign->type === 'recurrent')
         {

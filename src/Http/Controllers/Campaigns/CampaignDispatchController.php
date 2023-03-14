@@ -61,11 +61,11 @@ class CampaignDispatchController extends Controller
 
         $segmentTags = $request->get('segment_tags') ?? [];
 
-        $totalCampaignSubscriberCount = $campaign->unsent_count;
+        $totalCampaignSubscriberCount = $campaign->unsent_count ?? 0;
 
 
         foreach ($segmentTags as $segment) {
-            $totalCampaignSubscriberCount += Asset::where('contract', $segment)->where('type', 'segment')->where('total', '>=', 1)->groupBy('user_id')->count();
+            $totalCampaignSubscriberCount += Asset::where('contract', $segment)->where('type', 'segment')->where('total', '>=', 1)->distinct('user_id')->count();
 
             SendportalCampaignSegment::updateOrCreate(['segment_id' => $segment, 'campaign_id' => $campaign->id], [
                 'segment_id' => $segment, 'campaign_id' => $campaign->id

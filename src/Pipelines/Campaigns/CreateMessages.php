@@ -103,7 +103,7 @@ class CreateMessages
     {
         \Log::info('- Handling Campaign Segment id='.$segment->id);
 
-        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->pluck('user_id')->toArray();
+        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->distinct('user_id')->pluck('user_id')->toArray();
 
         if($campaign->type === 'recurrent')
         {
@@ -172,6 +172,11 @@ class CreateMessages
         foreach ($subscribers as $subscriber) {
 
             if (! $this->canSendToSubscriber($campaign->id, $subscriber->id)) {
+                continue;
+            }
+
+            if ($message = $this->findMessage($campaign, $subscriber)) {
+                \Log::info('Message has previously been created campaign=' . $campaign->id . ' subscriber=' . $subscriber->id);
                 continue;
             }
 

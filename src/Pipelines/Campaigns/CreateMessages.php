@@ -175,6 +175,11 @@ class CreateMessages
                 continue;
             }
 
+            if ($message = $this->findMessage($campaign, $subscriber)) {
+                \Log::info('Message has previously been created campaign=' . $campaign->id . ' subscriber=' . $subscriber->id);
+                continue;
+            }
+
             if(!$this->deductUnit($campaign->workspace_id,"Processed Campaign $campaign->id for subscriber $subscriber->id")) {
                 break;
             }

@@ -4,68 +4,80 @@ namespace Sendportal\Base\Adapters;
 
 use Illuminate\Support\Arr;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
-use Swift_TransportException;
+
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class SmtpAdapter extends BaseMailAdapter
 {
-    /** @var Swift_Mailer */
+    /** @var Mailer */
     protected $client;
 
-    /** @var Swift_SmtpTransport */
+    /** @var ESmtpTransport */
     protected $transport;
 
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
-        $failedRecipients = [];
-
+        // $failedRecipients = [];
         try {
-            $result = $this->resolveClient()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail), $failedRecipients);
-        } catch (Swift_TransportException $e) {
+            $result = $this->resolveClient()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail));
+        } catch (TransportException $e) {
             return $this->resolveMessageId(0);
         }
-
         return $this->resolveMessageId($result);
     }
 
-    protected function resolveClient(): Swift_Mailer
+    protected function resolveClient(): Mailer
     {
         if ($this->client) {
             return $this->client;
         }
 
-        $this->client = new Swift_Mailer($this->resolveTransport());
+        $this->client = new Mailer($this->resolveTransport());
 
         return $this->client;
     }
 
-    protected function resolveTransport(): Swift_SmtpTransport
+    protected function resolveTransport(): EsmtpTransport
     {
         if ($this->transport) {
             return $this->transport;
         }
 
-        $this->transport = new Swift_SmtpTransport(
+        $factory = new EsmtpTransportFactory();
+
+        $encryption = Arr::get($this->config, 'encryption');
+    
+        $scheme = !is_null($encryption) && $encryption === 'tls'
+        ? ((Arr::get($this->config, 'port') == 465) ? 'smtps' : 'smtp')
+        : '';
+    
+        $dsn = new Dsn(
+            $scheme,
             Arr::get($this->config, 'host'),
-            Arr::get($this->config, 'port'),
-            Arr::get($this->config, 'encryption')
+            Arr::get($this->config, 'username'),
+            Arr::get($this->config, 'password'),
+            Arr::get($this->config, 'port')
         );
 
-        $this->transport->setUsername(Arr::get($this->config, 'username'));
-        $this->transport->setPassword(Arr::get($this->config, 'password'));
-        $this->transport->setAuthMode('login');
+        $this->transport = $factory->create($dsn);
 
         return $this->transport;
     }
 
-    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail): Swift_Message
+    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail): Email
     {
-        $msg = new Swift_Message($subject, $content, 'text/html');
-
-        $msg->setTo($toEmail);
-        $msg->setFrom($fromEmail, $fromName);
+        $msg = (new Email())
+        ->from(new Address($fromEmail, $fromName))
+        ->to($toEmail)
+        ->subject($subject)
+        ->html($content);
 
         return $msg;
     }

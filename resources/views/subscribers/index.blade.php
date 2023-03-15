@@ -46,8 +46,8 @@
 
         @slot('right')
             <div class="btn-group mr-2">
-                <button class="btn btn-md btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fa fa-bars color-gray-400"></i>
+                <button class="btn btn-md btn-light dropdown-toggle" type="button" data-toggle="dropdown">
+                    {{ __('Bulk actions') }}
                 </button>
                 <div class="dropdown-menu">
                     <a href="{{ route('sendportal.subscribers.import') }}" class="dropdown-item">

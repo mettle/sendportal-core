@@ -1,6 +1,6 @@
 {
-    "name": "sabas/sendportal-core",
-    "homepage": "https://github.com/sabas/sendportal-core",
+    "name": "mettle/sendportal-core",
+    "homepage": "https://github.com/mettle/sendportal-core",
     "description": "Sendportal core functionality.",
     "type": "library",
     "license": "MIT",
@@ -8,7 +8,6 @@
     "require": {
         "ext-json": "*",
         "aws/aws-sdk-php-laravel": "^3.8",
-        "doctrine/dbal": "4.0.0-beta2",
         "illuminate/support": "^10.0",
         "kriswallsmith/buzz": "^1.2",
         "mailgun/mailgun-php": "^3.5",

@@ -113,8 +113,7 @@
                             <form action="{{ route('sendportal.subscribers.destroy', $subscriber->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <a href="{{ route('sendportal.subscribers.edit', $subscriber->id) }}"
-                                   class="btn btn-xs btn-light">{{ __('Edit') }}</a>
+
                                 <button type="submit"
                                         class="btn btn-xs btn-light delete-subscriber">{{ __('Delete') }}</button>
                             </form>

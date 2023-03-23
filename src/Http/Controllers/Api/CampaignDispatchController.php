@@ -47,7 +47,7 @@ class CampaignDispatchController extends Controller
         if($unitBalance <= 0){
             return response()->json([
                'status' => false,
-               'message' => 'You do not have units to send this request'
+               'message' => 'You do not have credits to send this request'
             ], 400);
         }else{
             $reciepient = $request->recipients;
@@ -59,7 +59,7 @@ class CampaignDispatchController extends Controller
                 if($allSubscriber*$perUnitPrice > $unitBalance){
                     return response()->json([
                        'status' => false,
-                       'message' => 'You do not have enough units to send this request'
+                       'message' => 'You do not have enough credits to send this request'
                     ], 400);
                 }
             }else{
@@ -70,7 +70,7 @@ class CampaignDispatchController extends Controller
                 if($taggedSubscriber*$perUnitPrice > $unitBalance){
                     return response()->json([
                        'status' => false,
-                       'message' => 'You do not have enough units to send this request'
+                       'message' => 'You do not have enough credits to send this request'
                     ], 400);
                 }
             }

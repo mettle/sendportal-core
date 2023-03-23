@@ -34,7 +34,7 @@
         </li>
         <li class="nav-item {{ request()->is('*units*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.units.index') }}">
-                <i class="fa-fw fas fa-book mr-2"></i><span>{{ __('Manage Unit') }}</span>
+                <i class="fa-fw fas fa-book mr-2"></i><span>{{ __('Manage Credits') }}</span>
             </a>
         </li>
 

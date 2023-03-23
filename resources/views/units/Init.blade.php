@@ -1,8 +1,8 @@
 @extends('sendportal::layouts.app')
 
-@section('title', __('Load Unit'))
+@section('title', __('Load Credits'))
 
-@section('heading', __('User Units'))
+@section('heading', __('User Credits'))
 
 @section('content')
 

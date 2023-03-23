@@ -1,8 +1,8 @@
 @extends('sendportal::layouts.app')
 
-@section('title', __('Units'))
+@section('title', __('Credits'))
 
-@section('heading', __('Manage Units'))
+@section('heading', __('Manage Credits'))
 
 @section('content')
 
@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-4 col-12 text-right">
             <a class="btn btn-primary btn-md btn-flat" href="{{ route('sendportal.units.load') }}">
-                <i class="fa fa-plus mr-1"></i> {{ __('Load Units') }}
+                <i class="fa fa-plus mr-1"></i> {{ __('Load Credits') }}
             </a>
         </div>
     </div>

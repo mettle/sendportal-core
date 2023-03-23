@@ -1,8 +1,8 @@
 @extends('sendportal::layouts.app')
 
-@section('title', __('Load Unit'))
+@section('title', __('Load Credits'))
 
-@section('heading', __('User Units'))
+@section('heading', __('User Credits'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
             <div class="col-lg-8 offset-lg-2">
                 <div class="card">
                     <div class="card-header">
-                        {{ __('Load Unit') }}
+                        {{ __('Load Credits') }}
                     </div>
                     <div class="card-body">
                         <form action="{{ route('sendportal.units.initializeTransaction') }}" method="POST" class="form-horizontal">

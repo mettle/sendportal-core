@@ -15,7 +15,7 @@
                         {{ __('Total Subscribers') }}
                         <div class="float-right">
                             <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-sm btn-secondary">
-                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">0</span> Unit(s)
+                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">0</span> Credit(s)
                             </a>
                         </div>
                     </div>

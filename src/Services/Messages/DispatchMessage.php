@@ -64,8 +64,9 @@ class DispatchMessage
         $trackingOptions = MessageTrackingOptions::fromMessage($message);
 
         $messageId = $this->dispatch($message, $emailService, $trackingOptions, $mergedContent);
-
-        $this->markSent($message, $messageId);
+        if(!empty($messageId)){
+            $this->markSent($message, $messageId);
+        }
 
         return $messageId;
     }
@@ -102,12 +103,17 @@ class DispatchMessage
             ->setFromName($message->from_name)
             ->setSubject($message->subject)
             ->setTrackingOptions($trackingOptions);
+        try{
+            $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
 
-        $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
+            Log::info('Message has been dispatched.', ['message_id' => $messageId]);
 
-        Log::info('Message has been dispatched.', ['message_id' => $messageId]);
+            return $messageId;
+        }catch(\Throwable $e){
+            Log::error('Unable to dispatch message', ['error' => $e->getMessage()]);
+            return null;
+        }
 
-        return $messageId;
     }
 
     /**

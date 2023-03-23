@@ -19,6 +19,7 @@ class TagStoreRequest extends FormRequest
                 Rule::unique('sendportal_tags')
                     ->where('workspace_id', Sendportal::currentWorkspaceId()),
             ],
+            
         ];
     }
 

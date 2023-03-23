@@ -24,7 +24,7 @@ class Sendportal
     {
         $this->app->make('router')->sendportalPublicApiRoutes();
     }
-    
+
     /**
      * @throws BindingResolutionException
      */
@@ -63,6 +63,14 @@ class Sendportal
     public function currentWorkspaceId(): ?int
     {
         return $this->app->make('sendportal.resolver')->resolveCurrentWorkspaceId();
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function currentWorkspaceName(): ?string
+    {
+        return $this->app->make('sendportal.resolver')->resolveCurrentWorkspaceName();
     }
 
     /**

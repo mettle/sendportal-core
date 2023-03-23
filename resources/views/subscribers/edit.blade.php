@@ -16,7 +16,7 @@
                 @csrf
                 @method('PUT')
 
-                @include('sendportal::subscribers.partials.form')
+                @include('sendportal::subscribers.partials.edit_form')
 
                 <x-sendportal.submit-button :label="__('Save')" />
             </form>

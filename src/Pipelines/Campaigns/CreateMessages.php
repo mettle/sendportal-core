@@ -2,11 +2,18 @@
 
 namespace Sendportal\Base\Pipelines\Campaigns;
 
+
 use Sendportal\Base\Events\MessageDispatchEvent;
+use Sendportal\Base\Facades\Sendportal;
+use Sendportal\Base\Jobs\AddSegmentSubscriberJob;
+use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\SendportalCampaignSegment;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
+use Sendportal\Base\Models\UserUnit;
+use Sendportal\Base\Models\UserUnitHistory;
 
 class CreateMessages
 {
@@ -31,6 +38,7 @@ class CreateMessages
             $this->handleAllSubscribers($campaign);
         } else {
             $this->handleTags($campaign);
+            $this->handleSegments($campaign);
         }
 
         return $next($campaign);
@@ -63,6 +71,17 @@ class CreateMessages
         }
     }
 
+    public function handleSegments(Campaign $campaign)
+    {
+        \Log::info(json_encode($campaign));
+        foreach ($campaign->segments as $segment) {
+
+            \Log::info(json_encode($segment));
+            $this->handleSegment($campaign, $segment);
+        }
+    }
+
+
     /**
      * Handle each tag
      *
@@ -80,6 +99,66 @@ class CreateMessages
         }, 'sendportal_subscribers.id');
     }
 
+    public function handleSegment(Campaign $campaign, $segment)
+    {
+        \Log::info('- Handling Campaign Segment id='.$segment->id);
+
+        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->distinct('user_id')->pluck('user_id')->toArray();
+
+        if($campaign->type === 'recurrent')
+        {
+            AddSegmentSubscriberJob::dispatch($userIds, $campaign->workspace_id)->onQueue('events');
+            Subscriber::whereIn('sc_user_id', $userIds)->where('workspace_id',$campaign->workspace_id)->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
+                $this->dispatchToSubscriber($campaign, $subscribers);
+            });
+        }else {
+            AddSegmentSubscriberJob::dispatchSync($userIds, $campaign->workspace_id);
+            Subscriber::whereIn('sc_user_id', $userIds)->where('workspace_id', $campaign->workspace_id)->whereNull('unsubscribed_at')->chunkById(1000, function ($subscribers) use ($campaign) {
+                $this->dispatchToSubscriber($campaign, $subscribers);
+            });
+        }
+    }
+
+    public function deductUnit($workspaceId,$note='')
+    {
+        return \DB::transaction(function()use($workspaceId,$note) {
+            $totalUserUnit = UserUnit::where('workspace_id',$workspaceId)->sharedLock()->first();
+
+            if(empty($totalUserUnit))
+            {
+                return false;
+            }
+
+            if($totalUserUnit->unit_balance <= 0) {
+                return false;
+            }
+            $old_balance = $totalUserUnit->unit_balance;
+            $totalUserUnit->unit_balance = $new_balance = $totalUserUnit->unit_balance - 1;
+            $totalUserUnit->save();
+            $this->updateUserUnitHistory($workspaceId,'deduct',$totalUserUnit->id,$old_balance,1,$new_balance,$note);
+
+            return true;
+
+        });
+
+
+    }
+
+    public function updateUserUnitHistory($workspace_id,$action, $user_unit_id, $old_units, $amount, $new_units,$tags='')
+    {
+
+        $history =  UserUnitHistory::create([
+            "user_unit_id" => $user_unit_id,
+            "action" => $action,
+            "old_unit_balance" => $old_units,
+            "amount" => $amount,
+            'tags'=>$tags,
+            'workspace_id' => $workspace_id,
+            "new_unit_balance" => $new_units
+        ]);
+        return $history;
+    }
+
     /**
      * Dispatch the campaign to a given subscriber
      *
@@ -91,8 +170,18 @@ class CreateMessages
         \Log::info('- Number of subscribers in this chunk: ' . count($subscribers));
 
         foreach ($subscribers as $subscriber) {
+
             if (! $this->canSendToSubscriber($campaign->id, $subscriber->id)) {
                 continue;
+            }
+
+            if ($message = $this->findMessage($campaign, $subscriber)) {
+                \Log::info('Message has previously been created campaign=' . $campaign->id . ' subscriber=' . $subscriber->id);
+                continue;
+            }
+
+            if(!$this->deductUnit($campaign->workspace_id,"Processed Campaign $campaign->id for subscriber $subscriber->id")) {
+                break;
             }
 
             $this->dispatch($campaign, $subscriber);

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Models;
 
+
 use  Carbon\Carbon;
-use Database\Factories\TagFactory;
+use Database\Factories\SegmentFactory;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,33 +22,31 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property EloquentCollection $subscribers
  * @property EloquentCollection $active_subscribers
  *
- * @method static TagFactory factory
+ * @method static SegmentFactory factory
  */
-class Tag extends BaseModel
+class Segment extends BaseModel
 {
     use HasFactory;
 
-    // NOTE(david): we require this because of namespace issues when resolving factories from models
-    // not in the default `App\Models` namespace.
-    protected static function newFactory()
-    {
-        return TagFactory::new();
-    }
+    protected $table = 'sendportal_segments';
 
-    /** @var string */
-    protected $table = 'sendportal_tags';
-
-    /** @var array */
     protected $guarded = [];
 
     /** @var array */
     protected $withCount = [
-        'subscribers'
+        'subscribers',
     ];
+    protected $appends = ['segment_subscribers_count'];
+
+
+    protected static function newFactory()
+    {
+        return SegmentFactory::new();
+    }
 
     public function campaigns(): BelongsToMany
     {
-        return $this->belongsToMany(Campaign::class, 'sendportal_campaign_tag');
+        return $this->belongsToMany(Campaign::class, 'sendportal_campaign_segments');
     }
 
     /**
@@ -55,7 +54,12 @@ class Tag extends BaseModel
      */
     public function subscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Subscriber::class, 'sendportal_tag_subscriber')->withTimestamps();
+        return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id')->as('asset')->where('sendportal_subscribers.workspace_id', $this->workspace_id)
+            ->withPivot('user_id', 'sc_user_id')->withTimestamps();
+    }
+    public function getSegmentSubscribersCountAttribute(){
+        return Asset::where("contract",$this->id)->where('type','segment')->distinct('user_id')
+            ->count('user_id');
     }
 
     /**
@@ -67,4 +71,5 @@ class Tag extends BaseModel
             ->whereNull('unsubscribed_at')
             ->withTimestamps();
     }
+
 }

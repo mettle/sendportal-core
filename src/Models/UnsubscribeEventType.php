@@ -10,12 +10,14 @@ class UnsubscribeEventType extends BaseModel
     const COMPLAINT = 2;
     const MANUAL_BY_ADMIN = 3;
     const MANUAL_BY_SUBSCRIBER = 4;
+    const REMOVED_BY_SOCIALCONNECTOR = 5;
 
     public static $types = [
         1 => 'Bounced',
         2 => 'Complained',
         3 => 'Manual by Admin',
         4 => 'Manual by Subscriber',
+        5 => 'Removed By SocialConnector'
     ];
 
     /**

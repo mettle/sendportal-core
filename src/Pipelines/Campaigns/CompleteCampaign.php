@@ -28,7 +28,12 @@ class CompleteCampaign
      */
     protected function markCampaignAsComplete(Campaign $campaign): void
     {
-        $campaign->status_id = CampaignStatus::STATUS_SENT;
+        if($campaign->type == 'recurrent'){
+            $campaign->status_id = CampaignStatus::STATUS_QUEUED;
+        }else{
+            $campaign->status_id = CampaignStatus::STATUS_SENT;
+        }
+
         $campaign->save();
     }
 }

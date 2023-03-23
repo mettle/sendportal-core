@@ -14,8 +14,9 @@
                     <div class="card-header-inner">
                         {{ __('Total Subscribers') }}
                         <div class="float-right">
-                            <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-sm btn-secondary">
-                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">0</span> Credit(s)
+
+                            <a href="{{ route('sendportal.units.index') }}" class="btn btn-sm btn-secondary">
+                                Balance: <span id="unit-balance" style="font-size:20px; font-weight:bolder;">{{$totalUserUnit}}</span> Credit(s)
                             </a>
                         </div>
                     </div>
@@ -130,7 +131,7 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>{{ __('Email') }}</th>
+{{--                            <th>{{ __('Email') }}</th>--}}
                             <th>{{ __('Name') }}</th>
                             <th>{{ __('Created') }}</th>
                             <th>{{ __('Status') }}</th>
@@ -142,10 +143,9 @@
                             <tr>
                                 <td>
                                     <a href="{{ route('sendportal.subscribers.show', $subscriber->id) }}">
-                                        {{ $subscriber->email }}
+                                        {{ $subscriber->full_name }}
                                     </a>
                                 </td>
-                                <td>{{ $subscriber->full_name }}</td>
                                 <td><span
                                         title="{{ $subscriber->created_at }}">{{ $subscriber->created_at->diffForHumans() }}</span>
                                 </td>
@@ -223,6 +223,6 @@
                 $('#unit-balance').html(data.data.unit_balance);
             });
         } )
-       
+
     </script>
 @endpush

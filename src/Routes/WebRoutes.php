@@ -123,9 +123,9 @@ class WebRoutes
                 $appRouter->name('subscribers.')->prefix('subscribers')->namespace('Subscribers')->group(static function (
                     Router $subscriberRouter
                 ) {
-                    $subscriberRouter->get('export', 'SubscribersController@export')->name('export');
-                    $subscriberRouter->get('import', 'SubscribersImportController@show')->name('import');
-                    $subscriberRouter->post('import', 'SubscribersImportController@store')->name('import.store');
+//                    $subscriberRouter->get('export', 'SubscribersController@export')->name('export');
+//                    $subscriberRouter->get('import', 'SubscribersImportController@show')->name('import');
+//                    $subscriberRouter->post('import', 'SubscribersImportController@store')->name('import.store');
                 });
                 $appRouter->resource('subscribers', 'Subscribers\SubscribersController');
 

@@ -182,7 +182,9 @@ class CampaignsController extends Controller
 
         $scUserID = request()->user()->sc_user_id ?? 0;
 
+
         $segmentTags = Segment::where('workspace_id', Sendportal::currentWorkspaceId())->get();
+
 
         return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount'));
     }

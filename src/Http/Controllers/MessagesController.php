@@ -113,12 +113,19 @@ class MessagesController extends Controller
             return redirect()->back()->withErrors(__('The selected message has already been sent'));
         }
 
-        $this->dispatchMessage->handle($message);
+        $mid = $this->dispatchMessage->handle($message);
+        if(empty($mid)){
+            return redirect()->route('sendportal.messages.draft')->with(
+                'danger',
+                __('An error occured')
+            );
+        }else{
+            return redirect()->route('sendportal.messages.draft')->with(
+                'success',
+                __('The message was sent successfully.')
+            );
+        }
 
-        return redirect()->route('sendportal.messages.draft')->with(
-            'success',
-            __('The message was sent successfully.')
-        );
     }
 
     /**

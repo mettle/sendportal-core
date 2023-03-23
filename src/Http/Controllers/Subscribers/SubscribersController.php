@@ -16,6 +16,7 @@ use Sendportal\Base\Events\SubscriberAddedEvent;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriberRequest;
+use Sendportal\Base\Http\Requests\SubscriberUpdateRequest;
 use Sendportal\Base\Models\UnsubscribeEventType;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
 use Sendportal\Base\Repositories\TagTenantRepository;
@@ -108,7 +109,7 @@ class SubscribersController extends Controller
     /**
      * @throws Exception
      */
-    public function update(SubscriberRequest $request, int $id): RedirectResponse
+    public function update(SubscriberUpdateRequest $request, int $id): RedirectResponse
     {
         $subscriber = $this->subscriberRepo->find(Sendportal::currentWorkspaceId(), $id);
         $data = $request->validated();

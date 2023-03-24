@@ -18,5 +18,5 @@ interface MailAdapterInterface
      *
      * @return string
      */
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string;
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content,string $replyToEmail): string;
 }

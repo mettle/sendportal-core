@@ -23,6 +23,7 @@ class MessageOptions
 
     /** @var MessageTrackingOptions */
     private $trackingOptions;
+    private $replyToEmail;
 
     /**
      * @return string
@@ -50,6 +51,21 @@ class MessageOptions
     public function setFromEmail(string $fromEmail): self
     {
         $this->fromEmail = $fromEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyToEmail(): string
+    {
+        return $this->replyToEmail;
+    }
+
+    public function setReplyToEmail(string $replytoemail): self
+    {
+        $this->replyToEmail = $replytoemail;
 
         return $this;
     }

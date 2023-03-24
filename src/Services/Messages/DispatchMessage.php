@@ -102,7 +102,8 @@ class DispatchMessage
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)
             ->setSubject($message->subject)
-            ->setTrackingOptions($trackingOptions);
+            ->setTrackingOptions($trackingOptions)
+            ->setReplyToEmail($message->reply_to??$message->from_email);
         try{
             $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
 

@@ -23,7 +23,7 @@ class SendgridMailAdapter extends BaseMailAdapter
      * @throws TypeException
      * @throws \Throwable
      */
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content,string $replyToEmail): string
     {
         $email = new Mail();
         $email->setFrom($fromEmail, $fromName);

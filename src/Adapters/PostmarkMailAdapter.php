@@ -14,7 +14,7 @@ class PostmarkMailAdapter extends BaseMailAdapter
     /** @var PostmarkClient */
     protected $client;
 
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content,string $replyToEmail): string
     {
         $result = $this->resolveClient()->sendEmail(
             "{$fromName} <{$fromEmail}>",
@@ -24,7 +24,7 @@ class PostmarkMailAdapter extends BaseMailAdapter
             null,
             null,
             $trackingOptions->isOpenTracking(),
-            null,
+            $replyToEmail,//Reply-To Goes Here
             null,
             null,
             null,

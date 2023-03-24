@@ -17,7 +17,7 @@ class SmtpAdapter extends BaseMailAdapter
     /** @var Swift_SmtpTransport */
     protected $transport;
 
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content,string $replyToEmail): string
     {
         $failedRecipients = [];
 

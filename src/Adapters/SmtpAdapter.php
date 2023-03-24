@@ -12,6 +12,7 @@ use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Exception\TransportException;
 
 class SmtpAdapter extends BaseMailAdapter
@@ -24,9 +25,8 @@ class SmtpAdapter extends BaseMailAdapter
 
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
-        // $failedRecipients = [];
         try {
-            $result = $this->resolveClient()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail));
+            $result = $this->resolveTransport()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail));
         } catch (TransportException $e) {
             return $this->resolveMessageId(0);
         }
@@ -38,7 +38,7 @@ class SmtpAdapter extends BaseMailAdapter
         if ($this->client) {
             return $this->client;
         }
-
+        
         $this->client = new Mailer($this->resolveTransport());
 
         return $this->client;
@@ -84,6 +84,6 @@ class SmtpAdapter extends BaseMailAdapter
 
     protected function resolveMessageId($result): string
     {
-        return ($result == 1) ? strval($result) : '-1';
+        return ($result instanceof SentMessage) ? $result->getMessageId() : '-1';
     }
 }

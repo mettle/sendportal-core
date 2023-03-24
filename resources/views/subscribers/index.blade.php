@@ -82,7 +82,6 @@
                     <th>{{ __('Tags') }}</th>
                     <th>{{ __('Created') }}</th>
                     <th>{{ __('Status') }}</th>
-                    <th>{{ __('Actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -109,15 +108,7 @@
                                 <span class="badge badge-success">{{ __('Subscribed') }}</span>
                             @endif
                         </td>
-                        <td>
-                            <form action="{{ route('sendportal.subscribers.destroy', $subscriber->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
 
-                                <button type="submit"
-                                        class="btn btn-xs btn-light delete-subscriber">{{ __('Delete') }}</button>
-                            </form>
-                        </td>
                     </tr>
                 @empty
                     <tr>

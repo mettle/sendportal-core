@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Blade;
 
 /**
  * @property int $id
@@ -255,7 +256,13 @@ class Campaign extends BaseModel
     public function getMergedContentAttribute(): ?string
     {
         if ($this->template_id) {
-            return str_replace(['{{content}}', '{{ content }}'], $this->content, $this->template->content);
+            return Blade::render(
+                $this->template->content,
+                [
+                    'content' => $this->content
+                ],
+                true
+            );
         }
 
         return $this->content;
@@ -361,7 +368,8 @@ class Campaign extends BaseModel
     public function canBeCancelled(): bool
     {
         // we can cancel campaigns that still have draft messages, because they haven't been entirely dispatched
-        // a campaign that doesn't have any more draft messages (i.e. they have all been sent) cannot be cancelled, because the campaign is completed
+        // a campaign that doesn't have any more draft messages (i.e. they have all been sent) cannot be cancelled,
+        // because the campaign is completed
 
         if (
             $this->status_id === CampaignStatus::STATUS_SENT

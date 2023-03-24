@@ -11,6 +11,7 @@ use Sendportal\Base\Repositories\Campaigns\CampaignTenantRepositoryInterface;
 use Sendportal\Base\Traits\NormalizeTags;
 use Sendportal\Pro\Repositories\AutomationScheduleRepository;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use Illuminate\Support\Facades\Blade;
 
 class MergeContentService
 {
@@ -93,7 +94,13 @@ class MergeContentService
 
     protected function mergeContent(?string $customContent, string $templateContent): string
     {
-        return str_ireplace(['{{content}}', '{{ content }}'], $customContent ?: '', $templateContent);
+        return Blade::render(
+            $templateContent,
+            [
+                'content' => $customContent ?: ''
+            ],
+            true
+        );
     }
 
     protected function mergeTags(string $content, Message $message): string

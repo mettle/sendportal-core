@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string|null $content
  * @property string|null $from_name
  * @property string|null $from_email
+ * @property string|null $reply_to
  * @property bool $is_open_tracking
  * @property bool $is_click_tracking
  * @property int|null $open_count
@@ -70,6 +71,8 @@ class Campaign extends BaseModel
 
     // NOTE(david): we require this because of namespace issues when resolving factories from models
     // not in the default `App\Models` namespace.
+
+
     protected static function newFactory()
     {
         return CampaignFactory::new();

@@ -268,6 +268,7 @@ class CreateMessages
             'subject' => $campaign->subject,
             'from_name' => $campaign->from_name,
             'from_email' => $campaign->from_email,
+            'reply_to' => $campaign->reply_to,
             'queued_at' => null,
             'sent_at' => null,
         ];
@@ -300,6 +301,7 @@ class CreateMessages
                 'subject' => $campaign->subject,
                 'from_name' => $campaign->from_name,
                 'from_email' => $campaign->from_email,
+                'reply_to' => $campaign->reply_to,
                 'queued_at' => now(),
                 'sent_at' => null,
             ]

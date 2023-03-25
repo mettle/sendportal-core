@@ -137,6 +137,7 @@ class DispatchTestMessage
             'subject' => '[Test] ' . $campaign->subject,
             'from_name' => $campaign->from_name,
             'from_email' => $campaign->from_email,
+            'reply_to' => $campaign->reply_to,
             'hash' => 'abc123',
         ]);
     }

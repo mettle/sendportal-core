@@ -2,6 +2,7 @@
 <x-sendportal.text-field name="subject" :label="__('Email Subject')" :value="$campaign->subject ?? old('subject')" />
 <x-sendportal.text-field name="from_name" :label="__('From Name')" :value="$campaign->from_name ?? old('from_name')" />
 {{--<x-sendportal.text-field name="from_email" :label="__('From Email')" type="email" :value="$campaign->from_email ?? old('from_email')" />--}}
+<x-sendportal.text-field name="reply_to" :label="__('Reply-To Email')" type="email" :value="$campaign->reply_to ?? old('reply_to')" />
 
 <x-sendportal.select-field name="template_id" :label="__('Template')" :options="$templates" :value="$campaign->template_id ?? old('template_id')" />
 

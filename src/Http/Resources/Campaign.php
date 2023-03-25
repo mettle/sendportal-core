@@ -24,6 +24,7 @@ class Campaign extends JsonResource
             'email_service_id' => $this->email_service_id,
             'from_name' => $this->from_name,
             'from_email' => $this->from_email,
+            'reply_to' => $this->reply_to,
             'is_open_tracking' => $this->is_open_tracking,
             'is_click_tracking' => $this->is_click_tracking,
             'sent_count' => $this->sent_count,

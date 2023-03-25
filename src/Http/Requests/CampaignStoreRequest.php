@@ -37,6 +37,11 @@ class CampaignStoreRequest extends FormRequest
 //                'max:255',
 //                'email',
 //            ],
+            'reply_to' => [
+                'required',
+                'max:255',
+                'email',
+            ],
             'email_service_id' => [
                 'required',
                 'integer',

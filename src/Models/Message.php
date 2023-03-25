@@ -26,6 +26,7 @@ use Sendportal\Pro\Models\AutomationSchedule;
  * @property string $subject
  * @property string $from_name
  * @property string $from_email
+ * @property string $reply_to
  * @property ?string $message_id
  * @property ?string $ip
  * @property int $open_count

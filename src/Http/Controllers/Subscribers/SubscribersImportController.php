@@ -53,7 +53,9 @@ class SubscribersImportController extends Controller
 
             $path = $request->file('file')->storeAs('imports', $filename, 'local');
 
-            $errors = $this->validateCsvContents(Storage::disk('local')->path($path));
+            $delimiter = $request->query('delimiter', ',');
+
+            $errors = $this->validateCsvContents(Storage::disk('local')->path($path), $delimiter);
 
             if (count($errors->getBags())) {
                 Storage::disk('local')->delete($path);
@@ -69,7 +71,7 @@ class SubscribersImportController extends Controller
                 'updated' => 0
             ];
 
-            (new FastExcel)->import(Storage::disk('local')->path($path), function (array $line) use ($request, &$counter) {
+            (new FastExcel)->configureCsv($delimiter)->import(Storage::disk('local')->path($path), function (array $line) use ($request, &$counter) {
                 $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
                 $data['tags'] = $request->get('tags') ?? [];
@@ -103,13 +105,13 @@ class SubscribersImportController extends Controller
      * @throws ReaderNotOpenedException
      * @throws UnsupportedTypeException
      */
-    protected function validateCsvContents(string $path): ViewErrorBag
+    protected function validateCsvContents(string $path, $delimiter): ViewErrorBag
     {
         $errors = new ViewErrorBag();
 
         $row = 1;
 
-        (new FastExcel)->import($path, function (array $line) use ($errors, &$row) {
+        (new FastExcel)->configureCsv($delimiter)->import($path, function (array $line) use ($errors, &$row) {
             $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
             try {

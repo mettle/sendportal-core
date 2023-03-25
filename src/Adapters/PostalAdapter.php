@@ -38,7 +38,7 @@ class PostalAdapter extends BaseMailAdapter
     protected function resolveMessageId($response): string
     {
         foreach ($response->recipients() as $email => $message) {
-            return (string) $message->id();    
+            return (string) $message->id();
         }
         
         throw new DomainException('Unable to resolve message ID');

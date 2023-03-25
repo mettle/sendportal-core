@@ -44,21 +44,23 @@ class MergeContentService
      */
     protected function resolveContent(Message $message): string
     {
+        $tags = $this->generateTags($message);
+
         if ($message->isCampaign()) {
-            $mergedContent = $this->mergeCampaignContent($message);
+            $mergedContent = $this->mergeCampaignContent($message, $tags);
         } elseif ($message->isAutomation()) {
-            $mergedContent = $this->mergeAutomationContent($message);
+            $mergedContent = $this->mergeAutomationContent($message, $tags);
         } else {
             throw new Exception('Invalid message source type for message id=' . $message->id);
         }
 
-        return $this->mergeTags($mergedContent, $message);
+        return $mergedContent;
     }
 
     /**
      * @throws Exception
      */
-    protected function mergeCampaignContent(Message $message): string
+    protected function mergeCampaignContent(Message $message, $tags): string
     {
         /** @var Campaign $campaign */
         $campaign = $this->campaignRepo->find($message->workspace_id, $message->source_id, ['template']);
@@ -68,14 +70,14 @@ class MergeContentService
         }
 
         return $campaign->template
-            ? $this->mergeContent($campaign->content, $campaign->template->content)
-            : $campaign->content;
+            ? $this->mergeContent($campaign->content, $campaign->template->content, $tags)
+            : $this->mergeContent($campaign->content, null, $tags);
     }
 
     /**
      * @throws Exception
      */
-    protected function mergeAutomationContent(Message $message): string
+    protected function mergeAutomationContent(Message $message, $tags): string
     {
         if (!$schedule = app(AutomationScheduleRepository::class)->find($message->source_id, ['automation_step'])) {
             throw new Exception('Unable to resolve automation step for message id=' . $message->id);
@@ -89,80 +91,37 @@ class MergeContentService
             throw new Exception('Unable to resolve template for automation step id=' . $schedule->automation_step_id);
         }
 
-        return $this->mergeContent($content, $template->content);
+        return $this->mergeContent($content, $template->content, $tags);
     }
 
-    protected function mergeContent(?string $customContent, string $templateContent): string
+    protected function mergeContent(?string $customContent, string $templateContent, $tags): string
     {
+        $customContent = $customContent ?: '';
+
+        $tags['content'] = $customContent;
+
         return Blade::render(
-            $templateContent,
-            [
-                'content' => $customContent ?: ''
-            ],
-            true
+            $templateContent ?? $customContent,
+            $tags
         );
     }
 
-    protected function mergeTags(string $content, Message $message): string
-    {
-        $content = $this->compileTags($content);
-
-        $content = $this->mergeSubscriberTags($content, $message);
-        $content = $this->mergeUnsubscribeLink($content, $message);
-        $content = $this->mergeWebviewLink($content, $message);
-
-        return $content;
-    }
-
-    protected function compileTags(string $content): string
-    {
-        $tags = [
-            'email',
-            'first_name',
-            'last_name',
-            'unsubscribe_url',
-            'webview_url'
-        ];
-
-        foreach ($tags as $tag) {
-            $content = $this->normalizeTags($content, $tag);
-        }
-
-        return $content;
-    }
-
-    protected function mergeSubscriberTags(string $content, Message $message): string
+    protected function generateTags(Message $message): array
     {
         $tags = [
             'email' => $message->recipient_email,
             'first_name' => optional($message->subscriber)->first_name ?? '',
-            'last_name' => optional($message->subscriber)->last_name ?? ''
+            'last_name' => optional($message->subscriber)->last_name ?? '',
+            'unsubscribe_url' => $this->generateUnsubscribeLink($message),
+            'webview_url' => $this->generateWebviewLink($message)
         ];
 
-        foreach ($tags as $key => $replace) {
-            $content = str_ireplace('{{' . $key . '}}', $replace, $content);
-        }
-
-        return $content;
-    }
-
-    protected function mergeUnsubscribeLink(string $content, Message $message): string
-    {
-        $unsubscribeLink = $this->generateUnsubscribeLink($message);
-
-        return str_ireplace(['{{ unsubscribe_url }}', '{{unsubscribe_url}}'], $unsubscribeLink, $content);
+        return $tags;
     }
 
     protected function generateUnsubscribeLink(Message $message): string
     {
         return route('sendportal.subscriptions.unsubscribe', $message->hash);
-    }
-
-    protected function mergeWebviewLink(string $content, Message $message): string
-    {
-        $webviewLink = $this->generateWebviewLink($message);
-
-        return str_ireplace('{{webview_url}}', $webviewLink, $content);
     }
 
     protected function generateWebviewLink(Message $message): string

@@ -260,8 +260,7 @@ class Campaign extends BaseModel
                 $this->template->content,
                 [
                     'content' => $this->content
-                ],
-                true
+                ]
             );
         }
 

@@ -190,7 +190,11 @@ class CampaignsController extends Controller
             ->where('type', '=', 'segment')
             ->whereIn('contract', $segmentTagsIds)
             ->groupBy('contract')
-            ->get();
+            ->get()
+            ->toArray();
+        $counts = collect($counts);
+
+        $aggregate = $counts->pluck('aggregate', 'contract');
 
 
         return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount',$counts));

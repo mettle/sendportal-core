@@ -191,10 +191,17 @@ class CampaignsController extends Controller
             ->where('type', '=', 'segment')
             ->whereIn('contract', $segmentTagsIds)
             ->groupBy('contract')
-            ->get()
-            ->toArray();
-        $counts = collect($counts);
-        dd($counts);
+            ->get();
+        $countArray = $counts->toArray();
+
+        $countMap = [];
+
+        foreach ($countArray as $count) {
+            $countMap[$count->contract] = $count->aggregate;
+        }
+
+        $counts = $countMap;
+
 
         $aggregate = $counts->pluck('aggregate', 'contract');
 

@@ -193,6 +193,7 @@ class CampaignsController extends Controller
             ->get()
             ->toArray();
         $counts = collect($counts);
+        dd($counts);
 
         $aggregate = $counts->pluck('aggregate', 'contract');
 

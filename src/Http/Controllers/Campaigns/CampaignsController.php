@@ -197,7 +197,7 @@ class CampaignsController extends Controller
         $countMap = [];
 
         foreach ($countArray as $count) {
-            $countMap[$count->contract] = $count->aggregate;
+            $countMap[$count['contract']] = $count['aggregate'];
         }
 
         $counts = $countMap;

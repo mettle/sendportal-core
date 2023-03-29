@@ -36,7 +36,7 @@ class Segment extends BaseModel
     protected $withCount = [
         'subscribers',
     ];
-    protected $appends = ['segment_subscribers_count'];
+//    protected $appends = ['segment_subscribers_count'];
 
 
     protected static function newFactory()

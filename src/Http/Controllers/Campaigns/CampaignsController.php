@@ -202,10 +202,6 @@ class CampaignsController extends Controller
 
         $counts = $countMap;
 
-
-        $aggregate = $counts->pluck('aggregate', 'contract');
-
-
         return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount','counts'));
     }
 

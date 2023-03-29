@@ -117,6 +117,7 @@
                                         <input name="segment_tags[]" type="checkbox" value="{{ $tag->id }}">
 
                                         {{ $tag->name }} ({{ $tag->segment_subscribers_count }} {{ __('subscribers') }})
+                                        {{ $tag->name }} ({{ $counts[$tag->id] }} {{ __('subscribers') }})
                                     </label>
                                 </div>
                             @empty

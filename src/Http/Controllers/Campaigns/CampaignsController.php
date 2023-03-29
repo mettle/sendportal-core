@@ -11,6 +11,7 @@ use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\CampaignStoreRequest;
 use Sendportal\Base\Http\Resources\Workspace;
+use Sendportal\Base\Models\Asset;
 use Sendportal\Base\Models\Segment;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\Workspace as ModelsWorkspace;
@@ -184,9 +185,15 @@ class CampaignsController extends Controller
 
 
         $segmentTags = Segment::where('workspace_id', Sendportal::currentWorkspaceId())->get();
+        $segmentTagsIds = Segment::where('workspace_id', Sendportal::currentWorkspaceId())->pluck('id')->toArray();
+        $counts = Asset::select('contract', \DB::raw('COUNT(DISTINCT user_id) as aggregate'))
+            ->where('type', '=', 'segment')
+            ->whereIn('contract', $segmentTagsIds)
+            ->groupBy('contract')
+            ->get();
 
 
-        return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount'));
+        return view('sendportal::campaigns.preview', compact('campaign', 'tags', 'segmentTags', 'subscriberCount',$counts));
     }
 
 

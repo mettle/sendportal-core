@@ -36,7 +36,7 @@ class Segment extends BaseModel
     protected $withCount = [
         'subscribers',
     ];
-    protected $appends = ['segment_subscribers_count'];
+//    protected $appends = ['segment_subscribers_count'];
 
 
     protected static function newFactory()
@@ -57,10 +57,10 @@ class Segment extends BaseModel
         return $this->belongsToMany(Subscriber::class, 'assets', 'contract', 'user_id')->as('asset')->where('sendportal_subscribers.workspace_id', $this->workspace_id)
             ->withPivot('user_id', 'sc_user_id')->withTimestamps();
     }
-    public function getSegmentSubscribersCountAttribute(){
-        return Asset::where("contract",$this->id)->where('type','segment')->distinct('user_id')
-            ->count('user_id');
-    }
+//    public function getSegmentSubscribersCountAttribute(){
+//        return Asset::where("contract",$this->id)->where('type','segment')->distinct('user_id')
+//            ->count('user_id');
+//    }
 
     /**
      * Active subscribers in this tag.

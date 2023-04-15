@@ -49,15 +49,15 @@
                 <button class="btn btn-md btn-default dropdown-toggle" type="button" data-toggle="dropdown">
                     <i class="fa fa-bars color-gray-400"></i>
                 </button>
-{{--                <div class="dropdown-menu">--}}
-{{--                    <a href="{{ route('sendportal.subscribers.import') }}" class="dropdown-item">--}}
-{{--                        <i class="fa fa-upload color-gray-400 mr-2"></i> {{ __('Import Subscribers') }}--}}
-{{--                    </a>--}}
+                <div class="dropdown-menu">
+                    <a href="{{ route('sendportal.subscribers.import') }}" class="dropdown-item">
+                        <i class="fa fa-upload color-gray-400 mr-2"></i> {{ __('Import Subscribers') }}
+                    </a>
 {{--                    <a href="{{ route('sendportal.subscribers.export') }}" class="dropdown-item">--}}
 {{--                        <i class="fa fa-download color-gray-400 mr-2"></i> {{ __('Export Subscribers') }}--}}
 {{--                    </a>--}}
 
-{{--                </div>--}}
+                </div>
             </div>
             <a class="btn btn-light btn-md mr-2" href="{{ route('sendportal.tags.index') }}">
                 <i class="fa fa-tag color-gray-400 mr-1"></i> {{ __('Tags') }}

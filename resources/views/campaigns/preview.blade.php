@@ -122,6 +122,30 @@
                                 <div>{{ __('There are no segments to select') }}</div>
                             @endforelse
                         </div>
+                        <div class="pb-2 exclude hide"><b>{{ __('EXCLUDE SEGMENTS') }}</b></div>
+                        <div class="exclude hide mb-2">
+                            <select id="id-field-exclude" class="form-control" name="exclude">
+                                <option value="" >
+                                    {{ __('Select') }}
+                                </option>
+                                <option value="exclude_segments" >
+                                    {{ __('Exclude Segments') }}
+                                </option>
+                            </select>
+                        </div>
+                
+                        <div class="exclude-segments-container hide">
+                            @forelse($segmentTags as $tag)
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="exclude_segment_tags[]" type="checkbox" value="{{ $tag->id }}">
+                                        {{ $tag->name }} ({{ $counts[$tag->id]??0 }} {{ __('subscribers') }})
+                                    </label>
+                                </div>
+                            @empty
+                                <div>{{ __('There are no segments to exclude') }}</div>
+                            @endforelse
+                        </div>
 
                         <div class="pb-2"><b>{{ __('SCHEDULE') }}</b></div>
                         <div class="form-group row form-group-schedule">
@@ -175,19 +199,36 @@
     <script>
         var target = $('.tags-container');
         var segmentTarget = $('.segments-container');
+        var excludeSegmentTarget = $('.exclude-segments-container');
+        var exclude = $('.exclude');
         $('#id-field-recipients').change(function() {
             if (this.value == 'send_to_all') {
                 target.addClass('hide');
+                exclude.addClass('hide');
                 segmentTarget.addClass('hide');
+                excludeSegmentTarget.addClass('hide');
+                $('#id-field-exclude').val("");
             }else if(this.value == 'send_to_tags') {
                 segmentTarget.addClass('hide');
                 target.removeClass('hide');
+                exclude.addClass('hide');
+                excludeSegmentTarget.addClass('hide');
+                $('#id-field-exclude').val("");
             }else if(this.value == 'send_to_segments'){
                 target.addClass('hide');
                 segmentTarget.removeClass('hide');
+                exclude.removeClass('hide');
             }else {
                 target.addClass('hide');
+                exclude.addClass('hide');
                 segmentTarget.addClass('hide');
+            }
+        });
+        $('#id-field-exclude').change(function() {
+            if (this.value != '') {
+                excludeSegmentTarget.removeClass('hide');
+            }else {
+                excludeSegmentTarget.addClass('hide');
             }
         });
 

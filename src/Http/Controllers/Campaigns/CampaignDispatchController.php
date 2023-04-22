@@ -60,11 +60,20 @@ class CampaignDispatchController extends Controller
 
 
         $segmentTags = $request->get('segment_tags') ?? [];
+        $excludeSegmentTags = $request->get('exclude_segment_tags') ?? [];
 
         $totalCampaignSubscriberCount = $campaign->unsent_count ?? 0;
 
 
         foreach ($segmentTags as $segment) {
+
+            $totalCampaignSubscriberCount += Asset::
+                                            where('contract', $segment)
+                                            ->whereNotIn('contract', $excludeSegmentTags)
+                                            ->where('type', 'segment')
+                                            ->where('total', '>=', 1)
+                                            ->distinct('user_id')
+                                            ->count();
             $totalCampaignSubscriberCount += Asset::where('contract', $segment)->where('type', 'segment')->where('total', '>=', 1)->distinct('user_id')->count();
 
             SendportalCampaignSegment::updateOrCreate(['segment_id' => $segment, 'campaign_id' => $campaign->id], [
@@ -92,6 +101,7 @@ class CampaignDispatchController extends Controller
             'scheduled_at' => $scheduledAt,
             'status_id' => CampaignStatus::STATUS_QUEUED,
             'save_as_draft' => $request->get('behaviour') === 'draft',
+            'excluded_segments' => json_encode($excludeSegmentTags)
         ]);
 
         return redirect()->route('sendportal.campaigns.status', $id);

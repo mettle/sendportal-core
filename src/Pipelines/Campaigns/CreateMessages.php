@@ -103,7 +103,10 @@ class CreateMessages
     {
         \Log::info('- Handling Campaign Segment id='.$segment->id);
 
-        $userIds = Asset::where('type', 'segment')->where('contract', $segment->id)->distinct('user_id')->pluck('user_id')->toArray();
+        $userIds = Asset::where('type', 'segment')
+                    ->where('contract', $segment->id)
+                    ->whereNotIn('contract', json_decode($campaign->excluded_segments))
+                    ->distinct('user_id')->pluck('user_id')->toArray();
 
         if($campaign->type === 'recurrent')
         {
@@ -268,7 +271,6 @@ class CreateMessages
             'subject' => $campaign->subject,
             'from_name' => $campaign->from_name,
             'from_email' => $campaign->from_email,
-            'reply_to' => $campaign->reply_to,
             'queued_at' => null,
             'sent_at' => null,
         ];
@@ -301,7 +303,6 @@ class CreateMessages
                 'subject' => $campaign->subject,
                 'from_name' => $campaign->from_name,
                 'from_email' => $campaign->from_email,
-                'reply_to' => $campaign->reply_to,
                 'queued_at' => now(),
                 'sent_at' => null,
             ]

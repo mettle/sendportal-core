@@ -61,6 +61,8 @@
 
                 <x-sendportal.select-field name="tags[]" :label="__('Tags')" :options="$tags" multiple />
 
+                <x-sendportal.text-field name="delimiter" :label="__('Custom CSV delimiter')" :value="" />
+
                 <div class="form-group row">
                     <div class="offset-sm-3 col-sm-9">
                         <a href="{{ route('sendportal.subscribers.index') }}" class="btn btn-light">{{ __('Back') }}</a>

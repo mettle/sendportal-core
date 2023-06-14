@@ -259,7 +259,13 @@ class Campaign extends BaseModel
             return Blade::render(
                 $this->template->content,
                 [
-                    'content' => $this->content
+                    'content' => $this->content,
+                    // placeholders
+                    'email' => '{!! $email !!}',
+                    'first_name' => '{!! $first_name !!}',
+                    'last_name' => '{!! $last_name !!}',
+                    'unsubscribe_url' => '{!! $unsubscribe_url !!}',
+                    'webview_url' => '{!! $webview_url !!}',
                 ]
             );
         }

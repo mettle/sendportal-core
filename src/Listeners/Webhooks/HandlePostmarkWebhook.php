@@ -54,6 +54,11 @@ class HandlePostmarkWebhook implements ShouldQueue
                 $this->handleBounce($messageId, $event->payload);
                 break;
 
+            case'SubscriptionChange':
+                $this->handleSubscriptionChange($messageId, $event->payload);
+                Log::info('Processing Postmark webhook.', ['type' => $eventName, 'message_id' => $messageId , 'payload' => $event->payload]);
+                break;
+
             default:
                 throw new RuntimeException("Unknown Postmark webhook event type '{$eventName}'.");
         }
@@ -104,6 +109,13 @@ class HandlePostmarkWebhook implements ShouldQueue
             $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
         }
     }
+
+    private function handleSubscriptionChange(string $messageId, array $content): void
+    {
+        $timestamp = $this->extractTimestamp($content, 'ChangedAt');
+        $this->emailWebhookService->handleUnsubscribe($messageId,$content);
+    }
+
 
     /**
      * Determine if the bounce is permanent

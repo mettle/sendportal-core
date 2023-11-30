@@ -140,6 +140,23 @@ class EmailWebhookService
         $this->unsubscribe($messageId, UnsubscribeEventType::BOUNCE);
     }
 
+    public function handleUnsubscribe($messageId, $timestamp): void
+    {
+        /* @var Message $message */
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
+            return;
+        }
+
+        if (!$message->unsubscribed_at) {
+            $message->unsubscribed_at = $timestamp;
+            $message->save();
+        }
+
+        $this->unsubscribe($messageId, UnsubscribeEventType::MANUAL_BY_SUBSCRIBER);
+    }
+
     public function handleFailure($messageId, $severity, $description, $timestamp): void
     {
         /* @var Message $message */

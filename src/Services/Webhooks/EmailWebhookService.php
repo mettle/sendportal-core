@@ -149,10 +149,10 @@ class EmailWebhookService
             return;
         }
 
-        if (!$message->unsubscribed_at) {
-            $message->unsubscribed_at = $timestamp;
-            $message->save();
-        }
+//        if (!$message->complained_at) {
+//            $message->unsubscribed_at = $timestamp;
+//            $message->save();
+//        }
 
         $this->unsubscribe($messageId, UnsubscribeEventType::MANUAL_BY_SUBSCRIBER);
     }

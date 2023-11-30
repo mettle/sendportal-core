@@ -120,7 +120,6 @@ class HandlePostmarkWebhook implements ShouldQueue
         else{
             $this->emailWebhookService->handleResubscribe($messageId);
         }
-
     }
 
 

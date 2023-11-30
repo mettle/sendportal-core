@@ -149,10 +149,13 @@ class EmailWebhookService
             return;
         }
 
+        Log::info('Debug webhook.', ['message' => $message, 'timestamp' => $timestamp ]);
+
 //        if (!$message->complained_at) {
 //            $message->unsubscribed_at = $timestamp;
 //            $message->save();
 //        }
+
 
         $this->unsubscribe($messageId, UnsubscribeEventType::MANUAL_BY_SUBSCRIBER);
     }

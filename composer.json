@@ -1,5 +1,5 @@
 {
-    "name": "mettle/sendportal-core",
+    "name": "ruvus11/sendportal-core",
     "homepage": "https://github.com/mettle/sendportal-core",
     "description": "Sendportal core functionality.",
     "type": "library",

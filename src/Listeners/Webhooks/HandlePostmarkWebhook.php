@@ -114,7 +114,7 @@ class HandlePostmarkWebhook implements ShouldQueue
         $value = $this->extractSuppressSending($content);
         $timestamp = $this->extractTimestamp($content, 'ChangedAt');
 
-        if($value == 'true'){
+        if($value){
             $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
         }
         else{
@@ -151,9 +151,9 @@ class HandlePostmarkWebhook implements ShouldQueue
         return Arr::get($payload, 'RecordType');
     }
 
-    private function extractSuppressSending(array $payload): string
+    private function extractSuppressSending(array $payload): bool
     {
-        return Arr::get($payload, 'SuppressSending')->toString();
+        return Arr::get($payload, 'SuppressSending');
     }
 
     private function extractMessageId(array $payload): string

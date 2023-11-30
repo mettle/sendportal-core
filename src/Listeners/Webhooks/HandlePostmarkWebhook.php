@@ -111,7 +111,7 @@ class HandlePostmarkWebhook implements ShouldQueue
 
     private function handleSubscriptionChange(string $messageId, array $content): void
     {
-        $value = $this->extractSuppressSending($event->payload);
+        $value = $this->extractSuppressSending($content);
         $timestamp = $this->extractTimestamp($content, 'ChangedAt');
 
         if($value){

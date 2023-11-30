@@ -56,7 +56,6 @@ class HandlePostmarkWebhook implements ShouldQueue
 
             case'SubscriptionChange':
                 $this->handleSubscriptionChange($messageId, $event->payload);
-                Log::info('Processing Postmark webhook.', ['type' => $eventName, 'message_id' => $messageId , 'payload' => $event->payload]);
                 break;
 
             default:
@@ -112,8 +111,16 @@ class HandlePostmarkWebhook implements ShouldQueue
 
     private function handleSubscriptionChange(string $messageId, array $content): void
     {
+        $value = $this->extractSuppressSending($event->payload);
         $timestamp = $this->extractTimestamp($content, 'ChangedAt');
-        $this->emailWebhookService->handleUnsubscribe($messageId,$content);
+
+        if($value){
+            $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
+        }
+        else{
+            $this->emailWebhookService->handleResubscribe($messageId);
+        }
+
     }
 
 
@@ -142,6 +149,11 @@ class HandlePostmarkWebhook implements ShouldQueue
     private function extractEventName(array $payload): string
     {
         return Arr::get($payload, 'RecordType');
+    }
+
+    private function extractSuppressSending(array $payload): string
+    {
+        return Arr::get($payload, 'SuppressSending');
     }
 
     private function extractMessageId(array $payload): string

@@ -51,10 +51,9 @@ class RenameSegmentsToTags extends Migration
 
     protected function listTableForeignKeys(string $table): array
     {
-        $conn = Schema::getConnection()->getDoctrineSchemaManager();
-
-        return array_map(function ($key) {
-            return $key->getName();
-        }, $conn->listTableForeignKeys($table));
+        return collect(Schema::getColumnListing($table))
+            ->filter(fn ($column) => Schema::getColumnType($table, $column) === 'foreign')
+            ->map(fn ($column) => "{$column}_foreign")
+            ->toArray();
     }
 }

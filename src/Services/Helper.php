@@ -20,7 +20,7 @@ class Helper
             return null;
         }
 
-        return Carbon::parse($date)->copy()->setTimezone($timezone);
+        return Carbon::parse($date)->copy()->tz($timezone);
     }
 
     public function isPro(): bool

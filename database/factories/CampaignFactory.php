@@ -19,11 +19,11 @@ class CampaignFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->sentence,
+            'name' => $this->faker->sentence(),
             'workspace_id' => Sendportal::currentWorkspaceId(),
-            'subject' => $this->faker->title,
-            'from_name' => $this->faker->name,
-            'from_email' => $this->faker->email,
+            'subject' => $this->faker->title(),
+            'from_name' => $this->faker->name(),
+            'from_email' => $this->faker->email(),
             'email_service_id' => EmailService::factory(),
             'is_open_tracking' => true,
             'is_click_tracking' => true,
@@ -34,7 +34,7 @@ class CampaignFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'content' => $this->faker->paragraph,
+                'content' => $this->faker->paragraph(),
             ];
         });
     }

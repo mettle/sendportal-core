@@ -44,7 +44,7 @@ class TagsControllerTest extends TestCase
     {
         // given
         $tagStoreData = [
-            'name' => $this->faker->word
+            'name' => $this->faker->word()
         ];
 
         // when
@@ -79,7 +79,7 @@ class TagsControllerTest extends TestCase
         $tag = Tag::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $tagUpdateData = [
-            'name' => $this->faker->word
+            'name' => $this->faker->word()
         ];
 
         // when

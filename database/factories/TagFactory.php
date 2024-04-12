@@ -17,7 +17,7 @@ class TagFactory extends Factory
     {
         return [
             'workspace_id' => Sendportal::currentWorkspaceId(),
-            'name' => ucwords($this->faker->unique()->word)
+            'name' => ucwords($this->faker->unique()->word())
         ];
     }
 }

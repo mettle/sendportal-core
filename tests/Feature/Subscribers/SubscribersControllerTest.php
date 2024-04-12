@@ -21,9 +21,9 @@ class SubscribersControllerTest extends TestCase
     {
         // given
         $subscriberStoreData = [
-            'email' => $this->faker->email,
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName
+            'email' => $this->faker->email(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName()
         ];
 
         // when
@@ -58,9 +58,9 @@ class SubscribersControllerTest extends TestCase
         $subscriber = Subscriber::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $subscriberUpdateData = [
-            'email' => $this->faker->email,
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName
+            'email' => $this->faker->email(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName()
         ];
 
         // when

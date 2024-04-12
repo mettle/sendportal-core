@@ -75,7 +75,7 @@ class PostmarkWebhooksTest extends TestCase
             'MessageID' => $message->message_id,
             'ReceivedAt' => now()->toIso8601String(),
             'RecordType' => 'Click',
-            'OriginalLink' => $this->faker->url,
+            'OriginalLink' => $this->faker->url(),
         ];
 
         // when

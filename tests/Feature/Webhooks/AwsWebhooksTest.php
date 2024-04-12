@@ -46,7 +46,7 @@ class AwsWebhooksTest extends TestCase
         self::assertEquals(0, $message->click_count);
         self::assertNull($message->clicked_at);
 
-        $link = ['link' => $this->faker->url];
+        $link = ['link' => $this->faker->url()];
         $webhook = $this->resolveWebhook('click', $message->message_id, $link);
 
         // when

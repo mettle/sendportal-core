@@ -82,7 +82,7 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('clicked', $message->message_id);
 
-        $webhook['event-data']['url'] = $this->faker->url;
+        $webhook['event-data']['url'] = $this->faker->url();
 
         // when
         $response = $this->json('POST', route($this->route), $webhook);

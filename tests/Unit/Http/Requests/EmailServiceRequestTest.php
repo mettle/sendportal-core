@@ -196,7 +196,7 @@ class EmailServiceRequestTest extends TestCase
             'type_id' => EmailServiceType::MAILGUN,
             'settings' => [
                 'key' => Str::random(),
-                'domain' => $this->faker->url,
+                'domain' => $this->faker->url(),
                 'zone' => 'JP'
             ]
         ]);
@@ -218,7 +218,7 @@ class EmailServiceRequestTest extends TestCase
             'type_id' => EmailServiceType::MAILGUN,
             'settings' => [
                 'key' => Str::random(),
-                'domain' => $this->faker->url,
+                'domain' => $this->faker->url(),
                 'zone' => 'EU'
             ]
         ]);

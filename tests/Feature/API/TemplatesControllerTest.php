@@ -61,7 +61,7 @@ class TemplatesControllerTest extends TestCase
         $route = route('sendportal.api.templates.store');
 
         $request = [
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
             'content' => 'Hello {{ content }}',
         ];
 

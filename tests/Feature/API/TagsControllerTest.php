@@ -54,7 +54,7 @@ class TagsControllerTest extends TestCase
         $route = route('sendportal.api.tags.store');
 
         $request = [
-            'name' => $this->faker->colorName,
+            'name' => $this->faker->colorName(),
         ];
 
         $this->postJson($route, $request)

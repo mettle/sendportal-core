@@ -23,7 +23,7 @@ class MergeContentTest extends TestCase
     public function campaign_content_can_be_merged()
     {
         // given
-        $content = $this->faker->sentence;
+        $content = $this->faker->sentence();
         $message = $this->generateCampaignMessage($content);
 
         // when
@@ -111,7 +111,7 @@ class MergeContentTest extends TestCase
 
         $message->subscriber()->associate(Subscriber::factory()->create([
             'first_name' => null,
-            'last_name' => $this->faker->lastName
+            'last_name' => $this->faker->lastName()
         ]));
 
         // when
@@ -148,7 +148,7 @@ class MergeContentTest extends TestCase
         $message = $this->generateCampaignMessage('Hi, {{ last_name }}');
 
         $message->subscriber()->associate(Subscriber::factory()->create([
-            'first_name' => $this->faker->firstName,
+            'first_name' => $this->faker->firstName(),
             'last_name' => null
         ]));
 

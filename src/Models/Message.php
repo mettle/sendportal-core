@@ -66,16 +66,19 @@ class Message extends BaseModel
     protected $guarded = [];
 
     /** @var array */
-    public $casts = [
-        'queued_at' => 'datetime',
-        'sent_at' => 'datetime',
-        'delivered_at' => 'datetime',
-        'bounced_at' => 'datetime',
-        'unsubscribed_at' => 'datetime',
-        'complained_at' => 'datetime',
-        'opened_at' => 'datetime',
-        'clicked_at' => 'datetime',
-    ];
+    public function casts():array
+    {
+        return [
+            'queued_at' => 'datetime',
+            'sent_at' => 'datetime',
+            'delivered_at' => 'datetime',
+            'bounced_at' => 'datetime',
+            'unsubscribed_at' => 'datetime',
+            'complained_at' => 'datetime',
+            'opened_at' => 'datetime',
+            'clicked_at' => 'datetime',
+        ];
+    }
 
     // We can't use boolean fields on this model because we have multiple points to update from the controller.
     /** @var array */

@@ -88,17 +88,20 @@ class Campaign extends BaseModel
     protected $booleanFields = [];
 
     /** @var array */
-    protected $casts = [
-        'status_id' => 'int',
-        'workspace_id' => 'int',
-        'template_id' => 'int',
-        'email_service_id' => 'int',
-        'is_open_tracking' => 'bool',
-        'is_click_tracking' => 'bool',
-        'scheduled_at' => 'datetime',
-        'save_as_draft' => 'bool',
-        'send_to_all' => 'bool',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'status_id' => 'int',
+            'workspace_id' => 'int',
+            'template_id' => 'int',
+            'email_service_id' => 'int',
+            'is_open_tracking' => 'bool',
+            'is_click_tracking' => 'bool',
+            'scheduled_at' => 'datetime',
+            'save_as_draft' => 'bool',
+            'send_to_all' => 'bool',
+        ];
+    }
 
     /**
      * Tags this campaign was sent to.

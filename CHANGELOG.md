@@ -1,5 +1,8 @@
 # Sendportal Core
 
+## 3.0.0 - 2024-04-18
+- Upgrade dependencies to Laravel V11 ([#194](https://github.com/mettle/sendportal-core/pull/194))
+
 ## 2.0.3 - 2021-07-05
 - Self-host CSS and JS assets ([#144](https://github.com/mettle/sendportal-core/pull/144))
 - Handle merge content and subject when subscriber first name or last name are null ([#143](https://github.com/mettle/sendportal-core/pull/143))

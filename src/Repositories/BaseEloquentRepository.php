@@ -93,7 +93,6 @@ class BaseEloquentRepository implements BaseEloquentInterface
      */
     protected function applyFilters($instance, array $filters = [])
     {
-
     }
 
     /**

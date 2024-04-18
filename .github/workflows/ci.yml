@@ -6,9 +6,8 @@ jobs:
     strategy:
       matrix:
         container: [
-          "kirschbaumdevelopment/laravel-test-runner:7.3",
-          "kirschbaumdevelopment/laravel-test-runner:7.4",
-          "kirschbaumdevelopment/laravel-test-runner:8.0"
+          "kirschbaumdevelopment/laravel-test-runner:8.2",
+          "kirschbaumdevelopment/laravel-test-runner:8.3"
         ]
 
     container:
@@ -39,7 +38,7 @@ jobs:
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Run Testsuite against MySQL

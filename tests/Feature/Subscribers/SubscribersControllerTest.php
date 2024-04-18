@@ -13,8 +13,8 @@ use Tests\TestCase;
 
 class SubscribersControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function new_subscribers_can_be_created_by_authenticated_users()

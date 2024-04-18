@@ -45,7 +45,7 @@ class DispatchTestMessage
     {
         $campaign = $this->resolveCampaign($workspaceId, $campaignId);
 
-        if (!$campaign) {
+        if (! $campaign) {
             Log::error(
                 'Unable to get campaign to send test message.',
                 ['workspace_id' => $workspaceId, 'campaign_id' => $campaignId]
@@ -104,7 +104,7 @@ class DispatchTestMessage
      */
     protected function dispatch(Message $message, EmailService $emailService, MessageTrackingOptions $trackingOptions, string $mergedContent): ?string
     {
-        $messageOptions = (new MessageOptions)
+        $messageOptions = (new MessageOptions())
             ->setTo($message->recipient_email)
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)

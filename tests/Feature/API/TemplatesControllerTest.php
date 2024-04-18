@@ -15,9 +15,9 @@ use Tests\TestCase;
 
 class TemplatesControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker,
-        NormalizeTags;
+    use RefreshDatabase;
+    use WithFaker;
+    use NormalizeTags;
 
     /** @test */
     public function the_template_index_is_accessible_to_authorised_users()

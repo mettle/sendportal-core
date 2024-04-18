@@ -49,7 +49,7 @@ class DispatchMessage
      */
     public function handle(Message $message): ?string
     {
-        if (!$this->isValidMessage($message)) {
+        if (! $this->isValidMessage($message)) {
             Log::info('Message is not valid, skipping id=' . $message->id);
 
             return null;
@@ -96,7 +96,7 @@ class DispatchMessage
      */
     protected function dispatch(Message $message, EmailService $emailService, MessageTrackingOptions $trackingOptions, string $mergedContent): ?string
     {
-        $messageOptions = (new MessageOptions)
+        $messageOptions = (new MessageOptions())
             ->setTo($message->recipient_email)
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)
@@ -129,13 +129,13 @@ class DispatchMessage
             return false;
         }
 
-        if (!$message->isCampaign()) {
+        if (! $message->isCampaign()) {
             return true;
         }
 
         $campaign = Campaign::find($message->source_id);
 
-        if (!$campaign) {
+        if (! $campaign) {
             return false;
         }
 

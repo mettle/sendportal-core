@@ -14,8 +14,8 @@ use Tests\TestCase;
 
 class CampaignsControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function a_list_of_a_workspaces_campaigns_can_be_retrieved()

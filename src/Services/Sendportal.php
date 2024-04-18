@@ -24,7 +24,7 @@ class Sendportal
     {
         $this->app->make('router')->sendportalPublicApiRoutes();
     }
-    
+
     /**
      * @throws BindingResolutionException
      */

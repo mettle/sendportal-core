@@ -11,8 +11,8 @@ use Tests\TestCase;
 
 class SubscriberTagsControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function can_retrieve_a_list_of_a_subscribers_tags()

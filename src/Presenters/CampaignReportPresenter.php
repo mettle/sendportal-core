@@ -56,7 +56,7 @@ class CampaignReportPresenter
      */
     public function generate(): array
     {
-        if (!$this->campaign) {
+        if (! $this->campaign) {
             throw new RuntimeException('Campaign must be initialised');
         }
 

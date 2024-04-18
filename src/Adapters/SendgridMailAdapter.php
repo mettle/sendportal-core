@@ -36,7 +36,7 @@ class SendgridMailAdapter extends BaseMailAdapter
         $response = $this->resolveClient()->send($email);
 
         throw_if(
-            !in_array($response->statusCode(), [Response::HTTP_OK, Response::HTTP_ACCEPTED]),
+            ! in_array($response->statusCode(), [Response::HTTP_OK, Response::HTTP_ACCEPTED]),
             new DomainException($response->body(), $response->statusCode())
         );
 

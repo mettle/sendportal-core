@@ -7,11 +7,11 @@ namespace Sendportal\Base\Factories;
 use InvalidArgumentException;
 use Sendportal\Base\Adapters\MailgunMailAdapter;
 use Sendportal\Base\Adapters\MailjetAdapter;
+use Sendportal\Base\Adapters\PostalAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Adapters\SmtpAdapter;
-use Sendportal\Base\Adapters\PostalAdapter;
 use Sendportal\Base\Interfaces\MailAdapterInterface;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
@@ -57,13 +57,13 @@ class MailAdapterFactory
      */
     private function resolve(EmailService $emailService): MailAdapterInterface
     {
-        if (!$emailServiceType = EmailServiceType::resolve($emailService->type_id)) {
-            throw new InvalidArgumentException("Unable to resolve mail provider type from ID [$emailService->type_id].");
+        if (! $emailServiceType = EmailServiceType::resolve($emailService->type_id)) {
+            throw new InvalidArgumentException("Unable to resolve mail provider type from ID [{$emailService->type_id}].");
         }
 
         $adapterClass = self::$adapterMap[$emailService->type_id] ?? null;
 
-        if (!$adapterClass) {
+        if (! $adapterClass) {
             throw new InvalidArgumentException("Mail adapter type [{$emailServiceType}] is not supported.");
         }
 

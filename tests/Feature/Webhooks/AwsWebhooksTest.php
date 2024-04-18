@@ -134,8 +134,8 @@ class AwsWebhooksTest extends TestCase
             'Message' => json_encode(
                 [
                     $type => [
-                            'timestamp' => now()->timestamp,
-                        ] + $properties,
+                        'timestamp' => now()->timestamp,
+                    ] + $properties,
                     'eventType' => $type,
                     'mail' => [
                         'messageId' => $messageId,

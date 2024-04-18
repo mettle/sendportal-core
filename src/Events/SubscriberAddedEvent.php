@@ -11,7 +11,9 @@ use Sendportal\Base\Models\Subscriber;
 
 class SubscriberAddedEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var Subscriber */
     public $subscriber;

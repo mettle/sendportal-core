@@ -26,7 +26,7 @@ class MessageTrackingOptionsTest extends TestCase
     public function open_tracking_can_be_turned_off()
     {
         // given
-        $trackingOptions = (new MessageTrackingOptions)->setIsOpenTracking(false);
+        $trackingOptions = (new MessageTrackingOptions())->setIsOpenTracking(false);
 
         // then
         self::assertFalse($trackingOptions->isOpenTracking());
@@ -36,7 +36,7 @@ class MessageTrackingOptionsTest extends TestCase
     public function click_tracking_can_be_turned_off()
     {
         // given
-        $trackingOptions = (new MessageTrackingOptions)->setIsClickTracking(false);
+        $trackingOptions = (new MessageTrackingOptions())->setIsClickTracking(false);
 
         // then
         self::assertFalse($trackingOptions->isClickTracking());
@@ -46,7 +46,7 @@ class MessageTrackingOptionsTest extends TestCase
     public function tracking_can_be_turned_off_entirely()
     {
         // given
-        $trackingOptions = (new MessageTrackingOptions)->disable();
+        $trackingOptions = (new MessageTrackingOptions())->disable();
 
         // then
         $this->assertFalse($trackingOptions->isClickTracking());

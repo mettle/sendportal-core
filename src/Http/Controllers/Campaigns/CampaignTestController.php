@@ -28,7 +28,7 @@ class CampaignTestController extends Controller
     {
         $messageId = $this->dispatchTestMessage->handle(Sendportal::currentWorkspaceId(), $campaignId, $request->get('recipient_email'));
 
-        if (!$messageId) {
+        if (! $messageId) {
             return redirect()->route('sendportal.campaigns.preview', $campaignId)
                 ->withInput()
                 ->with(['error', __('Failed to dispatch test email.')]);

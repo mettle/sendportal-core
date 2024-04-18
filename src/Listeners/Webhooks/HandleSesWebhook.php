@@ -40,7 +40,7 @@ class HandleSesWebhook implements ShouldQueue
 
         $event = json_decode(Arr::get($event->payload, 'Message'), true);
 
-        if (!$event) {
+        if (! $event) {
             return;
         }
 
@@ -58,12 +58,12 @@ class HandleSesWebhook implements ShouldQueue
         /** @var string|null $eventType */
         $eventType = $event['eventType'] ?? null;
 
-        if (!$eventType || !$messageId) {
+        if (! $eventType || ! $messageId) {
             return;
         }
-        
+
         $eventType = strtolower($eventType);
-        
+
         // https://docs.aws.amazon.com/ses/latest/DeveloperGuide/event-publishing-retrieving-sns-examples.html#event-publishing-retrieving-sns-open
         // Bounce, Complaint, Message, Send Email, Reject Event, Open Event, Click Event
         switch ($eventType) {

@@ -15,8 +15,8 @@ use Tests\TestCase;
 
 class MergeSubjectTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function the_email_tag_is_replaced_with_the_subscriber_email()

@@ -1,4 +1,6 @@
-<?php namespace Sendportal\Base\Interfaces;
+<?php
+
+namespace Sendportal\Base\Interfaces;
 
 interface BaseEloquentInterface
 {

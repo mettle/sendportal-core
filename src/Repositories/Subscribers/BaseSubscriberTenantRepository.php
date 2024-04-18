@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Sendportal\Base\Repositories\Subscribers;

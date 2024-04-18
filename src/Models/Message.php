@@ -66,7 +66,7 @@ class Message extends BaseModel
     protected $guarded = [];
 
     /** @var array */
-    public function casts():array
+    public function casts(): array
     {
         return [
             'queued_at' => 'datetime',

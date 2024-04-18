@@ -13,8 +13,8 @@ use Tests\TestCase;
 
 class TemplatesControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function a_logged_in_user_can_see_template_index()
@@ -166,7 +166,7 @@ class TemplatesControllerTest extends TestCase
 
         // when
         $namePostResponse = $this->put(route('sendportal.templates.update', $template->id), $namePostData);
-        
+
         // then
         $namePostResponse->assertSessionHasErrors('content');
 

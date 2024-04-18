@@ -20,7 +20,7 @@ class MessageTrackingOptions
         // NOTE(david): at the moment only campaigns have the ability to turn off tracking, so we start
         // by creating a default set of options that has the tracking on, and only look to adjust that
         // if the message we've got is for a campaign.
-        $trackingOptions = new static;
+        $trackingOptions = new static();
 
         if ($message->source && get_class($message->source) === Campaign::class) {
             return static::fromCampaign($message->source);
@@ -31,7 +31,7 @@ class MessageTrackingOptions
 
     public static function fromCampaign(Campaign $campaign): MessageTrackingOptions
     {
-        return (new static)
+        return (new static())
             ->setIsOpenTracking($campaign->is_open_tracking ?? true)
             ->setIsClickTracking($campaign->is_click_tracking ?? true);
     }

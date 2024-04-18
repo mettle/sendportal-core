@@ -33,11 +33,11 @@ class EmailWebhookService
         /** @var Message $message */
         $message = Message::where('message_id', $messageId)->first();
 
-        if (!$message) {
+        if (! $message) {
             return;
         }
 
-        if (!$message->opened_at) {
+        if (! $message->opened_at) {
             $message->opened_at = $timestamp;
             $message->ip = $ipAddress;
         }
@@ -60,7 +60,7 @@ class EmailWebhookService
         /* @var Message $message */
         $message = Message::where('message_id', $messageId)->first();
 
-        if (!$message) {
+        if (! $message) {
             return;
         }
 
@@ -69,13 +69,13 @@ class EmailWebhookService
             return;
         }
 
-        if (!$message->clicked_at) {
+        if (! $message->clicked_at) {
             $message->clicked_at = $timestamp;
         }
 
         // Since you have to open a campaign to click a link inside it, we'll consider those clicks as opens
         // even if the tracking image didn't load.
-        if (!$message->opened_at) {
+        if (! $message->opened_at) {
             ++$message->open_count;
             $message->opened_at = $timestamp;
         }
@@ -111,11 +111,11 @@ class EmailWebhookService
         /* @var Message $message */
         $message = Message::where('message_id', $messageId)->first();
 
-        if (!$message) {
+        if (! $message) {
             return;
         }
 
-        if (!$message->complained_at) {
+        if (! $message->complained_at) {
             $message->unsubscribed_at = $timestamp;
             $message->save();
         }
@@ -128,11 +128,11 @@ class EmailWebhookService
         /* @var Message $message */
         $message = Message::where('message_id', $messageId)->first();
 
-        if (!$message) {
+        if (! $message) {
             return;
         }
 
-        if (!$message->bounced_at) {
+        if (! $message->bounced_at) {
             $message->bounced_at = $timestamp;
             $message->save();
         }
@@ -145,7 +145,7 @@ class EmailWebhookService
         /* @var Message $message */
         $message = Message::where('message_id', $messageId)->first();
 
-        if (!$message) {
+        if (! $message) {
             return;
         }
 
@@ -165,7 +165,7 @@ class EmailWebhookService
     {
         $subscriberId = DB::table('sendportal_messages')->where('message_id', $messageId)->value('subscriber_id');
 
-        if (!$subscriberId) {
+        if (! $subscriberId) {
             return;
         }
 
@@ -190,7 +190,7 @@ class EmailWebhookService
 
         $automationSchedule = DB::table('sendportal_automation_schedules')->where('id', $message->source_id)->first();
 
-        if (!$automationSchedule) {
+        if (! $automationSchedule) {
             throw new RuntimeException('Unable to find schedule matching message source id=' . $message->source_id);
         }
 

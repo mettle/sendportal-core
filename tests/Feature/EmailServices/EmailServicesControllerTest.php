@@ -15,8 +15,8 @@ use Tests\TestCase;
 
 class EmailServicesControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function the_provider_create_form_is_accessible_to_authenticated_users()

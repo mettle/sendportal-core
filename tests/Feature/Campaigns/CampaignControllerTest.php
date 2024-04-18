@@ -15,8 +15,8 @@ use Tests\TestCase;
 
 class CampaignControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function the_index_of_campaigns_is_accessible_to_authenticated_users()

@@ -11,8 +11,8 @@ use Tests\TestCase;
 
 class TagSubscribersControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function the_index_gets_tag_subscribers()

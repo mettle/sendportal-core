@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Http\Controllers\Api\Webhooks;
 
-use Illuminate\Support\Arr;
-
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Events\Webhooks\PostalWebhookReceived;
@@ -20,7 +18,7 @@ class PostalWebhooksController extends Controller
         Log::info('Postal webhook received');
 
         event(new PostalWebhookReceived($payload));
-        
+
 
         return response('OK');
     }

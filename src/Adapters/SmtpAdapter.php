@@ -53,7 +53,7 @@ class SmtpAdapter extends BaseMailAdapter
 
         $encryption = Arr::get($this->config, 'encryption');
 
-        $scheme = !is_null($encryption) && $encryption === 'tls'
+        $scheme = ! is_null($encryption) && $encryption === 'tls'
             ? ((Arr::get($this->config, 'port') == 465) ? 'smtps' : 'smtp')
             : '';
 

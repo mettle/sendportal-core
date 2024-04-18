@@ -14,8 +14,8 @@ use Tests\TestCase;
 
 class SubscribersControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function the_subscribers_index_is_accessible_to_authorised_users()

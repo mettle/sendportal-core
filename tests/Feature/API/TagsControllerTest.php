@@ -13,8 +13,8 @@ use Tests\TestCase;
 
 class TagsControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function a_list_of_a_workspaces_tags_can_be_retrieved()

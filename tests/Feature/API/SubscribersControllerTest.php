@@ -67,9 +67,9 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $request = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->email(),
         ];
 
         $response = $this->post($route, $request);
@@ -155,8 +155,8 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $updateData = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $subscriber->email,
         ];
 
@@ -181,9 +181,9 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $request = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->email(),
             'tags' => [$tag->id]
         ];
 
@@ -213,8 +213,8 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $request = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $subscriber->email,
             'tags' => [$tag2->id]
         ];

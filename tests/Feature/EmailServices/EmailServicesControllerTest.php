@@ -33,7 +33,7 @@ class EmailServicesControllerTest extends TestCase
     {
         // given
         $emailServiceStoreData = [
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
             'type_id' => EmailServiceType::POSTMARK,
             'settings' => [
                 'key' => Str::random()
@@ -73,7 +73,7 @@ class EmailServicesControllerTest extends TestCase
         $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
 
         $emailServiceUpdateData = [
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
             'settings' => [
                 'key' => Str::random()
             ]
@@ -112,7 +112,7 @@ class EmailServicesControllerTest extends TestCase
     {
         // given
         $emailServiceStoreData = [
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
             'type_id' => EmailServiceType::POSTMARK,
         ];
 

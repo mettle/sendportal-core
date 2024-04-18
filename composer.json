@@ -6,23 +6,23 @@
     "license": "MIT",
     "authors": [],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^8.2|^8.3",
         "ext-json": "*",
-        "aws/aws-sdk-php-laravel": "^3.6",
-        "doctrine/dbal": "^3.0",
-        "illuminate/support": "^8.0",
+        "aws/aws-sdk-php-laravel": "^3.9",
+        "doctrine/dbal": "^4.0",
+        "illuminate/support": "^10.0|^11.0",
         "kriswallsmith/buzz": "^1.2",
-        "mailgun/mailgun-php": "^3.2",
-        "mailjet/mailjet-apiv3-php": "^1.5",
-        "nyholm/psr7": "^1.3",
-        "rap2hpoutre/fast-excel": "^2.3",
-        "sendgrid/sendgrid": "^7.9",
-        "wildbit/postmark-php": "^4.0",
-        "postal/postal": "^1.0"
+        "mailgun/mailgun-php": "^4.2",
+        "mailjet/mailjet-apiv3-php": "^1.6",
+        "nyholm/psr7": "^1.8",
+        "postal/postal": "^2.0",
+        "rap2hpoutre/fast-excel": "^5.4",
+        "sendgrid/sendgrid": "^8.1",
+        "wildbit/postmark-php": "^6.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0",
-        "phpunit/phpunit": "^9.0",
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0",
         "roave/security-advisories": "dev-master"
     },
     "autoload": {
@@ -40,10 +40,12 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {

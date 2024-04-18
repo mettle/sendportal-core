@@ -60,8 +60,8 @@ class TemplatesControllerTest extends TestCase
     {
         // given
         $data = [
-            'name' => $this->faker->name,
-            'content' => $this->faker->sentence
+            'name' => $this->faker->name(),
+            'content' => $this->faker->sentence()
         ];
 
         // when
@@ -82,11 +82,11 @@ class TemplatesControllerTest extends TestCase
     {
         // given
         $namePostData = [
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
         ];
 
         $contentPostData = [
-            'content' => $this->faker->sentence
+            'content' => $this->faker->sentence()
         ];
 
         // when
@@ -129,8 +129,8 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $data = [
-            'name' => $this->faker->name,
-            'content' => $this->faker->sentence
+            'name' => $this->faker->name(),
+            'content' => $this->faker->sentence()
         ];
 
         // when
@@ -157,11 +157,11 @@ class TemplatesControllerTest extends TestCase
         ]);
 
         $namePostData = [
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
         ];
 
         $contentPostData = [
-            'content' => $this->faker->sentence
+            'content' => $this->faker->sentence()
         ];
 
         // when

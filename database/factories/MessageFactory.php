@@ -18,17 +18,17 @@ class MessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'hash' => $this->faker->uuid,
+            'hash' => $this->faker->uuid(),
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'subscriber_id' => Subscriber::factory(),
             'source_type' => Campaign::class,
             'source_id' => Campaign::factory(),
-            'recipient_email' => $this->faker->email,
+            'recipient_email' => $this->faker->email(),
             'subject' => $this->faker->sentence(3),
-            'from_name' => $this->faker->name,
+            'from_name' => $this->faker->name(),
             'from_email' => 'testing@sendportal.test',
             'message_id' => null,
-            'ip' => $this->faker->ipv4,
+            'ip' => $this->faker->ipv4(),
             'open_count' => 0,
             'click_count' => 0,
             'queued_at' => null,

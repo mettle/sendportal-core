@@ -16,7 +16,7 @@ class AdjustTemplateContent extends UpgradeMigration
         $templates = $this->getTableName('templates');
 
         Schema::table($templates, function (Blueprint $table) {
-            $table->longText('content')->change();
+            $table->longText('content')->nullable()->change();
         });
     }
 }

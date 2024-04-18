@@ -57,12 +57,12 @@ class CampaignsControllerTest extends TestCase
         $emailService = $this->createEmailService();
 
         $request = [
-            'name' => $this->faker->colorName,
-            'subject' => $this->faker->word,
-            'from_name' => $this->faker->word,
-            'from_email' => $this->faker->safeEmail,
+            'name' => $this->faker->colorName(),
+            'subject' => $this->faker->word(),
+            'from_name' => $this->faker->word(),
+            'from_email' => $this->faker->safeEmail(),
             'email_service_id' => $emailService->id,
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'send_to_all' => 1,
             'scheduled_at' => now(),
         ];
@@ -89,12 +89,12 @@ class CampaignsControllerTest extends TestCase
         ]);
 
         $request = [
-            'name' => $this->faker->word,
-            'subject' => $this->faker->word,
-            'from_name' => $this->faker->word,
-            'from_email' => $this->faker->safeEmail,
+            'name' => $this->faker->word(),
+            'subject' => $this->faker->word(),
+            'from_name' => $this->faker->word(),
+            'from_email' => $this->faker->safeEmail(),
             'email_service_id' => $emailService->id,
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'send_to_all' => 1,
             'scheduled_at' => now(),
         ];
@@ -118,12 +118,12 @@ class CampaignsControllerTest extends TestCase
         $campaign = $this->createCampaign($emailService);
 
         $request = [
-            'name' => $this->faker->word,
-            'subject' => $this->faker->word,
-            'from_name' => $this->faker->word,
-            'from_email' => $this->faker->safeEmail,
+            'name' => $this->faker->word(),
+            'subject' => $this->faker->word(),
+            'from_name' => $this->faker->word(),
+            'from_email' => $this->faker->safeEmail(),
             'email_service_id' => $emailService->id,
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'send_to_all' => 1,
             'scheduled_at' => now(),
         ];

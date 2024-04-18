@@ -63,7 +63,7 @@ class SendgridWebhooksTest extends TestCase
         self::assertEquals(0, $message->click_count);
         self::assertNull($message->clicked_at);
 
-        $url = ['url' => $this->faker->url];
+        $url = ['url' => $this->faker->url()];
         $webhook = $this->resolveWebhook('click', $message->message_id, $url);
 
         // when

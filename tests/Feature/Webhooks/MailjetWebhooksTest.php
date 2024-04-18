@@ -92,7 +92,7 @@ class MailjetWebhooksTest extends TestCase
             'MessageID' => $message->message_id,
             'Message_GUID' => '1ab23cd4-e567-8901-2345-6789f0gh1i2j',
             'email' => 'api@mailjet.com',
-            'url' => $this->faker->url,
+            'url' => $this->faker->url(),
             'ip' => '127.0.0.1',
             'geo' => 'FR',
             'agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36'

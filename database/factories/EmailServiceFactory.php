@@ -17,7 +17,7 @@ class EmailServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => ucwords($this->faker->word),
+            'name' => ucwords($this->faker->word()),
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'type_id' => $this->faker->randomElement(EmailServiceType::pluck('id')),
             'settings' => ['foo' => 'bar'],

@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use RuntimeException;
 use Sendportal\Base\Events\Webhooks\PostalWebhookReceived;
 use Sendportal\Base\Services\Webhooks\EmailWebhookService;
@@ -28,7 +27,6 @@ class HandlePostalWebhook implements ShouldQueue
 
     public function handle(PostalWebhookReceived $event): void
     {
-     
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
@@ -51,11 +49,11 @@ class HandlePostalWebhook implements ShouldQueue
                 $messageId = $this->extractMessageIdBounced($event->payload);
                 $this->handleBounce($messageId, $event->payload);
                 break;
-                
+
             case 'MessageDeliveryFailed':
                 $this->handleFailed($messageId, $event->payload);
                 break;
-                
+
             case 'MessageHeld':
                 $this->handleHeld($messageId, $event->payload);
                 break;
@@ -110,7 +108,7 @@ class HandlePostalWebhook implements ShouldQueue
             $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
         }
     }
-    
+
     private function handleHeld(string $messageId, array $content): void
     {
         $severity = Arr::get($content, 'payload.status');
@@ -128,7 +126,7 @@ class HandlePostalWebhook implements ShouldQueue
     {
         return Arr::get($payload, 'event');
     }
-    
+
     private function extractMessageIdBounced(array $payload): string
     {
         $messageId = Arr::get($payload, 'payload.original_message.id');
@@ -147,12 +145,12 @@ class HandlePostalWebhook implements ShouldQueue
     {
         return Carbon::createFromTimestamp(Arr::get($payload, 'payload.bounce.timestamp'));
     }
-    
+
     private function extractTimestampFailed($payload): Carbon
     {
         return Carbon::createFromTimestamp(Arr::get($payload, 'payload.timestamp'));
     }
-    
+
     private function extractTimestamp($payload): Carbon
     {
         return Carbon::createFromTimestamp(Arr::get($payload, 'timestamp'));

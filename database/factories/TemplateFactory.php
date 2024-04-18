@@ -12,7 +12,7 @@ class TemplateFactory extends Factory
 {
     /** @var string */
     protected $model = Template::class;
-    
+
     public function definition(): array
     {
         return [

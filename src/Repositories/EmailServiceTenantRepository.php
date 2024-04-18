@@ -7,7 +7,6 @@ use Sendportal\Base\Models\EmailServiceType;
 
 class EmailServiceTenantRepository extends BaseTenantRepository
 {
-
     /**
      * @var string
      */

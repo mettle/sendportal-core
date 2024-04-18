@@ -14,7 +14,7 @@ class CanAccessSubscriber implements Rule
     {
         $subscriber = Subscriber::find($value);
 
-        if (!$subscriber) {
+        if (! $subscriber) {
             return false;
         }
 

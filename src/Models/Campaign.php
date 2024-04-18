@@ -170,7 +170,7 @@ class Campaign extends BaseModel
     {
         return Subscriber::where('workspace_id', $this->workspace_id)
             ->whereNull('unsubscribed_at')
-            ->when(!$this->send_to_all, function (Builder $query) {
+            ->when(! $this->send_to_all, function (Builder $query) {
                 $query->whereHas('tags', function (Builder $subQuery) {
                     $subQuery->whereIn('sendportal_tags.id', $this->tags->pluck('id'));
                 });

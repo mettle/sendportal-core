@@ -16,8 +16,8 @@ use Tests\TestCase;
 
 class MergeContentTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function campaign_content_can_be_merged()

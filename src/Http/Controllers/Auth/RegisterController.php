@@ -21,8 +21,8 @@ use Sendportal\Base\Traits\ChecksInvitations;
 
 class RegisterController extends Controller
 {
-    use RegistersUsers,
-        ChecksInvitations;
+    use RegistersUsers;
+    use ChecksInvitations;
 
     /** @var AcceptInvitation */
     private $acceptInvitation;

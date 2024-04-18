@@ -9,7 +9,6 @@ use Sendportal\Base\Services\ResolverService;
 
 class ResolverProvider extends ServiceProvider
 {
-
     /**
      * Register any application services.
      *

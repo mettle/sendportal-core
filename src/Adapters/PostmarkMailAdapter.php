@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sendportal\Base\Adapters;
 
 use Illuminate\Support\Arr;
-use Postmark\Models\DynamicResponseModel;
 use Postmark\Models\PostmarkResponse;
 use Postmark\PostmarkClient;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;

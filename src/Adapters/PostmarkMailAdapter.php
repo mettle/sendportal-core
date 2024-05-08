@@ -6,6 +6,7 @@ namespace Sendportal\Base\Adapters;
 
 use Illuminate\Support\Arr;
 use Postmark\Models\DynamicResponseModel;
+use Postmark\Models\PostmarkResponse;
 use Postmark\PostmarkClient;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 
@@ -48,8 +49,8 @@ class PostmarkMailAdapter extends BaseMailAdapter
         return $this->client;
     }
 
-    protected function resolveMessageId(DynamicResponseModel $result): string
+    protected function resolveMessageId(PostmarkResponse $result): string
     {
-        return (string)$result->__get('MessageID');
+        return $result->getMessageID();
     }
 }

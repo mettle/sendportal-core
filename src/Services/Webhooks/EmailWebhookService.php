@@ -140,6 +140,43 @@ class EmailWebhookService
         $this->unsubscribe($messageId, UnsubscribeEventType::BOUNCE);
     }
 
+    public function handleUnsubscribe($messageId, $timestamp): void
+    {
+
+        /* @var Message $message */
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
+            return;
+        }
+
+        $message->unsubscribed_at = $timestamp;
+        $message->save();
+
+
+        $this->unsubscribe($messageId, UnsubscribeEventType::MANUAL_BY_SUBSCRIBER);
+    }
+
+    public function handleResubscribe($messageId): void
+    {
+
+        /* @var Message $message */
+        $message = Message::where('message_id', $messageId)->first();
+
+        if (!$message) {
+            return;
+        }
+
+        $message->unsubscribed_at = 'NULL';
+        $message->save();
+
+
+        $this->resubscribe($messageId);
+    }
+
+
+
+
     public function handleFailure($messageId, $severity, $description, $timestamp): void
     {
         /* @var Message $message */
@@ -172,6 +209,24 @@ class EmailWebhookService
         DB::table('sendportal_subscribers')->where('id', $subscriberId)->update([
             'unsubscribed_at' => now(),
             'unsubscribe_event_id' => $typeId,
+            'updated_at' => now()
+        ]);
+    }
+
+    /**
+     * Resubscribe a subscriber.
+     */
+    protected function resubscribe(string $messageId): void
+    {
+        $subscriberId = DB::table('sendportal_messages')->where('message_id', $messageId)->value('subscriber_id');
+
+        if (!$subscriberId) {
+            return;
+        }
+
+        DB::table('sendportal_subscribers')->where('id', $subscriberId)->update([
+            'unsubscribed_at' => NULL,
+            'unsubscribe_event_id' => NULL,
             'updated_at' => now()
         ]);
     }

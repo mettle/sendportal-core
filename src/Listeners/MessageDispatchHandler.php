@@ -6,11 +6,15 @@ namespace Sendportal\Base\Listeners;
 
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Sendportal\Base\Events\MessageDispatchEvent;
+use Sendportal\Base\Exceptions\MessageLimitReachedException;
 use Sendportal\Base\Services\Messages\DispatchMessage;
 
 class MessageDispatchHandler implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /** @var string */
     public $queue = 'sendportal-message-dispatch';
 
@@ -27,6 +31,10 @@ class MessageDispatchHandler implements ShouldQueue
      */
     public function handle(MessageDispatchEvent $event): void
     {
-        $this->dispatchMessage->handle($event->message);
+        try {
+            $this->dispatchMessage->handle($event->message);
+        } catch (MessageLimitReachedException $e) {
+            $this->release();
+        }
     }
 }

@@ -47,7 +47,7 @@ abstract class BaseSubscriberTenantRepository extends BaseTenantRepository imple
      */
     public function syncTags(Subscriber $subscriber, array $tags = [])
     {
-        return $subscriber->tags()->sync($tags);
+        return $subscriber->tags()->sync($tags, false);
     }
 
     /**

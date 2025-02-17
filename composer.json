@@ -10,7 +10,7 @@
         "ext-json": "*",
         "aws/aws-sdk-php-laravel": "^3.9",
         "doctrine/dbal": "^4.0",
-        "illuminate/support": "^10.0|^11.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
         "kriswallsmith/buzz": "^1.2",
         "mailgun/mailgun-php": "^4.2",
         "mailjet/mailjet-apiv3-php": "^1.6",
@@ -21,7 +21,7 @@
         "wildbit/postmark-php": "^6.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0",
+        "orchestra/testbench": "^9.0|^10.0",
         "phpunit/phpunit": "^11.0",
         "roave/security-advisories": "dev-master"
     },

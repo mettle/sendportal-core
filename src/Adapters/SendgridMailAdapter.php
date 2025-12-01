@@ -57,8 +57,9 @@ class SendgridMailAdapter extends BaseMailAdapter
     protected function resolveMessageId(SendgridResponse $response): string
     {
         foreach ($response->headers() as $header) {
-            if (Str::startsWith($header, 'X-Message-Id:')) {
-                return str_replace('X-Message-Id: ', '', $header);
+            $header = strtolower($header);
+            if (Str::startsWith($header, strtolower('X-Message-Id:'))) {
+                return str_replace(strtolower('X-Message-Id: '), '', $header);
             }
         }
 

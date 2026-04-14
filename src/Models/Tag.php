@@ -42,11 +42,6 @@ class Tag extends BaseModel
         'name',
     ];
 
-    /** @var array */
-    protected $withCount = [
-        'subscribers'
-    ];
-
     public function campaigns(): BelongsToMany
     {
         return $this->belongsToMany(Campaign::class, 'sendportal_campaign_tag');

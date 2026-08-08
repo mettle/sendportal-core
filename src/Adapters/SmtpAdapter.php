@@ -4,8 +4,6 @@ namespace Sendportal\Base\Adapters;
 
 use Illuminate\Support\Arr;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
@@ -15,32 +13,23 @@ use Symfony\Component\Mime\Email;
 
 class SmtpAdapter extends BaseMailAdapter
 {
-    /** @var Mailer */
-    protected $client;
-
     /** @var EsmtpTransport */
     protected $transport;
 
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
-        try {
-            $result = $this->resolveClient()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail));
-        } catch (TransportException $e) {
-            return $this->resolveMessageId(0);
-        }
+        // Send through the transport rather than the Mailer: Mailer::send() returns
+        // void, so the message id was previously always '-1'. The transport hands
+        // back a SentMessage carrying the real id.
+        //
+        // A TransportException is deliberately not caught here. Swallowing it
+        // returned '-1', which every caller reads as a truthy success, so failed
+        // sends were recorded as delivered. The other adapters let it propagate.
+        $sentMessage = $this->resolveTransport()->send(
+            $this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail)
+        );
 
-        return $this->resolveMessageId($result);
-    }
-
-    protected function resolveClient(): Mailer
-    {
-        if ($this->client) {
-            return $this->client;
-        }
-
-        $this->client = new Mailer($this->resolveTransport());
-
-        return $this->client;
+        return $this->resolveMessageId($sentMessage);
     }
 
     protected function resolveTransport(): EsmtpTransport

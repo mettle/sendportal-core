@@ -6,6 +6,7 @@ namespace Tests\Unit\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\MessageFailure;
@@ -16,7 +17,7 @@ class SubscriberTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_has_many_messages()
     {
         // given
@@ -40,7 +41,7 @@ class SubscriberTest extends TestCase
         static::assertEquals($campaignTwo->id, $messageTwo->source_id);
     }
 
-    /** @test */
+    #[Test]
     public function deleting_a_subscriber_also_deletes_its_messages_and_any_failures_associated_to_them()
     {
         // given

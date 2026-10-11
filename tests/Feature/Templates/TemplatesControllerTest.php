@@ -6,6 +6,7 @@ namespace Tests\Feature\Templates;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Template;
@@ -16,7 +17,7 @@ class TemplatesControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_can_see_template_index()
     {
         // when
@@ -26,7 +27,7 @@ class TemplatesControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function the_index_lists_existing_templates()
     {
         // given
@@ -42,7 +43,7 @@ class TemplatesControllerTest extends TestCase
         $response->assertSee($template->name);
     }
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_can_see_the_create_form()
     {
         // when
@@ -55,7 +56,7 @@ class TemplatesControllerTest extends TestCase
         $response->assertSee('Content');
     }
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_can_store_a_new_template()
     {
         // given
@@ -77,7 +78,7 @@ class TemplatesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function storing_is_validated()
     {
         // given
@@ -102,7 +103,7 @@ class TemplatesControllerTest extends TestCase
         $contentPostResponse->assertSessionHasErrors('name');
     }
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_can_see_the_edit_form()
     {
         // given
@@ -120,7 +121,7 @@ class TemplatesControllerTest extends TestCase
         $response->assertSee($template->content);
     }
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_can_update_a_template()
     {
         // given
@@ -148,7 +149,7 @@ class TemplatesControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_templates', $data + ['id' => $template->id, 'workspace_id' => Sendportal::currentWorkspaceId()]);
     }
 
-    /** @test */
+    #[Test]
     public function updates_are_validated()
     {
         // given
@@ -177,7 +178,7 @@ class TemplatesControllerTest extends TestCase
         $contentPostResponse->assertSessionHasErrors('name');
     }
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_can_delete_a_template()
     {
         // given
@@ -197,7 +198,7 @@ class TemplatesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_logged_in_user_cannot_delete_a_template_if_it_is_used()
     {
         // given
@@ -223,7 +224,7 @@ class TemplatesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_template_name_must_be_unique_for_a_workspace()
     {
         // given

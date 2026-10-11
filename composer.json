@@ -6,11 +6,11 @@
     "license": "MIT",
     "authors": [],
     "require": {
-        "php": "^8.2|^8.3",
+        "php": "^8.3",
         "ext-json": "*",
         "aws/aws-sdk-php-laravel": "^3.9",
         "doctrine/dbal": "^4.0",
-        "illuminate/support": "^10.0|^11.0",
+        "illuminate/support": "^12.0|^13.0",
         "kriswallsmith/buzz": "^1.2",
         "mailgun/mailgun-php": "^4.2",
         "mailjet/mailjet-apiv3-php": "^1.6",
@@ -21,8 +21,8 @@
         "wildbit/postmark-php": "^6.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0",
-        "phpunit/phpunit": "^11.0",
+        "orchestra/testbench": "^10.0|^11.0",
+        "phpunit/phpunit": "^11.5.50|^12.5.8",
         "roave/security-advisories": "dev-master"
     },
     "autoload": {

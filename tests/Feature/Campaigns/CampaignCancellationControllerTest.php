@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Campaigns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
@@ -17,7 +18,7 @@ class CampaignCancellationControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function the_confirm_cancel_endpoint_returns_the_confirm_cancel_view()
     {
         $campaign = Campaign::factory()->queued()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -27,7 +28,7 @@ class CampaignCancellationControllerTest extends TestCase
         $response->assertViewIs('sendportal::campaigns.cancel');
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_endpoint_cancels_a_queued_campaign()
     {
         $campaign = Campaign::factory()->queued()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -39,7 +40,7 @@ class CampaignCancellationControllerTest extends TestCase
         static::assertEquals(CampaignStatus::STATUS_CANCELLED, $campaign->refresh()->status_id);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_endpoint_cancels_a_sending_campaign()
     {
         $campaign = Campaign::factory()->sending()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -50,7 +51,7 @@ class CampaignCancellationControllerTest extends TestCase
         static::assertEquals(CampaignStatus::STATUS_CANCELLED, $campaign->refresh()->status_id);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_endpoint_does_not_allow_a_draft_campaign_to_be_cancelled()
     {
         $campaign = Campaign::factory()->draft()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -62,7 +63,7 @@ class CampaignCancellationControllerTest extends TestCase
         static::assertEquals(CampaignStatus::STATUS_DRAFT, $campaign->refresh()->status_id);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_endpoint_does_not_allow_a_sent_campaign_to_be_cancelled()
     {
         $campaign = Campaign::factory()->sent()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -74,7 +75,7 @@ class CampaignCancellationControllerTest extends TestCase
         static::assertEquals(CampaignStatus::STATUS_SENT, $campaign->refresh()->status_id);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_endpoint_does_not_allow_a_cancelled_campaign_to_be_cancelled()
     {
         $campaign = Campaign::factory()->cancelled()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);
@@ -86,7 +87,7 @@ class CampaignCancellationControllerTest extends TestCase
         static::assertEquals(CampaignStatus::STATUS_CANCELLED, $campaign->refresh()->status_id);
     }
 
-    /** @test */
+    #[Test]
     public function when_a_sending_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
     {
         $campaign = Campaign::factory()->sending()->create([
@@ -120,7 +121,7 @@ class CampaignCancellationControllerTest extends TestCase
         $response->assertSessionHas('success', "The campaign was cancelled whilst being processed (~1/2 dispatched).");
     }
 
-    /** @test */
+    #[Test]
     public function when_a_sending_not_send_to_all_campaign_is_cancelled_the_user_is_told_how_many_messages_were_dispatched()
     {
         $tag = Tag::factory()->create([
@@ -162,7 +163,7 @@ class CampaignCancellationControllerTest extends TestCase
         $response->assertSessionHas('success', "The campaign was cancelled whilst being processed (~1/2 dispatched).");
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_that_save_as_draft_cannot_be_cancelled_until_every_draft_message_has_been_created()
     {
         $campaign = Campaign::factory()->sending()->create([
@@ -192,7 +193,7 @@ class CampaignCancellationControllerTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_that_save_as_draft_can_be_cancelled_if_every_draft_message_has_been_created()
     {
         $campaign = Campaign::factory()->sending()->create([

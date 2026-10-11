@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Factories;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Adapters\MailgunMailAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
@@ -16,7 +17,7 @@ use Tests\TestCase;
 
 class MailAdapterFactoryTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function can_build_a_mailgun_adapter()
     {
         // given
@@ -30,7 +31,7 @@ class MailAdapterFactoryTest extends TestCase
         self::assertEquals(MailgunMailAdapter::class, get_class($adapter));
     }
 
-    /** @test */
+    #[Test]
     public function can_build_a_sendgrid_adapter()
     {
         // given
@@ -44,7 +45,7 @@ class MailAdapterFactoryTest extends TestCase
         self::assertEquals(SendgridMailAdapter::class, get_class($adapter));
     }
 
-    /** @test */
+    #[Test]
     public function can_build_a_postmark_adapter()
     {
         // given
@@ -58,7 +59,7 @@ class MailAdapterFactoryTest extends TestCase
         self::assertEquals(PostmarkMailAdapter::class, get_class($adapter));
     }
 
-    /** @test */
+    #[Test]
     public function can_build_an_ses_adapter()
     {
         // given
@@ -72,7 +73,7 @@ class MailAdapterFactoryTest extends TestCase
         self::assertEquals(SesMailAdapter::class, get_class($adapter));
     }
 
-    /** @test */
+    #[Test]
     public function an_exception_is_thrown_when_building_an_unknown_adapater()
     {
         // given

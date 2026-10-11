@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Http\Requests\EmailServiceRequest;
 use Sendportal\Base\Models\EmailServiceType;
 use Tests\TestCase;
@@ -26,7 +27,7 @@ class EmailServiceRequestTest extends TestCase
         $this->request = new EmailServiceRequest();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_the_name_of_the_email_service_is_not_provided()
     {
         // given
@@ -41,7 +42,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertTrue($validator->getMessageBag()->has('name'));
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_the_id_of_the_email_service_is_not_provided()
     {
         // given
@@ -57,7 +58,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_key_or_secret_or_region_or_configuration_set_name_are_not_provided_for_the_ses_email_service()
     {
         // given
@@ -77,7 +78,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(4, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_pass_validation_for_the_ses_email_service()
     {
         // given
@@ -98,7 +99,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertTrue($validator->passes());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_the_key_is_not_provided_for_the_sendgrid_email_service()
     {
         // given
@@ -115,7 +116,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_pass_validation_for_the_sendgrid_email_service()
     {
         // given
@@ -133,7 +134,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertTrue($validator->passes());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_the_key_is_not_provided_for_the_postmark_email_service()
     {
         // given
@@ -150,7 +151,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_pass_validation_for_the_postmark_email_service()
     {
         // given
@@ -168,7 +169,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertTrue($validator->passes());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_key_or_domain_or_zone_are_not_provided_for_the_mailgun_email_service()
     {
         // given
@@ -187,7 +188,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(3, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailgun_email_service()
     {
         // given
@@ -209,7 +210,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_pass_validation_for_the_mailgun_email_service()
     {
         // given
@@ -229,7 +230,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertTrue($validator->passes());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_key_or_secret_or_zone_are_not_provided_for_the_mailjet_email_service()
     {
         // given
@@ -248,7 +249,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(3, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fail_validation_if_the_provided_zone_is_not_valid_for_the_mailjet_email_service()
     {
         // given
@@ -270,7 +271,7 @@ class EmailServiceRequestTest extends TestCase
         self::assertEquals(1, $validator->getMessageBag()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_pass_validation_for_the_mailjet_email_service()
     {
         // given

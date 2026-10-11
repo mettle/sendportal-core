@@ -6,6 +6,7 @@ namespace Tests\Feature\Tags;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
@@ -16,7 +17,7 @@ class TagsControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function the_index_of_tags_is_accessible_to_authenticated_users()
     {
         // given
@@ -29,7 +30,7 @@ class TagsControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function the_tag_create_form_is_accessible_to_authenticated_users()
     {
         // when
@@ -39,7 +40,7 @@ class TagsControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function new_tags_can_be_created_by_authenticated_users()
     {
         // given
@@ -59,7 +60,7 @@ class TagsControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_tag_edit_view_is_accessible_by_authenticated_users()
     {
         // given
@@ -72,7 +73,7 @@ class TagsControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function a_tag_is_updateable_by_an_authenticated_user()
     {
         // given
@@ -94,7 +95,7 @@ class TagsControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function subscribers_are_not_synced_when_the_tag_is_updated()
     {
         // given
@@ -122,7 +123,7 @@ class TagsControllerTest extends TestCase
     }
 
 
-    /* @test */
+    #[Test]
     public function a_tag_can_be_deleted()
     {
         // given
@@ -140,7 +141,7 @@ class TagsControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_tag_name_must_be_unique_for_a_workspace()
     {
         // given

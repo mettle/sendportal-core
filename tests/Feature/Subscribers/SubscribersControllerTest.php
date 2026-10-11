@@ -6,6 +6,7 @@ namespace Tests\Feature\Subscribers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
@@ -16,7 +17,7 @@ class SubscribersControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function new_subscribers_can_be_created_by_authenticated_users()
     {
         // given
@@ -38,7 +39,7 @@ class SubscribersControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_edit_view_is_accessible_by_authenticated_users()
     {
         // given
@@ -51,7 +52,7 @@ class SubscribersControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function a_subscriber_is_updateable_by_an_authenticated_user()
     {
         // given
@@ -78,7 +79,7 @@ class SubscribersControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_show_view_is_accessible_by_an_authenticated_user()
     {
         // given
@@ -91,7 +92,7 @@ class SubscribersControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function the_subscribers_index_lists_subscribers()
     {
         // given
@@ -109,7 +110,7 @@ class SubscribersControllerTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function the_subscribers_index_can_be_filtered_by_tags()
     {
         // given

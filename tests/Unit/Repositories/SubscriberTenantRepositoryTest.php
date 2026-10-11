@@ -6,6 +6,7 @@ namespace Tests\Unit\Repositories;
 
 use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Repositories\Subscribers\SubscriberTenantRepositoryInterface;
@@ -26,7 +27,7 @@ class SubscriberTenantRepositoryTest extends TestCase
         $this->repository = app()->make(SubscriberTenantRepositoryInterface::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_get_the_grow_chart_data()
     {
         // given
@@ -41,7 +42,7 @@ class SubscriberTenantRepositoryTest extends TestCase
         self::assertArrayHasKey('unsubscribers', $data);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_get_the_total_number_of_subscribers_created_before_the_reference_period()
     {
         // given
@@ -59,7 +60,7 @@ class SubscriberTenantRepositoryTest extends TestCase
         self::assertEquals(2, $data['startingValue']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_get_the_total_number_of_subscribers_in_the_reference_period_grouped_by_date()
     {
         // given
@@ -87,7 +88,7 @@ class SubscriberTenantRepositoryTest extends TestCase
         self::assertEquals(2, $runningTotal->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_get_the_total_number_of_unsubscribers_in_the_reference_period_grouped_by_date()
     {
         // given

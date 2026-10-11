@@ -1,5 +1,11 @@
 # Sendportal Core
 
+## 4.0.0 - Unreleased
+- Upgrade dependencies to Laravel 13, with Laravel 12 still supported
+- Drop support for Laravel 10 and 11, and PHP 8.2
+- Upgrade to PHPUnit 12 and convert test annotations to attributes
+- Fix PHP 8.4 implicit nullable parameter deprecation in `Helper::displayDate()`
+
 ## 3.0.0 - 2024-04-18
 - Upgrade dependencies to Laravel V11 ([#194](https://github.com/mettle/sendportal-core/pull/194))
 

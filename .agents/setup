@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# Prepares an Amp orb for sendportal-core: PHP 8.4 + Composer, MariaDB and
+# PostgreSQL with the databases/users phpunit.xml.dist and CI expect, and vendor/.
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+PHP_VERSION=8.4
+step() { echo "==> $1"; STEP_START=$SECONDS; }
+done_step() { echo "    done in $((SECONDS - STEP_START))s"; }
+
+export DEBIAN_FRONTEND=noninteractive
+
+step "System packages"
+if [ ! -f /etc/apt/sources.list.d/php.list ]; then
+  sudo apt-get update -qq
+  sudo apt-get install -y -qq ca-certificates curl lsb-release >/dev/null
+  curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
+  sudo dpkg -i /tmp/debsuryorg-archive-keyring.deb >/dev/null
+  echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" |
+    sudo tee /etc/apt/sources.list.d/php.list >/dev/null
+fi
+packages=(unzip mariadb-server postgresql)
+for ext in cli mbstring xml curl zip mysql pgsql sqlite3 intl bcmath gd; do
+  packages+=("php${PHP_VERSION}-${ext}")
+done
+missing=()
+for pkg in "${packages[@]}"; do
+  dpkg -s "$pkg" >/dev/null 2>&1 || missing+=("$pkg")
+done
+if [ ${#missing[@]} -gt 0 ]; then
+  sudo apt-get update -qq
+  sudo apt-get install -y -qq "${missing[@]}" >/dev/null
+fi
+sudo update-alternatives --set php "/usr/bin/php${PHP_VERSION}" >/dev/null
+done_step
+
+step "Composer"
+if ! command -v composer >/dev/null; then
+  expected="$(curl -sS https://composer.github.io/installer.sig)"
+  php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"
+  actual="$(php -r "echo hash_file('sha384', '/tmp/composer-setup.php');")"
+  if [ "$expected" != "$actual" ]; then
+    echo "Composer installer checksum mismatch" >&2
+    exit 1
+  fi
+  sudo php /tmp/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
+  rm -f /tmp/composer-setup.php
+fi
+composer --version
+done_step
+
+step "Database tuning (speed over durability)"
+sudo tee /etc/mysql/mariadb.conf.d/99-orb.cnf >/dev/null <<'EOF'
+[mysqld]
+innodb_flush_log_at_trx_commit = 0
+innodb_doublewrite = 0
+sync_binlog = 0
+skip-log-bin
+EOF
+pg_conf_dir="$(ls -d /etc/postgresql/*/main | tail -1)/conf.d"
+sudo tee "$pg_conf_dir/99-orb.conf" >/dev/null <<'EOF'
+fsync = off
+synchronous_commit = off
+full_page_writes = off
+EOF
+done_step
+
+step "Start databases"
+sudo service mariadb restart >/dev/null
+sudo service postgresql restart >/dev/null
+for _ in $(seq 1 30); do
+  sudo mysqladmin ping --silent >/dev/null 2>&1 && sudo -u postgres pg_isready -q && break
+  sleep 1
+done
+done_step
+
+step "Databases and users"
+# sendportal-core tests (phpunit.xml.dist): homestead/secret, sendportal_dev.
+# mettle/sendportal app tests: laravel/secret, sendportal_testing.
+sudo mysql <<'EOF'
+CREATE DATABASE IF NOT EXISTS sendportal_dev;
+CREATE DATABASE IF NOT EXISTS sendportal_testing;
+CREATE USER IF NOT EXISTS 'homestead'@'localhost' IDENTIFIED BY 'secret';
+CREATE USER IF NOT EXISTS 'laravel'@'localhost' IDENTIFIED BY 'secret';
+GRANT ALL ON *.* TO 'homestead'@'localhost';
+GRANT ALL ON *.* TO 'laravel'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+for role in homestead laravel; do
+  sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname = '$role'" | grep -q 1 ||
+    sudo -u postgres psql -qc "CREATE ROLE $role WITH LOGIN SUPERUSER PASSWORD 'secret'"
+done
+for db in sendportal_dev:homestead sendportal_testing:laravel; do
+  name="${db%%:*}"; owner="${db##*:}"
+  sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname = '$name'" | grep -q 1 ||
+    sudo -u postgres psql -qc "CREATE DATABASE $name OWNER $owner"
+done
+done_step
+
+step "Composer dependencies"
+# This is a library, so there is no composer.lock; this resolves the latest
+# compatible versions and is a no-op when vendor/ is already up to date.
+composer update --no-interaction --no-progress --prefer-dist
+done_step
+
+step "Orb agent guidance"
+mkdir -p "$HOME/.config/amp"
+cat > "$HOME/.config/amp/AGENTS.md" <<'EOF'
+# sendportal-core orb
+
+- PHP 8.4 and Composer are installed; vendor/ is ready.
+- MariaDB and PostgreSQL run locally with the users and databases phpunit.xml.dist expects.
+- Run tests against MySQL with `vendor/bin/phpunit` and against Postgres with
+  `DB_CONNECTION=pgsql vendor/bin/phpunit`.
+EOF
+done_step

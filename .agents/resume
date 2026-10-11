@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Databases do not survive an orb pause; bring them back if they are down.
+set -euo pipefail
+
+sudo mysqladmin ping --silent >/dev/null 2>&1 || sudo service mariadb start >/dev/null
+sudo -u postgres pg_isready -q || sudo service postgresql start >/dev/null

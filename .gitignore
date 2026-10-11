@@ -8,3 +8,4 @@ build/
 node_modules/
 phpunit.xml
 .phpunit.cache
+.amp/portals/*

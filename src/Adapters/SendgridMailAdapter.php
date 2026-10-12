@@ -56,9 +56,11 @@ class SendgridMailAdapter extends BaseMailAdapter
 
     protected function resolveMessageId(SendgridResponse $response): string
     {
+        // Header names are case-insensitive (HTTP/2 sends them lowercased), but the
+        // ID itself is case-sensitive: it has to match sg_message_id in webhooks.
         foreach ($response->headers() as $header) {
-            if (Str::startsWith($header, 'X-Message-Id:')) {
-                return str_replace('X-Message-Id: ', '', $header);
+            if (Str::startsWith(strtolower($header), 'x-message-id:')) {
+                return trim(Str::after($header, ':'));
             }
         }
 

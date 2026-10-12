@@ -6,6 +6,7 @@ namespace Tests\Feature\Content;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
@@ -19,7 +20,7 @@ class MergeContentTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function campaign_content_can_be_merged()
     {
         // given
@@ -37,7 +38,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_handle_a_null_value_for_campaign_content()
     {
         $content = null;
@@ -51,7 +52,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function the_unsubscribe_url_tag_is_replaced_with_a_valid_unsubscribe_link()
     {
         // given
@@ -70,7 +71,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function the_email_tag_is_replaced_with_the_subscriber_email()
     {
         // given
@@ -87,7 +88,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function the_first_name_tag_is_replaced_with_the_subscriber_first_name()
     {
         // given
@@ -104,7 +105,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function first_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_first_name_is_null()
     {
         $message = $this->generateCampaignMessage('Hi, {{ first_name }}');
@@ -124,7 +125,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
     {
         // given
@@ -142,7 +143,7 @@ class MergeContentTest extends TestCase
         self::assertEquals($expectedHtml, $mergedContent);
     }
 
-    /** @test */
+    #[Test]
     public function last_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_last_name_is_null()
     {
         $message = $this->generateCampaignMessage('Hi, {{ last_name }}');

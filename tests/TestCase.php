@@ -44,9 +44,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function mockRelayMessageService(): void
     {
-        $service = $this->getMockBuilder(RelayMessage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $service = $this->createStub(RelayMessage::class);
 
         $service->method('handle')->willReturn(Str::random());
 

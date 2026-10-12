@@ -7,6 +7,7 @@ namespace Tests\Feature\Webhooks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Message;
 use Tests\TestCase;
 
@@ -18,7 +19,7 @@ class AwsWebhooksTest extends TestCase
     /** @var string */
     protected $route = 'sendportal.api.webhooks.aws';
 
-    /** @test */
+    #[Test]
     public function it_accepts_delivery_webhooks()
     {
         // given
@@ -37,7 +38,7 @@ class AwsWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_click_webhooks()
     {
         // given
@@ -59,7 +60,7 @@ class AwsWebhooksTest extends TestCase
         self::assertNotNull($message->clicked_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_open_webhooks()
     {
         // given
@@ -80,7 +81,7 @@ class AwsWebhooksTest extends TestCase
         self::assertNotNull($message->opened_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_complaint_webhooks()
     {
         // given
@@ -99,7 +100,7 @@ class AwsWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_bounce_webhooks()
     {
         // given

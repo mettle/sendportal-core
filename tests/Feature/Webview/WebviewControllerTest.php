@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Webview;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
@@ -14,7 +15,7 @@ class WebviewControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function a_message_can_be_seen_in_the_webview()
     {
         // given

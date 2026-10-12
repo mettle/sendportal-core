@@ -54,7 +54,7 @@ class HandlePostmarkWebhook implements ShouldQueue
                 $this->handleBounce($messageId, $event->payload);
                 break;
 
-            case'SubscriptionChange':
+            case 'SubscriptionChange':
                 $this->handleSubscriptionChange($messageId, $event->payload);
                 break;
 
@@ -109,19 +109,34 @@ class HandlePostmarkWebhook implements ShouldQueue
         }
     }
 
+    /**
+     * https://postmarkapp.com/developer/webhooks/subscription-change-webhook
+     */
     private function handleSubscriptionChange(string $messageId, array $content): void
     {
-        $value = $this->extractSuppressSending($content);
+        // Reactivations, and suppressions made by the account owner rather than the
+        // recipient, have no MessageID. Reactivations are deliberately not mirrored:
+        // resubscribing someone should happen in Sendportal, not follow Postmark.
+        if (! Arr::get($content, 'SuppressSending') || ! $messageId) {
+            return;
+        }
+
         $timestamp = $this->extractTimestamp($content, 'ChangedAt');
 
-        if($value){
-            $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
-        }
-        else{
-            $this->emailWebhookService->handleResubscribe($messageId);
+        switch (Arr::get($content, 'SuppressionReason')) {
+            case 'HardBounce':
+                $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
+                break;
+
+            case 'SpamComplaint':
+                $this->emailWebhookService->handleComplaint($messageId, $timestamp);
+                break;
+
+            case 'ManualSuppression':
+                $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
+                break;
         }
     }
-
 
     /**
      * Determine if the bounce is permanent
@@ -150,14 +165,9 @@ class HandlePostmarkWebhook implements ShouldQueue
         return Arr::get($payload, 'RecordType');
     }
 
-    private function extractSuppressSending(array $payload): bool
-    {
-        return Arr::get($payload, 'SuppressSending');
-    }
-
     private function extractMessageId(array $payload): string
     {
-        return trim(Arr::get($payload, 'MessageID'));
+        return trim((string) Arr::get($payload, 'MessageID'));
     }
 
     private function extractTimestamp(array $payload, string $field = 'ReceivedAt'): Carbon

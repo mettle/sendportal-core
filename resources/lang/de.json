@@ -230,6 +230,7 @@
     "The message was deleted": "Die Nachricht wurde gelöscht",
     "The number of subscribers for this campaign exceeds your SES quota": "Die Anzahl der Abonnenten dieser Kampagne überschreitet Ihre SES-Quota",
     "The Postmark Email Service requires you to enter a key": "Der Poststempel-E-Mail-Dienst erfordert die Eingabe eines Schlüssels",
+    "The Resend Email Service requires you to enter a key": "Der Resend-E-Mail-Dienst erfordert die Eingabe eines Schlüssels",
     "The provided file contains errors": "Die bereitgestellte Datei enthält Fehler",
     "The selected message has already been sent": "Die ausgewählte Nachricht wurde bereits gesendet",
     "The Sendgrid Email Service requires you to enter a key": "Der Sendgrid-E-Mail-Dienst erfordert die Eingabe eines Schlüssels",

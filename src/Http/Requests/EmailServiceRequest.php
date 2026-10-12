@@ -81,6 +81,11 @@ class EmailServiceRequest extends FormRequest
                     'settings.port.required' =>  __('The SMTP Email Service requires you to enter a port'),
                 ];
 
+            case EmailServiceType::RESEND:
+                return [
+                    'settings.key.required' => __('The Resend Email Service requires you to enter a key'),
+                ];
+
             default:
                 return [];
         }
@@ -99,6 +104,7 @@ class EmailServiceRequest extends FormRequest
 
             case EmailServiceType::SENDGRID:
             case EmailServiceType::POSTMARK:
+            case EmailServiceType::RESEND:
                 return [
                     'settings.key' => 'required',
                 ];

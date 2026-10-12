@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\UnsubscribeEventType;
 use Tests\TestCase;
 
 class SendgridWebhooksTest extends TestCase
@@ -199,6 +200,11 @@ class SendgridWebhooksTest extends TestCase
 
         // then
         self::assertNotNull($message->refresh()->unsubscribed_at);
+
+        $subscriber = $message->subscriber->refresh();
+
+        self::assertNotNull($subscriber->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::EMAIL_SERVICE, $subscriber->unsubscribe_event_id);
     }
 
     protected function createMessage(): Message

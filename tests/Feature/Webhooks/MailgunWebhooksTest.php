@@ -12,6 +12,7 @@ use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\UnsubscribeEventType;
 use Tests\TestCase;
 
 class MailgunWebhooksTest extends TestCase
@@ -112,6 +113,30 @@ class MailgunWebhooksTest extends TestCase
         $response->assertOk();
 
         self::assertNotNull($message->refresh()->unsubscribed_at);
+    }
+
+    #[Test]
+    public function it_accepts_unsubscribed_webhooks()
+    {
+        // given
+        $message = $this->createMessage();
+
+        self::assertNull($message->unsubscribed_at);
+
+        $webhook = $this->resolveWebhook('unsubscribed', $message->message_id);
+
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
+
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->unsubscribed_at);
+
+        $subscriber = $message->subscriber->refresh();
+
+        self::assertNotNull($subscriber->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::EMAIL_SERVICE, $subscriber->unsubscribe_event_id);
     }
 
     #[Test]

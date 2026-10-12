@@ -24,6 +24,7 @@ class QuotaService implements QuotaServiceInterface
             case EmailServiceType::MAILJET:
             case EmailServiceType::SMTP:
             case EmailServiceType::POSTAL:
+            case EmailServiceType::RESEND:
                 return false;
         }
 

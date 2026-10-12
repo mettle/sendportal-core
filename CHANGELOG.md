@@ -7,6 +7,9 @@
 - Fix PHP 8.4 implicit nullable parameter deprecation in `Helper::displayDate()`
 - Remove the unused `doctrine/dbal` dependency
 - Fix the campaign report opens chart showing no opens when `app.timezone` is not UTC (Carbon 3)
+- Add Resend email service, including webhook handling for delivery, open, click, bounce, complaint and unsubscribe events
+- Add an "Email Service" unsubscribe event type for unsubscribes reported by email services; Sendgrid, Mailjet and Postmark unsubscribes now use it
+- Handle Mailgun `unsubscribed` webhooks, which previously failed
 
 ## 3.0.0 - 2024-04-18
 - Upgrade dependencies to Laravel V11 ([#194](https://github.com/mettle/sendportal-core/pull/194))

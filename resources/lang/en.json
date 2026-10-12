@@ -230,6 +230,7 @@
     "The message was deleted": "The message was deleted",
     "The number of subscribers for this campaign exceeds your SES quota": "The number of subscribers for this campaign exceeds your SES quota",
     "The Postmark Email Service requires you to enter a key": "The Postmark Email Service requires you to enter a key",
+    "The Resend Email Service requires you to enter a key": "The Resend Email Service requires you to enter a key",
     "The provided file contains errors": "The provided file contains errors",
     "The selected message has already been sent": "The selected message has already been sent",
     "The Sendgrid Email Service requires you to enter a key": "The Sendgrid Email Service requires you to enter a key",

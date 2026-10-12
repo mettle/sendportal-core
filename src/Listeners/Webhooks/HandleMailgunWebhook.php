@@ -68,6 +68,10 @@ class HandleMailgunWebhook implements ShouldQueue
                 $this->handleComplained($messageId, $event->payload);
                 break;
 
+            case 'unsubscribed':
+                $this->handleUnsubscribed($messageId, $event->payload);
+                break;
+
             case 'failed':
                 $this->handleFailed($messageId, $event->payload);
                 break;
@@ -111,6 +115,16 @@ class HandleMailgunWebhook implements ShouldQueue
         $timestamp = $this->extractTimestamp($content);
 
         $this->emailWebhookService->handleComplaint($messageId, $timestamp);
+    }
+
+    /**
+     * Requires unsubscribe tracking to be enabled in Mailgun.
+     */
+    private function handleUnsubscribed(string $messageId, array $content): void
+    {
+        $timestamp = $this->extractTimestamp($content);
+
+        $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
     }
 
     private function handleFailed(string $messageId, array $content): void

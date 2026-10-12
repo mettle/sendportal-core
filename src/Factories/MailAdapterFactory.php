@@ -9,6 +9,7 @@ use Sendportal\Base\Adapters\MailgunMailAdapter;
 use Sendportal\Base\Adapters\MailjetAdapter;
 use Sendportal\Base\Adapters\PostalAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
+use Sendportal\Base\Adapters\ResendAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Adapters\SmtpAdapter;
@@ -27,6 +28,7 @@ class MailAdapterFactory
         EmailServiceType::MAILJET => MailjetAdapter::class,
         EmailServiceType::SMTP => SmtpAdapter::class,
         EmailServiceType::POSTAL => PostalAdapter::class,
+        EmailServiceType::RESEND => ResendAdapter::class,
     ];
 
     /**

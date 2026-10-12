@@ -182,7 +182,7 @@ class PostmarkWebhooksTest extends TestCase
 
         self::assertEquals('2026-10-12 09:30:00', $message->refresh()->unsubscribed_at);
         self::assertNotNull($message->subscriber->unsubscribed_at);
-        self::assertEquals(UnsubscribeEventType::MANUAL_BY_SUBSCRIBER, $message->subscriber->unsubscribe_event_id);
+        self::assertEquals(UnsubscribeEventType::EMAIL_SERVICE, $message->subscriber->unsubscribe_event_id);
     }
 
     #[Test]

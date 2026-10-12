@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Adapters\MailgunMailAdapter;
 use Sendportal\Base\Adapters\PostmarkMailAdapter;
+use Sendportal\Base\Adapters\ResendAdapter;
 use Sendportal\Base\Adapters\SendgridMailAdapter;
 use Sendportal\Base\Adapters\SesMailAdapter;
 use Sendportal\Base\Factories\MailAdapterFactory;
@@ -71,6 +72,20 @@ class MailAdapterFactoryTest extends TestCase
 
         // then
         self::assertEquals(SesMailAdapter::class, get_class($adapter));
+    }
+
+    #[Test]
+    public function can_build_a_resend_adapter()
+    {
+        // given
+        $emailService = EmailService::factory()->make(['workspace_id' => null, 'type_id' => EmailServiceType::RESEND]);
+        $adapterFactory = new MailAdapterFactory();
+
+        // when
+        $adapter = $adapterFactory->adapter($emailService);
+
+        // then
+        self::assertEquals(ResendAdapter::class, get_class($adapter));
     }
 
     #[Test]

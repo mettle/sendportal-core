@@ -10,12 +10,14 @@ class UnsubscribeEventType extends BaseModel
     public const COMPLAINT = 2;
     public const MANUAL_BY_ADMIN = 3;
     public const MANUAL_BY_SUBSCRIBER = 4;
+    public const EMAIL_SERVICE = 5;
 
     public static $types = [
         1 => 'Bounced',
         2 => 'Complained',
         3 => 'Manual by Admin',
         4 => 'Manual by Subscriber',
+        5 => 'Email Service',
     ];
 
     /**

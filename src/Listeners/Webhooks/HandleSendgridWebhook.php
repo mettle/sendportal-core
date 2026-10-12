@@ -146,7 +146,7 @@ class HandleSendgridWebhook implements ShouldQueue
     {
         $timestamp = $this->extractTimestamp($content);
 
-        $this->emailWebhookService->handleComplaint($messageId, $timestamp);
+        $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
     }
 
     private function extractEventName(array $payload): string

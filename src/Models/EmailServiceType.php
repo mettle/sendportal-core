@@ -15,6 +15,7 @@ class EmailServiceType extends BaseModel
     public const MAILJET = 5;
     public const SMTP = 6;
     public const POSTAL = 7;
+    public const RESEND = 8;
 
     /** @var array */
     protected static $types = [
@@ -25,6 +26,7 @@ class EmailServiceType extends BaseModel
         self::MAILJET => 'Mailjet',
         self::SMTP => 'SMTP',
         self::POSTAL => 'Postal',
+        self::RESEND => 'Resend',
     ];
 
     /**

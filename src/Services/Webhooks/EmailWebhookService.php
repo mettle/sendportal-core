@@ -123,6 +123,9 @@ class EmailWebhookService
         $this->unsubscribe($messageId, UnsubscribeEventType::COMPLAINT);
     }
 
+    /**
+     * Handle a recipient unsubscribing through the email service, e.g. via a provider-managed unsubscribe link.
+     */
     public function handleUnsubscribe(string $messageId, Carbon $timestamp): void
     {
         /* @var Message $message */
@@ -137,7 +140,7 @@ class EmailWebhookService
             $message->save();
         }
 
-        $this->unsubscribe($messageId, UnsubscribeEventType::MANUAL_BY_SUBSCRIBER);
+        $this->unsubscribe($messageId, UnsubscribeEventType::EMAIL_SERVICE);
     }
 
     public function handlePermanentBounce($messageId, $timestamp): void
@@ -155,6 +158,23 @@ class EmailWebhookService
         }
 
         $this->unsubscribe($messageId, UnsubscribeEventType::BOUNCE);
+    }
+
+    /**
+     * Unsubscribe subscribers by email address, for providers that report unsubscribes
+     * independently of a message.
+     */
+    public function handleUnsubscribeByEmail(array $workspaceIds, string $email, Carbon $timestamp): void
+    {
+        DB::table('sendportal_subscribers')
+            ->whereIn('workspace_id', $workspaceIds)
+            ->where('email', $email)
+            ->whereNull('unsubscribed_at')
+            ->update([
+                'unsubscribed_at' => $timestamp,
+                'unsubscribe_event_id' => UnsubscribeEventType::EMAIL_SERVICE,
+                'updated_at' => now(),
+            ]);
     }
 
     public function handleFailure($messageId, $severity, $description, $timestamp): void

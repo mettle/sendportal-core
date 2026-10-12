@@ -16,6 +16,7 @@
         "nyholm/psr7": "^1.8",
         "postal/postal": "^2.0",
         "rap2hpoutre/fast-excel": "^5.4",
+        "resend/resend-php": "^1.16",
         "sendgrid/sendgrid": "^8.1",
         "wildbit/postmark-php": "^6.0"
     },

@@ -231,6 +231,7 @@
     "The message was deleted": "Ziņojums dzēsts",
     "The number of subscribers for this campaign exceeds your SES quota": "Abonentu skaits pārsniedz SES maksimālo abonentu skaitu",
     "The Postmark Email Service requires you to enter a key": "E-pasta serviss Postmark pieprasa ievadīt atslēgu",
+    "The Resend Email Service requires you to enter a key": "E-pasta serviss Resend pieprasa ievadīt atslēgu",
     "The provided file contains errors": "Datne satur kļūdas",
     "The selected message has already been sent": "Izvēlētais ziņojums jau ir nosūtīts",
     "The Sendgrid Email Service requires you to enter a key": "E-pasta serviss Sendgrid pieprasa ievadīt atslēgu",

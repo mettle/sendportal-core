@@ -1,0 +1,2 @@
+<x-sendportal.text-field name="settings[key]" :label="__('API Key')" :value="Arr::get($settings ?? [], 'key')" autocomplete="off" />
+<x-sendportal.text-field name="settings[webhook_secret]" :label="__('Webhook Signing Secret')" :value="Arr::get($settings ?? [], 'webhook_secret')" autocomplete="off" />

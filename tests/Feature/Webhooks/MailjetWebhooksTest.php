@@ -259,7 +259,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals('2015-06-03 12:35:41', $message->refresh()->unsubscribed_at);
 
         self::assertNotNull($subscriber->unsubscribed_at);
-        self::assertEquals(UnsubscribeEventType::COMPLAINT, $subscriber->unsubscribe_event_id);
+        self::assertEquals(UnsubscribeEventType::EMAIL_SERVICE, $subscriber->unsubscribe_event_id);
     }
 
     #[Test]

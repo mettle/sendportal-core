@@ -149,7 +149,7 @@ class HandleMailjetWebhook implements ShouldQueue
     {
         $timestamp = $this->extractTimestamp($content);
 
-        $this->emailWebhookService->handleComplaint($messageId, $timestamp);
+        $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
     }
 
     /**

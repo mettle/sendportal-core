@@ -291,6 +291,41 @@ class EmailServiceRequestTest extends TestCase
         self::assertTrue($validator->passes());
     }
 
+    #[Test]
+    public function it_should_fail_validation_if_the_key_is_not_provided_for_the_resend_email_service()
+    {
+        // given
+        $this->request->merge([
+            'name' => 'Test',
+            'type_id' => EmailServiceType::RESEND
+        ]);
+
+        $validator = $this->getValidator();
+
+        // then
+        self::assertFalse($validator->passes());
+        self::assertTrue($validator->getMessageBag()->has('settings.key'));
+        self::assertEquals(1, $validator->getMessageBag()->count());
+    }
+
+    #[Test]
+    public function it_should_pass_validation_for_the_resend_email_service()
+    {
+        // given
+        $this->request->merge([
+            'name' => 'Test',
+            'type_id' => EmailServiceType::RESEND,
+            'settings' => [
+                'key' => Str::random()
+            ]
+        ]);
+
+        $validator = $this->getValidator();
+
+        // then
+        self::assertTrue($validator->passes());
+    }
+
     protected function getValidator(): ValidatorContract
     {
         return Validator::make($this->request->all(), $this->request->rules(), $this->request->messages());

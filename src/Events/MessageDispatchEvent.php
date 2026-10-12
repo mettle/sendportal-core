@@ -10,7 +10,9 @@ use Sendportal\Base\Models\Message;
 
 class MessageDispatchEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * @var Message

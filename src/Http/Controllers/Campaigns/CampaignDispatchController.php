@@ -45,7 +45,7 @@ class CampaignDispatchController extends Controller
             return redirect()->route('sendportal.campaigns.status', $id);
         }
 
-        if (!$campaign->email_service_id) {
+        if (! $campaign->email_service_id) {
             return redirect()->route('sendportal.campaigns.edit', $id)
                 ->withErrors(__('Please select an Email Service'));
         }

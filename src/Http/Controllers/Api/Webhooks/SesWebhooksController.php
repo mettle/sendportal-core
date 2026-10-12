@@ -23,7 +23,7 @@ class SesWebhooksController extends Controller
 
         $payloadType = $payload['Type'] ?? null;
 
-        if (!in_array($payloadType, ['SubscriptionConfirmation', 'Notification'], true)) {
+        if (! in_array($payloadType, ['SubscriptionConfirmation', 'Notification'], true)) {
             return response('OK (not processed).');
         }
 

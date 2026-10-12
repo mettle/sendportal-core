@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
@@ -14,10 +15,10 @@ use Tests\TestCase;
 
 class SubscribersControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    /** @test */
+    #[Test]
     public function the_subscribers_index_is_accessible_to_authorised_users()
     {
         // given
@@ -38,7 +39,7 @@ class SubscribersControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_single_subscriber_is_accessible_to_authorised_users()
     {
         // given
@@ -60,16 +61,16 @@ class SubscribersControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_subscriber_can_be_created_by_authorised_users()
     {
         // when
         $route = route('sendportal.api.subscribers.store');
 
         $request = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->email(),
         ];
 
         $response = $this->post($route, $request);
@@ -80,7 +81,7 @@ class SubscribersControllerTest extends TestCase
         $response->assertJson(['data' => $request]);
     }
 
-    /** @test */
+    #[Test]
     public function a_subscriber_can_be_updated_by_authorised_users()
     {
         // given
@@ -106,7 +107,7 @@ class SubscribersControllerTest extends TestCase
         $response->assertJson(['data' => $request]);
     }
 
-    /** @test */
+    #[Test]
     public function a_subscriber_can_be_deleted_by_authorised_users()
     {
         // given
@@ -124,7 +125,7 @@ class SubscribersControllerTest extends TestCase
         $this->assertDatabaseMissing('sendportal_subscribers', ['id' => $subscriber->id]);
     }
 
-    /** @test */
+    #[Test]
     public function a_subscriber_in_a_tag_can_be_deleted()
     {
         // given
@@ -145,7 +146,7 @@ class SubscribersControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_store_endpoint_can_update_subscriber_based_on_email_address()
     {
         // given
@@ -155,8 +156,8 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $updateData = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $subscriber->email,
         ];
 
@@ -171,7 +172,7 @@ class SubscribersControllerTest extends TestCase
         $response->assertJson(['data' => $updateData]);
     }
 
-    /** @test */
+    #[Test]
     public function the_store_endpoint_allows_tags_to_be_added_with_the_subscriber()
     {
         // given
@@ -181,9 +182,9 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $request = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->email,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->email(),
             'tags' => [$tag->id]
         ];
 
@@ -199,7 +200,7 @@ class SubscribersControllerTest extends TestCase
         self::assertContains($tag->id, $subscriber->tags->pluck('id'));
     }
 
-    /** @test */
+    #[Test]
     public function the_store_endpoint_allows_subscriber_tags_to_be_updated()
     {
         // given
@@ -213,8 +214,8 @@ class SubscribersControllerTest extends TestCase
         $route = route('sendportal.api.subscribers.store');
 
         $request = [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $subscriber->email,
             'tags' => [$tag2->id]
         ];

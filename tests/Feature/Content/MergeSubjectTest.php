@@ -6,6 +6,7 @@ namespace Tests\Feature\Content;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
@@ -15,10 +16,10 @@ use Tests\TestCase;
 
 class MergeSubjectTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    /** @test */
+    #[Test]
     public function the_email_tag_is_replaced_with_the_subscriber_email()
     {
         // given
@@ -32,7 +33,7 @@ class MergeSubjectTest extends TestCase
         self::assertEquals('Hi, foo@bar.com', $mergedSubject);
     }
 
-    /** @test */
+    #[Test]
     public function the_first_name_tag_is_replaced_with_the_subscriber_first_name()
     {
         // given
@@ -46,7 +47,7 @@ class MergeSubjectTest extends TestCase
         self::assertEquals('Hi, foo', $mergedSubject);
     }
 
-    /** @test */
+    #[Test]
     public function the_first_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_first_name_is_null()
     {
         // given
@@ -60,7 +61,7 @@ class MergeSubjectTest extends TestCase
         self::assertEquals('Hi, ', $mergedSubject);
     }
 
-    /** @test */
+    #[Test]
     public function the_last_name_tag_is_replaced_with_the_subscriber_last_name()
     {
         // given
@@ -74,7 +75,7 @@ class MergeSubjectTest extends TestCase
         self::assertEquals('Hi, bar', $mergedSubject);
     }
 
-    /** @test */
+    #[Test]
     public function the_last_name_tag_is_replaced_with_an_empty_string_if_the_subscriber_last_name_is_null()
     {
         // given
@@ -88,7 +89,7 @@ class MergeSubjectTest extends TestCase
         self::assertEquals('Hi, ', $mergedSubject);
     }
 
-    /** @test */
+    #[Test]
     public function multiple_different_tags_are_replaced()
     {
         // given

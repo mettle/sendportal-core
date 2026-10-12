@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,10 @@ use Tests\TestCase;
 
 class CampaignsControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    /** @test */
+    #[Test]
     public function a_list_of_a_workspaces_campaigns_can_be_retrieved()
     {
         $emailService = $this->createEmailService();
@@ -34,7 +35,7 @@ class CampaignsControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_single_campaign_can_be_retrieved()
     {
         $emailService = $this->createEmailService();
@@ -51,18 +52,18 @@ class CampaignsControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_new_campaign_can_be_added()
     {
         $emailService = $this->createEmailService();
 
         $request = [
-            'name' => $this->faker->colorName,
-            'subject' => $this->faker->word,
-            'from_name' => $this->faker->word,
-            'from_email' => $this->faker->safeEmail,
+            'name' => $this->faker->colorName(),
+            'subject' => $this->faker->word(),
+            'from_name' => $this->faker->word(),
+            'from_email' => $this->faker->safeEmail(),
             'email_service_id' => $emailService->id,
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'send_to_all' => 1,
             'scheduled_at' => now(),
         ];
@@ -78,7 +79,7 @@ class CampaignsControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_campaigns', $request);
     }
 
-    /** @test */
+    #[Test]
     public function a_campaign_can_be_updated()
     {
         $emailService = $this->createEmailService();
@@ -89,12 +90,12 @@ class CampaignsControllerTest extends TestCase
         ]);
 
         $request = [
-            'name' => $this->faker->word,
-            'subject' => $this->faker->word,
-            'from_name' => $this->faker->word,
-            'from_email' => $this->faker->safeEmail,
+            'name' => $this->faker->word(),
+            'subject' => $this->faker->word(),
+            'from_name' => $this->faker->word(),
+            'from_email' => $this->faker->safeEmail(),
             'email_service_id' => $emailService->id,
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'send_to_all' => 1,
             'scheduled_at' => now(),
         ];
@@ -110,7 +111,7 @@ class CampaignsControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_campaigns', $request);
     }
 
-    /** @test */
+    #[Test]
     public function a_sent_campaign_cannot_be_updated()
     {
         $emailService = $this->createEmailService();
@@ -118,12 +119,12 @@ class CampaignsControllerTest extends TestCase
         $campaign = $this->createCampaign($emailService);
 
         $request = [
-            'name' => $this->faker->word,
-            'subject' => $this->faker->word,
-            'from_name' => $this->faker->word,
-            'from_email' => $this->faker->safeEmail,
+            'name' => $this->faker->word(),
+            'subject' => $this->faker->word(),
+            'from_name' => $this->faker->word(),
+            'from_email' => $this->faker->safeEmail(),
             'email_service_id' => $emailService->id,
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'send_to_all' => 1,
             'scheduled_at' => now(),
         ];

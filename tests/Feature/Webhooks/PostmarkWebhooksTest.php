@@ -7,6 +7,7 @@ namespace Tests\Feature\Webhooks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Message;
 use Tests\TestCase;
 
@@ -18,7 +19,7 @@ class PostmarkWebhooksTest extends TestCase
     /** @var string */
     protected $route = 'sendportal.api.webhooks.postmark';
 
-    /** @test */
+    #[Test]
     public function it_accepts_delivery_webhooks()
     {
         // given
@@ -39,7 +40,7 @@ class PostmarkWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_open_webhooks()
     {
         // given
@@ -62,7 +63,7 @@ class PostmarkWebhooksTest extends TestCase
         self::assertNotNull($message->opened_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_click_webhooks()
     {
         // given
@@ -75,7 +76,7 @@ class PostmarkWebhooksTest extends TestCase
             'MessageID' => $message->message_id,
             'ReceivedAt' => now()->toIso8601String(),
             'RecordType' => 'Click',
-            'OriginalLink' => $this->faker->url,
+            'OriginalLink' => $this->faker->url(),
         ];
 
         // when
@@ -86,7 +87,7 @@ class PostmarkWebhooksTest extends TestCase
         self::assertNotNull($message->clicked_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_spam_complaint_webhooks()
     {
         // given
@@ -107,7 +108,7 @@ class PostmarkWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_temporary_bounce_webhooks()
     {
         // given
@@ -133,7 +134,7 @@ class PostmarkWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_permanent_bounce_webhooks()
     {
         // given

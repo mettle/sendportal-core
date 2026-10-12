@@ -46,7 +46,6 @@ class WebRoutes
             $this->name('sendportal.')->namespace('\Sendportal\Base\Http\Controllers')->group(static function (
                 Router $appRouter
             ) {
-
                 // Dashboard.
                 $appRouter->get('/', 'DashboardController@index')->name('dashboard');
 

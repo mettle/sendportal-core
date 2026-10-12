@@ -6,10 +6,10 @@ class UnsubscribeEventType extends BaseModel
 {
     protected $table = 'sendportal_unsubscribe_event_types';
 
-    const BOUNCE = 1;
-    const COMPLAINT = 2;
-    const MANUAL_BY_ADMIN = 3;
-    const MANUAL_BY_SUBSCRIBER = 4;
+    public const BOUNCE = 1;
+    public const COMPLAINT = 2;
+    public const MANUAL_BY_ADMIN = 3;
+    public const MANUAL_BY_SUBSCRIBER = 4;
 
     public static $types = [
         1 => 'Bounced',

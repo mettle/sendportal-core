@@ -6,3 +6,5 @@ composer.lock
 .phpunit.result.cache
 build/
 node_modules/
+phpunit.xml
+.phpunit.cache

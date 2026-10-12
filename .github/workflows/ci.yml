@@ -1,4 +1,7 @@
-on: push
+on:
+  push:
+    branches: [master]
+  pull_request:
 name: Laravel CI
 jobs:
   phpunit:
@@ -6,15 +9,16 @@ jobs:
     strategy:
       matrix:
         container: [
-          "kirschbaumdevelopment/laravel-test-runner:7.3",
-          "kirschbaumdevelopment/laravel-test-runner:7.4",
-          "kirschbaumdevelopment/laravel-test-runner:8.0"
+          "kirschbaumdevelopment/laravel-test-runner:8.3",
+          "kirschbaumdevelopment/laravel-test-runner:8.4",
+          "kirschbaumdevelopment/laravel-test-runner:8.5"
         ]
+        laravel: ["12.*", "13.*"]
 
     container:
       image: ${{ matrix.container }}
 
-    name: ${{ matrix.container }}
+    name: ${{ matrix.container }} - Laravel ${{ matrix.laravel }}
 
     services:
       mysql:
@@ -39,9 +43,9 @@ jobs:
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --with "laravel/framework:${{ matrix.laravel }}"
       - name: Run Testsuite against MySQL
         run: vendor/bin/phpunit
         env:

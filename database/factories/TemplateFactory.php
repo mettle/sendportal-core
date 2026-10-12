@@ -12,11 +12,11 @@ class TemplateFactory extends Factory
 {
     /** @var string */
     protected $model = Template::class;
-    
+
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
             'workspace_id' => Sendportal::currentWorkspaceId(),
             'content' => '{{content}}'
         ];

@@ -28,7 +28,7 @@ class ApiTagService
     {
         $tag = $this->tags->store($workspaceId, $data->except('subscribers')->toArray());
 
-        if (!empty($data['subscribers'])) {
+        if (! empty($data['subscribers'])) {
             $tag->subscribers()->attach($data['subscribers']);
         }
 

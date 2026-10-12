@@ -43,14 +43,14 @@ class ResolveEmailService
      */
     protected function resolveAutomationEmailService(Message $message): EmailService
     {
-        if (!$automationSchedule = app(AutomationScheduleRepository::class)->find(
+        if (! $automationSchedule = app(AutomationScheduleRepository::class)->find(
             $message->source_id,
             ['automation_step.automation.email_service.type']
         )) {
             throw new Exception('Unable to resolve automation schedule for message id=' . $message->id);
         }
 
-        if (!$emailService = $automationSchedule->automation_step->automation->email_service) {
+        if (! $emailService = $automationSchedule->automation_step->automation->email_service) {
             throw new Exception('Unable to resolve email service for message id=' . $message->id);
         }
 

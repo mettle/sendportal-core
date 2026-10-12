@@ -8,7 +8,9 @@ use Illuminate\Queue\SerializesModels;
 
 class MailgunWebhookReceived
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var array */
     public $payload;

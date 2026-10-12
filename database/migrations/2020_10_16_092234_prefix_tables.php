@@ -17,7 +17,7 @@ class PrefixTables extends Migration
                 continue;
             }
 
-            if (!Schema::hasTable("{$table}")) {
+            if (! Schema::hasTable("{$table}")) {
                 continue;
             }
 

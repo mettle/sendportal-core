@@ -14,7 +14,7 @@ class CanAccessTag implements Rule
     {
         $tag = Tag::find($value);
 
-        if (!$tag) {
+        if (! $tag) {
             return false;
         }
 

@@ -37,7 +37,7 @@ abstract class BaseMessageTenantRepository extends BaseTenantRepository implemen
                 }
             ]);
 
-        $instance->when(!Helper::isPro(), function ($q) {
+        $instance->when(! Helper::isPro(), function ($q) {
             $q->where('source_type', '=', Campaign::class);
         });
 

@@ -1,4 +1,6 @@
-<?php namespace Sendportal\Base\Repositories;
+<?php
+
+namespace Sendportal\Base\Repositories;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -308,7 +310,7 @@ abstract class BaseTenantRepository implements BaseTenantInterface
      */
     public function getModelName(): string
     {
-        if (!$this->modelName) {
+        if (! $this->modelName) {
             throw new RuntimeException('Model has not been set in ' . get_called_class());
         }
 
@@ -332,7 +334,7 @@ abstract class BaseTenantRepository implements BaseTenantInterface
     {
         $model = $this->getModelName();
 
-        return new $model;
+        return new $model();
     }
 
     /**

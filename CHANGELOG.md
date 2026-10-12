@@ -1,5 +1,16 @@
 # Sendportal Core
 
+## 4.0.0 - 2026-10-12
+- Upgrade dependencies to Laravel 13, with Laravel 12 still supported
+- Drop support for Laravel 10 and 11, and PHP 8.2
+- Upgrade to PHPUnit 12 and convert test annotations to attributes
+- Fix PHP 8.4 implicit nullable parameter deprecation in `Helper::displayDate()`
+- Remove the unused `doctrine/dbal` dependency
+- Fix the campaign report opens chart showing no opens when `app.timezone` is not UTC (Carbon 3)
+
+## 3.0.0 - 2024-04-18
+- Upgrade dependencies to Laravel V11 ([#194](https://github.com/mettle/sendportal-core/pull/194))
+
 ## 2.0.3 - 2021-07-05
 - Self-host CSS and JS assets ([#144](https://github.com/mettle/sendportal-core/pull/144))
 - Handle merge content and subject when subscriber first name or last name are null ([#143](https://github.com/mettle/sendportal-core/pull/143))

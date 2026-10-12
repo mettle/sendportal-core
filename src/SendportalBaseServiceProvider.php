@@ -30,7 +30,7 @@ class SendportalBaseServiceProvider extends ServiceProvider
             ], 'sendportal-views');
 
             $this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/sendportal'),
+                __DIR__.'/../resources/lang' => app()->langPath('vendor/sendportal'),
             ], 'sendportal-lang');
 
             $this->publishes([

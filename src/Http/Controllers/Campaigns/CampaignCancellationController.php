@@ -43,13 +43,13 @@ class CampaignCancellationController extends Controller
         $campaign = $this->campaignRepository->find(Sendportal::currentWorkspaceId(), $campaignId, ['status']);
         $originalStatus = $campaign->status;
 
-        if (!$campaign->canBeCancelled()) {
+        if (! $campaign->canBeCancelled()) {
             throw ValidationException::withMessages([
                 'campaignStatus' => "{$campaign->status->name} campaigns cannot be cancelled.",
             ])->redirectTo(route('sendportal.campaigns.index'));
         }
 
-        if ($campaign->save_as_draft && !$campaign->allDraftsCreated()) {
+        if ($campaign->save_as_draft && ! $campaign->allDraftsCreated()) {
             throw ValidationException::withMessages([
                 'messagesPendingDraft' => __('Campaigns that save draft messages cannot be cancelled until all drafts have been created.'),
             ])->redirectTo(route('sendportal.campaigns.index'));

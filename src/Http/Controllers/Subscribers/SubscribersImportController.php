@@ -69,7 +69,7 @@ class SubscribersImportController extends Controller
                 'updated' => 0
             ];
 
-            (new FastExcel)->import(Storage::disk('local')->path($path), function (array $line) use ($request, &$counter) {
+            (new FastExcel())->import(Storage::disk('local')->path($path), function (array $line) use ($request, &$counter) {
                 $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
                 $data['tags'] = $request->get('tags') ?? [];
@@ -109,7 +109,7 @@ class SubscribersImportController extends Controller
 
         $row = 1;
 
-        (new FastExcel)->import($path, function (array $line) use ($errors, &$row) {
+        (new FastExcel())->import($path, function (array $line) use ($errors, &$row) {
             $data = Arr::only($line, ['id', 'email', 'first_name', 'last_name']);
 
             try {

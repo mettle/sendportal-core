@@ -56,7 +56,7 @@ class CampaignReportPresenter
      */
     public function generate(): array
     {
-        if (!$this->campaign) {
+        if (! $this->campaign) {
             throw new RuntimeException('Campaign must be initialised');
         }
 
@@ -95,7 +95,7 @@ class CampaignReportPresenter
         $secondsPerInterval = $this->calculateSecondsInterval($timespan);
 
         // Modify first so that it matches with the database intervals (i.e. using DIV in mysql).
-        $first = Carbon::createFromTimestamp(floor($first->timestamp / $secondsPerInterval) * $secondsPerInterval);
+        $first = Carbon::createFromTimestamp(floor($first->timestamp / $secondsPerInterval) * $secondsPerInterval, $first->getTimezone());
 
         // Create the PHP DateTime intervals.
         $intervals = $this->createIntervals($first, $last, $timespan);

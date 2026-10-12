@@ -7,6 +7,7 @@ namespace Tests\Feature\Webhooks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Message;
 use Tests\TestCase;
 
@@ -18,7 +19,7 @@ class SendgridWebhooksTest extends TestCase
     /** @var string */
     protected $route = 'sendportal.api.webhooks.sendgrid';
 
-    /** @test */
+    #[Test]
     public function it_accepts_delivered_webhooks()
     {
         // given
@@ -35,7 +36,7 @@ class SendgridWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_open_webhooks()
     {
         // given
@@ -54,7 +55,7 @@ class SendgridWebhooksTest extends TestCase
         self::assertEquals(1, $message->open_count);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_click_webhooks()
     {
         // given
@@ -63,7 +64,7 @@ class SendgridWebhooksTest extends TestCase
         self::assertEquals(0, $message->click_count);
         self::assertNull($message->clicked_at);
 
-        $url = ['url' => $this->faker->url];
+        $url = ['url' => $this->faker->url()];
         $webhook = $this->resolveWebhook('click', $message->message_id, $url);
 
         // when
@@ -74,7 +75,7 @@ class SendgridWebhooksTest extends TestCase
         self::assertEquals(1, $message->click_count);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_spam_report_webhooks()
     {
         // given
@@ -91,7 +92,7 @@ class SendgridWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_dropped_webhooks()
     {
         // given
@@ -116,7 +117,7 @@ class SendgridWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_deferred_webhooks()
     {
         // given
@@ -137,7 +138,7 @@ class SendgridWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_bounce_webhooks()
     {
         // given
@@ -162,7 +163,7 @@ class SendgridWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_blocked_webhooks()
     {
         // given
@@ -183,7 +184,7 @@ class SendgridWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_unsubscribed_webhooks()
     {
         // given

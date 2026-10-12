@@ -32,7 +32,7 @@ class CampaignDeleteController extends Controller
     {
         $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $id);
 
-        if (!$campaign->draft) {
+        if (! $campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }
@@ -49,7 +49,7 @@ class CampaignDeleteController extends Controller
     {
         $campaign = $this->campaigns->find(Sendportal::currentWorkspaceId(), $request->get('id'));
 
-        if (!$campaign->draft) {
+        if (! $campaign->draft) {
             return redirect()->route('sendportal.campaigns.index')
                 ->withErrors(__('Unable to delete a campaign that is not in draft status'));
         }

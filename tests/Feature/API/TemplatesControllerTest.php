@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Template;
@@ -15,11 +16,11 @@ use Tests\TestCase;
 
 class TemplatesControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker,
-        NormalizeTags;
+    use RefreshDatabase;
+    use WithFaker;
+    use NormalizeTags;
 
-    /** @test */
+    #[Test]
     public function the_template_index_is_accessible_to_authorised_users()
     {
         $template = Template::factory()->create([
@@ -37,7 +38,7 @@ class TemplatesControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_single_template_is_accessible_to_authorised_users()
     {
         $template = Template::factory()->create([
@@ -55,13 +56,13 @@ class TemplatesControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_template_can_be_created()
     {
         $route = route('sendportal.api.templates.store');
 
         $request = [
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
             'content' => 'Hello {{ content }}',
         ];
 
@@ -78,7 +79,7 @@ class TemplatesControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_templates', $normalisedRequest);
     }
 
-    /** @test */
+    #[Test]
     public function a_template_can_be_updated_by_authorised_users()
     {
         $template = Template::factory()->create([
@@ -107,7 +108,7 @@ class TemplatesControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_templates', $normalisedRequest);
     }
 
-    /** @test */
+    #[Test]
     public function a_template_can_be_deleted_by_authorised_users()
     {
         $template = Template::factory()->create([
@@ -126,7 +127,7 @@ class TemplatesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_template_cannot_be_deleted_by_authorised_users_if_it_is_used()
     {
         $template = Template::factory()->create([
@@ -146,7 +147,7 @@ class TemplatesControllerTest extends TestCase
             ->assertJsonValidationErrors(['template']);
     }
 
-    /** @test */
+    #[Test]
     public function a_template_name_must_be_unique_for_a_workspace()
     {
         $template = Template::factory()->create([
@@ -167,7 +168,7 @@ class TemplatesControllerTest extends TestCase
         self::assertEquals(1, Template::where('name', $template->name)->count());
     }
 
-    /** @test */
+    #[Test]
     public function two_workspaces_can_have_the_same_name_for_a_template()
     {
         $template = Template::factory()->create([

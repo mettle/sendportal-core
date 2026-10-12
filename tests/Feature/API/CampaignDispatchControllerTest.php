@@ -6,6 +6,7 @@ namespace Tests\Feature\API;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Interfaces\QuotaServiceInterface;
 use Sendportal\Base\Models\Campaign;
@@ -20,7 +21,7 @@ class CampaignDispatchControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function a_draft_campaign_can_be_dispatched()
     {
         $this->ignoreQuota();
@@ -46,7 +47,7 @@ class CampaignDispatchControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_sent_campaign_cannot_be_dispatched()
     {
         $this->ignoreQuota();
@@ -65,7 +66,7 @@ class CampaignDispatchControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_campaign_cannot_be_dispatched_if_the_number_of_subscribers_exceeds_the_ses_quota()
     {
         $this->instance(QuotaServiceInterface::class, Mockery::mock(QuotaService::class, function ($mock) {

@@ -101,7 +101,7 @@ class MessagesController extends Controller
      */
     public function send(): RedirectResponse
     {
-        if (!$message = $this->messageRepo->find(
+        if (! $message = $this->messageRepo->find(
             Sendportal::currentWorkspaceId(),
             request('id'),
             ['subscriber']
@@ -128,7 +128,7 @@ class MessagesController extends Controller
      */
     public function delete(): RedirectResponse
     {
-        if (!$message = $this->messageRepo->find(
+        if (! $message = $this->messageRepo->find(
             Sendportal::currentWorkspaceId(),
             request('id')
         )) {
@@ -161,7 +161,7 @@ class MessagesController extends Controller
             return redirect()->back()->withErrors(__('No messages selected'));
         }
 
-        if (!$messages = $this->messageRepo->getWhereIn(
+        if (! $messages = $this->messageRepo->getWhereIn(
             Sendportal::currentWorkspaceId(),
             request('messages'),
             ['subscriber']

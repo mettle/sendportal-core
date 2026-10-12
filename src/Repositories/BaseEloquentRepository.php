@@ -1,4 +1,6 @@
-<?php namespace Sendportal\Base\Repositories;
+<?php
+
+namespace Sendportal\Base\Repositories;
 
 use Sendportal\Base\Interfaces\BaseEloquentInterface;
 
@@ -91,7 +93,6 @@ class BaseEloquentRepository implements BaseEloquentInterface
      */
     protected function applyFilters($instance, array $filters = [])
     {
-        return;
     }
 
     /**
@@ -347,7 +348,7 @@ class BaseEloquentRepository implements BaseEloquentInterface
     {
         $model = $this->getModelName();
 
-        return new $model;
+        return new $model();
     }
 
     /**

@@ -24,15 +24,15 @@ class ImportSubscriberService
     {
         $subscriber = null;
 
-        if (!empty(Arr::get($data, 'id'))) {
+        if (! empty(Arr::get($data, 'id'))) {
             $subscriber = $this->subscribers->findBy($workspaceId, 'id', $data['id'], ['tags']);
         }
 
-        if (!$subscriber) {
+        if (! $subscriber) {
             $subscriber = $this->subscribers->findBy($workspaceId, 'email', Arr::get($data, 'email'), ['tags']);
         }
 
-        if (!$subscriber) {
+        if (! $subscriber) {
             $subscriber = $this->subscribers->store($workspaceId, Arr::except($data, ['id', 'tags']));
         }
 

@@ -44,7 +44,7 @@ class HandleMailgunWebhook implements ShouldQueue
         $messageId = $this->extractMessageId($event->payload);
         $eventName = $this->extractEventName($event->payload);
 
-        if (!$this->checkWebhookValidity($messageId, $event->payload)) {
+        if (! $this->checkWebhookValidity($messageId, $event->payload)) {
             Log::error('Mailgun webhook failed verification check.', ['payload' => $event->payload]);
             return;
         }
@@ -176,14 +176,14 @@ class HandleMailgunWebhook implements ShouldQueue
         /** @var EmailService|null $emailservice */
         $emailservice = $message->source->email_service ?? null;
 
-        if (!$emailservice) {
+        if (! $emailservice) {
             return false;
         }
 
         /** @var string|null $signingKey */
         $signingKey = $emailservice->settings['webhook_key'] ?? null;
 
-        if (!$signingKey) {
+        if (! $signingKey) {
             return false;
         }
 

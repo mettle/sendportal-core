@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Sendportal\Base\Http\Controllers\EmailServices;
 
 use Exception;
@@ -45,7 +44,7 @@ class TestEmailServiceController extends Controller
         try {
             $messageId = $dispatchTestMessage->testService(Sendportal::currentWorkspaceId(), $emailService, $options);
 
-            if (!$messageId) {
+            if (! $messageId) {
                 return redirect()
                     ->back()
                     ->with(['error', __('Failed to dispatch test email.')]);

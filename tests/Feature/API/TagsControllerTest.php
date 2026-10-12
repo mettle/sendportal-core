@@ -7,16 +7,17 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Tag;
 use Tests\TestCase;
 
 class TagsControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    /** @test */
+    #[Test]
     public function a_list_of_a_workspaces_tags_can_be_retrieved()
     {
         $tag = $this->createTag();
@@ -32,7 +33,7 @@ class TagsControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_single_tag_can_be_retrieved()
     {
         $tag = $this->createTag();
@@ -48,13 +49,13 @@ class TagsControllerTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_new_tag_can_be_added()
     {
         $route = route('sendportal.api.tags.store');
 
         $request = [
-            'name' => $this->faker->colorName,
+            'name' => $this->faker->colorName(),
         ];
 
         $this->postJson($route, $request)
@@ -64,7 +65,7 @@ class TagsControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_tags', $request);
     }
 
-    /** @test */
+    #[Test]
     public function a_tag_can_be_updated()
     {
         $tag = $this->createTag();
@@ -85,7 +86,7 @@ class TagsControllerTest extends TestCase
         $this->assertDatabaseHas('sendportal_tags', $request);
     }
 
-    /** @test */
+    #[Test]
     public function a_tag_can_be_deleted()
     {
         $tag = $this->createTag();
@@ -100,7 +101,7 @@ class TagsControllerTest extends TestCase
         $this->assertDatabaseCount('sendportal_tags', 0);
     }
 
-    /** @test */
+    #[Test]
     public function a_tag_name_must_be_unique_for_a_workspace()
     {
         $tag = $this->createTag();
@@ -118,7 +119,7 @@ class TagsControllerTest extends TestCase
         self::assertEquals(1, Tag::where('name', $tag->name)->count());
     }
 
-    /** @test */
+    #[Test]
     public function two_workspaces_can_have_the_same_name_for_a_tag()
     {
         $tag = $this->createTag();

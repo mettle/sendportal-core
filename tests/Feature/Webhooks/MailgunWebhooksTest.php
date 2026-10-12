@@ -7,6 +7,7 @@ namespace Tests\Feature\Webhooks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Models\EmailServiceType;
@@ -31,7 +32,7 @@ class MailgunWebhooksTest extends TestCase
         $this->webHookKey = Str::random();
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_delivery_webhooks()
     {
         // given
@@ -50,7 +51,7 @@ class MailgunWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->delivered_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_opened_webhooks()
     {
         // given
@@ -71,7 +72,7 @@ class MailgunWebhooksTest extends TestCase
         self::assertNotNull($message->opened_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_clicked_webhooks()
     {
         // given
@@ -82,7 +83,7 @@ class MailgunWebhooksTest extends TestCase
 
         $webhook = $this->resolveWebhook('clicked', $message->message_id);
 
-        $webhook['event-data']['url'] = $this->faker->url;
+        $webhook['event-data']['url'] = $this->faker->url();
 
         // when
         $response = $this->json('POST', route($this->route), $webhook);
@@ -94,7 +95,7 @@ class MailgunWebhooksTest extends TestCase
         self::assertNotNull($message->clicked_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_complained_webhooks()
     {
         // given
@@ -113,7 +114,7 @@ class MailgunWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->unsubscribed_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_permanent_failure_webhooks()
     {
         // given
@@ -142,7 +143,7 @@ class MailgunWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_temporary_failure_webhooks()
     {
         // given

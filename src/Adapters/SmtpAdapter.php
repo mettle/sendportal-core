@@ -4,74 +4,74 @@ namespace Sendportal\Base\Adapters;
 
 use Illuminate\Support\Arr;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
-use Swift_TransportException;
+use Symfony\Component\Mailer\SentMessage;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class SmtpAdapter extends BaseMailAdapter
 {
-    /** @var Swift_Mailer */
-    protected $client;
-
-    /** @var Swift_SmtpTransport */
+    /** @var EsmtpTransport */
     protected $transport;
 
     public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
     {
-        $failedRecipients = [];
+        // Send through the transport rather than the Mailer: Mailer::send() returns
+        // void, so the message id was previously always '-1'. The transport hands
+        // back a SentMessage carrying the real id.
+        //
+        // A TransportException is deliberately not caught here. Swallowing it
+        // returned '-1', which every caller reads as a truthy success, so failed
+        // sends were recorded as delivered. The other adapters let it propagate.
+        $sentMessage = $this->resolveTransport()->send(
+            $this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail)
+        );
 
-        try {
-            $result = $this->resolveClient()->send($this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail), $failedRecipients);
-        } catch (Swift_TransportException $e) {
-            return $this->resolveMessageId(0);
-        }
-
-        return $this->resolveMessageId($result);
+        return $this->resolveMessageId($sentMessage);
     }
 
-    protected function resolveClient(): Swift_Mailer
-    {
-        if ($this->client) {
-            return $this->client;
-        }
-
-        $this->client = new Swift_Mailer($this->resolveTransport());
-
-        return $this->client;
-    }
-
-    protected function resolveTransport(): Swift_SmtpTransport
+    protected function resolveTransport(): EsmtpTransport
     {
         if ($this->transport) {
             return $this->transport;
         }
 
-        $this->transport = new Swift_SmtpTransport(
+        $factory = new EsmtpTransportFactory();
+
+        $encryption = Arr::get($this->config, 'encryption');
+
+        $scheme = ! is_null($encryption) && $encryption === 'tls'
+            ? ((Arr::get($this->config, 'port') == 465) ? 'smtps' : 'smtp')
+            : '';
+
+        $dsn = new Dsn(
+            $scheme,
             Arr::get($this->config, 'host'),
-            Arr::get($this->config, 'port'),
-            Arr::get($this->config, 'encryption')
+            Arr::get($this->config, 'username'),
+            Arr::get($this->config, 'password'),
+            Arr::get($this->config, 'port')
         );
 
-        $this->transport->setUsername(Arr::get($this->config, 'username'));
-        $this->transport->setPassword(Arr::get($this->config, 'password'));
-        $this->transport->setAuthMode('login');
+        $this->transport = $factory->create($dsn);
 
         return $this->transport;
     }
 
-    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail): Swift_Message
+    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail): Email
     {
-        $msg = new Swift_Message($subject, $content, 'text/html');
-
-        $msg->setTo($toEmail);
-        $msg->setFrom($fromEmail, $fromName);
+        $msg = (new Email())
+            ->from(new Address($fromEmail, $fromName))
+            ->to($toEmail)
+            ->subject($subject)
+            ->html($content);
 
         return $msg;
     }
 
     protected function resolveMessageId($result): string
     {
-        return ($result == 1) ? strval($result) : '-1';
+        return ($result instanceof SentMessage) ? $result->getMessageId() : '-1';
     }
 }

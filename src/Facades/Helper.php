@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Facade;
 
 class Helper extends Facade
 {
-
     /**
      * @return string
      */

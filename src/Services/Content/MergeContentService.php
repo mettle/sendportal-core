@@ -62,7 +62,7 @@ class MergeContentService
         /** @var Campaign $campaign */
         $campaign = $this->campaignRepo->find($message->workspace_id, $message->source_id, ['template']);
 
-        if (!$campaign) {
+        if (! $campaign) {
             throw new Exception('Unable to resolve campaign step for message id= ' . $message->id);
         }
 
@@ -76,15 +76,15 @@ class MergeContentService
      */
     protected function mergeAutomationContent(Message $message): string
     {
-        if (!$schedule = app(AutomationScheduleRepository::class)->find($message->source_id, ['automation_step'])) {
+        if (! $schedule = app(AutomationScheduleRepository::class)->find($message->source_id, ['automation_step'])) {
             throw new Exception('Unable to resolve automation step for message id=' . $message->id);
         }
 
-        if (!$content = $schedule->automation_step->content) {
+        if (! $content = $schedule->automation_step->content) {
             throw new Exception('Unable to resolve content for automation step id=' . $schedule->automation_step_id);
         }
 
-        if (!$template = $schedule->automation_step->template) {
+        if (! $template = $schedule->automation_step->template) {
             throw new Exception('Unable to resolve template for automation step id=' . $schedule->automation_step_id);
         }
 

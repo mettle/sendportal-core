@@ -31,7 +31,7 @@ class ApiSubscriberService
     {
         $existingSubscriber = $this->subscribers->findBy($workspaceId, 'email', $data['email']);
 
-        if (!$existingSubscriber) {
+        if (! $existingSubscriber) {
             $subscriber = $this->subscribers->store($workspaceId, $data->toArray());
 
             event(new SubscriberAddedEvent($subscriber));

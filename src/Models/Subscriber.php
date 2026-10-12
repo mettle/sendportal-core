@@ -58,9 +58,12 @@ class Subscriber extends BaseModel
     ];
 
     /** @var string[] */
-    protected $casts = [
-        'unsubscribed_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'unsubscribed_at' => 'datetime',
+        ];
+    }
 
     public function tags(): BelongsToMany
     {

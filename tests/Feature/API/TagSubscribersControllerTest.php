@@ -7,14 +7,15 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class TagSubscribersControllerTest extends TestCase
 {
-    use RefreshDatabase,
-        WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
-    /** @test */
+    #[Test]
     public function the_index_gets_tag_subscribers()
     {
         $tag = $this->createTag();
@@ -39,7 +40,7 @@ class TagSubscribersControllerTest extends TestCase
         $response->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function a_subscriber_can_be_added_to_a_tag()
     {
         $tag = $this->createTag();
@@ -71,7 +72,7 @@ class TagSubscribersControllerTest extends TestCase
         $response->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function the_store_endpoint_is_idempotent()
     {
         $tag = $this->createTag();
@@ -94,7 +95,7 @@ class TagSubscribersControllerTest extends TestCase
         self::assertCount(2, $tag->refresh()->subscribers);
     }
 
-    /** @test */
+    #[Test]
     public function a_tags_subscribers_can_be_synced()
     {
         $tag = $this->createTag();
@@ -134,7 +135,7 @@ class TagSubscribersControllerTest extends TestCase
         $response->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function a_tag_can_be_deleted()
     {
         $tag = $this->createTag();

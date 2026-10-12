@@ -17,10 +17,10 @@ class SubscriberFactory extends Factory
     {
         return [
             'workspace_id' => Sendportal::currentWorkspaceId(),
-            'hash' => $this->faker->uuid,
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'email' => $this->faker->safeEmail
+            'hash' => $this->faker->uuid(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->safeEmail()
         ];
     }
 }

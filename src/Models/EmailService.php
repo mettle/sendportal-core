@@ -49,11 +49,14 @@ class EmailService extends BaseModel
     ];
 
     /** @var array */
-    protected $casts = [
-        'id' => 'int',
-        'workspace_id' => 'int',
-        'type_id' => 'int'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id' => 'int',
+            'workspace_id' => 'int',
+            'type_id' => 'int'
+        ];
+    }
 
     /**
      * The type of this provider.

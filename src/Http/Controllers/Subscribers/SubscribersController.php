@@ -114,7 +114,7 @@ class SubscribersController extends Controller
         $data = $request->validated();
 
         // updating subscriber from subscribed -> unsubscribed
-        if (!$request->has('subscribed') && !$subscriber->unsubscribed_at) {
+        if (! $request->has('subscribed') && ! $subscriber->unsubscribed_at) {
             $data['unsubscribed_at'] = now();
             $data['unsubscribe_event_id'] = UnsubscribeEventType::MANUAL_BY_ADMIN;
         } // updating subscriber from unsubscribed -> subscribed
@@ -123,7 +123,7 @@ class SubscribersController extends Controller
             $data['unsubscribe_event_id'] = null;
         }
 
-        if (!$request->has('tags')) {
+        if (! $request->has('tags')) {
             $data['tags'] = [];
         }
 
@@ -156,7 +156,7 @@ class SubscribersController extends Controller
     {
         $subscribers = $this->subscriberRepo->all(Sendportal::currentWorkspaceId(), 'id');
 
-        if (!$subscribers->count()) {
+        if (! $subscribers->count()) {
             return redirect()->route('sendportal.subscribers.index')->withErrors(__('There are no subscribers to export'));
         }
 

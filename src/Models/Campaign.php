@@ -88,17 +88,20 @@ class Campaign extends BaseModel
     protected $booleanFields = [];
 
     /** @var array */
-    protected $casts = [
-        'status_id' => 'int',
-        'workspace_id' => 'int',
-        'template_id' => 'int',
-        'email_service_id' => 'int',
-        'is_open_tracking' => 'bool',
-        'is_click_tracking' => 'bool',
-        'scheduled_at' => 'datetime',
-        'save_as_draft' => 'bool',
-        'send_to_all' => 'bool',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'status_id' => 'int',
+            'workspace_id' => 'int',
+            'template_id' => 'int',
+            'email_service_id' => 'int',
+            'is_open_tracking' => 'bool',
+            'is_click_tracking' => 'bool',
+            'scheduled_at' => 'datetime',
+            'save_as_draft' => 'bool',
+            'send_to_all' => 'bool',
+        ];
+    }
 
     /**
      * Tags this campaign was sent to.
@@ -167,7 +170,7 @@ class Campaign extends BaseModel
     {
         return Subscriber::where('workspace_id', $this->workspace_id)
             ->whereNull('unsubscribed_at')
-            ->when(!$this->send_to_all, function (Builder $query) {
+            ->when(! $this->send_to_all, function (Builder $query) {
                 $query->whereHas('tags', function (Builder $subQuery) {
                     $subQuery->whereIn('sendportal_tags.id', $this->tags->pluck('id'));
                 });
@@ -177,7 +180,7 @@ class Campaign extends BaseModel
 
     public function getSentCountAttribute(): int
     {
-        return $this->sent_messages->count();
+        return $this->sent_messages()->count();
     }
 
     public function getUnsentCountAttribute(): int
@@ -255,7 +258,7 @@ class Campaign extends BaseModel
     public function getMergedContentAttribute(): ?string
     {
         if ($this->template_id) {
-            return str_replace(['{{content}}', '{{ content }}'], $this->content, $this->template->content);
+            return str_replace(['{{content}}', '{{ content }}'], $this->content ?? '', $this->template()->value('content') ?? '');
         }
 
         return $this->content;

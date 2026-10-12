@@ -6,6 +6,7 @@ namespace Tests\Feature\Campaigns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
@@ -18,7 +19,7 @@ class CampaignControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function the_index_of_campaigns_is_accessible_to_authenticated_users()
     {
         // given
@@ -31,7 +32,7 @@ class CampaignControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function draft_campaigns_appear_on_the_draft_index()
     {
         $statuses = [
@@ -54,7 +55,7 @@ class CampaignControllerTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function sent_campaigns_dont_appear_on_the_draft_index()
     {
         $statuses = [
@@ -76,7 +77,7 @@ class CampaignControllerTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function the_sent_index_of_campaigns_is_accessible_to_authenticated_users()
     {
         // given
@@ -89,7 +90,7 @@ class CampaignControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function sent_campaigns_appear_on_the_sent_index()
     {
         $statuses = [
@@ -111,7 +112,7 @@ class CampaignControllerTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function draft_campaigns_dont_appear_on_the_sent_index()
     {
         $statuses = [
@@ -134,7 +135,7 @@ class CampaignControllerTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function the_campaign_creation_form_is_accessible_to_authenticated_users()
     {
         // when
@@ -144,7 +145,7 @@ class CampaignControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function new_campaigns_can_be_created_by_authenticated_users()
     {
         $campaignStoreData = $this->generateCampaignStoreData();
@@ -159,7 +160,7 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_preview_view_is_accessible_by_authenticated_users()
     {
         // given
@@ -172,7 +173,7 @@ class CampaignControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function the_edit_view_is_accessible_by_authenticated_users()
     {
         // given
@@ -185,7 +186,7 @@ class CampaignControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function a_campaign_is_updateable_by_authenticated_users()
     {
         // given
@@ -213,7 +214,7 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_can_be_set_to_not_track_opens()
     {
         // given
@@ -230,7 +231,7 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_can_be_set_to_track_opens()
     {
         // given
@@ -247,7 +248,7 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_can_be_set_to_not_track_clicks()
     {
         // given
@@ -264,7 +265,7 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_can_be_set_to_track_clicks()
     {
         // given
@@ -281,7 +282,7 @@ class CampaignControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function campaign_content_is_required_if_no_template_is_selected()
     {
         // given
@@ -297,7 +298,7 @@ class CampaignControllerTest extends TestCase
         $response->assertSessionHasErrors('content');
     }
 
-    /** @test */
+    #[Test]
     public function campaign_content_is_not_required_if_a_template_is_selected()
     {
         // given

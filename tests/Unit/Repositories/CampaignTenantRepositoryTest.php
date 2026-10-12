@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Repositories;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\CampaignStatus;
@@ -28,7 +29,7 @@ class CampaignTenantRepositoryTest extends TestCase
         $this->campaignRepository = app(CampaignTenantRepositoryInterface::class);
     }
 
-    /** @test */
+    #[Test]
     public function the_get_average_time_to_open_method_returns_the_average_time_taken_to_open_a_campaigns_message()
     {
         // given
@@ -55,7 +56,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertEquals('00:00:45', $averageTimeToOpen);
     }
 
-    /** @test */
+    #[Test]
     public function the_get_average_time_to_open_method_returns_na_if_there_have_been_no_opens()
     {
         // given
@@ -69,7 +70,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertEquals('N/A', $averageTimeToOpen);
     }
 
-    /** @test */
+    #[Test]
     public function the_get_average_time_to_click_method_returns_the_average_time_taken_for_a_campaign_link_to_be_clicked_for_the_first_time()
     {
         // given
@@ -95,7 +96,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertEquals('00:00:45', $averageTimeToClick);
     }
 
-    /** @test */
+    #[Test]
     public function the_average_time_to_click_attribute_returns_na_if_there_have_been_no_clicks()
     {
         // given
@@ -109,7 +110,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertEquals('N/A', $averageTimeToClick);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_campaign_method_sets_the_campaign_status_to_cancelled()
     {
         // given
@@ -125,7 +126,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertEquals(CampaignStatus::STATUS_CANCELLED, $campaign->fresh()->status_id);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_campaign_method_deletes_draft_messages_if_the_campaign_has_any()
     {
         // given
@@ -148,7 +149,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertCount(0, Message::all());
     }
 
-    /** @test */
+    #[Test]
     public function the_cancel_campaign_method_does_not_delete_sent_messages()
     {
         // given
@@ -171,7 +172,7 @@ class CampaignTenantRepositoryTest extends TestCase
         static::assertCount(1, Message::all());
     }
 
-    /** @test */
+    #[Test]
     public function the_get_count_method_returns_campaign_message_counts()
     {
         // given

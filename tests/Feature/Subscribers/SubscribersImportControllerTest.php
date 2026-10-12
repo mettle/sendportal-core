@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
@@ -25,7 +26,7 @@ class SubscribersImportControllerTest extends TestCase
         Storage::fake('local');
     }
 
-    /** @test */
+    #[Test]
     public function the_page_to_upload_subscribers_is_accessible_to_authenticated_users()
     {
         // when
@@ -35,7 +36,7 @@ class SubscribersImportControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_allow_any_file_other_than_a_csv_file_to_be_uploaded()
     {
         // given
@@ -50,7 +51,7 @@ class SubscribersImportControllerTest extends TestCase
         $response->assertSessionHasErrors('file');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_store_the_uploaded_file_process_the_subscribers_and_redirect_to_subscribers_index_page_if_there_are_no_errors()
     {
         // given
@@ -76,7 +77,7 @@ class SubscribersImportControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_import_subscribers_as_the_upload_has_to_be_validated_before_storing_subscribers()
     {
         // given
@@ -100,7 +101,7 @@ class SubscribersImportControllerTest extends TestCase
         $this->assertDatabaseCount('sendportal_subscribers', 0);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_allow_attaching_subscribers_to_an_existing_tag()
     {
         // given
@@ -127,7 +128,7 @@ class SubscribersImportControllerTest extends TestCase
         $this->assertDatabaseCount('sendportal_tag_subscriber', 1);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_allow_attaching_subscribers_to_multiple_tag()
     {
         // given
@@ -154,7 +155,7 @@ class SubscribersImportControllerTest extends TestCase
         $this->assertDatabaseCount('sendportal_tag_subscriber', 2);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_allow_updating_an_existing_subscriber_if_the_id_column_is_filled()
     {
         // given
@@ -183,7 +184,7 @@ class SubscribersImportControllerTest extends TestCase
         self::assertEquals('Test Surname', $subscriber->last_name);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_allow_updating_an_existing_subscriber_by_email_if_it_already_exist()
     {
         // given
@@ -211,7 +212,7 @@ class SubscribersImportControllerTest extends TestCase
         self::assertEquals('Test Surname', $subscriber->last_name);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_notify_the_user_of_how_many_subscribers_have_been_imported_and_how_many_have_been_updated()
     {
         // given
@@ -236,7 +237,7 @@ class SubscribersImportControllerTest extends TestCase
         $response->assertSessionHas('success', 'Imported 2 subscriber(s) and updated 1 subscriber(s) out of 3');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_remove_existing_tags_from_a_subscriber_when_importing_subscribers_with_a_new_tag()
     {
         // given

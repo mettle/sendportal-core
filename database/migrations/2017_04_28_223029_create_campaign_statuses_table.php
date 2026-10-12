@@ -20,10 +20,10 @@ class CreateCampaignStatusesTable extends UpgradeMigration
 
         DB::table('sendportal_campaign_statuses')
             ->insert([
-                ['name' => 'Draft'],
-                ['name' => 'Queued'],
-                ['name' => 'Sending'],
-                ['name' => 'Sent'],
+                ['id' => 1, 'name' => 'Draft'],
+                ['id' => 2, 'name' => 'Queued'],
+                ['id' => 3, 'name' => 'Sending'],
+                ['id' => 4, 'name' => 'Sent'],
             ]);
     }
 }

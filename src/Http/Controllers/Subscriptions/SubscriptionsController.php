@@ -11,6 +11,7 @@ use Sendportal\Base\Http\Requests\SubscriptionToggleRequest;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\UnsubscribeEventType;
 use Sendportal\Base\Repositories\Messages\MessageTenantRepositoryInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SubscriptionsController extends Controller
 {
@@ -27,7 +28,7 @@ class SubscriptionsController extends Controller
      */
     public function unsubscribe(string $messageHash): View
     {
-        $message = Message::with('subscriber')->where('hash', $messageHash)->first();
+        $message = $this->resolveMessage($messageHash);
 
         return view('sendportal::subscriptions.unsubscribe', compact('message'));
     }
@@ -37,7 +38,7 @@ class SubscriptionsController extends Controller
      */
     public function subscribe(string $messageHash): View
     {
-        $message = Message::with('subscriber')->where('hash', $messageHash)->first();
+        $message = $this->resolveMessage($messageHash);
 
         return view('sendportal::subscriptions.subscribe', compact('message'));
     }
@@ -47,7 +48,7 @@ class SubscriptionsController extends Controller
      */
     public function update(SubscriptionToggleRequest $request, string $messageHash): RedirectResponse
     {
-        $message = Message::where('hash', $messageHash)->first();
+        $message = $this->resolveMessage($messageHash);
         $subscriber = $message->subscriber;
 
         $unsubscribed = (bool)$request->get('unsubscribed');
@@ -73,5 +74,24 @@ class SubscriptionsController extends Controller
 
         return redirect()->route('sendportal.subscriptions.unsubscribe', $message->hash)
             ->with('success', __('You have been added to the mailing list.'));
+    }
+
+    /**
+     * Resolve the message behind a subscription link.
+     *
+     * An unknown hash, or a message whose subscriber has been deleted, is a 404
+     * rather than a 500 - these links live in inboxes long after the underlying
+     * records may have been pruned.
+     */
+    protected function resolveMessage(string $messageHash): Message
+    {
+        /** @var Message|null $message */
+        $message = Message::with('subscriber')->where('hash', $messageHash)->first();
+
+        if (! $message || ! $message->subscriber) {
+            throw new NotFoundHttpException('Unable to resolve subscription for hash ' . $messageHash);
+        }
+
+        return $message;
     }
 }

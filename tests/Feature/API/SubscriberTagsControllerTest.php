@@ -7,6 +7,7 @@ namespace Tests\Feature\API;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SubscriberTagsControllerTest extends TestCase
@@ -14,7 +15,7 @@ class SubscriberTagsControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function can_retrieve_a_list_of_a_subscribers_tags()
     {
         $tag = $this->createTag();
@@ -39,7 +40,7 @@ class SubscriberTagsControllerTest extends TestCase
         $response->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function can_add_new_tags_to_the_subscriber()
     {
         $tag = $this->createTag();
@@ -71,7 +72,7 @@ class SubscriberTagsControllerTest extends TestCase
         $response->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function can_update_the_tags_associated_with_the_subscriber()
     {
         $subscriber = $this->createSubscriber();
@@ -111,7 +112,7 @@ class SubscriberTagsControllerTest extends TestCase
         $response->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function can_remove_tags_from_the_subscriber()
     {
         $tag = $this->createTag();

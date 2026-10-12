@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Messages;
 
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Services\Messages\MessageTrackingOptions;
@@ -11,7 +12,7 @@ use Tests\TestCase;
 
 class MessageTrackingOptionsTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function default_tracking_options_are_on()
     {
         // given
@@ -22,7 +23,7 @@ class MessageTrackingOptionsTest extends TestCase
         self::assertTrue($trackingOptions->isClickTracking());
     }
 
-    /** @test */
+    #[Test]
     public function open_tracking_can_be_turned_off()
     {
         // given
@@ -32,7 +33,7 @@ class MessageTrackingOptionsTest extends TestCase
         self::assertFalse($trackingOptions->isOpenTracking());
     }
 
-    /** @test */
+    #[Test]
     public function click_tracking_can_be_turned_off()
     {
         // given
@@ -42,7 +43,7 @@ class MessageTrackingOptionsTest extends TestCase
         self::assertFalse($trackingOptions->isClickTracking());
     }
 
-    /** @test */
+    #[Test]
     public function tracking_can_be_turned_off_entirely()
     {
         // given
@@ -53,7 +54,7 @@ class MessageTrackingOptionsTest extends TestCase
         $this->assertFalse($trackingOptions->isOpenTracking());
     }
 
-    /** @test */
+    #[Test]
     public function open_tracking_can_be_turned_off_from_a_campaign()
     {
         // given
@@ -67,7 +68,7 @@ class MessageTrackingOptionsTest extends TestCase
         self::assertTrue($trackingOptions->isClickTracking());
     }
 
-    /** @test */
+    #[Test]
     public function click_tracking_can_be_turned_off_from_a_campaign()
     {
         // given
@@ -81,7 +82,7 @@ class MessageTrackingOptionsTest extends TestCase
         self::assertFalse($trackingOptions->isClickTracking());
     }
 
-    /** @test */
+    #[Test]
     public function open_tracking_can_be_turned_off_from_a_message()
     {
         // given
@@ -97,7 +98,7 @@ class MessageTrackingOptionsTest extends TestCase
         self::assertTrue($trackingOptions->isClickTracking());
     }
 
-    /** @test */
+    #[Test]
     public function click_tracking_can_be_turned_off_from_a_message()
     {
         // given

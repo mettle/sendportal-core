@@ -7,6 +7,7 @@ namespace Tests\Feature\Webhooks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Models\Subscriber;
@@ -21,7 +22,7 @@ class MailjetWebhooksTest extends TestCase
     /** @var string */
     protected $route = 'sendportal.api.webhooks.mailjet';
 
-    /** @test */
+    #[Test]
     public function it_accepts_delivery_webhooks()
     {
         // given
@@ -48,7 +49,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals('2015-06-03 12:19:09', $message->delivered_at->toDateTimeString());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_open_webhooks()
     {
         // given
@@ -77,7 +78,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals('2015-05-31 20:18:39', $message->opened_at->toDateTimeString());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_click_webhooks()
     {
         // given
@@ -106,7 +107,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals('2015-06-03 12:30:53', $message->clicked_at->toDateTimeString());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_spam_complaint_webhooks()
     {
         // given
@@ -130,7 +131,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals('2015-05-05 07:49:55', $message->refresh()->unsubscribed_at->toDateTimeString());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_temporary_bounce_webhooks()
     {
         // given
@@ -162,7 +163,7 @@ class MailjetWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_permanent_bounce_webhooks()
     {
         // given
@@ -198,7 +199,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals('2015-05-05 07:49:55', $message->refresh()->bounced_at->toDateTimeString());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_blocked_webhooks()
     {
         // given
@@ -227,7 +228,7 @@ class MailjetWebhooksTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_unsubscribe_webhooks()
     {
         // given
@@ -261,7 +262,7 @@ class MailjetWebhooksTest extends TestCase
         self::assertEquals(UnsubscribeEventType::COMPLAINT, $subscriber->unsubscribe_event_id);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_grouped_event_webhooks()
     {
         // given

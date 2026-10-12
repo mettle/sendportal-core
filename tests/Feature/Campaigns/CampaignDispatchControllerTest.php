@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Campaigns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Tag;
@@ -14,7 +15,7 @@ class CampaignDispatchControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function campaigns_can_be_dispatched_to_tags_belonging_to_the_users_workspace()
     {
         // given
@@ -36,7 +37,7 @@ class CampaignDispatchControllerTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    /** @test */
+    #[Test]
     public function campaigns_cannot_be_dispatched_to_tags_belonging_to_another_workspace()
     {
         // given

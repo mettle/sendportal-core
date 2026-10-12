@@ -7,6 +7,7 @@ namespace Tests\Feature\EmailServices;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\EmailService;
@@ -18,7 +19,7 @@ class EmailServicesControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    /** @test */
+    #[Test]
     public function the_provider_create_form_is_accessible_to_authenticated_users()
     {
         // when
@@ -28,7 +29,7 @@ class EmailServicesControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function new_email_services_can_be_created_by_authenticated_users()
     {
         // given
@@ -53,7 +54,7 @@ class EmailServicesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function the_email_service_edit_view_is_accessible_by_authenticated_users()
     {
         // given
@@ -66,7 +67,7 @@ class EmailServicesControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function an_email_service_is_updateable_by_an_authenticated_user()
     {
         // given
@@ -91,7 +92,7 @@ class EmailServicesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function an_email_service_can_be_deleted_by_an_authenticated_user()
     {
         // given
@@ -107,7 +108,7 @@ class EmailServicesControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function email_services_require_the_correct_settings_to_be_saved()
     {
         // given
@@ -125,7 +126,7 @@ class EmailServicesControllerTest extends TestCase
         $response->assertSessionHasErrors(['settings.key']);
     }
 
-    /** @test */
+    #[Test]
     public function email_services_cannot_be_deleted_if_they_are_being_used()
     {
         $emailService = EmailService::factory()->create(['workspace_id' => Sendportal::currentWorkspaceId()]);

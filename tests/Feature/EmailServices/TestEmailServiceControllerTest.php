@@ -7,6 +7,7 @@ namespace Tests\Feature\EmailServices;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\EmailService;
 use Sendportal\Base\Services\Messages\DispatchTestMessage;
@@ -17,7 +18,7 @@ class TestEmailServiceControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function the_test_email_service_page_is_accessible_by_authenticated_users()
     {
         // given
@@ -30,7 +31,7 @@ class TestEmailServiceControllerTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function an_email_service_cannot_be_tested_without_a_from_email_address()
     {
         // given
@@ -51,7 +52,7 @@ class TestEmailServiceControllerTest extends TestCase
         $response->assertSessionHasErrors('from');
     }
 
-    /** @test */
+    #[Test]
     public function an_email_service_cannot_be_tested_without_a_subject()
     {
         // given
@@ -72,7 +73,7 @@ class TestEmailServiceControllerTest extends TestCase
         $response->assertSessionHasErrors('subject');
     }
 
-    /** @test */
+    #[Test]
     public function an_email_service_cannot_be_tested_without_a_body()
     {
         // given
@@ -93,7 +94,7 @@ class TestEmailServiceControllerTest extends TestCase
         $response->assertSessionHasErrors('body');
     }
 
-    /** @test */
+    #[Test]
     public function an_email_service_can_be_tested_by_an_authenticated_user()
     {
         // given
@@ -129,7 +130,7 @@ class TestEmailServiceControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_redirect_the_user_to_the_email_service_test_page_if_the_email_service_test_fails()
     {
         // given

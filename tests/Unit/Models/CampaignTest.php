@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Facades\Sendportal;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Message;
@@ -16,7 +17,7 @@ class CampaignTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_has_many_opens()
     {
         // given
@@ -38,7 +39,7 @@ class CampaignTest extends TestCase
         static::assertEquals(3, $opens->count());
     }
 
-    /** @test */
+    #[Test]
     public function the_unique_open_count_attribute_returns_the_number_of_unique_opens_for_a_campaign()
     {
         // given
@@ -55,7 +56,7 @@ class CampaignTest extends TestCase
         static::assertEquals(3, $campaign->unique_open_count);
     }
 
-    /** @test */
+    #[Test]
     public function the_total_open_count_attribute_returns_the_total_number_of_opens_for_a_campaign()
     {
         // given
@@ -71,7 +72,7 @@ class CampaignTest extends TestCase
         static::assertEquals(15, $campaign->total_open_count);
     }
 
-    /** @test */
+    #[Test]
     public function it_has_many_clicks()
     {
         // given
@@ -93,7 +94,7 @@ class CampaignTest extends TestCase
         static::assertEquals(3, $clicks->count());
     }
 
-    /** @test */
+    #[Test]
     public function the_unique_click_count_attribute_returns_the_number_of_unique_clicks_for_a_campaign()
     {
         // given
@@ -107,7 +108,7 @@ class CampaignTest extends TestCase
         static::assertEquals(3, $campaign->unique_click_count);
     }
 
-    /** @test */
+    #[Test]
     public function the_total_click_count_attribute_returns_the_total_number_of_clicks_for_a_campaign()
     {
         // given
@@ -123,7 +124,7 @@ class CampaignTest extends TestCase
         static::assertEquals(15, $campaign->total_click_count);
     }
 
-    /** @test */
+    #[Test]
     public function the_cancelled_attribute_returns_true_if_the_campaign_is_cancelled()
     {
         // given
@@ -133,7 +134,7 @@ class CampaignTest extends TestCase
         static::assertTrue($campaign->cancelled);
     }
 
-    /** @test */
+    #[Test]
     public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_queued()
     {
         // given
@@ -144,7 +145,7 @@ class CampaignTest extends TestCase
         static::assertTrue($campaign->canBeCancelled());
     }
 
-    /** @test */
+    #[Test]
     public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sending()
     {
         // given
@@ -155,7 +156,7 @@ class CampaignTest extends TestCase
         static::assertTrue($campaign->canBeCancelled());
     }
 
-    /** @test */
+    #[Test]
     public function the_can_be_cancelled_method_returns_true_if_the_campaign_is_sent_and_saves_as_draft_and_not_all_drafts_have_been_sent()
     {
         // given
@@ -185,7 +186,7 @@ class CampaignTest extends TestCase
         static::assertTrue($campaign->canBeCancelled());
     }
 
-    /** @test */
+    #[Test]
     public function the_can_be_cancelled_method_returns_false_if_the_campaign_is_sent_and_saves_as_draft_and_all_drafts_have_been_sent()
     {
         // given
@@ -209,7 +210,7 @@ class CampaignTest extends TestCase
     }
 
 
-    /** @test */
+    #[Test]
     public function the_all_drafts_created_method_returns_true_if_all_drafts_have_been_created()
     {
         // given
@@ -239,7 +240,7 @@ class CampaignTest extends TestCase
         static::assertTrue($campaign->allDraftsCreated());
     }
 
-    /** @test */
+    #[Test]
     public function the_all_drafts_created_method_returns_false_if_all_drafts_have_not_been_created()
     {
         // given
@@ -269,7 +270,7 @@ class CampaignTest extends TestCase
         static::assertFalse($campaign->allDraftsCreated());
     }
 
-    /** @test */
+    #[Test]
     public function the_all_drafts_created_method_returns_true_if_the_campaign_does_not_save_as_draft()
     {
         // given

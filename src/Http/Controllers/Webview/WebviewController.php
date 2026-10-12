@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View as ViewContract;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Models\Message;
 use Sendportal\Base\Services\Content\MergeContentService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class WebviewController extends Controller
 {
@@ -25,8 +26,12 @@ class WebviewController extends Controller
      */
     public function show(string $messageHash): ViewContract
     {
-        /** @var Message $message */
+        /** @var Message|null $message */
         $message = Message::with('subscriber')->where('hash', $messageHash)->first();
+
+        if (! $message) {
+            throw new NotFoundHttpException('Unable to resolve message for hash ' . $messageHash);
+        }
 
         $content = $this->merger->handle($message);
 

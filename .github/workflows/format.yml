@@ -6,23 +6,28 @@ on:
       - '**.php'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   php-cs-fixer:
     runs-on: ubuntu-latest
+    env:
+      # GITHUB_TOKEN can't push to a fork, so fork PRs are checked rather than fixed.
+      IS_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Run php-cs-fixer
         uses: docker://oskarstark/php-cs-fixer-ga:3.13.0
         with:
-          args: --config=.php-cs-fixer.dist.php
+          args: --config=.php-cs-fixer.dist.php ${{ env.IS_FORK == 'true' && '--dry-run --diff' || '' }}
 
       - uses: stefanzweifel/git-auto-commit-action@v4
+        if: env.IS_FORK != 'true'
         with:
           commit_message: Apply php-cs-fixer changes
         env:

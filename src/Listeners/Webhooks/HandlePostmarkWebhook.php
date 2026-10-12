@@ -54,6 +54,10 @@ class HandlePostmarkWebhook implements ShouldQueue
                 $this->handleBounce($messageId, $event->payload);
                 break;
 
+            case 'SubscriptionChange':
+                $this->handleSubscriptionChange($messageId, $event->payload);
+                break;
+
             default:
                 throw new RuntimeException("Unknown Postmark webhook event type '{$eventName}'.");
         }
@@ -106,6 +110,35 @@ class HandlePostmarkWebhook implements ShouldQueue
     }
 
     /**
+     * https://postmarkapp.com/developer/webhooks/subscription-change-webhook
+     */
+    private function handleSubscriptionChange(string $messageId, array $content): void
+    {
+        // Reactivations, and suppressions made by the account owner rather than the
+        // recipient, have no MessageID. Reactivations are deliberately not mirrored:
+        // resubscribing someone should happen in Sendportal, not follow Postmark.
+        if (! Arr::get($content, 'SuppressSending') || ! $messageId) {
+            return;
+        }
+
+        $timestamp = $this->extractTimestamp($content, 'ChangedAt');
+
+        switch (Arr::get($content, 'SuppressionReason')) {
+            case 'HardBounce':
+                $this->emailWebhookService->handlePermanentBounce($messageId, $timestamp);
+                break;
+
+            case 'SpamComplaint':
+                $this->emailWebhookService->handleComplaint($messageId, $timestamp);
+                break;
+
+            case 'ManualSuppression':
+                $this->emailWebhookService->handleUnsubscribe($messageId, $timestamp);
+                break;
+        }
+    }
+
+    /**
      * Determine if the bounce is permanent
      * https://postmarkapp.com/developer/api/bounce-api#bounce-types
      */
@@ -134,7 +167,7 @@ class HandlePostmarkWebhook implements ShouldQueue
 
     private function extractMessageId(array $payload): string
     {
-        return trim(Arr::get($payload, 'MessageID'));
+        return trim((string) Arr::get($payload, 'MessageID'));
     }
 
     private function extractTimestamp(array $payload, string $field = 'ReceivedAt'): Carbon

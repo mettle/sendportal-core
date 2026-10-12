@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
 use Sendportal\Base\Models\Message;
+use Sendportal\Base\Models\Subscriber;
+use Sendportal\Base\Models\UnsubscribeEventType;
 use Tests\TestCase;
 
 class PostmarkWebhooksTest extends TestCase
@@ -164,6 +166,93 @@ class PostmarkWebhooksTest extends TestCase
         self::assertNotNull($message->refresh()->bounced_at);
     }
 
+    #[Test]
+    public function it_unsubscribes_the_subscriber_on_a_subscription_change_unsubscribe()
+    {
+        // given
+        $message = $this->createMessageWithSubscriber();
+
+        $webhook = $this->subscriptionChange($message, 'ManualSuppression');
+
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
+
+        // then
+        $response->assertOk();
+
+        self::assertEquals('2026-10-12 09:30:00', $message->refresh()->unsubscribed_at);
+        self::assertNotNull($message->subscriber->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::MANUAL_BY_SUBSCRIBER, $message->subscriber->unsubscribe_event_id);
+    }
+
+    #[Test]
+    public function it_records_a_bounce_on_a_subscription_change_hard_bounce()
+    {
+        // given
+        $message = $this->createMessageWithSubscriber();
+
+        $webhook = $this->subscriptionChange($message, 'HardBounce');
+
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
+
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->refresh()->bounced_at);
+        self::assertNull($message->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::BOUNCE, $message->subscriber->unsubscribe_event_id);
+    }
+
+    #[Test]
+    public function it_records_a_complaint_on_a_subscription_change_spam_complaint()
+    {
+        // given
+        $message = $this->createMessageWithSubscriber();
+
+        $webhook = $this->subscriptionChange($message, 'SpamComplaint');
+
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
+
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->subscriber->refresh()->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::COMPLAINT, $message->subscriber->unsubscribe_event_id);
+    }
+
+    #[Test]
+    public function a_subscription_change_reactivation_does_not_resubscribe_the_subscriber()
+    {
+        // given
+        $message = $this->createMessageWithSubscriber();
+        $message->subscriber->update([
+            'unsubscribed_at' => now(),
+            'unsubscribe_event_id' => UnsubscribeEventType::MANUAL_BY_SUBSCRIBER,
+        ]);
+
+        // Postmark sends no MessageID or SuppressionReason for reactivations.
+        $webhook = [
+            'RecordType' => 'SubscriptionChange',
+            'MessageID' => null,
+            'ChangedAt' => '2026-10-12T09:30:00Z',
+            'Recipient' => $message->recipient_email,
+            'Origin' => 'Customer',
+            'SuppressSending' => false,
+            'SuppressionReason' => null,
+        ];
+
+        // when
+        $response = $this->json('POST', route($this->route), $webhook);
+
+        // then
+        $response->assertOk();
+
+        self::assertNotNull($message->subscriber->refresh()->unsubscribed_at);
+        self::assertEquals(UnsubscribeEventType::MANUAL_BY_SUBSCRIBER, $message->subscriber->unsubscribe_event_id);
+    }
+
     /**
      * Create Message
      */
@@ -172,5 +261,33 @@ class PostmarkWebhooksTest extends TestCase
         return Message::factory()->create([
             'message_id' => Str::random(),
         ]);
+    }
+
+    protected function createMessageWithSubscriber(): Message
+    {
+        return Message::factory()->create([
+            'message_id' => Str::random(),
+            'subscriber_id' => Subscriber::factory()->create()->id,
+        ]);
+    }
+
+    /**
+     * https://postmarkapp.com/developer/webhooks/subscription-change-webhook
+     */
+    protected function subscriptionChange(Message $message, string $reason): array
+    {
+        return [
+            'RecordType' => 'SubscriptionChange',
+            'MessageID' => $message->message_id,
+            'ServerID' => 23,
+            'MessageStream' => 'outbound',
+            'ChangedAt' => '2026-10-12T09:30:00Z',
+            'Recipient' => $message->recipient_email,
+            'Origin' => 'Recipient',
+            'SuppressSending' => true,
+            'SuppressionReason' => $reason,
+            'Tag' => null,
+            'Metadata' => [],
+        ];
     }
 }

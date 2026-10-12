@@ -19,6 +19,10 @@ class Helper
             return null;
         }
 
+        if (! $timezone) {
+            $timezone = config('app.timezone');
+        }
+        
         return Carbon::parse($date)->copy()->tz($timezone);
     }
 

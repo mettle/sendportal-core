@@ -1,6 +1,6 @@
 # Sendportal Core
 
-## 4.0.0 - Unreleased
+## 4.0.0 - 2026-10-12
 - Upgrade dependencies to Laravel 13, with Laravel 12 still supported
 - Drop support for Laravel 10 and 11, and PHP 8.2
 - Upgrade to PHPUnit 12 and convert test annotations to attributes

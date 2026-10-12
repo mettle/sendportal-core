@@ -1,4 +1,7 @@
-on: push
+on:
+  push:
+    branches: [master]
+  pull_request:
 name: Laravel CI
 jobs:
   phpunit:
@@ -40,7 +43,7 @@ jobs:
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install composer dependencies
         run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --with "laravel/framework:${{ matrix.laravel }}"
       - name: Run Testsuite against MySQL

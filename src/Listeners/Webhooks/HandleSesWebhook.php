@@ -17,7 +17,7 @@ class HandleSesWebhook implements ShouldQueue
 {
     /** @var string */
     public $queue = 'sendportal-webhook-process';
-    
+
     /** @var EmailWebhookService */
     private $emailWebhookService;
 

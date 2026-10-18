@@ -19,7 +19,7 @@ class MailgunMailAdapter extends BaseMailAdapter
         'EU' => 'https://api.eu.mailgun.net/v3'
     ];
 
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content, array $headers = []): string
     {
         $parameters = [
             'from' => "{$fromName} <{$fromEmail}>",
@@ -29,6 +29,10 @@ class MailgunMailAdapter extends BaseMailAdapter
             'o:tracking-clicks' => (string) $trackingOptions->isClickTracking(),
             'o:tracking-opens' => (string) $trackingOptions->isOpenTracking()
         ];
+
+        foreach ($headers as $name => $value) {
+            $parameters['h:' . $name] = $value;
+        }
 
         $result = $this->resolveClient()->messages()->send($this->resolveDomain(), $parameters);
 

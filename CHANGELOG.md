@@ -1,5 +1,11 @@
 # Sendportal Core
 
+## Unreleased
+- Add RFC 8058 one-click unsubscribe, which Gmail and Yahoo require from bulk senders. Campaign emails, including test sends, now carry `List-Unsubscribe` and `List-Unsubscribe-Post` headers, and a `POST` to the unsubscribe link unsubscribes the subscriber straight away without a CSRF token. `List-Unsubscribe-Post` is only sent when the unsubscribe link is HTTPS, so `APP_URL` must use `https://`
+- Send SES messages with the SESv2 `SendEmail` operation, which can set custom headers. It needs the same `ses:SendEmail` IAM permission
+- **Breaking:** `MailAdapterInterface::send()` takes a new `array $headers = []` argument, which custom adapters must accept and send
+- Test sends use a well-formed placeholder message hash, so their unsubscribe and webview links return 404 instead of an error on Postgres
+
 ## 4.0.0 - 2026-10-12
 - Upgrade dependencies to Laravel 13, with Laravel 12 still supported
 - Drop support for Laravel 10 and 11, and PHP 8.2

@@ -24,6 +24,9 @@ class MessageOptions
     /** @var MessageTrackingOptions */
     private $trackingOptions;
 
+    /** @var array<string, string> */
+    private $headers = [];
+
     /**
      * @return string
      */
@@ -101,6 +104,24 @@ class MessageOptions
     public function setTrackingOptions(MessageTrackingOptions $trackingOptions): self
     {
         $this->trackingOptions = $trackingOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @param array<string, string> $headers
+     */
+    public function setHeaders(array $headers): self
+    {
+        $this->headers = $headers;
 
         return $this;
     }

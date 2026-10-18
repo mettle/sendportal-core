@@ -12,25 +12,40 @@ use Sendportal\Base\Services\Messages\MessageTrackingOptions;
 
 class PostalAdapter extends BaseMailAdapter
 {
+    /** @var Client */
+    protected $client;
+
     /**
      * @throws TypeException
      * @throws \Throwable
      */
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content, array $headers = []): string
     {
-        $client = new Client('https://' . Arr::get($this->config, 'postal_host'), Arr::get($this->config, 'key'));
-
-        $message = new Message($client);
+        $message = new Message();
         $message->to($toEmail);
         $message->from($fromName.' <'.$fromEmail.'>');
         $message->subject($subject);
         $message->htmlBody($content);
-        $response = $client->send->message($message);
+
+        foreach ($headers as $name => $value) {
+            $message->header($name, $value);
+        }
+
+        $response = $this->resolveClient()->send->message($message);
 
         return $this->resolveMessageId($response);
     }
 
+    protected function resolveClient(): Client
+    {
+        if ($this->client) {
+            return $this->client;
+        }
 
+        $this->client = new Client('https://' . Arr::get($this->config, 'postal_host'), Arr::get($this->config, 'key'));
+
+        return $this->client;
+    }
 
     protected function resolveMessageId($response): string
     {

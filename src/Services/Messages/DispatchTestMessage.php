@@ -14,6 +14,13 @@ use Sendportal\Base\Services\Content\MergeContentService;
 
 class DispatchTestMessage
 {
+    /**
+     * Test messages are never saved, so their links must not match a real message.
+     * This has to be a well-formed UUID: the hash column is a uuid on Postgres, where
+     * anything else makes the unsubscribe and webview pages error instead of 404.
+     */
+    protected const TEST_MESSAGE_HASH = '00000000-0000-0000-0000-000000000000';
+
     /** @var ResolveEmailService */
     protected $resolveEmailService;
 
@@ -61,7 +68,11 @@ class DispatchTestMessage
 
         $trackingOptions = MessageTrackingOptions::fromCampaign($campaign);
 
-        return $this->dispatch($message, $emailService, $trackingOptions, $mergedContent);
+        // Test sends carry the same headers as real sends. Their unsubscribe link points
+        // at TEST_MESSAGE_HASH, so following it cannot unsubscribe anyone.
+        $headers = ListUnsubscribeHeaders::forMessage($message);
+
+        return $this->dispatch($message, $emailService, $trackingOptions, $mergedContent, $headers);
     }
 
     /**
@@ -75,7 +86,7 @@ class DispatchTestMessage
             'subject' => $options->getSubject(),
             'from_name' => 'Sendportal',
             'from_email' => $options->getFromEmail(),
-            'hash' => 'abc123',
+            'hash' => self::TEST_MESSAGE_HASH,
         ]);
 
         $trackingOptions = (new MessageTrackingOptions())->disable();
@@ -102,14 +113,15 @@ class DispatchTestMessage
     /**
      * @throws Exception
      */
-    protected function dispatch(Message $message, EmailService $emailService, MessageTrackingOptions $trackingOptions, string $mergedContent): ?string
+    protected function dispatch(Message $message, EmailService $emailService, MessageTrackingOptions $trackingOptions, string $mergedContent, array $headers = []): ?string
     {
         $messageOptions = (new MessageOptions())
             ->setTo($message->recipient_email)
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)
             ->setSubject($message->subject)
-            ->setTrackingOptions($trackingOptions);
+            ->setTrackingOptions($trackingOptions)
+            ->setHeaders($headers);
 
         $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
 
@@ -136,7 +148,7 @@ class DispatchTestMessage
             'subject' => '[Test] ' . $campaign->subject,
             'from_name' => $campaign->from_name,
             'from_email' => $campaign->from_email,
-            'hash' => 'abc123',
+            'hash' => self::TEST_MESSAGE_HASH,
         ]);
     }
 }

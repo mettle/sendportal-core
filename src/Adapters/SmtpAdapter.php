@@ -16,7 +16,7 @@ class SmtpAdapter extends BaseMailAdapter
     /** @var EsmtpTransport */
     protected $transport;
 
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content, array $headers = []): string
     {
         // Send through the transport rather than the Mailer: Mailer::send() returns
         // void, so the message id was previously always '-1'. The transport hands
@@ -26,7 +26,7 @@ class SmtpAdapter extends BaseMailAdapter
         // returned '-1', which every caller reads as a truthy success, so failed
         // sends were recorded as delivered. The other adapters let it propagate.
         $sentMessage = $this->resolveTransport()->send(
-            $this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail)
+            $this->resolveMessage($subject, $content, $fromEmail, $fromName, $toEmail, $headers)
         );
 
         return $this->resolveMessageId($sentMessage);
@@ -59,13 +59,17 @@ class SmtpAdapter extends BaseMailAdapter
         return $this->transport;
     }
 
-    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail): Email
+    protected function resolveMessage(string $subject, string $content, string $fromEmail, string $fromName, string $toEmail, array $headers = []): Email
     {
         $msg = (new Email())
             ->from(new Address($fromEmail, $fromName))
             ->to($toEmail)
             ->subject($subject)
             ->html($content);
+
+        foreach ($headers as $name => $value) {
+            $msg->getHeaders()->addTextHeader($name, $value);
+        }
 
         return $msg;
     }

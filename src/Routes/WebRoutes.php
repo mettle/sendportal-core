@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sendportal\Base\Routes;
 
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Router;
 
 class WebRoutes
@@ -20,6 +22,15 @@ class WebRoutes
                 ) {
                     $subscriptionController->get('unsubscribe/{messageHash}', 'SubscriptionsController@unsubscribe')
                         ->name('unsubscribe');
+
+                    // RFC 8058 one-click unsubscribe. Mailbox providers POST here from the
+                    // List-Unsubscribe header without a CSRF token. Excluding the base CSRF
+                    // middleware also excludes its subclasses: VerifyCsrfToken on Laravel 12,
+                    // PreventRequestForgery on Laravel 13.
+                    $subscriptionController->post('unsubscribe/{messageHash}', 'SubscriptionsController@oneClickUnsubscribe')
+                        ->name('unsubscribe.one-click')
+                        ->withoutMiddleware([PreventRequestForgery::class, VerifyCsrfToken::class]);
+
                     $subscriptionController->get(
                         'subscribe/{messageHash}',
                         'SubscriptionsController@subscribe'

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sendportal\Base\Http\Controllers\Subscriptions;
 
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Sendportal\Base\Http\Controllers\Controller;
 use Sendportal\Base\Http\Requests\SubscriptionToggleRequest;
@@ -34,6 +35,20 @@ class SubscriptionsController extends Controller
     }
 
     /**
+     * Unsubscribe a subscriber straight away (RFC 8058 one-click unsubscribe).
+     *
+     * Mailbox providers POST "List-Unsubscribe=One-Click" here from the List-Unsubscribe
+     * header. The body is not checked: the message hash is what authorises the request,
+     * as it does for the unsubscribe page.
+     */
+    public function oneClickUnsubscribe(string $messageHash): Response
+    {
+        $this->markUnsubscribed($this->resolveMessage($messageHash));
+
+        return response(__('You have been successfully removed from the mailing list.'));
+    }
+
+    /**
      * Subscribe a subscriber.
      */
     public function subscribe(string $messageHash): View
@@ -54,12 +69,7 @@ class SubscriptionsController extends Controller
         $unsubscribed = (bool)$request->get('unsubscribed');
 
         if ($unsubscribed) {
-            $message->unsubscribed_at = now();
-            $message->save();
-
-            $subscriber->unsubscribed_at = now();
-            $subscriber->unsubscribe_event_id = UnsubscribeEventType::MANUAL_BY_SUBSCRIBER;
-            $subscriber->save();
+            $this->markUnsubscribed($message);
 
             return redirect()->route('sendportal.subscriptions.subscribe', $message->hash)
                 ->with('success', __('You have been successfully removed from the mailing list.'));
@@ -74,6 +84,20 @@ class SubscriptionsController extends Controller
 
         return redirect()->route('sendportal.subscriptions.unsubscribe', $message->hash)
             ->with('success', __('You have been added to the mailing list.'));
+    }
+
+    /**
+     * Record that the subscriber unsubscribed themselves from this message.
+     */
+    protected function markUnsubscribed(Message $message): void
+    {
+        $message->unsubscribed_at = now();
+        $message->save();
+
+        $subscriber = $message->subscriber;
+        $subscriber->unsubscribed_at = now();
+        $subscriber->unsubscribe_event_id = UnsubscribeEventType::MANUAL_BY_SUBSCRIBER;
+        $subscriber->save();
     }
 
     /**

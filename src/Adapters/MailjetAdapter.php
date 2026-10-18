@@ -20,26 +20,31 @@ class MailjetAdapter extends BaseMailAdapter
         'US' => 'api.us.mailjet.com'
     ];
 
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content, array $headers = []): string
     {
+        $message = [
+            'From' => [
+                'Email' => $fromEmail,
+                'Name' => $fromName
+            ],
+            'To' => [
+                [
+                    'Email' => $toEmail,
+                    // 'Name' => ''
+                ]
+            ],
+            'Subject' => $subject,
+            'HTMLPart' => $content,
+        ];
+
+        // Mailjet expects an object here, which an empty array would not encode to.
+        if ($headers) {
+            $message['Headers'] = $headers;
+        }
+
         $response = $this->resolveClient()->post(Resources::$Email, [
             'body' => [
-                'Messages' => [
-                    [
-                        'From' => [
-                            'Email' => $fromEmail,
-                            'Name' => $fromName
-                        ],
-                        'To' => [
-                            [
-                                'Email' => $toEmail,
-                                // 'Name' => ''
-                            ]
-                        ],
-                        'Subject' => $subject,
-                        'HTMLPart' => $content,
-                    ]
-                ],
+                'Messages' => [$message],
                 'TrackOpens' => $trackingOptions->isOpenTracking() ? 'enabled' : 'disabled',
                 'TrackClicks' => $trackingOptions->isClickTracking() ? 'enabled' : 'disabled'
             ]

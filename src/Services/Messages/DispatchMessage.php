@@ -101,7 +101,8 @@ class DispatchMessage
             ->setFromEmail($message->from_email)
             ->setFromName($message->from_name)
             ->setSubject($message->subject)
-            ->setTrackingOptions($trackingOptions);
+            ->setTrackingOptions($trackingOptions)
+            ->setHeaders(ListUnsubscribeHeaders::forMessage($message));
 
         $messageId = $this->relayMessage->handle($mergedContent, $messageOptions, $emailService);
 

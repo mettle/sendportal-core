@@ -15,8 +15,9 @@ interface MailAdapterInterface
      * @param string $subject
      * @param MessageTrackingOptions $trackingOptions
      * @param string $content
+     * @param array<string, string> $headers Additional message headers, keyed by header name.
      *
      * @return string
      */
-    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content): string;
+    public function send(string $fromEmail, string $fromName, string $toEmail, string $subject, MessageTrackingOptions $trackingOptions, string $content, array $headers = []): string;
 }
